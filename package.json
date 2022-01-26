@@ -9,15 +9,17 @@
     "format": "npm-run-all -p format:*",
     "format:code": "npm run prettier:code -- --write",
     "format:other": "npm run prettier:other -- --write",
-    "prettier:code": "prettier \"**/*.{ts,js}\"",
+    "prettier:code": "prettier \"**/*.{ts,tsx,js}\"",
     "prettier:other": "prettier \"**/*.{css,json,scss}\"",
     "prepare": "husky install"
   },
   "dependencies": {
     "antd": "^4.18.5",
+    "firebase": "^9.6.4",
     "next": "12.0.8",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-firebase-hooks": "^5.0.0",
     "sass": "^1.49.0"
   },
   "devDependencies": {
