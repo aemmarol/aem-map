@@ -1,4 +1,5 @@
 import {Button, Layout, Card, Form, Input, Checkbox} from "antd";
+import {UserOutlined, LockOutlined} from "@ant-design/icons";
 import type {NextPage} from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -6,52 +7,49 @@ import styles from "../styles/Home.module.scss";
 
 const Home: NextPage = () => {
   return (
-    <Layout style={{height: "100vh"}}>
-      <Card style={{width: "500", margin: "auto"}}>
-        <div style={{textAlign: "center", fontSize: 20}}>
-          <b>Sign In</b>
-        </div>
-        <br />
+    <div className={styles.main_wrapper}>
+      <Card className={styles.signinbox}>
+        <div className={styles.loginheader}>Sign In</div>
         <Form
-          name="signin"
-          labelCol={{span: 8}}
-          wrapperCol={{span: 16}}
+          name="normal_login"
+          className="login-form"
           initialValues={{remember: true}}
-          autoComplete="off"
-          labelAlign="left"
         >
           <Form.Item
-            label="Username"
             name="username"
-            rules={[{required: true, message: "Please input your username!"}]}
+            rules={[{required: true, message: "Please input your Username!"}]}
           >
-            <Input />
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Username"
+            />
           </Form.Item>
-
           <Form.Item
-            label="Password"
             name="password"
-            rules={[{required: true, message: "Please input your password!"}]}
+            rules={[{required: true, message: "Please input your Password!"}]}
           >
-            <Input.Password />
+            <Input
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Password"
+            />
           </Form.Item>
-
-          <Form.Item
-            name="remember"
-            valuePropName="checked"
-            wrapperCol={{offset: 8, span: 16}}
-          >
+          <Form.Item name="remember" valuePropName="checked" noStyle>
             <Checkbox>Remember me</Checkbox>
           </Form.Item>
 
-          <Form.Item wrapperCol={{offset: 8, span: 16}}>
-            <Button type="primary" htmlType="submit">
-              Submit
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+            >
+              Log in
             </Button>
           </Form.Item>
         </Form>
       </Card>
-    </Layout>
+    </div>
   );
 };
 
