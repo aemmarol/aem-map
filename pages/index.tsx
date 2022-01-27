@@ -9,19 +9,19 @@ const Home: NextPage = () => {
   return (
     <div className={styles.main_wrapper}>
       <Card className={styles.signinbox}>
-        <div className={styles.loginheader}>Sign In</div>
-        <Form
-          name="normal_login"
-          className="login-form"
-          initialValues={{remember: true}}
-        >
+        <div className={styles.signinheader}>
+          <h1>Sign In</h1>
+        </div>
+        <Form name="signin_form" initialValues={{remember: true}}>
           <Form.Item
-            name="username"
+            name="Username"
             rules={[{required: true, message: "Please input your Username!"}]}
           >
             <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Username"
+              prefix={<UserOutlined className={styles.formicon} />}
+              placeholder= "Username"
+              bordered={false}
+              className={styles.forminput}
             />
           </Form.Item>
           <Form.Item
@@ -29,20 +29,22 @@ const Home: NextPage = () => {
             rules={[{required: true, message: "Please input your Password!"}]}
           >
             <Input
-              prefix={<LockOutlined className="site-form-item-icon" />}
+              prefix={<LockOutlined className={styles.formicon} />}
               type="password"
               placeholder="Password"
+              bordered={false}
+              className={styles.forminput}
             />
           </Form.Item>
           <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Remember me</Checkbox>
+            <Checkbox className={styles.remembercheck}>Remember me</Checkbox>
           </Form.Item>
 
           <Form.Item>
             <Button
               type="primary"
               htmlType="submit"
-              className="login-form-button"
+              className={styles.loginbutton}
             >
               Log in
             </Button>

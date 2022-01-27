@@ -9,5 +9,52 @@
 
 .signinbox {
   width: 100%;
-  max-width: 350px;
+  max-width: 420px;
+  height: 100%;
+  max-height: 325px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signinheader {
+  text-align: center;
+}
+
+.signinheader > h1{
+  font-weight: 500;
+  font-size: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.forminput {
+  background-color: #f5f5f5;
+  color: #f5f5f5;
+  border-radius: 5px;
+  border: 1px;
+  height: 34px;
+  width: 308px;
+}
+
+.forminput ::placeholder{
+  background-color: #f5f5f5;
+  color:grey;
+}
+
+.formicon {
+  color: grey;
+}
+
+.loginbutton{
+  border-radius: 5px;
+  margin-top: 1em;
+}
+
+.remembercheck{
+  align-items: left;
+}
+
+.forminput:hover{
+  background-color: #f5f5f5;
 }
