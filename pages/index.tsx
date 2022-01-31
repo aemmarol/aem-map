@@ -7,21 +7,25 @@ import styles from "../styles/Home.module.scss";
 
 const Home: NextPage = () => {
   return (
-    <div className={styles.main_wrapper}>
-      <Card className={styles.signinbox}>
-        <div className={styles.signinheader}>
+    <div className={styles.mainWrapper}>
+      <Card className={styles.signInBox}>
+        <div className={styles.signInHeader}>
           <h1>Sign In</h1>
         </div>
-        <Form name="signin_form" initialValues={{remember: true}}>
+        <Form
+          name="signInForm"
+          initialValues={{remember: true}}
+          className={styles.signInForm}
+        >
           <Form.Item
-            name="Username"
+            name="username"
             rules={[{required: true, message: "Please input your Username!"}]}
           >
             <Input
-              prefix={<UserOutlined className={styles.formicon} />}
-              placeholder= "Username"
+              prefix={<UserOutlined className={styles.formIcon} />}
+              placeholder="Username"
               bordered={false}
-              className={styles.forminput}
+              className={styles.formInput}
             />
           </Form.Item>
           <Form.Item
@@ -29,22 +33,19 @@ const Home: NextPage = () => {
             rules={[{required: true, message: "Please input your Password!"}]}
           >
             <Input
-              prefix={<LockOutlined className={styles.formicon} />}
+              prefix={<LockOutlined className={styles.formIcon} />}
               type="password"
               placeholder="Password"
               bordered={false}
-              className={styles.forminput}
+              className={styles.formInput}
             />
           </Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox className={styles.remembercheck}>Remember me</Checkbox>
-          </Form.Item>
 
-          <Form.Item>
+          <Form.Item className={styles.logInButton}>
             <Button
               type="primary"
               htmlType="submit"
-              className={styles.loginbutton}
+              className={styles.logInButton}
             >
               Log in
             </Button>
