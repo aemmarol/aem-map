@@ -2,9 +2,19 @@ import {Button} from "antd";
 import type {NextPage} from "next";
 import Head from "next/head";
 import Image from "next/image";
+import {useEffect} from "react";
 import styles from "../styles/Home.module.scss";
+import {getAuth} from "firebase/auth";
+
+const auth = getAuth();
 
 const Home: NextPage = () => {
+  const user = auth.currentUser;
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   return (
     <div className={styles.container}>
       <Head>

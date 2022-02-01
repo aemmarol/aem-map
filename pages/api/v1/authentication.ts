@@ -1,13 +1,21 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type {NextApiRequest, NextApiResponse} from "next";
 import Joi from "joi";
-import {getAuth, signInWithCustomToken} from "firebase/auth";
 import "../../../firebase/firebaseConfig";
+import {authenticationProps} from "../../../types/authentication";
+import Airtable from "airtable";
+
+const airtableBase = new Airtable({
+  apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
+}).base("app7V1cg4ibiooxcn");
+
+const userTable = airtableBase("userList");
+const refreshTokenTable = airtableBase("refreshtokens");
 
 interface Data {
   name?: string;
   data?: object;
   msg: string;
+  success: boolean;
 }
 
 const loginSchema = Joi.object({
@@ -15,48 +23,27 @@ const loginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  if (req.method === "POST") {
-    const auth = getAuth();
+export const login = async (props: authenticationProps): Promise<Data> => {
+  const {error} = loginSchema.validate(props);
+  const {itsId, password} = props;
 
-    const {error} = loginSchema.validate(req.body);
-    const {itsId, password} = req.body;
-
-    if (error) {
-      return res.status(400).json({msg: error.details[0].message});
-    } else {
-      await fetch(
-        process.env.NEXT_PUBLIC_AEM_AUTH_API_DOMAIN + "/api/authentication",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({itsId, password}),
-        }
-      )
-        .then((result) => {
-          if (result.ok) {
-            result.json().then((tokenData) => {
-              signInWithCustomToken(auth, tokenData.data).then((finalToken) => {
-                return res
-                  .status(200)
-                  .json({msg: "login Successful", data: finalToken});
-              });
-            });
-          } else {
-            return res.status(400).json({msg: "user not found"});
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          return res.status(400).json({msg: "user not found"});
-        });
-    }
+  if (error) {
+    return {success: false, msg: "invalid credentials!"};
   } else {
-    return res.status(404).json({msg: "api not found"});
+    const userData = await userTable
+      .select({
+        view: "Grid view",
+        filterByFormula: `({ITS ID} = '${itsId}')`,
+      })
+      .firstPage();
+    if (!userData.length) {
+      return {success: false, msg: "user not found!"};
+    } else {
+      let data = userData[0].fields;
+      if (data["password"] !== password) {
+        return {success: false, msg: "invalid credentials"};
+      }
+      return {success: true, msg: "user logged in successfully!"};
+    }
   }
-}
+};
