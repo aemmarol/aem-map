@@ -1,21 +1,18 @@
-import {Button, Layout, Card, Form, Input, Checkbox} from "antd";
+import {Button, Form, Input} from "antd";
 import {UserOutlined, LockOutlined} from "@ant-design/icons";
 import type {NextPage} from "next";
-import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.scss";
+import {Signinlayout} from "../layouts/signInPage";
+import {SigninCard} from "../components";
 
-const Home: NextPage = () => {
+const SignInPage: NextPage = () => {
   return (
-    <div className={styles.mainWrapper}>
-      <Card className={styles.signInBox}>
-        <div className={styles.signInHeader}>
-          <h1>Sign In</h1>
-        </div>
+    <Signinlayout>
+      <SigninCard title="Sign In">
         <Form
-          name="signInForm"
+          name="signinForm"
           initialValues={{remember: true}}
-          className={styles.signInForm}
+          className={styles.signinForm}
         >
           <Form.Item
             name="username"
@@ -41,19 +38,19 @@ const Home: NextPage = () => {
             />
           </Form.Item>
 
-          <Form.Item className={styles.logInButton}>
+          <Form.Item className="text-align-center">
             <Button
               type="primary"
               htmlType="submit"
-              className={styles.logInButton}
+              className={styles.signInButton}
             >
-              Log in
+              Sign in
             </Button>
           </Form.Item>
         </Form>
-      </Card>
-    </div>
+      </SigninCard>
+    </Signinlayout>
   );
 };
 
-export default Home;
+export default SignInPage;
