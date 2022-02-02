@@ -1,15 +1,32 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import Joi from "joi";
-import "../../../firebase/firebaseConfig";
-import {authenticationProps} from "../../../types/authentication";
 import Airtable from "airtable";
+import {sign, verify} from "jsonwebtoken";
+import "../../../firebase/firebaseConfig";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
 }).base("app7V1cg4ibiooxcn");
 
 const userTable = airtableBase("userList");
-const refreshTokenTable = airtableBase("refreshtokens");
+
+type authenticationProps = {
+  itsId: string;
+  password: string;
+};
+
+interface authUser {
+  itsId: string;
+  name: string;
+  userRole: Array<string>;
+  assignedArea: Array<string>;
+}
+
+interface verifiedToken{
+  iat:number;
+  data:object;
+  exp:number
+}
 
 interface Data {
   name?: string;
@@ -30,20 +47,45 @@ export const login = async (props: authenticationProps): Promise<Data> => {
   if (error) {
     return {success: false, msg: "invalid credentials!"};
   } else {
-    const userData = await userTable
+    const data = await userTable
       .select({
         view: "Grid view",
-        filterByFormula: `({ITS ID} = '${itsId}')`,
+        filterByFormula: `({itsId} = '${itsId}')`,
       })
       .firstPage();
-    if (!userData.length) {
+
+    if (!data.length) {
       return {success: false, msg: "user not found!"};
     } else {
-      let data = userData[0].fields;
-      if (data["password"] !== password) {
+      const userData = {...data[0].fields};
+      const {name, itsId, assignedArea, userRole} = userData;
+      if (userData.password !== password) {
         return {success: false, msg: "invalid credentials"};
       }
+      const userTokenData = {name, itsId, assignedArea, userRole};
+      const accessToken: string = sign(
+        {exp: Math.floor(Date.now() / 1000) + 60 * 60 * 6, data: userTokenData},
+        process.env.NEXT_PUBLIC_ACCESS_TOKEN_SALT as string
+      );
+      localStorage.setItem("user", accessToken);
       return {success: true, msg: "user logged in successfully!"};
     }
+  }
+};
+
+export const logout = () => {
+  localStorage.removeItem("user");
+};
+
+export const verifyUser = (): authUser | Data => {
+  try {
+    const accessToken = localStorage.getItem("user");
+    const userData = verify(
+      accessToken as string,
+      process.env.NEXT_PUBLIC_ACCESS_TOKEN_SALT as string
+    ) as verifiedToken;
+    return userData.data as authUser
+  } catch (error) {
+    return {success: false, msg: "User not verified!!"};
   }
 };
