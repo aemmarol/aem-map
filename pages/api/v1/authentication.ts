@@ -22,10 +22,10 @@ interface authUser {
   assignedArea: Array<string>;
 }
 
-interface verifiedToken{
-  iat:number;
-  data:object;
-  exp:number
+interface verifiedToken {
+  iat: number;
+  data: object;
+  exp: number;
 }
 
 interface Data {
@@ -84,7 +84,7 @@ export const verifyUser = (): authUser | Data => {
       accessToken as string,
       process.env.NEXT_PUBLIC_ACCESS_TOKEN_SALT as string
     ) as verifiedToken;
-    return userData.data as authUser
+    return userData.data as authUser;
   } catch (error) {
     return {success: false, msg: "User not verified!!"};
   }
