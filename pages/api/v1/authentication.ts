@@ -1,13 +1,38 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type {NextApiRequest, NextApiResponse} from "next";
 import Joi from "joi";
-import {getAuth, signInWithCustomToken} from "firebase/auth";
+import Airtable from "airtable";
+import {sign, verify} from "jsonwebtoken";
 import "../../../firebase/firebaseConfig";
+
+const airtableBase = new Airtable({
+  apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
+}).base("app7V1cg4ibiooxcn");
+
+const userTable = airtableBase("userList");
+
+type authenticationProps = {
+  itsId: string;
+  password: string;
+};
+
+interface authUser {
+  itsId: string;
+  name: string;
+  userRole: Array<string>;
+  assignedArea: Array<string>;
+}
+
+interface verifiedToken {
+  iat: number;
+  data: object;
+  exp: number;
+}
 
 interface Data {
   name?: string;
   data?: object;
   msg: string;
+  success: boolean;
 }
 
 const loginSchema = Joi.object({
@@ -15,48 +40,52 @@ const loginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  if (req.method === "POST") {
-    const auth = getAuth();
+export const login = async (props: authenticationProps): Promise<Data> => {
+  const {error} = loginSchema.validate(props);
+  const {itsId, password} = props;
 
-    const {error} = loginSchema.validate(req.body);
-    const {itsId, password} = req.body;
-
-    if (error) {
-      return res.status(400).json({msg: error.details[0].message});
-    } else {
-      await fetch(
-        process.env.NEXT_PUBLIC_AEM_AUTH_API_DOMAIN + "/api/authentication",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({itsId, password}),
-        }
-      )
-        .then((result) => {
-          if (result.ok) {
-            result.json().then((tokenData) => {
-              signInWithCustomToken(auth, tokenData.data).then((finalToken) => {
-                return res
-                  .status(200)
-                  .json({msg: "login Successful", data: finalToken});
-              });
-            });
-          } else {
-            return res.status(400).json({msg: "user not found"});
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          return res.status(400).json({msg: "user not found"});
-        });
-    }
+  if (error) {
+    return {success: false, msg: "invalid credentials!"};
   } else {
-    return res.status(404).json({msg: "api not found"});
+    const data = await userTable
+      .select({
+        view: "Grid view",
+        filterByFormula: `({itsId} = '${itsId}')`,
+      })
+      .firstPage();
+
+    if (!data.length) {
+      return {success: false, msg: "user not found!"};
+    } else {
+      const userData = {...data[0].fields};
+      const {name, itsId, assignedArea, userRole} = userData;
+      if (userData.password !== password) {
+        return {success: false, msg: "invalid credentials"};
+      }
+      const userTokenData = {name, itsId, assignedArea, userRole};
+      const accessToken: string = sign(
+        {exp: Math.floor(Date.now() / 1000) + 60 * 60 * 6, data: userTokenData},
+        process.env.NEXT_PUBLIC_ACCESS_TOKEN_SALT as string
+      );
+      localStorage.setItem("user", accessToken);
+      return {success: true, msg: "user logged in successfully!"};
+    }
   }
-}
+};
+
+export const logout = () => {
+  localStorage.removeItem("user");
+};
+
+export const verifyUser = (): authUser | Data => {
+  try {
+    const accessToken = localStorage.getItem("user");
+    const userData = verify(
+      accessToken as string,
+      process.env.NEXT_PUBLIC_ACCESS_TOKEN_SALT as string
+    ) as verifiedToken;
+    return userData.data as authUser;
+  } catch (error) {
+    return {success: false, msg: "User not verified!!"};
+  }
+};
