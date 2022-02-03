@@ -15,12 +15,20 @@ const SignInPage: NextPage = () => {
           className={styles.signinForm}
         >
           <Form.Item
-            name="username"
-            rules={[{required: true, message: "Please input your Username!"}]}
+            name="ITS ID"
+            rules={[
+              {required: true, message: "Please input your ITS ID!"},
+              {min: 8, message: "ITS ID cannot be less than 8 characters"},
+              {max: 8, message: "ITS ID cannot be greater than 8 characters"},
+              {
+                pattern: new RegExp(/^[0-9]+$/),
+                message: "ITS ID should be a number",
+              },
+            ]}
           >
             <Input
               prefix={<UserOutlined className={styles.formIcon} />}
-              placeholder="Username"
+              placeholder="ITS ID"
               bordered={false}
               className={styles.formInput}
             />
