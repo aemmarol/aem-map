@@ -1,9 +1,9 @@
-import {Button, Form, Input, notification} from "antd";
-import {UserOutlined, LockOutlined} from "@ant-design/icons";
-import type {NextPage} from "next";
+import { Button, Form, Input, notification } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import type { NextPage } from "next";
 import styles from "../styles/Home.module.scss";
-import {Signinlayout} from "../layouts/signInPage";
-import {SigninCard} from "../components";
+import { Signinlayout } from "../layouts/signInPage";
+import { SigninCard } from "../components";
 import {
   login,
   authenticationProps,
@@ -11,11 +11,13 @@ import {
 } from "../pages/api/v1/authentication";
 
 const SignInPage: NextPage = () => {
-  const onFinish = (values: any) => {
-    const formValues: authenticationProps = values;
-    login(formValues)
+
+  const [form] = Form.useForm();
+
+  const onFinish = (values:authenticationProps) => {
+    login(values)
       .then((response) => {
-        let userResponse: loginResponseData = response as loginResponseData;
+        const userResponse: loginResponseData = response as loginResponseData;
         notification.success({
           message: userResponse.msg,
         });
@@ -34,16 +36,16 @@ const SignInPage: NextPage = () => {
         <Form
           form={form}
           name="signinForm"
-          initialValues={{remember: true}}
+          initialValues={{ remember: true }}
           className={styles.signinForm}
           onFinish={onFinish}
         >
           <Form.Item
             name="itsId"
             rules={[
-              {required: true, message: "Please input your ITS ID!"},
-              {min: 8, message: "ITS ID cannot be less than 8 characters"},
-              {max: 8, message: "ITS ID cannot be greater than 8 characters"},
+              { required: true, message: "Please input your ITS ID!" },
+              { min: 8, message: "ITS ID cannot be less than 8 characters" },
+              { max: 8, message: "ITS ID cannot be greater than 8 characters" },
               {
                 pattern: new RegExp(/^[0-9]+$/),
                 message: "ITS ID should be a number",
@@ -59,7 +61,7 @@ const SignInPage: NextPage = () => {
           </Form.Item>
           <Form.Item
             name="password"
-            rules={[{required: true, message: "Please input your Password!"}]}
+            rules={[{ required: true, message: "Please input your Password!" }]}
           >
             <Input
               prefix={<LockOutlined className={styles.formIcon} />}
