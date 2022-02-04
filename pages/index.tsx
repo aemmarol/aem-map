@@ -19,6 +19,7 @@ const SignInPage: NextPage = () => {
         notification.success({
           message: userResponse.msg,
         });
+        form.resetFields();
       })
       .catch((error) => {
         notification.error({
@@ -31,6 +32,7 @@ const SignInPage: NextPage = () => {
     <Signinlayout>
       <SigninCard title="Sign In">
         <Form
+          form={form}
           name="signinForm"
           initialValues={{remember: true}}
           className={styles.signinForm}
