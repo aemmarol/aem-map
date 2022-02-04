@@ -3,7 +3,7 @@ import Joi from "joi";
 import Airtable from "airtable";
 import {sign, verify} from "jsonwebtoken";
 import "../../../firebase/firebaseConfig";
-import { authenticationProps, loginResponseData } from "../../../interfaces";
+import {authenticationProps, loginResponseData} from "../../../interfaces";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
