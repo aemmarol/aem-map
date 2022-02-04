@@ -10,10 +10,10 @@ const airtableBase = new Airtable({
 
 const userTable = airtableBase("userList");
 
-type authenticationProps = {
+export interface authenticationProps {
   itsId: string;
   password: string;
-};
+}
 
 interface authUser {
   itsId: string;
@@ -28,7 +28,7 @@ interface verifiedToken {
   exp: number;
 }
 
-interface Data {
+export interface loginResponseData {
   name?: string;
   data?: object;
   msg: string;
@@ -40,12 +40,14 @@ const loginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
-export const login = async (props: authenticationProps): Promise<Data> => {
+export const login = async (
+  props: authenticationProps
+): Promise<loginResponseData | Error> => {
   const {error} = loginSchema.validate(props);
   const {itsId, password} = props;
 
   if (error) {
-    return {success: false, msg: "invalid credentials!"};
+    throw new Error("invalid credentials!");
   } else {
     const data = await userTable
       .select({
@@ -55,12 +57,12 @@ export const login = async (props: authenticationProps): Promise<Data> => {
       .firstPage();
 
     if (!data.length) {
-      return {success: false, msg: "user not found!"};
+      throw new Error("user not found!");
     } else {
       const userData = {...data[0].fields};
       const {name, itsId, assignedArea, userRole} = userData;
       if (userData.password !== password) {
-        return {success: false, msg: "invalid credentials"};
+        throw new Error("invalid credentials!!");
       }
       const userTokenData = {name, itsId, assignedArea, userRole};
       const accessToken: string = sign(
@@ -77,7 +79,7 @@ export const logout = () => {
   localStorage.removeItem("user");
 };
 
-export const verifyUser = (): authUser | Data => {
+export const verifyUser = (): authUser | Error => {
   try {
     const accessToken = localStorage.getItem("user");
     const userData = verify(
@@ -86,6 +88,6 @@ export const verifyUser = (): authUser | Data => {
     ) as verifiedToken;
     return userData.data as authUser;
   } catch (error) {
-    return {success: false, msg: "User not verified!!"};
+    throw new Error("User not verified!!");
   }
 };

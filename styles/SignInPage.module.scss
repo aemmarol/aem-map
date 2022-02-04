@@ -1,0 +1,21 @@
+.signinForm {
+  width: 100%;
+
+  .formInput {
+    border-radius: 6px;
+    height: 42px;
+    background-color: #f5f5f5;
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+  .formIcon {
+    color: grey;
+  }
+
+  .signInButton {
+    border-radius: 4px;
+    text-align: center;
+    margin-top: 12px;
+  }
+}

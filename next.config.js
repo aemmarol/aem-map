@@ -2,9 +2,7 @@ const withPlugins = require("next-compose-plugins");
 const withAntdLess = require("next-plugin-antd-less");
 
 const pluginAntdLess = withAntdLess({
-  modifyVars: {
-    "@primary-color": "#0f0",
-  },
+  modifyVars: {},
   lessVarsFilePath: "./src/styles/variables.less",
   // cssLoaderOptions: {
   // esModule: false,
