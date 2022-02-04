@@ -28,7 +28,7 @@ interface verifiedToken {
   exp: number;
 }
 
-interface Data {
+export interface Data {
   name?: string;
   data?: object;
   msg: string;
@@ -47,7 +47,7 @@ export const login = async (
   const {itsId, password} = props;
 
   if (error) {
-    return new Error("invalid credentials!");
+    throw new Error("invalid credentials!");
   } else {
     const data = await userTable
       .select({
@@ -57,12 +57,12 @@ export const login = async (
       .firstPage();
 
     if (!data.length) {
-      return new Error("user not found!");
+      throw new Error("user not found!");
     } else {
       const userData = {...data[0].fields};
       const {name, itsId, assignedArea, userRole} = userData;
       if (userData.password !== password) {
-        return new Error("invalid credentials!!");
+        throw new Error("invalid credentials!!");
       }
       const userTokenData = {name, itsId, assignedArea, userRole};
       const accessToken: string = sign(
