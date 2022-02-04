@@ -7,7 +7,7 @@ import {SigninCard} from "../components";
 import {
   login,
   authenticationProps,
-  LoginResponseData,
+  loginResponseData,
 } from "../pages/api/v1/authentication";
 
 const SignInPage: NextPage = () => {
@@ -15,7 +15,7 @@ const SignInPage: NextPage = () => {
     const formValues: authenticationProps = values;
     login(formValues)
       .then((response) => {
-        let userResponse: LoginResponseData = response as LoginResponseData;
+        let userResponse: loginResponseData = response as loginResponseData;
         notification.success({
           message: userResponse.msg,
         });

@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import Joi from "joi";
 import Airtable from "airtable";
-import {sign, verify} from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 import "../../../firebase/firebaseConfig";
 
 const airtableBase = new Airtable({
@@ -10,7 +10,7 @@ const airtableBase = new Airtable({
 
 const userTable = airtableBase("userList");
 
-export type authenticationProps = {
+export interface authenticationProps {
   itsId: string;
   password: string;
 };
@@ -28,7 +28,7 @@ interface verifiedToken {
   exp: number;
 }
 
-export interface LoginResponseData {
+export interface loginResponseData {
   name?: string;
   data?: object;
   msg: string;
@@ -42,9 +42,9 @@ const loginSchema = Joi.object({
 
 export const login = async (
   props: authenticationProps
-): Promise<LoginResponseData | Error> => {
-  const {error} = loginSchema.validate(props);
-  const {itsId, password} = props;
+): Promise<loginResponseData | Error> => {
+  const { error } = loginSchema.validate(props);
+  const { itsId, password } = props;
 
   if (error) {
     throw new Error("invalid credentials!");
@@ -59,18 +59,18 @@ export const login = async (
     if (!data.length) {
       throw new Error("user not found!");
     } else {
-      const userData = {...data[0].fields};
-      const {name, itsId, assignedArea, userRole} = userData;
+      const userData = { ...data[0].fields };
+      const { name, itsId, assignedArea, userRole } = userData;
       if (userData.password !== password) {
         throw new Error("invalid credentials!!");
       }
-      const userTokenData = {name, itsId, assignedArea, userRole};
+      const userTokenData = { name, itsId, assignedArea, userRole };
       const accessToken: string = sign(
-        {exp: Math.floor(Date.now() / 1000) + 60 * 60 * 6, data: userTokenData},
+        { exp: Math.floor(Date.now() / 1000) + 60 * 60 * 6, data: userTokenData },
         process.env.NEXT_PUBLIC_ACCESS_TOKEN_SALT as string
       );
       localStorage.setItem("user", accessToken);
-      return {success: true, msg: "user logged in successfully!"};
+      return { success: true, msg: "user logged in successfully!" };
     }
   }
 };
@@ -79,7 +79,7 @@ export const logout = () => {
   localStorage.removeItem("user");
 };
 
-export const verifyUser = (): authUser | LoginResponseData => {
+export const verifyUser = (): authUser | Error => {
   try {
     const accessToken = localStorage.getItem("user");
     const userData = verify(
@@ -88,6 +88,6 @@ export const verifyUser = (): authUser | LoginResponseData => {
     ) as verifiedToken;
     return userData.data as authUser;
   } catch (error) {
-    return {success: false, msg: "User not verified!!"};
+    throw new Error("User not verified!!");
   }
 };
