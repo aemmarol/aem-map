@@ -7,9 +7,7 @@ const {Content} = Layout;
 export const Signinlayout: FC = ({children}) => {
   return (
     <Layout>
-      <Content className={styles.mainWrapper}>
-        {children}
-        </Content>
+      <Content className={styles.mainWrapper}>{children}</Content>
     </Layout>
   );
 };
