@@ -4,23 +4,25 @@ import type {NextPage} from "next";
 import styles from "../styles/Home.module.scss";
 import {Signinlayout} from "../layouts/signInPage";
 import {SigninCard} from "../components";
-import {login, authenticationProps} from "../pages/api/v1/authentication";
+import {
+  login,
+  authenticationProps,
+  LoginResponseData,
+} from "../pages/api/v1/authentication";
 
 const SignInPage: NextPage = () => {
   const onFinish = (values: any) => {
-    console.log("Success:", values);
     const formValues: authenticationProps = values;
     login(formValues)
       .then((response) => {
-        console.log(response);
+        let userResponse: LoginResponseData = response as LoginResponseData;
         notification.success({
-          message: response.msg,
+          message: userResponse.msg,
         });
       })
       .catch((error) => {
-        console.log(error);
         notification.error({
-          message: error.msg,
+          message: error.message,
         });
       });
   };

@@ -28,7 +28,7 @@ interface verifiedToken {
   exp: number;
 }
 
-export interface Data {
+export interface LoginResponseData {
   name?: string;
   data?: object;
   msg: string;
@@ -42,7 +42,7 @@ const loginSchema = Joi.object({
 
 export const login = async (
   props: authenticationProps
-): Promise<Data | Error> => {
+): Promise<LoginResponseData | Error> => {
   const {error} = loginSchema.validate(props);
   const {itsId, password} = props;
 
@@ -79,7 +79,7 @@ export const logout = () => {
   localStorage.removeItem("user");
 };
 
-export const verifyUser = (): authUser | Data => {
+export const verifyUser = (): authUser | LoginResponseData => {
   try {
     const accessToken = localStorage.getItem("user");
     const userData = verify(
