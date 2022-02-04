@@ -3,17 +3,13 @@ import Joi from "joi";
 import Airtable from "airtable";
 import {sign, verify} from "jsonwebtoken";
 import "../../../firebase/firebaseConfig";
+import { authenticationProps, loginResponseData } from "../../../interfaces";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
 }).base("app7V1cg4ibiooxcn");
 
 const userTable = airtableBase("userList");
-
-export interface authenticationProps {
-  itsId: string;
-  password: string;
-}
 
 interface authUser {
   itsId: string;
@@ -26,13 +22,6 @@ interface verifiedToken {
   iat: number;
   data: object;
   exp: number;
-}
-
-export interface loginResponseData {
-  name?: string;
-  data?: object;
-  msg: string;
-  success: boolean;
 }
 
 const loginSchema = Joi.object({
