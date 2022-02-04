@@ -1,4 +1,4 @@
-import {Button, Form, Input} from "antd";
+import {Button, Form, Input, notification} from "antd";
 import {UserOutlined, LockOutlined} from "@ant-design/icons";
 import type {NextPage} from "next";
 import styles from "../styles/Home.module.scss";
@@ -11,12 +11,18 @@ const SignInPage: NextPage = () => {
     console.log("Success:", values);
     const formValues: authenticationProps = values;
     login(formValues)
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+      .then((response) => {
+        console.log(response);
+        notification.success({
+          message: response.msg,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        notification.error({
+          message: error.msg,
+        });
+      });
   };
 
   return (
@@ -27,7 +33,6 @@ const SignInPage: NextPage = () => {
           initialValues={{remember: true}}
           className={styles.signinForm}
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
         >
           <Form.Item
             name="itsId"
