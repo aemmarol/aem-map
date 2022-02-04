@@ -1,6 +1,6 @@
 import {Layout} from "antd";
 import {FC} from "react";
-import styles from "../styles/layouts/LoginLayout.module.scss";
+import styles from "../styles/layouts/SignInLayout.module.scss";
 
 const {Content} = Layout;
 
