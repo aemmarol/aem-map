@@ -40,12 +40,14 @@ const loginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
-export const login = async (props: authenticationProps): Promise<Data> => {
+export const login = async (
+  props: authenticationProps
+): Promise<Data | Error> => {
   const {error} = loginSchema.validate(props);
   const {itsId, password} = props;
 
   if (error) {
-    return {success: false, msg: "invalid credentials!"};
+    return new Error("invalid credentials!");
   } else {
     const data = await userTable
       .select({
@@ -55,12 +57,12 @@ export const login = async (props: authenticationProps): Promise<Data> => {
       .firstPage();
 
     if (!data.length) {
-      return {success: false, msg: "user not found!"};
+      return new Error("user not found!");
     } else {
       const userData = {...data[0].fields};
       const {name, itsId, assignedArea, userRole} = userData;
       if (userData.password !== password) {
-        return {success: false, msg: "invalid credentials"};
+        return new Error("invalid credentials!!");
       }
       const userTokenData = {name, itsId, assignedArea, userRole};
       const accessToken: string = sign(
