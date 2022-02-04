@@ -1,8 +1,8 @@
 import {Button, Form, Input, notification} from "antd";
 import {UserOutlined, LockOutlined} from "@ant-design/icons";
 import type {NextPage} from "next";
-import styles from "../styles/Home.module.scss";
-import {Signinlayout} from "../layouts/signInPage";
+import styles from "../styles/SignInPage.module.scss";
+import {Signinlayout} from "../layouts/signInLayout";
 import {SigninCard} from "../components";
 import {
   login,
