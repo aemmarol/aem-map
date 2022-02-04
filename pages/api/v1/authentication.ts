@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import Joi from "joi";
 import Airtable from "airtable";
-import { sign, verify } from "jsonwebtoken";
+import {sign, verify} from "jsonwebtoken";
 import "../../../firebase/firebaseConfig";
 
 const airtableBase = new Airtable({
@@ -13,7 +13,7 @@ const userTable = airtableBase("userList");
 export interface authenticationProps {
   itsId: string;
   password: string;
-};
+}
 
 interface authUser {
   itsId: string;
@@ -43,8 +43,8 @@ const loginSchema = Joi.object({
 export const login = async (
   props: authenticationProps
 ): Promise<loginResponseData | Error> => {
-  const { error } = loginSchema.validate(props);
-  const { itsId, password } = props;
+  const {error} = loginSchema.validate(props);
+  const {itsId, password} = props;
 
   if (error) {
     throw new Error("invalid credentials!");
@@ -59,18 +59,18 @@ export const login = async (
     if (!data.length) {
       throw new Error("user not found!");
     } else {
-      const userData = { ...data[0].fields };
-      const { name, itsId, assignedArea, userRole } = userData;
+      const userData = {...data[0].fields};
+      const {name, itsId, assignedArea, userRole} = userData;
       if (userData.password !== password) {
         throw new Error("invalid credentials!!");
       }
-      const userTokenData = { name, itsId, assignedArea, userRole };
+      const userTokenData = {name, itsId, assignedArea, userRole};
       const accessToken: string = sign(
-        { exp: Math.floor(Date.now() / 1000) + 60 * 60 * 6, data: userTokenData },
+        {exp: Math.floor(Date.now() / 1000) + 60 * 60 * 6, data: userTokenData},
         process.env.NEXT_PUBLIC_ACCESS_TOKEN_SALT as string
       );
       localStorage.setItem("user", accessToken);
-      return { success: true, msg: "user logged in successfully!" };
+      return {success: true, msg: "user logged in successfully!"};
     }
   }
 };
