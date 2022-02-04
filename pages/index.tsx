@@ -4,11 +4,15 @@ import type {NextPage} from "next";
 import styles from "../styles/Home.module.scss";
 import {Signinlayout} from "../layouts/signInPage";
 import {SigninCard} from "../components";
-import {login} from "../pages/api/v1/authentication";
+import {login, authenticationProps} from "../pages/api/v1/authentication";
 
 const SignInPage: NextPage = () => {
   const onFinish = (values: any) => {
     console.log("Success:", values);
+    const formValues: authenticationProps = values;
+    login(formValues)
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error));
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -26,7 +30,7 @@ const SignInPage: NextPage = () => {
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
-            name="ITSID"
+            name="itsId"
             rules={[
               {required: true, message: "Please input your ITS ID!"},
               {min: 8, message: "ITS ID cannot be less than 8 characters"},

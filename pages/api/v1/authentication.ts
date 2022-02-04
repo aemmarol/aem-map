@@ -10,7 +10,7 @@ const airtableBase = new Airtable({
 
 const userTable = airtableBase("userList");
 
-type authenticationProps = {
+export type authenticationProps = {
   itsId: string;
   password: string;
 };
