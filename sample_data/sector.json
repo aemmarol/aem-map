@@ -1,0 +1,16 @@
+[
+  {
+    "sector_name": "BADRI MOHALLAH",
+    "sector_id": 1,
+    "sub_sectors": [1, 2, 3, 4, 5],
+    "color_code": "#A9D18E",
+    "masool_name": "Mulla Yusuf Patanwala",
+    "masool_its": 123456,
+    "masool_contact_number": 1234567890,
+    "masoola_name": "Munira Patanwala",
+    "masoola_its": 654321,
+    "masoola_contact_number": 987654321
+  }
+]
+
+
