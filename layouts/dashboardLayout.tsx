@@ -32,9 +32,9 @@ export const Dashboardlayout: FC<{headerTitle: string}> = ({
         <Divider />
         <Menu theme="light" mode="inline" defaultSelectedKeys={["1"]}>
           <Menu.Item key="1">Mohallah List</Menu.Item>
-          <Menu.Item key="1">File List</Menu.Item>
-          <Menu.Item key="2">User List</Menu.Item>
-          <Menu.Item key="3">Escalations</Menu.Item>
+          <Menu.Item key="2">File List</Menu.Item>
+          <Menu.Item key="3">User List</Menu.Item>
+          <Menu.Item key="4">Escalations</Menu.Item>
         </Menu>
       </Drawer>
       <Layout>
