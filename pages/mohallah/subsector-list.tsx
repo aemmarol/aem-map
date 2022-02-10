@@ -24,11 +24,11 @@ const SubSectorList: NextPage = () => {
     sub_sector_id: 1,
     sector_id: 1,
     musaid_name: "Aziz Ahmedabadwala",
-    "musaid_ its": 123456,
+    musaid_its: 123456,
     musaid_contact_number: 1234567890,
     musaida_name: "Farida Mandsaurwala",
     musaida_its: 654321,
-    "musaida_contact number": 987654321,
+    musaida_contact_number: 987654321,
   };
 
   return (
