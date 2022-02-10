@@ -1,9 +1,13 @@
 .header {
   background-color: white;
+  height: 80px;
+  display: flex;
+  align-items: center;
 }
 
 .content {
   height: 100vh;
+  padding: 32px 50px;
 }
 
 .navhead {

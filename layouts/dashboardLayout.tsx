@@ -5,7 +5,10 @@ import {useState} from "react";
 const {Header, Content} = Layout;
 import {MenuOutlined} from "@ant-design/icons";
 
-export const Dashboardlayout: FC = ({children}) => {
+export const Dashboardlayout: FC<{headerTitle: string}> = ({
+  children,
+  headerTitle,
+}) => {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -40,6 +43,7 @@ export const Dashboardlayout: FC = ({children}) => {
             icon={<MenuOutlined />}
             onClick={() => setVisible(!visible)}
           />
+          <h1>{headerTitle}</h1>
         </Header>
         <Content className={styles.content}>{children}</Content>
       </Layout>
