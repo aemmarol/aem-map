@@ -1,5 +1,5 @@
 import {NextPage} from "next";
-import {Dashboardlayout} from "../layouts/dashboardLayout";
+import {Dashboardlayout} from "../../layouts/dashboardLayout";
 
 const Dashboard: NextPage = () => {
   return (
