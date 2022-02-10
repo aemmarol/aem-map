@@ -18,3 +18,9 @@ a {
 .text-align-center {
   text-align: center;
 }
+
+.sidebar {
+  .ant-drawer-body {
+    padding: 0;
+  }
+}

@@ -1,31 +1,18 @@
-import {Layout, Button, Menu, Drawer, Image, Divider, Dropdown} from "antd";
+import {Layout, Button, Menu, Drawer, Image, Divider} from "antd";
 import {FC} from "react";
 import styles from "../styles/layouts/DashboardLayout.module.scss";
 import {useState} from "react";
 const {Header, Content} = Layout;
-import {DownOutlined, MenuOutlined, LogoutOutlined} from "@ant-design/icons";
+import {MenuOutlined} from "@ant-design/icons";
 
 export const Dashboardlayout: FC = ({children}) => {
-  const handleNavClick = () => {
-    setVisible(false);
-  };
-
-  const userDropdownOverlay = (
-    <Menu>
-      <Menu.Item>
-        <LogoutOutlined className={styles.logoutlogo} />
-        Logout
-      </Menu.Item>
-    </Menu>
-  );
-
   const [visible, setVisible] = useState(false);
 
   return (
     <Layout>
       <Drawer
         width={250}
-        className={styles.sidebar}
+        className="sidebar"
         visible={visible}
         placement="left"
         onClose={() => setVisible(false)}
@@ -39,25 +26,11 @@ export const Dashboardlayout: FC = ({children}) => {
             preview={false}
           />
         </div>
-        <br />
-        <div className={styles.userinfo}>
-          <Dropdown overlay={userDropdownOverlay}>
-            <div>
-              ITS ID <DownOutlined />
-            </div>
-          </Dropdown>
-        </div>
         <Divider />
         <Menu theme="light" mode="inline" defaultSelectedKeys={["1"]}>
-          <Menu.Item onClick={handleNavClick} key="1">
-            Map View
-          </Menu.Item>
-          <Menu.Item onClick={handleNavClick} key="2">
-            User List
-          </Menu.Item>
-          <Menu.Item onClick={handleNavClick} key="3">
-            Escalations
-          </Menu.Item>
+          <Menu.Item key="1">Map View</Menu.Item>
+          <Menu.Item key="2">User List</Menu.Item>
+          <Menu.Item key="3">Escalations</Menu.Item>
         </Menu>
       </Drawer>
       <Layout>
