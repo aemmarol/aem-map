@@ -4,6 +4,9 @@ import Layout from "antd/lib/layout/layout";
 import {NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import styles from "../../styles/SubSectorList.module.scss";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+
+import {faLocationDot} from "@fortawesome/free-solid-svg-icons";
 
 const SubSectorList: NextPage = () => {
   const sector = {
@@ -34,28 +37,51 @@ const SubSectorList: NextPage = () => {
   return (
     <Dashboardlayout headerTitle={sector.sector_name}>
       <Layout className={styles.mainWrapper}>
-        <Row>
-          <Col span={2}>
-            <b>Masool:</b>
+        <Row justify="space-around">
+          <Col span={5}>
+            <Card className={styles.masoolCard}>
+              <div className={styles.masoolCardContent}>
+                <p>
+                  <b className={styles.masoolCardHeader}>Masool:</b>
+                </p>
+                <p className={styles.masoolName}>{sector.masool_name}</p>
+                <p className={styles.masoolDetails}>{sector.masool_its}</p>
+                <p className={styles.masoolDetails}>
+                  {sector.masool_contact_number}
+                </p>
+              </div>
+            </Card>
           </Col>
-          <Col span={3}>{sector.masool_name}</Col>
-          <Col span={3}>{sector.masool_its}</Col>
-          <Col span={3}>{sector.masool_contact_number}</Col>
-        </Row>
-        <Row>
-          <Col span={2}>
-            <b>Masoola:</b>
+          <Col span={5}>
+            <Card className={styles.masoolCard}>
+              <div className={styles.masoolCardContent}>
+                <p>
+                  <b className={styles.masoolCardHeader}>Masoola:</b>
+                </p>
+                <p className={styles.masoolName}>{sector.masoola_name}</p>
+                <p className={styles.masoolDetails}>{sector.masoola_its}</p>
+                <p className={styles.masoolDetails}>
+                  {sector.masoola_contact_number}
+                </p>
+              </div>
+            </Card>
           </Col>
-          <Col span={3}>{sector.masoola_name}</Col>
-          <Col span={3}>{sector.masoola_its}</Col>
-          <Col span={3}>{sector.masoola_contact_number}</Col>
-        </Row>
-        <Row>
-          <Col span={2}>
-            <b>Distance:</b>
+          <Col span={5}>
+            <Card className={styles.distanceCard}>
+              <div className={styles.distanceCardContent}>
+                <div>
+                  <FontAwesomeIcon
+                    icon={faLocationDot}
+                    className={styles.locationIcon}
+                  />
+                </div>
+                <span>
+                  0.1 KM <br />1 Minute
+                </span>
+              </div>
+            </Card>
           </Col>
-          <Col span={3}>0.25 KM</Col>
-          <Col span={3}>1 Minute</Col>
+          <Col span={5}></Col>
         </Row>
 
         <Space className={styles.subSectorCardsWrapper}>
