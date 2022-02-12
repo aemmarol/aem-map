@@ -4,6 +4,7 @@ import {NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import styles from "../../styles/SubSectorList.module.scss";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {InchargeDetailsCard} from "../../components/cards/inchargeDetailsCard";
 
 import {faLocationDot} from "@fortawesome/free-solid-svg-icons";
 
@@ -35,36 +36,24 @@ const SubSectorList: NextPage = () => {
 
   return (
     <Dashboardlayout backgroundColor="#e8f5e9" headerTitle={sector.sector_name}>
-      <Row justify="space-around">
-        <Col span={5}>
-          <Card className={styles.masoolCard}>
-            <div className={styles.masoolCardContent}>
-              <p>
-                <b className={styles.masoolCardHeader}>Masool:</b>
-              </p>
-              <p className={styles.masoolName}>{sector.masool_name}</p>
-              <p className={styles.masoolDetails}>{sector.masool_its}</p>
-              <p className={styles.masoolDetails}>
-                {sector.masool_contact_number}
-              </p>
-            </div>
-          </Card>
+      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+        <Col span={6}>
+          <InchargeDetailsCard
+            cardTitle="Masool"
+            inchargeName={sector.masool_name}
+            inchargeIts={sector.masool_its}
+            inchargeContactNumber={sector.masool_contact_number}
+          ></InchargeDetailsCard>
         </Col>
-        <Col span={5}>
-          <Card className={styles.masoolCard}>
-            <div className={styles.masoolCardContent}>
-              <p>
-                <b className={styles.masoolCardHeader}>Masoola:</b>
-              </p>
-              <p className={styles.masoolName}>{sector.masoola_name}</p>
-              <p className={styles.masoolDetails}>{sector.masoola_its}</p>
-              <p className={styles.masoolDetails}>
-                {sector.masoola_contact_number}
-              </p>
-            </div>
-          </Card>
+        <Col span={6}>
+          <InchargeDetailsCard
+            cardTitle="Masool"
+            inchargeName={sector.masool_name}
+            inchargeIts={sector.masool_its}
+            inchargeContactNumber={sector.masool_contact_number}
+          ></InchargeDetailsCard>
         </Col>
-        <Col span={5}>
+        <Col span={6}>
           <Card className={styles.distanceCard}>
             <div className={styles.distanceCardContent}>
               <div>
@@ -79,7 +68,7 @@ const SubSectorList: NextPage = () => {
             </div>
           </Card>
         </Col>
-        <Col span={5}></Col>
+        <Col span={6}></Col>
       </Row>
 
       <Space className={styles.subSectorCardsWrapper}>
