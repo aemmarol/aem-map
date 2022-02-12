@@ -3,10 +3,8 @@ import {Space, Card, Row, Col} from "antd";
 import {NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import styles from "../../styles/SubSectorList.module.scss";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {InchargeDetailsCard} from "../../components/cards/inchargeDetailsCard";
-
-import {faLocationDot} from "@fortawesome/free-solid-svg-icons";
+import {DistanceCard} from "../../components/cards/distanceCard";
 
 const SubSectorList: NextPage = () => {
   const sector = {
@@ -36,7 +34,7 @@ const SubSectorList: NextPage = () => {
 
   return (
     <Dashboardlayout backgroundColor="#e8f5e9" headerTitle={sector.sector_name}>
-      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+      <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
         <Col span={6}>
           <InchargeDetailsCard
             cardTitle="Masool"
@@ -47,26 +45,18 @@ const SubSectorList: NextPage = () => {
         </Col>
         <Col span={6}>
           <InchargeDetailsCard
-            cardTitle="Masool"
-            inchargeName={sector.masool_name}
-            inchargeIts={sector.masool_its}
-            inchargeContactNumber={sector.masool_contact_number}
+            cardTitle="Masoola"
+            inchargeName={sector.masoola_name}
+            inchargeIts={sector.masoola_its}
+            inchargeContactNumber={sector.masoola_contact_number}
           ></InchargeDetailsCard>
         </Col>
-        <Col span={6}>
-          <Card className={styles.distanceCard}>
-            <div className={styles.distanceCardContent}>
-              <div>
-                <FontAwesomeIcon
-                  icon={faLocationDot}
-                  className={styles.locationIcon}
-                />
-              </div>
-              <span>
-                0.1 KM <br />1 Minute
-              </span>
-            </div>
-          </Card>
+        <Col span={6} className={styles.infoCol}>
+          <DistanceCard
+            backgroundColor="#A9D18E"
+            distance="0.25 KM"
+            eta="1 Minute"
+          ></DistanceCard>
         </Col>
         <Col span={6}></Col>
       </Row>
