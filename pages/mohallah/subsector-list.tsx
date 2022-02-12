@@ -1,6 +1,5 @@
 import {ManOutlined, WomanOutlined} from "@ant-design/icons";
 import {Space, Card, Row, Col} from "antd";
-import Layout from "antd/lib/layout/layout";
 import {NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import styles from "../../styles/SubSectorList.module.scss";
