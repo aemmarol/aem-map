@@ -1,10 +1,10 @@
-import {ManOutlined, WomanOutlined} from "@ant-design/icons";
 import {Space, Card, Row, Col} from "antd";
 import {NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import styles from "../../styles/SubSectorList.module.scss";
 import {InchargeDetailsCard} from "../../components/cards/inchargeDetailsCard";
 import {DistanceCard} from "../../components/cards/distanceCard";
+import {SubSectorCard} from "../../components/cards/subSectorCard";
 
 const SubSectorList: NextPage = () => {
   const sector = {
@@ -41,7 +41,7 @@ const SubSectorList: NextPage = () => {
             inchargeName={sector.masool_name}
             inchargeIts={sector.masool_its}
             inchargeContactNumber={sector.masool_contact_number}
-          ></InchargeDetailsCard>
+          />
         </Col>
         <Col span={6}>
           <InchargeDetailsCard
@@ -49,47 +49,70 @@ const SubSectorList: NextPage = () => {
             inchargeName={sector.masoola_name}
             inchargeIts={sector.masoola_its}
             inchargeContactNumber={sector.masoola_contact_number}
-          ></InchargeDetailsCard>
+          />
         </Col>
         <Col span={6} className={styles.infoCol}>
           <DistanceCard
             backgroundColor="#A9D18E"
-            distance="0.25 KM"
+            distance="0.1 KM"
             eta="1 Minute"
-          ></DistanceCard>
+          />
         </Col>
         <Col span={6}></Col>
       </Row>
 
-      <Space className={styles.subSectorCardsWrapper}>
-        <Card className={styles.subSectorCard} bodyStyle={{padding: "0"}}>
-          <div className={styles.cardContent}>
-            <h2 className={styles.cardHeading}>Burj Burhan</h2>
-            <ul>
-              <li>
-                <b>Musaid:</b> {subsector.musaid_name}
-              </li>
-              <li>
-                <b>Musaida:</b> {subsector.musaid_name}
-              </li>
-              <li>
-                <b>Distance:</b> 0.25km/1 Minute
-              </li>
-            </ul>
-          </div>
-          <div className={styles.cardFooter}>
-            <div className={styles.footerContent}>
-              <p>Total Mumineen</p>
-              <Space className={styles.personCount} size={20}>
-                <ManOutlined />
-                100
-                <WomanOutlined />
-                100
-              </Space>
-            </div>
-          </div>
-        </Card>
-      </Space>
+      <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+        <Col span={6}>
+          <SubSectorCard
+            musaidName={subsector.musaid_name}
+            musaidaName={subsector.musaida_name}
+            distance="0.1 KM"
+            eta="1 Minute"
+            cardHeading={subsector.sub_sector_name}
+            backgroundColor="#A9D18E"
+          />
+        </Col>
+        <Col span={6}>
+          <SubSectorCard
+            musaidName={subsector.musaid_name}
+            musaidaName={subsector.musaida_name}
+            distance="0.1 KM"
+            eta="1 Minute"
+            cardHeading={subsector.sub_sector_name}
+            backgroundColor="#A9D18E"
+          />
+        </Col>
+        <Col span={6}>
+          <SubSectorCard
+            musaidName={subsector.musaid_name}
+            musaidaName={subsector.musaida_name}
+            distance="0.1 KM"
+            eta="1 Minute"
+            cardHeading={subsector.sub_sector_name}
+            backgroundColor="#A9D18E"
+          />
+        </Col>
+        <Col span={6}>
+          <SubSectorCard
+            musaidName={subsector.musaid_name}
+            musaidaName={subsector.musaida_name}
+            distance="0.1 KM"
+            eta="1 Minute"
+            cardHeading={subsector.sub_sector_name}
+            backgroundColor="#A9D18E"
+          />
+        </Col>
+        <Col span={6}>
+          <SubSectorCard
+            musaidName={subsector.musaid_name}
+            musaidaName={subsector.musaida_name}
+            distance="0.1 KM"
+            eta="1 Minute"
+            cardHeading={subsector.sub_sector_name}
+            backgroundColor="#A9D18E"
+          />
+        </Col>
+      </Row>
     </Dashboardlayout>
   );
 };

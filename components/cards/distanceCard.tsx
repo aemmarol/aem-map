@@ -8,7 +8,7 @@ export const DistanceCard: FC<{
   backgroundColor?: string;
   distance: string;
   eta: string;
-}> = ({backgroundColor = "#fffff", distance, eta}) => {
+}> = ({backgroundColor = "#000000", distance, eta}) => {
   return (
     <Card style={{background: backgroundColor}} className={styles.distanceCard}>
       <div className={styles.distanceCardContent}>
