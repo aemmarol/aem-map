@@ -35,85 +35,83 @@ const SubSectorList: NextPage = () => {
   };
 
   return (
-    <Dashboardlayout headerTitle={sector.sector_name}>
-      <Layout className={styles.mainWrapper}>
-        <Row justify="space-around">
-          <Col span={5}>
-            <Card className={styles.masoolCard}>
-              <div className={styles.masoolCardContent}>
-                <p>
-                  <b className={styles.masoolCardHeader}>Masool:</b>
-                </p>
-                <p className={styles.masoolName}>{sector.masool_name}</p>
-                <p className={styles.masoolDetails}>{sector.masool_its}</p>
-                <p className={styles.masoolDetails}>
-                  {sector.masool_contact_number}
-                </p>
-              </div>
-            </Card>
-          </Col>
-          <Col span={5}>
-            <Card className={styles.masoolCard}>
-              <div className={styles.masoolCardContent}>
-                <p>
-                  <b className={styles.masoolCardHeader}>Masoola:</b>
-                </p>
-                <p className={styles.masoolName}>{sector.masoola_name}</p>
-                <p className={styles.masoolDetails}>{sector.masoola_its}</p>
-                <p className={styles.masoolDetails}>
-                  {sector.masoola_contact_number}
-                </p>
-              </div>
-            </Card>
-          </Col>
-          <Col span={5}>
-            <Card className={styles.distanceCard}>
-              <div className={styles.distanceCardContent}>
-                <div>
-                  <FontAwesomeIcon
-                    icon={faLocationDot}
-                    className={styles.locationIcon}
-                  />
-                </div>
-                <span>
-                  0.1 KM <br />1 Minute
-                </span>
-              </div>
-            </Card>
-          </Col>
-          <Col span={5}></Col>
-        </Row>
-
-        <Space className={styles.subSectorCardsWrapper}>
-          <Card className={styles.subSectorCard} bodyStyle={{padding: "0"}}>
-            <div className={styles.cardContent}>
-              <h2 className={styles.cardHeading}>Burj Burhan</h2>
-              <ul>
-                <li>
-                  <b>Musaid:</b> {subsector.musaid_name}
-                </li>
-                <li>
-                  <b>Musaida:</b> {subsector.musaid_name}
-                </li>
-                <li>
-                  <b>Distance:</b> 0.25km/1 Minute
-                </li>
-              </ul>
-            </div>
-            <div className={styles.cardFooter}>
-              <div className={styles.footerContent}>
-                <p>Total Mumineen</p>
-                <Space className={styles.personCount} size={20}>
-                  <ManOutlined />
-                  100
-                  <WomanOutlined />
-                  100
-                </Space>
-              </div>
+    <Dashboardlayout backgroundColor="#e8f5e9" headerTitle={sector.sector_name}>
+      <Row justify="space-around">
+        <Col span={5}>
+          <Card className={styles.masoolCard}>
+            <div className={styles.masoolCardContent}>
+              <p>
+                <b className={styles.masoolCardHeader}>Masool:</b>
+              </p>
+              <p className={styles.masoolName}>{sector.masool_name}</p>
+              <p className={styles.masoolDetails}>{sector.masool_its}</p>
+              <p className={styles.masoolDetails}>
+                {sector.masool_contact_number}
+              </p>
             </div>
           </Card>
-        </Space>
-      </Layout>
+        </Col>
+        <Col span={5}>
+          <Card className={styles.masoolCard}>
+            <div className={styles.masoolCardContent}>
+              <p>
+                <b className={styles.masoolCardHeader}>Masoola:</b>
+              </p>
+              <p className={styles.masoolName}>{sector.masoola_name}</p>
+              <p className={styles.masoolDetails}>{sector.masoola_its}</p>
+              <p className={styles.masoolDetails}>
+                {sector.masoola_contact_number}
+              </p>
+            </div>
+          </Card>
+        </Col>
+        <Col span={5}>
+          <Card className={styles.distanceCard}>
+            <div className={styles.distanceCardContent}>
+              <div>
+                <FontAwesomeIcon
+                  icon={faLocationDot}
+                  className={styles.locationIcon}
+                />
+              </div>
+              <span>
+                0.1 KM <br />1 Minute
+              </span>
+            </div>
+          </Card>
+        </Col>
+        <Col span={5}></Col>
+      </Row>
+
+      <Space className={styles.subSectorCardsWrapper}>
+        <Card className={styles.subSectorCard} bodyStyle={{padding: "0"}}>
+          <div className={styles.cardContent}>
+            <h2 className={styles.cardHeading}>Burj Burhan</h2>
+            <ul>
+              <li>
+                <b>Musaid:</b> {subsector.musaid_name}
+              </li>
+              <li>
+                <b>Musaida:</b> {subsector.musaid_name}
+              </li>
+              <li>
+                <b>Distance:</b> 0.25km/1 Minute
+              </li>
+            </ul>
+          </div>
+          <div className={styles.cardFooter}>
+            <div className={styles.footerContent}>
+              <p>Total Mumineen</p>
+              <Space className={styles.personCount} size={20}>
+                <ManOutlined />
+                100
+                <WomanOutlined />
+                100
+              </Space>
+            </div>
+          </div>
+        </Card>
+      </Space>
     </Dashboardlayout>
   );
 };

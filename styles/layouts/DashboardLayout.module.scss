@@ -1,19 +1,12 @@
-.header {
-  background-color: white;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  .headerTitle {
-    margin: auto;
-  }
-}
-
 .content {
   height: 100vh;
+  margin-top: 80px;
+  padding: 20px 32px;
 }
 
 .navhead {
   text-align: center;
+  padding-top: 20px;
 }
 
 .userinfo {

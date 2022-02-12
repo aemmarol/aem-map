@@ -1,14 +1,15 @@
-import {Layout, Button, Menu, Drawer, Image, Divider} from "antd";
+import {Layout, Button, Menu, Drawer, Image, Divider, Avatar} from "antd";
 import {FC} from "react";
 import styles from "../styles/layouts/DashboardLayout.module.scss";
 import {useState} from "react";
-const {Header, Content} = Layout;
-import {MenuOutlined} from "@ant-design/icons";
+import {DashboardHeader} from "../components/headers";
 
-export const Dashboardlayout: FC<{headerTitle: string}> = ({
-  children,
-  headerTitle,
-}) => {
+const {Header, Content} = Layout;
+
+export const Dashboardlayout: FC<{
+  headerTitle: string;
+  backgroundColor?: string;
+}> = ({children, headerTitle, backgroundColor = "#efefef"}) => {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -19,6 +20,7 @@ export const Dashboardlayout: FC<{headerTitle: string}> = ({
         visible={visible}
         placement="left"
         onClose={() => setVisible(false)}
+        closable={false}
       >
         <div className={styles.navhead}>
           <Image
@@ -38,15 +40,16 @@ export const Dashboardlayout: FC<{headerTitle: string}> = ({
         </Menu>
       </Drawer>
       <Layout>
-        <Header className={styles.header}>
-          <Button
-            type="primary"
-            icon={<MenuOutlined />}
-            onClick={() => setVisible(!visible)}
-          />
-          <h1>{headerTitle}</h1>
-        </Header>
-        <Content className={styles.content}>{children}</Content>
+        <DashboardHeader
+          headerTitle={headerTitle}
+          handleToggle={() => setVisible(!visible)}
+        />
+        <Content
+          style={{background: backgroundColor}}
+          className={styles.content}
+        >
+          {children}
+        </Content>
       </Layout>
     </Layout>
   );
