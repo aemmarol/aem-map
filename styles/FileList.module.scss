@@ -1,8 +1,9 @@
 .mainWrapper {
   min-height: 100vh;
-  background-color: #e8f5e9;
-  padding: 32px 50px;
-  min-width: 100wh;
+
+  .infoCol {
+    display: flex;
+  }
 
   .table {
     margin-top: 20px;

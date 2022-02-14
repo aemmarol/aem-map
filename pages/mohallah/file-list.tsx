@@ -1,7 +1,9 @@
-import {Layout, Row, Col, Table} from "antd";
+import {Row, Col, Table} from "antd";
 import {NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import styles from "../../styles/FileList.module.scss";
+import {InchargeDetailsCard} from "../../components/cards/inchargeDetailsCard";
+import {DistanceCard} from "../../components/cards/distanceCard";
 
 const FileList: NextPage = () => {
   const data = {
@@ -314,46 +316,49 @@ const FileList: NextPage = () => {
     },
   ];
   return (
-    <Dashboardlayout headerTitle="BURJ BURHAN">
-      <Layout className={styles.mainWrapper}>
-        <Row>
-          <Col span={2}>
-            <b>Masool:</b>
+    <Dashboardlayout headerTitle="BURJ BURHAN" backgroundColor="#e8f5e9">
+      <div className={styles.mainWrapper}>
+        <Row gutter={16}>
+          <Col span={4}>
+            <InchargeDetailsCard
+              cardTitle="Masool"
+              inchargeName={data.masool_name}
+              inchargeIts={data.masool_its}
+              inchargeContactNumber={data.masool_contact_number}
+            />
           </Col>
-          <Col span={3}>{data.masool_name}</Col>
-          <Col span={3}>{data.masool_its}</Col>
-          <Col span={3}>{data.masool_contact_number}</Col>
-        </Row>
-        <Row>
-          <Col span={2}>
-            <b>Masoola:</b>
+          <Col span={4}>
+            <InchargeDetailsCard
+              cardTitle="Masoola"
+              inchargeName={data.masoola_name}
+              inchargeIts={data.masoola_its}
+              inchargeContactNumber={data.masoola_contact_number}
+            />
           </Col>
-          <Col span={3}>{data.masoola_name}</Col>
-          <Col span={3}>{data.masoola_its}</Col>
-          <Col span={3}>{data.masoola_contact_number}</Col>
-        </Row>
-        <Row>
-          <Col span={2}>
-            <b>Musaid:</b>
+          <Col span={4}>
+            <InchargeDetailsCard
+              cardTitle="Musaid"
+              inchargeName={data.musaid_name}
+              inchargeIts={data.musaid_its}
+              inchargeContactNumber={data.musaid_contact_number}
+            />
           </Col>
-          <Col span={3}>{data.musaid_name}</Col>
-          <Col span={3}>{data.musaid_its}</Col>
-          <Col span={3}>{data.musaid_contact_number}</Col>
-        </Row>
-        <Row>
-          <Col span={2}>
-            <b>Musaida:</b>
+          <Col span={4}>
+            <InchargeDetailsCard
+              cardTitle="Musaida"
+              inchargeName={data.musaida_name}
+              inchargeIts={data.musaida_its}
+              inchargeContactNumber={data.musaida_contact_number}
+            />
           </Col>
-          <Col span={3}>{data.musaida_name}</Col>
-          <Col span={3}>{data.musaida_its}</Col>
-          <Col span={3}>{data.musaida_contact_number}</Col>
-        </Row>
-        <Row>
-          <Col span={2}>
-            <b>Distance:</b>
+          <Col span={4} className={styles.infoCol}>
+            <DistanceCard
+              backgroundColor="#A9D18E"
+              distance="0.1 KM"
+              eta="1 Minute"
+            />
           </Col>
-          <Col span={3}>0.25 KM</Col>
-          <Col span={3}>1 Minute</Col>
+          <Col span={4} />
         </Row>
 
         <Table
@@ -361,7 +366,7 @@ const FileList: NextPage = () => {
           columns={columns}
           className={styles.table}
         />
-      </Layout>
+      </div>
     </Dashboardlayout>
   );
 };
