@@ -31,16 +31,16 @@ const handler: NextApiHandler<NextApiResponse> = async (
   res: NextApiResponse
 ) => {
   // const form = new formidable.IncomingForm();
-  if(req.method === "POST"){
+  if (req.method === "POST") {
     try {
       const {fields, files} = await formidablePromise(req, {});
       let sampleData = XLSX.readFile(files.file.filepath);
-      let data:any=[];
-  
+      let data: any = [];
+
       const sheets = sampleData.SheetNames;
-  
-      console.log(req.method)
-  
+
+      console.log(req.method);
+
       for (let i = 0; i < sheets.length; i++) {
         const temp = XLSX.utils.sheet_to_json(
           sampleData.Sheets[sampleData.SheetNames[i]]
@@ -53,10 +53,9 @@ const handler: NextApiHandler<NextApiResponse> = async (
     } catch (error) {
       res.status(500).json({error: error});
     }
-  }else{
-    res.status(404).json({msg:"api not found"})
+  } else {
+    res.status(404).json({msg: "api not found"});
   }
-  
 };
 
 export default handler;
