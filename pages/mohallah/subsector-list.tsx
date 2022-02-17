@@ -1,11 +1,10 @@
-import {ManOutlined, WomanOutlined} from "@ant-design/icons";
-import {Space, Card, Row, Col} from "antd";
+import {Row, Col} from "antd";
 import {NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import styles from "../../styles/SubSectorList.module.scss";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-
-import {faLocationDot} from "@fortawesome/free-solid-svg-icons";
+import {InchargeDetailsCard} from "../../components/cards/inchargeDetailsCard";
+import {DistanceCard} from "../../components/cards/distanceCard";
+import {SubSectorCard} from "../../components/cards/subSectorCard";
 
 const SubSectorList: NextPage = () => {
   const sector = {
@@ -35,82 +34,87 @@ const SubSectorList: NextPage = () => {
 
   return (
     <Dashboardlayout backgroundColor="#e8f5e9" headerTitle={sector.sector_name}>
-      <Row justify="space-around">
-        <Col span={5}>
-          <Card className={styles.masoolCard}>
-            <div className={styles.masoolCardContent}>
-              <p>
-                <b className={styles.masoolCardHeader}>Masool:</b>
-              </p>
-              <p className={styles.masoolName}>{sector.masool_name}</p>
-              <p className={styles.masoolDetails}>{sector.masool_its}</p>
-              <p className={styles.masoolDetails}>
-                {sector.masool_contact_number}
-              </p>
-            </div>
-          </Card>
-        </Col>
-        <Col span={5}>
-          <Card className={styles.masoolCard}>
-            <div className={styles.masoolCardContent}>
-              <p>
-                <b className={styles.masoolCardHeader}>Masoola:</b>
-              </p>
-              <p className={styles.masoolName}>{sector.masoola_name}</p>
-              <p className={styles.masoolDetails}>{sector.masoola_its}</p>
-              <p className={styles.masoolDetails}>
-                {sector.masoola_contact_number}
-              </p>
-            </div>
-          </Card>
-        </Col>
-        <Col span={5}>
-          <Card className={styles.distanceCard}>
-            <div className={styles.distanceCardContent}>
-              <div>
-                <FontAwesomeIcon
-                  icon={faLocationDot}
-                  className={styles.locationIcon}
-                />
-              </div>
-              <span>
-                0.1 KM <br />1 Minute
-              </span>
-            </div>
-          </Card>
-        </Col>
-        <Col span={5}></Col>
-      </Row>
+      <div className={styles.mainWrapper}>
+        <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+          <Col span={6}>
+            <InchargeDetailsCard
+              cardTitle="Masool"
+              inchargeName={sector.masool_name}
+              inchargeIts={sector.masool_its}
+              inchargeContactNumber={sector.masool_contact_number}
+            />
+          </Col>
+          <Col span={6}>
+            <InchargeDetailsCard
+              cardTitle="Masoola"
+              inchargeName={sector.masoola_name}
+              inchargeIts={sector.masoola_its}
+              inchargeContactNumber={sector.masoola_contact_number}
+            />
+          </Col>
+          <Col span={6} className={styles.infoCol}>
+            <DistanceCard
+              backgroundColor="#A9D18E"
+              distance="0.1 KM"
+              eta="1 Minute"
+            />
+          </Col>
+          <Col span={6}></Col>
+        </Row>
 
-      <Space className={styles.subSectorCardsWrapper}>
-        <Card className={styles.subSectorCard} bodyStyle={{padding: "0"}}>
-          <div className={styles.cardContent}>
-            <h2 className={styles.cardHeading}>Burj Burhan</h2>
-            <ul>
-              <li>
-                <b>Musaid:</b> {subsector.musaid_name}
-              </li>
-              <li>
-                <b>Musaida:</b> {subsector.musaid_name}
-              </li>
-              <li>
-                <b>Distance:</b> 0.25km/1 Minute
-              </li>
-            </ul>
-          </div>
-          <div className={styles.cardFooter}>
-            <div className={styles.footerContent}>
-              <p>Total Mumineen</p>
-              <Space className={styles.personCount} size={20}>
-                <ManOutlined />
-                100
-                <WomanOutlined />
-                100
-              </Space>
-            </div>
-          </div>
-        </Card>
-      </Space>
+        <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+          <Col span={6}>
+            <SubSectorCard
+              musaidName={subsector.musaid_name}
+              musaidaName={subsector.musaida_name}
+              distance="0.1 KM"
+              eta="1 Minute"
+              cardHeading={subsector.sub_sector_name}
+              backgroundColor="#A9D18E"
+            />
+          </Col>
+          <Col span={6}>
+            <SubSectorCard
+              musaidName={subsector.musaid_name}
+              musaidaName={subsector.musaida_name}
+              distance="0.1 KM"
+              eta="1 Minute"
+              cardHeading={subsector.sub_sector_name}
+              backgroundColor="#A9D18E"
+            />
+          </Col>
+          <Col span={6}>
+            <SubSectorCard
+              musaidName={subsector.musaid_name}
+              musaidaName={subsector.musaida_name}
+              distance="0.1 KM"
+              eta="1 Minute"
+              cardHeading={subsector.sub_sector_name}
+              backgroundColor="#A9D18E"
+            />
+          </Col>
+          <Col span={6}>
+            <SubSectorCard
+              musaidName={subsector.musaid_name}
+              musaidaName={subsector.musaida_name}
+              distance="0.1 KM"
+              eta="1 Minute"
+              cardHeading={subsector.sub_sector_name}
+              backgroundColor="#A9D18E"
+            />
+          </Col>
+          <Col span={6}>
+            <SubSectorCard
+              musaidName={subsector.musaid_name}
+              musaidaName={subsector.musaida_name}
+              distance="0.1 KM"
+              eta="1 Minute"
+              cardHeading={subsector.sub_sector_name}
+              backgroundColor="#A9D18E"
+            />
+          </Col>
+        </Row>
+      </div>
     </Dashboardlayout>
   );
 };
