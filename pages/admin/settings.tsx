@@ -46,6 +46,8 @@ const AdminSettings: NextPage = () => {
       "/api/v1/user/dataUpload",
       requestOptions
     ).then((data) => data.json());
+
+    console.log(apiResult);
   };
 
   return (
