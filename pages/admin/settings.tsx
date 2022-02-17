@@ -27,7 +27,7 @@ const AdminSettings: NextPage = () => {
       }
     },
     onDrop(e: any) {
-      // console.log("Dropped files", e.dataTransfer.files);
+      console.log("Dropped files", e.dataTransfer.files);
     },
   };
 
