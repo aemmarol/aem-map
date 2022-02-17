@@ -12,10 +12,12 @@ const AdminSettings: NextPage = () => {
   const draggerProps = {
     name: "file",
     multiple: false,
+    maxCount: 1,
+    accept:
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
     onChange(info: any) {
       const {status} = info.file;
       if (status !== "uploading") {
-        console.log(info.file, info.fileList);
         setexcelFile(info.file);
       }
       if (status === "done") {
@@ -25,15 +27,25 @@ const AdminSettings: NextPage = () => {
       }
     },
     onDrop(e: any) {
-      console.log("Dropped files", e.dataTransfer.files);
+      // console.log("Dropped files", e.dataTransfer.files);
     },
   };
 
-  const handleFileSubmit = () => {
-    console.log("excel file", excelFile);
+  const handleFileSubmit = async () => {
     const formData = new FormData();
     // @ts-ignore: Object is possibly 'null'.
-    formData.append("excel_file", excelFile.originFileObj);
+    formData.append("file", excelFile.originFileObj);
+
+    const requestOptions = {
+      method: "POST",
+      // headers: {"Content-Type": "multipart/form-data"},
+      body: formData,
+    };
+
+    const apiResult = await fetch(
+      "/api/v1/user/dataUpload",
+      requestOptions
+    ).then((data) => data.json());
   };
 
   return (

@@ -33,13 +33,11 @@ const handler: NextApiHandler<NextApiResponse> = async (
   // const form = new formidable.IncomingForm();
   if (req.method === "POST") {
     try {
-      const {fields, files} = await formidablePromise(req, {});
-      let sampleData = XLSX.readFile(files.file.filepath);
-      let data: any = [];
+      const {files} = await formidablePromise(req, {});
+      const sampleData = XLSX.readFile(files.file.filepath);
+      const data: any = [];
 
       const sheets = sampleData.SheetNames;
-
-      console.log(req.method);
 
       for (let i = 0; i < sheets.length; i++) {
         const temp = XLSX.utils.sheet_to_json(
