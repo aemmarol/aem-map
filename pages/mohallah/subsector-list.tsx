@@ -1,4 +1,4 @@
-import {Space, Card, Row, Col} from "antd";
+import {Row, Col} from "antd";
 import {NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import styles from "../../styles/SubSectorList.module.scss";

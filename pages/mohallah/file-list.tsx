@@ -1,4 +1,4 @@
-import {Row, Col, Table} from "antd";
+import {Row, Col} from "antd";
 import {NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import styles from "../../styles/FileList.module.scss";
