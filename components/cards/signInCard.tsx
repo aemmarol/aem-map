@@ -1,6 +1,6 @@
 import {Card} from "antd";
 import {FC} from "react";
-import styles from "../../styles/components/signInCard.module.scss";
+import styles from "../../styles/components/cards/signInCard.module.scss";
 import Image from "next/image";
 
 export const SigninCard: FC<{title: string}> = ({children, title}) => {

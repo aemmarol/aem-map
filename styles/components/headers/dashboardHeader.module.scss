@@ -1,0 +1,19 @@
+.header {
+  background-color: white;
+  height: 80px;
+  display: flex;
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  align-items: center;
+
+  .headerTitle {
+    margin-bottom: 0;
+    margin-left: 32px;
+    justify-self: center;
+  }
+
+  .avatar {
+    margin-left: auto;
+  }
+}
