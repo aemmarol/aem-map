@@ -1,6 +1,8 @@
+import {Timestamp} from "firebase/firestore";
+
 export interface databaseMumeneenFieldData {
   name: string;
   id?: string;
   version?: string;
-  created_at?: Date;
+  created_at?: string;
 }
