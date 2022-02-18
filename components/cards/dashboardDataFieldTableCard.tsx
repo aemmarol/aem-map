@@ -1,4 +1,5 @@
 import {Button, Card, Form, Input, Modal, Table} from "antd";
+import moment from "moment";
 import {FC, useState} from "react";
 import {databaseMumeneenFieldData} from "../../interfaces";
 import {
@@ -33,7 +34,7 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
     const data: databaseMumeneenFieldData = {
       version: process.env.NEXT_PUBLIC_DATABASE_VERSION,
       name: values.name,
-      created_at: new Date(),
+      created_at: moment(new Date()).format("DD-MM-YYYY hh:mm A"),
     };
     const result = await addDataField(collectionName, data);
     if (result) {

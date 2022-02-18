@@ -5,6 +5,7 @@ import {
   fileDetailsFieldCollectionName,
   mumeneenDetailsFieldCollectionName,
 } from "../../../../firebase/dbCollectionNames";
+import moment from "moment";
 
 const mumeneenDetailsFieldCollection = collection(
   firestore,
@@ -23,7 +24,13 @@ export const getMumeneenDataFields = async (): Promise<
   const querySnapshot = await getDocs(mumeneenDetailsFieldCollection);
   querySnapshot.forEach((docs) => {
     const {name, version, created_at} = docs.data();
-    resultArr.push({name, version, created_at, id: docs.id});
+
+    resultArr.push({
+      name,
+      version,
+      created_at,
+      id: docs.id,
+    });
   });
 
   return resultArr.filter(
@@ -38,7 +45,12 @@ export const getFileDataFields = async (): Promise<
   const querySnapshot = await getDocs(fileDetailsFieldCollection);
   querySnapshot.forEach((docs) => {
     const {name, version, created_at} = docs.data();
-    resultArr.push({name, version, created_at, id: docs.id});
+    resultArr.push({
+      name,
+      version,
+      created_at,
+      id: docs.id,
+    });
   });
 
   return resultArr.filter(

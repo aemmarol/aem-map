@@ -70,12 +70,13 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     {
       title: "Name",
       dataIndex: "name",
+      key: "name",
       width: 100,
     },
     {
       title: "Created At",
       dataIndex: "created_at",
-      render: (value: any) => moment(value).format("DD-MM-YYYY"),
+      key: "created_at",
       width: 100,
     },
     {
@@ -100,12 +101,13 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     {
       title: "Name",
       dataIndex: "name",
+      key: "name",
       width: 100,
     },
     {
       title: "Created At",
       dataIndex: "created_at",
-      render: (value: any) => moment(value).format("DD-MM-YYYY"),
+      key: "created_at",
       width: 100,
     },
     {
