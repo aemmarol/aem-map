@@ -4,7 +4,7 @@ import {databaseMumeneenFieldData} from "../../interfaces";
 import {
   addDataField,
   getMumeneenDataFields,
-} from "../../pages/api/v1/user/databaseFields";
+} from "../../pages/api/v1/db/databaseFields";
 
 interface CardProps {
   data: any[];

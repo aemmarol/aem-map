@@ -7,7 +7,7 @@ import {
   deleteDataField,
   getFileDataFields,
   getMumeneenDataFields,
-} from "../api/v1/user/databaseFields";
+} from "../api/v1/db/databaseFields";
 import {databaseMumeneenFieldData} from "../../interfaces";
 import {DashboardDataFieldTableCard} from "../../components";
 import {
