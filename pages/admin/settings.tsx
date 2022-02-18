@@ -14,7 +14,6 @@ import {
   fileDetailsFieldCollectionName,
   mumeneenDetailsFieldCollectionName,
 } from "../../firebase/dbCollectionNames";
-import moment from "moment";
 
 const Dragger = Upload.Dragger;
 
@@ -170,6 +169,20 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     setisFileDataFieldTableLoading(false);
   };
 
+  const loadFileDataFields = async () => {
+    setisFileDataFieldTableLoading(true);
+    const data = await getFileDataFields();
+    updateFileFields(data);
+    setisFileDataFieldTableLoading(false);
+  };
+
+  const loadMumeneenDataFields = async () => {
+    setisMumeneenDataFieldTableLoading(true);
+    const data = await getMumeneenDataFields();
+    updateMumeneenFields(data);
+    setisMumeneenDataFieldTableLoading(false);
+  };
+
   return (
     <Dashboardlayout headerTitle="Admin Settings">
       <Row className="mb-30">
@@ -199,9 +212,9 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
             cardTitle="Mumeneen data fields"
             data={mumeneenFields}
             dataColumns={mumeneenDataFieldsColumns}
-            updateData={updateMumeneenFields}
             collectionName={mumeneenDetailsFieldCollectionName}
             isTableLoading={isMumeneenDataFieldTableLoading}
+            onAddSuccess={loadMumeneenDataFields}
           />
         </Col>
         <Col xs={12}>
@@ -209,9 +222,9 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
             cardTitle="File data fields"
             data={fileFields}
             dataColumns={fileDataFieldsColumns}
-            updateData={updateFileFields}
             collectionName={fileDetailsFieldCollectionName}
             isTableLoading={isFileDataFieldTableLoading}
+            onAddSuccess={loadFileDataFields}
           />
         </Col>
       </Row>
