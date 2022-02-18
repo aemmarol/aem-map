@@ -2,12 +2,8 @@ import {Button, Card, Form, Input, Modal, Table} from "antd";
 import moment from "moment";
 import {FC, useState} from "react";
 import {databaseMumeneenFieldData} from "../../interfaces";
-import {
-  addDataField,
-  getMumeneenDataFields,
-} from "../../pages/api/v1/db/databaseFields";
+import {addDataField} from "../../pages/api/v1/db/databaseFields";
 import styles from "../../styles/components/cards/dashboardDataFieldTableCard.module.scss";
-// import {addDataField} from "../../pages/api/v1/db/databaseFields";
 
 interface CardProps {
   data: any[];
