@@ -7,7 +7,7 @@ import {
   getMumeneenDataFields,
 } from "../../pages/api/v1/db/databaseFields";
 import styles from "../../styles/components/cards/dashboardDataFieldTableCard.module.scss";
-import {addDataField} from "../../pages/api/v1/db/databaseFields";
+// import {addDataField} from "../../pages/api/v1/db/databaseFields";
 
 interface CardProps {
   data: any[];
@@ -64,6 +64,8 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
         loading={isTableLoading || isLoading}
         dataSource={data}
         columns={dataColumns}
+        scroll={{y: "calc(100vh - 600px)"}}
+        pagination={false}
       />
       {showAddFieldForm ? (
         <Modal
