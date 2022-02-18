@@ -5,7 +5,6 @@ import {
   fileDetailsFieldCollectionName,
   mumeneenDetailsFieldCollectionName,
 } from "../../../../firebase/dbCollectionNames";
-import moment from "moment";
 
 const mumeneenDetailsFieldCollection = collection(
   firestore,

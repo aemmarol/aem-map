@@ -4,16 +4,15 @@ import {FC, useState} from "react";
 import {databaseMumeneenFieldData} from "../../interfaces";
 import {
   addDataField,
-  getMumeneenDataFields,
 } from "../../pages/api/v1/db/databaseFields";
 
 interface CardProps {
   data: any[];
   dataColumns: any[];
   cardTitle: string;
-  updateData: (data: databaseMumeneenFieldData[]) => any;
   collectionName: string;
   isTableLoading: boolean;
+  onAddSuccess:()=>any;
 }
 
 export const DashboardDataFieldTableCard: FC<CardProps> = ({
@@ -21,8 +20,8 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
   dataColumns,
   cardTitle,
   collectionName,
-  updateData,
   isTableLoading,
+  onAddSuccess
 }) => {
   const [form] = Form.useForm();
 
@@ -36,13 +35,13 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
       name: values.name,
       created_at: moment(new Date()).format("DD-MM-YYYY hh:mm A"),
     };
+
     const result = await addDataField(collectionName, data);
     if (result) {
       form.resetFields();
-      const newData = await getMumeneenDataFields();
-      updateData(newData);
       setshowAddFieldForm(false);
       setisLoading(false);
+      onAddSuccess();
     } else {
       setisLoading(false);
     }

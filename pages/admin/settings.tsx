@@ -1,20 +1,19 @@
-import {Button, Card, Col, message, Row, Upload} from "antd";
-import {GetServerSideProps, NextPage} from "next";
-import {Dashboardlayout} from "../../layouts/dashboardLayout";
-import {DeleteTwoTone, InboxOutlined} from "@ant-design/icons";
-import {useEffect, useState} from "react";
+import { Button, Card, Col, message, Row, Upload } from "antd";
+import { GetServerSideProps, NextPage } from "next";
+import { Dashboardlayout } from "../../layouts/dashboardLayout";
+import { DeleteTwoTone, InboxOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
 import {
   deleteDataField,
   getFileDataFields,
   getMumeneenDataFields,
 } from "../api/v1/db/databaseFields";
-import {databaseMumeneenFieldData} from "../../interfaces";
-import {DashboardDataFieldTableCard} from "../../components";
+import { databaseMumeneenFieldData } from "../../interfaces";
+import { DashboardDataFieldTableCard } from "../../components";
 import {
   fileDetailsFieldCollectionName,
   mumeneenDetailsFieldCollectionName,
 } from "../../firebase/dbCollectionNames";
-import moment from "moment";
 
 const Dragger = Upload.Dragger;
 
@@ -51,7 +50,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     accept:
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
     onChange(info: any) {
-      const {status} = info.file;
+      const { status } = info.file;
       if (status !== "uploading") {
         setexcelFile(info.file);
       }
@@ -170,6 +169,20 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     setisFileDataFieldTableLoading(false);
   };
 
+  const loadFileDataFields = async () => {
+    setisFileDataFieldTableLoading(true);
+    const data = await getFileDataFields();
+    updateFileFields(data)
+    setisFileDataFieldTableLoading(false);
+  }
+
+  const loadMumeneenDataFields = async () => {
+    setisMumeneenDataFieldTableLoading(true);
+    const data = await getMumeneenDataFields();
+    updateMumeneenFields(data)
+    setisMumeneenDataFieldTableLoading(false);
+  }
+
   return (
     <Dashboardlayout headerTitle="Admin Settings">
       <Row className="mb-30">
@@ -192,15 +205,15 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
         </Col>
       </Row>
 
-      <Row gutter={{xs: 8}}>
+      <Row gutter={{ xs: 8 }}>
         <Col xs={12}>
           <DashboardDataFieldTableCard
             cardTitle="Mumeneen data fields"
             data={mumeneenFields}
             dataColumns={mumeneenDataFieldsColumns}
-            updateData={updateMumeneenFields}
             collectionName={mumeneenDetailsFieldCollectionName}
             isTableLoading={isMumeneenDataFieldTableLoading}
+            onAddSuccess={loadMumeneenDataFields}
           />
         </Col>
         <Col xs={12}>
@@ -208,9 +221,9 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
             cardTitle="File data fields"
             data={fileFields}
             dataColumns={fileDataFieldsColumns}
-            updateData={updateFileFields}
             collectionName={fileDetailsFieldCollectionName}
             isTableLoading={isFileDataFieldTableLoading}
+            onAddSuccess={loadFileDataFields}
           />
         </Col>
       </Row>
@@ -227,5 +240,5 @@ export const getServerSideProps: GetServerSideProps<
     await getMumeneenDataFields();
   const fileDataFields: databaseMumeneenFieldData[] = await getFileDataFields();
 
-  return {props: {mumeneenDataFields, fileDataFields}};
+  return { props: { mumeneenDataFields, fileDataFields } };
 };
