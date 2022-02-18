@@ -2,9 +2,7 @@ import {Button, Card, Form, Input, Modal, Table} from "antd";
 import moment from "moment";
 import {FC, useState} from "react";
 import {databaseMumeneenFieldData} from "../../interfaces";
-import {
-  addDataField,
-} from "../../pages/api/v1/db/databaseFields";
+import {addDataField} from "../../pages/api/v1/db/databaseFields";
 
 interface CardProps {
   data: any[];
@@ -12,7 +10,7 @@ interface CardProps {
   cardTitle: string;
   collectionName: string;
   isTableLoading: boolean;
-  onAddSuccess:()=>any;
+  onAddSuccess: () => any;
 }
 
 export const DashboardDataFieldTableCard: FC<CardProps> = ({
@@ -21,7 +19,7 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
   cardTitle,
   collectionName,
   isTableLoading,
-  onAddSuccess
+  onAddSuccess,
 }) => {
   const [form] = Form.useForm();
 
