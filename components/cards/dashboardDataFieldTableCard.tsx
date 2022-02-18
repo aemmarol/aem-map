@@ -6,6 +6,7 @@ import {
   addDataField,
   getMumeneenDataFields,
 } from "../../pages/api/v1/db/databaseFields";
+import styles from "../../styles/components/cards/dashboardDataFieldTableCard.module.scss";
 
 interface CardProps {
   data: any[];
@@ -50,6 +51,7 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
 
   return (
     <Card
+      className={styles.card}
       extra={
         <Button onClick={() => setshowAddFieldForm(true)} type="primary">
           Add field
@@ -83,7 +85,11 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
               <Input />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className={styles.submitButton}
+              >
                 Submit
               </Button>
             </Form.Item>
