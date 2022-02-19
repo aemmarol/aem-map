@@ -1,4 +1,4 @@
-import {databaseMumeneenFieldData} from "../../../../interfaces";
+import {databaseMumeneenFieldData} from "../../../../types";
 import {addDoc, collection, deleteDoc, doc, getDocs} from "firebase/firestore";
 import {firestore} from "../../../../firebase/firebaseConfig";
 import {

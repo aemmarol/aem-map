@@ -8,7 +8,7 @@ import {
   getFileDataFields,
   getMumeneenDataFields,
 } from "../api/v1/db/databaseFields";
-import {databaseMumeneenFieldData} from "../../interfaces";
+import {databaseMumeneenFieldData} from "../../types";
 import {DashboardDataFieldTableCard} from "../../components";
 import {
   fileDetailsFieldCollectionName,
