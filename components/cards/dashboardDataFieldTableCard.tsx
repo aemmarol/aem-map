@@ -3,7 +3,6 @@ import moment from "moment";
 import {FC, useState} from "react";
 import {databaseMumeneenFieldData} from "../../interfaces";
 import {addDataField} from "../../pages/api/v1/db/databaseFields";
-import styles from "../../styles/components/cards/dashboardDataFieldTableCard.module.scss";
 
 interface CardProps {
   data: any[];
@@ -48,7 +47,7 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
 
   return (
     <Card
-      className={styles.card}
+      className="border-radius-10"
       extra={
         <Button onClick={() => setshowAddFieldForm(true)} type="primary">
           Add field
@@ -84,11 +83,7 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
               <Input />
             </Form.Item>
             <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className={styles.submitButton}
-              >
+              <Button type="primary" htmlType="submit">
                 Submit
               </Button>
             </Form.Item>

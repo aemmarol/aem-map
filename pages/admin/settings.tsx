@@ -188,7 +188,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
       <Row className="mb-30">
         <Col xs={12}>
           <Card
-            style={{borderRadius: "10px"}}
+            className="border-radius-10"
             extra={
               <Button onClick={handleFileSubmit} type="primary">
                 Submit
