@@ -5,6 +5,9 @@ import styles from "../../styles/SubSectorList.module.scss";
 import {InchargeDetailsCard} from "../../components/cards/inchargeDetailsCard";
 import {DistanceCard} from "../../components/cards/distanceCard";
 import {SubSectorCard} from "../../components/cards/subSectorCard";
+import {verifyUser} from "../api/v1/authentication";
+import {useRouter} from "next/router";
+import {useEffect} from "react";
 
 const SubSectorList: NextPage = () => {
   const sector = {
@@ -31,6 +34,17 @@ const SubSectorList: NextPage = () => {
     musaida_its: 654321,
     musaida_contact_number: 987654321,
   };
+
+  const router = useRouter();
+
+  useEffect(() => {
+    try {
+      verifyUser();
+    } catch (e) {
+      console.log("Please Sign In First");
+      router.push("/");
+    }
+  });
 
   return (
     <Dashboardlayout backgroundColor="#e8f5e9" headerTitle={sector.sector_name}>
