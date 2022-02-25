@@ -1,13 +1,16 @@
-import {Row, Col} from "antd";
+import {Row, Col, Spin} from "antd";
 import {NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import styles from "../../styles/SubSectorList.module.scss";
-import {InchargeDetailsCard} from "../../components/cards/inchargeDetailsCard";
-import {DistanceCard} from "../../components/cards/distanceCard";
-import {SubSectorCard} from "../../components/cards/subSectorCard";
 import {verifyUser} from "../api/v1/authentication";
 import {useRouter} from "next/router";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {
+  FullPageLoader,
+  InchargeDetailsCard,
+  DistanceCard,
+  SubSectorCard,
+} from "../../components";
 
 const SubSectorList: NextPage = () => {
   const sector = {
@@ -37,100 +40,110 @@ const SubSectorList: NextPage = () => {
 
   const router = useRouter();
 
+  const [userAuthenticated, setuserAuthenticated] = useState(false);
+
   useEffect(() => {
     try {
       verifyUser();
+      setuserAuthenticated(true);
     } catch (e) {
       console.log("Please Sign In First");
       router.push("/");
     }
   });
 
-  return (
-    <Dashboardlayout backgroundColor="#e8f5e9" headerTitle={sector.sector_name}>
-      <div className={styles.mainWrapper}>
-        <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
-          <Col span={6}>
-            <InchargeDetailsCard
-              cardTitle="Masool"
-              inchargeName={sector.masool_name}
-              inchargeIts={sector.masool_its}
-              inchargeContactNumber={sector.masool_contact_number}
-            />
-          </Col>
-          <Col span={6}>
-            <InchargeDetailsCard
-              cardTitle="Masoola"
-              inchargeName={sector.masoola_name}
-              inchargeIts={sector.masoola_its}
-              inchargeContactNumber={sector.masoola_contact_number}
-            />
-          </Col>
-          <Col span={6} className={styles.infoCol}>
-            <DistanceCard
-              backgroundColor="#A9D18E"
-              distance="0.1 KM"
-              eta="1 Minute"
-            />
-          </Col>
-          <Col span={6}></Col>
-        </Row>
+  if (userAuthenticated) {
+    return (
+      <Dashboardlayout
+        backgroundColor="#e8f5e9"
+        headerTitle={sector.sector_name}
+      >
+        <div className={styles.mainWrapper}>
+          <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+            <Col span={6}>
+              <InchargeDetailsCard
+                cardTitle="Masool"
+                inchargeName={sector.masool_name}
+                inchargeIts={sector.masool_its}
+                inchargeContactNumber={sector.masool_contact_number}
+              />
+            </Col>
+            <Col span={6}>
+              <InchargeDetailsCard
+                cardTitle="Masoola"
+                inchargeName={sector.masoola_name}
+                inchargeIts={sector.masoola_its}
+                inchargeContactNumber={sector.masoola_contact_number}
+              />
+            </Col>
+            <Col span={6} className={styles.infoCol}>
+              <DistanceCard
+                backgroundColor="#A9D18E"
+                distance="0.1 KM"
+                eta="1 Minute"
+              />
+            </Col>
+            <Col span={6}></Col>
+          </Row>
 
-        <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
-          <Col span={6}>
-            <SubSectorCard
-              musaidName={subsector.musaid_name}
-              musaidaName={subsector.musaida_name}
-              distance="0.1 KM"
-              eta="1 Minute"
-              cardHeading={subsector.sub_sector_name}
-              backgroundColor="#A9D18E"
-            />
-          </Col>
-          <Col span={6}>
-            <SubSectorCard
-              musaidName={subsector.musaid_name}
-              musaidaName={subsector.musaida_name}
-              distance="0.1 KM"
-              eta="1 Minute"
-              cardHeading={subsector.sub_sector_name}
-              backgroundColor="#A9D18E"
-            />
-          </Col>
-          <Col span={6}>
-            <SubSectorCard
-              musaidName={subsector.musaid_name}
-              musaidaName={subsector.musaida_name}
-              distance="0.1 KM"
-              eta="1 Minute"
-              cardHeading={subsector.sub_sector_name}
-              backgroundColor="#A9D18E"
-            />
-          </Col>
-          <Col span={6}>
-            <SubSectorCard
-              musaidName={subsector.musaid_name}
-              musaidaName={subsector.musaida_name}
-              distance="0.1 KM"
-              eta="1 Minute"
-              cardHeading={subsector.sub_sector_name}
-              backgroundColor="#A9D18E"
-            />
-          </Col>
-          <Col span={6}>
-            <SubSectorCard
-              musaidName={subsector.musaid_name}
-              musaidaName={subsector.musaida_name}
-              distance="0.1 KM"
-              eta="1 Minute"
-              cardHeading={subsector.sub_sector_name}
-              backgroundColor="#A9D18E"
-            />
-          </Col>
-        </Row>
-      </div>
-    </Dashboardlayout>
-  );
+          <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+            <Col span={6}>
+              <SubSectorCard
+                musaidName={subsector.musaid_name}
+                musaidaName={subsector.musaida_name}
+                distance="0.1 KM"
+                eta="1 Minute"
+                cardHeading={subsector.sub_sector_name}
+                backgroundColor="#A9D18E"
+              />
+            </Col>
+            <Col span={6}>
+              <SubSectorCard
+                musaidName={subsector.musaid_name}
+                musaidaName={subsector.musaida_name}
+                distance="0.1 KM"
+                eta="1 Minute"
+                cardHeading={subsector.sub_sector_name}
+                backgroundColor="#A9D18E"
+              />
+            </Col>
+            <Col span={6}>
+              <SubSectorCard
+                musaidName={subsector.musaid_name}
+                musaidaName={subsector.musaida_name}
+                distance="0.1 KM"
+                eta="1 Minute"
+                cardHeading={subsector.sub_sector_name}
+                backgroundColor="#A9D18E"
+              />
+            </Col>
+            <Col span={6}>
+              <SubSectorCard
+                musaidName={subsector.musaid_name}
+                musaidaName={subsector.musaida_name}
+                distance="0.1 KM"
+                eta="1 Minute"
+                cardHeading={subsector.sub_sector_name}
+                backgroundColor="#A9D18E"
+              />
+            </Col>
+            <Col span={6}>
+              <SubSectorCard
+                musaidName={subsector.musaid_name}
+                musaidaName={subsector.musaida_name}
+                distance="0.1 KM"
+                eta="1 Minute"
+                cardHeading={subsector.sub_sector_name}
+                backgroundColor="#A9D18E"
+              />
+            </Col>
+          </Row>
+        </div>
+      </Dashboardlayout>
+    );
+  } else {
+    return <FullPageLoader />;
+  }
 };
 
 export default SubSectorList;
