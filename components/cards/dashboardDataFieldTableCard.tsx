@@ -47,6 +47,7 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
 
   return (
     <Card
+      className="border-radius-10"
       extra={
         <Button onClick={() => setshowAddFieldForm(true)} type="primary">
           Add field
@@ -58,6 +59,8 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
         loading={isTableLoading || isLoading}
         dataSource={data}
         columns={dataColumns}
+        scroll={{y: "calc(100vh - 600px)"}}
+        pagination={false}
       />
       {showAddFieldForm ? (
         <Modal
