@@ -8,7 +8,7 @@ import {
   getFileDataFields,
   getMumeneenDataFields,
 } from "../api/v1/db/databaseFields";
-import {databaseMumeneenFieldData} from "../../interfaces";
+import {databaseMumeneenFieldData} from "../../types";
 import {DashboardDataFieldTableCard} from "../../components";
 import {
   fileDetailsFieldCollectionName,
@@ -157,6 +157,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     setisMumeneenDataFieldTableLoading(true);
     await deleteDataField(mumeneenDetailsFieldCollectionName, record.id);
     const updatedData = await getMumeneenDataFields();
+
     setMumeneenFields(updatedData);
     setisMumeneenDataFieldTableLoading(false);
   };

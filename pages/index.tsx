@@ -5,7 +5,7 @@ import styles from "../styles/SignInPage.module.scss";
 import {Signinlayout} from "../layouts/signInLayout";
 import {SigninCard} from "../components";
 import {login} from "../pages/api/v1/authentication";
-import {authenticationProps, loginResponseData} from "../interfaces";
+import {authenticationProps, loginResponseData} from "../types";
 
 const SignInPage: NextPage = () => {
   const [form] = Form.useForm();

@@ -1,10 +1,19 @@
-import {databaseMumeneenFieldData} from "../../../../interfaces";
-import {addDoc, collection, deleteDoc, doc, getDocs} from "firebase/firestore";
+import {databaseMumeneenFieldData} from "../../../../types";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import {firestore} from "../../../../firebase/firebaseConfig";
 import {
   fileDetailsFieldCollectionName,
   mumeneenDetailsFieldCollectionName,
 } from "../../../../firebase/dbCollectionNames";
+import {defaultDatabaseFields} from "../../../../utils";
 
 const mumeneenDetailsFieldCollection = collection(
   firestore,
@@ -20,41 +29,47 @@ export const getMumeneenDataFields = async (): Promise<
   databaseMumeneenFieldData[]
 > => {
   const resultArr: databaseMumeneenFieldData[] = [];
-  const querySnapshot = await getDocs(mumeneenDetailsFieldCollection);
+  const q = query(
+    mumeneenDetailsFieldCollection,
+    where("version", "==", defaultDatabaseFields.version)
+  );
+  const querySnapshot = await getDocs(q);
   querySnapshot.forEach((docs) => {
-    const {name, version, created_at} = docs.data();
+    const {name, version, created_at, updated_at} = docs.data();
 
     resultArr.push({
       name,
       version,
       created_at,
+      updated_at,
       id: docs.id,
     });
   });
 
-  return resultArr.filter(
-    (data) => data.version === process.env.NEXT_PUBLIC_DATABASE_VERSION
-  );
+  return resultArr;
 };
 
 export const getFileDataFields = async (): Promise<
   databaseMumeneenFieldData[]
 > => {
   const resultArr: databaseMumeneenFieldData[] = [];
-  const querySnapshot = await getDocs(fileDetailsFieldCollection);
+  const q = query(
+    fileDetailsFieldCollection,
+    where("version", "==", defaultDatabaseFields.version)
+  );
+  const querySnapshot = await getDocs(q);
   querySnapshot.forEach((docs) => {
-    const {name, version, created_at} = docs.data();
+    const {name, version, created_at, updated_at} = docs.data();
     resultArr.push({
       name,
       version,
       created_at,
       id: docs.id,
+      updated_at,
     });
   });
 
-  return resultArr.filter(
-    (data) => data.version === process.env.NEXT_PUBLIC_DATABASE_VERSION
-  );
+  return resultArr;
 };
 
 export const addDataField = async (
