@@ -3,6 +3,7 @@ import moment from "moment";
 import {FC, useState} from "react";
 import {databaseMumeneenFieldData} from "../../types";
 import {addDataField} from "../../pages/api/v1/db/databaseFields";
+import {defaultDatabaseFields} from "../../utils";
 
 interface CardProps {
   data: any[];
@@ -29,9 +30,8 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
   const handleFormSubmit = async (values: any) => {
     setisLoading(true);
     const data: databaseMumeneenFieldData = {
-      version: process.env.NEXT_PUBLIC_DATABASE_VERSION,
       name: values.name,
-      created_at: moment(new Date()).format("DD-MM-YYYY hh:mm A"),
+      ...defaultDatabaseFields,
     };
 
     const result = await addDataField(collectionName, data);

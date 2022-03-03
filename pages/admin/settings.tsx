@@ -157,6 +157,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     setisMumeneenDataFieldTableLoading(true);
     await deleteDataField(mumeneenDetailsFieldCollectionName, record.id);
     const updatedData = await getMumeneenDataFields();
+
     setMumeneenFields(updatedData);
     setisMumeneenDataFieldTableLoading(false);
   };
