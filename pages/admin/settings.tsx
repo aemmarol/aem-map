@@ -188,6 +188,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
       <Row className="mb-30">
         <Col xs={12}>
           <Card
+            className="border-radius-10"
             extra={
               <Button onClick={handleFileSubmit} type="primary">
                 Submit
@@ -205,7 +206,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
         </Col>
       </Row>
 
-      <Row gutter={{xs: 8}}>
+      <Row gutter={{xs: 8, lg: 12}}>
         <Col xs={12}>
           <DashboardDataFieldTableCard
             cardTitle="Mumeneen data fields"
