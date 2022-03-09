@@ -1,8 +1,8 @@
 import {Button, Card, Form, Input, Modal, Table} from "antd";
 import {FC, useState} from "react";
-import {databaseMumeneenFieldData} from "../../types";
-import {addDataField} from "../../pages/api/v1/db/databaseFields";
-import {defaultDatabaseFields} from "../../utils";
+import {databaseMumeneenFieldData} from "../../../types";
+import {addDataField} from "../../../pages/api/v1/db/databaseFields";
+import {defaultDatabaseFields} from "../../../utils";
 
 interface CardProps {
   data: any[];
@@ -58,7 +58,7 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
         loading={isTableLoading || isLoading}
         dataSource={data}
         columns={dataColumns}
-        scroll={{y: "calc(100vh - 600px)"}}
+        scroll={{y: "400px"}}
         pagination={false}
       />
       {showAddFieldForm ? (
