@@ -1,14 +1,14 @@
-import { Col, Row } from "antd";
-import { GetServerSideProps, NextPage } from "next";
-import { Dashboardlayout } from "../../layouts/dashboardLayout";
-import { DeleteTwoTone } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import {Col, Row} from "antd";
+import {GetServerSideProps, NextPage} from "next";
+import {Dashboardlayout} from "../../layouts/dashboardLayout";
+import {DeleteTwoTone} from "@ant-design/icons";
+import {useEffect, useState} from "react";
 import {
   deleteDataField,
   getFileDataFields,
   getMumeneenDataFields,
 } from "../api/v1/db/databaseFields";
-import { databaseMumeneenFieldData } from "../../types";
+import {databaseMumeneenFieldData} from "../../types";
 import {
   DashboardDataFieldTableCard,
   TableCardWithForm,
@@ -22,7 +22,7 @@ import {
   fileDataFieldsColumns,
   mumeneenDataFieldsColumns,
 } from "../../utils/columnData";
-import { FileListTable } from "../../components/tables";
+import {FileListTable} from "../../components/tables";
 
 interface AdminSettingsProps {
   mumeneenDataFields: databaseMumeneenFieldData[];
@@ -98,7 +98,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
         </Col>
       </Row>
 
-      <Row gutter={[{ xs: 8, lg: 12 }, 16]}>
+      <Row gutter={[{xs: 8, lg: 12}, 16]}>
         <Col xs={12}>
           <DashboardDataFieldTableCard
             cardTitle="Mumeneen data fields"
@@ -161,7 +161,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
             isTableLoading={false}
             formFields={{}}
             addBtnText="Add Mohallah"
-            onFormSubmit={() => { }}
+            onFormSubmit={() => {}}
             tableComponent={<FileListTable />}
             cardTitle="Mohallah Info"
           />
@@ -180,5 +180,5 @@ export const getServerSideProps: GetServerSideProps<
     await getMumeneenDataFields();
   const fileDataFields: databaseMumeneenFieldData[] = await getFileDataFields();
 
-  return { props: { mumeneenDataFields, fileDataFields } };
+  return {props: {mumeneenDataFields, fileDataFields}};
 };
