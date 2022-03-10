@@ -99,12 +99,14 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
       dataIndex: "id",
       width: 100,
       editable: false,
+      fixed: "left",
     },
     {
       title: "name",
       dataIndex: "name",
       width: 150,
       editable: false,
+      fixed: "left",
     },
     {
       title: "primary_color",
@@ -164,6 +166,7 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
       title: "operation",
       dataIndex: "operation",
       width: 150,
+      fixed: "right",
       render: (_: any, record: sectorData) => {
         const editable = isEditing(record);
         return editable ? (
@@ -229,7 +232,7 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
           dataSource: data,
           columns: mergedColumns,
           pagination: false,
-          scroll: {y: "400px"},
+          scroll: {x: "450px", y: "400px"},
           components: {
             body: {
               cell: EditableCell,

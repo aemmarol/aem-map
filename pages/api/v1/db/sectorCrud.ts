@@ -4,6 +4,7 @@ import {
   collection,
   doc,
   getDocs,
+  orderBy,
   query,
   updateDoc,
   where,
@@ -19,7 +20,8 @@ export const getSectorData = async (): Promise<sectorData[]> => {
   const resultArr: sectorData[] = [];
   const q = query(
     sectorCollection,
-    where("version", "==", defaultDatabaseFields.version)
+    where("version", "==", defaultDatabaseFields.version),
+    orderBy("name", "asc")
   );
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((docs) => {
@@ -57,11 +59,7 @@ export const getSectorData = async (): Promise<sectorData[]> => {
     });
   });
 
-  return resultArr.sort((a, b) => {
-    if (a.name > b.name) return 1;
-    if (a.name < b.name) return -1;
-    return 0;
-  });
+  return resultArr;
 };
 
 export const addSectorData = async (data: sectorData): Promise<boolean> => {
