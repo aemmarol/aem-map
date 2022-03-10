@@ -5,15 +5,16 @@ export interface databaseMumeneenFieldData extends defaultFields {
   id?: string;
 }
 
-export interface sectorFieldData extends defaultFields {
+export interface sectorData extends defaultFields {
   name: string;
-  id: string;
-  sub_sector_id: string;
-  color_code: string;
+  id?: string;
+  sub_sector_id?: string[];
+  primary_color: string;
+  secondary_color: string;
   masool_name: string;
   masool_its: string;
-  masool_contact_number: string;
+  masool_contact: string;
   masoola_name: string;
   masoola_its: string;
-  masoola_contact_number: string;
+  masoola_contact: string;
 }
