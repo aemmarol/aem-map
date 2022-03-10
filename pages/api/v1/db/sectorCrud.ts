@@ -20,7 +20,7 @@ export const getSectorData = async (): Promise<sectorData[]> => {
   const resultArr: sectorData[] = [];
   const q = query(
     sectorCollection,
-    where("version", "==", defaultDatabaseFields.version),
+    where("version", "==", defaultDatabaseFields.version)
   );
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((docs) => {
@@ -58,10 +58,10 @@ export const getSectorData = async (): Promise<sectorData[]> => {
     });
   });
 
-  return resultArr.sort((a,b)=>{
-    if(a.name>b.name)return 1;
-    if(a.name<b.name)return -1;
-    return 0
+  return resultArr.sort((a, b) => {
+    if (a.name > b.name) return 1;
+    if (a.name < b.name) return -1;
+    return 0;
   });
 };
 
@@ -77,6 +77,9 @@ export const updateSectorData = async (
   data: Partial<sectorData>
 ): Promise<boolean> => {
   const dataCollection = doc(firestore, sectorCollectionName, id);
-  await updateDoc(dataCollection, {...data,updated_at:moment(new Date()).format("DD-MM-YYYY HH:mm:ss")});
+  await updateDoc(dataCollection, {
+    ...data,
+    updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
+  });
   return true;
 };
