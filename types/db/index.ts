@@ -13,8 +13,8 @@ export interface sectorData extends defaultFields {
   secondary_color: string;
   masool_name: string;
   masool_its: string;
-  masool_contact_number: string;
+  masool_contact: string;
   masoola_name: string;
   masoola_its: string;
-  masoola_contact_number: string;
+  masoola_contact: string;
 }

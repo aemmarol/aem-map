@@ -8,6 +8,7 @@ interface CardProps {
   data: any[];
   dataColumns: any[];
   cardTitle: string;
+  modalTitle: string;
   collectionName: string;
   isTableLoading: boolean;
   onAddSuccess: () => any;
@@ -19,6 +20,7 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
   cardTitle,
   collectionName,
   isTableLoading,
+  modalTitle,
   onAddSuccess,
 }) => {
   const [form] = Form.useForm();
@@ -63,7 +65,7 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
       />
       {showAddFieldForm ? (
         <Modal
-          title="Add Mumeneen Data Field"
+          title={modalTitle}
           visible={showAddFieldForm}
           onCancel={() => setshowAddFieldForm(false)}
           footer={null}

@@ -1,26 +1,30 @@
 import {Button, Card, Form, Modal, Table} from "antd";
 import {FC, useState} from "react";
+import {addSectorData} from "../../pages/api/v1/db/sectorCrud";
+import {sectorDbData} from "../../sample_data/sector";
+import {sectorData} from "../../types";
+import {defaultDatabaseFields} from "../../utils";
 
 interface CardProps {
   cardTitle: string;
-  onFormSubmit: (values: object, callback: Function) => any;
-  isTableLoading: boolean;
-  addBtnText: string;
-  formFields: any;
-  tableComponent: any;
   modalTitle: string;
+  addBtnText: string;
+  onFormSubmit: (data: sectorData, callback: () => any) => any;
+  TableComponent: any;
+  tableComponentProps: any;
+  formFields: any;
 }
 
 export const TableCardWithForm: FC<CardProps> = ({
   cardTitle,
-  onFormSubmit,
-  isTableLoading,
-  addBtnText,
-  formFields,
-  tableComponent,
   modalTitle,
+  addBtnText,
+  onFormSubmit,
+  tableComponentProps,
+  TableComponent,
+  formFields,
 }) => {
-  const [form] = Form.useForm();
+  const [addForm] = Form.useForm();
 
   const [showAddFieldForm, setshowAddFieldForm] = useState<boolean>(false);
   const [isLoading, setisLoading] = useState<boolean>(false);
@@ -28,7 +32,10 @@ export const TableCardWithForm: FC<CardProps> = ({
   const handleFormSubmit = async (values: any) => {
     setisLoading(true);
 
-    const callback = () => setshowAddFieldForm(false);
+    const callback = () => {
+      addForm.resetFields();
+      setshowAddFieldForm(false);
+    };
 
     await onFormSubmit(values, callback);
   };
@@ -43,16 +50,17 @@ export const TableCardWithForm: FC<CardProps> = ({
       }
       title={cardTitle}
     >
-      {tableComponent}
+      <TableComponent {...tableComponentProps} isLoading={isLoading} />
       {showAddFieldForm ? (
         <Modal
-          title="Add Mumeneen Data Field"
+          title={modalTitle}
           visible={showAddFieldForm}
           onCancel={() => setshowAddFieldForm(false)}
           footer={null}
+          className="max-height-500 overflow-y-auto"
         >
           <Form
-            form={form}
+            form={addForm}
             layout="vertical"
             name="add-data-field"
             onFinish={handleFormSubmit}

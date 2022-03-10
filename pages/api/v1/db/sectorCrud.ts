@@ -1,19 +1,26 @@
-import {databaseMumeneenFieldData, sectorData} from "../../../../types";
-import {addDoc, collection, getDocs, query, where} from "firebase/firestore";
+import {sectorData} from "../../../../types";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import {firestore} from "../../../../firebase/firebaseConfig";
 import {sectorCollectionName} from "../../../../firebase/dbCollectionNames";
 import {defaultDatabaseFields} from "../../../../utils";
+import moment from "moment";
 
-const mumeneenDetailsFieldCollection = collection(
-  firestore,
-  sectorCollectionName
-);
+const sectorCollection = collection(firestore, sectorCollectionName);
 
 export const getSectorData = async (): Promise<sectorData[]> => {
   const resultArr: sectorData[] = [];
   const q = query(
-    mumeneenDetailsFieldCollection,
-    where("version", "==", defaultDatabaseFields.version)
+    sectorCollection,
+    where("version", "==", defaultDatabaseFields.version),
   );
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((docs) => {
@@ -25,10 +32,10 @@ export const getSectorData = async (): Promise<sectorData[]> => {
       sub_sector_id,
       primary_color,
       secondary_color,
-      masool_contact_number,
+      masool_contact,
       masool_its,
       masool_name,
-      masoola_contact_number,
+      masoola_contact,
       masoola_its,
       masoola_name,
     } = docs.data();
@@ -44,22 +51,32 @@ export const getSectorData = async (): Promise<sectorData[]> => {
       secondary_color,
       masool_name,
       masool_its,
-      masool_contact_number,
+      masool_contact,
       masoola_name,
       masoola_its,
-      masoola_contact_number,
+      masoola_contact,
     });
   });
 
-  return resultArr;
+  return resultArr.sort((a,b)=>{
+    if(a.name>b.name)return 1;
+    if(a.name<b.name)return -1;
+    return 0
+  });
 };
 
-export const addSectorData = async (
-  collectionName: string,
-  data: sectorData
-): Promise<boolean> => {
-  const dataCollection = collection(firestore, collectionName);
+export const addSectorData = async (data: sectorData): Promise<boolean> => {
+  const dataCollection = collection(firestore, sectorCollectionName);
   const result = await addDoc(dataCollection, data);
   if (result.id) return true;
   return false;
+};
+
+export const updateSectorData = async (
+  id: string,
+  data: Partial<sectorData>
+): Promise<boolean> => {
+  const dataCollection = doc(firestore, sectorCollectionName, id);
+  await updateDoc(dataCollection, {...data,updated_at:moment(new Date()).format("DD-MM-YYYY HH:mm:ss")});
+  return true;
 };

@@ -44,7 +44,7 @@ export const SectorFormFields: FC = () => {
 
       <Form.Item
         label="Masool Contact Number"
-        name="masool_contact_number"
+        name="masool_contact"
         rules={[{required: true, message: "Please input Contact Number!"}]}
       >
         <Input />
@@ -60,7 +60,7 @@ export const SectorFormFields: FC = () => {
 
       <Form.Item
         label="Masoola ITS Number"
-        name="masoolaa_its"
+        name="masoola_its"
         rules={[{required: true, message: "Please input ITS Number!"}]}
       >
         <Input />
@@ -68,7 +68,7 @@ export const SectorFormFields: FC = () => {
 
       <Form.Item
         label="Masoola Contact Number"
-        name="masoola_contact_number"
+        name="masoola_contact"
         rules={[{required: true, message: "Please input Contact Number!"}]}
       >
         <Input />

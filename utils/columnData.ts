@@ -1,3 +1,5 @@
+import {Tag} from "antd";
+
 export const mumeneenDataFieldsColumns: any[] = [
   {
     title: "Name",

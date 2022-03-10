@@ -1,47 +1,38 @@
 import {Col, Row} from "antd";
 import {GetServerSideProps, NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
-import {DeleteTwoTone} from "@ant-design/icons";
 import {useEffect, useState} from "react";
 import {
-  deleteDataField,
   getFileDataFields,
   getMumeneenDataFields,
 } from "../api/v1/db/databaseFields";
-import {databaseMumeneenFieldData} from "../../types";
+import {databaseMumeneenFieldData, sectorData} from "../../types";
 import {
-  DashboardDataFieldTableCard,
+  MumeneenDataFieldTable,
+  FileDataFieldTable,
   TableCardWithForm,
   UploadExcelFileCard,
+  SectorDetailsComponent,
 } from "../../components";
-import {
-  fileDetailsFieldCollectionName,
-  mumeneenDetailsFieldCollectionName,
-} from "../../firebase/dbCollectionNames";
-import {
-  fileDataFieldsColumns,
-  mumeneenDataFieldsColumns,
-} from "../../utils/columnData";
+
 import {FileListTable} from "../../components/tables";
+import {getSectorData} from "../api/v1/db/sectorCrud";
 
 interface AdminSettingsProps {
   mumeneenDataFields: databaseMumeneenFieldData[];
   fileDataFields: databaseMumeneenFieldData[];
+  sectorDetailsData: sectorData[];
 }
 
 const AdminSettings: NextPage<AdminSettingsProps> = ({
   mumeneenDataFields,
   fileDataFields,
+  sectorDetailsData,
 }) => {
-  const [isMumeneenDataFieldTableLoading, setisMumeneenDataFieldTableLoading] =
-    useState(false);
-  const [isSectorDataTableLoading, setisSectorDataTableLoading] =
-    useState(false);
+  const [sectorDetails, setSectorDetails] = useState<sectorData[] | []>([]);
   const [mumeneenFields, setMumeneenFields] = useState<
     databaseMumeneenFieldData[] | []
   >([]);
-  const [isFileDataFieldTableLoading, setisFileDataFieldTableLoading] =
-    useState(false);
   const [fileFields, setFileFields] = useState<
     databaseMumeneenFieldData[] | []
   >([]);
@@ -49,46 +40,8 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   useEffect(() => {
     setMumeneenFields(mumeneenDataFields);
     setFileFields(fileDataFields);
-  }, [mumeneenDataFields, fileDataFields]);
-
-  const updateMumeneenFields = (data: databaseMumeneenFieldData[]) => {
-    setMumeneenFields(data);
-  };
-
-  const updateFileFields = (data: databaseMumeneenFieldData[]) => {
-    setFileFields(data);
-  };
-
-  const handleMumeneenFieldDelete = async (record: any) => {
-    setisMumeneenDataFieldTableLoading(true);
-    await deleteDataField(mumeneenDetailsFieldCollectionName, record.id);
-    const updatedData = await getMumeneenDataFields();
-
-    setMumeneenFields(updatedData);
-    setisMumeneenDataFieldTableLoading(false);
-  };
-
-  const handleFileFieldDelete = async (record: any) => {
-    setisFileDataFieldTableLoading(true);
-    await deleteDataField(fileDetailsFieldCollectionName, record.id);
-    const updatedData = await getFileDataFields();
-    setFileFields(updatedData);
-    setisFileDataFieldTableLoading(false);
-  };
-
-  const loadFileDataFields = async () => {
-    setisFileDataFieldTableLoading(true);
-    const data = await getFileDataFields();
-    updateFileFields(data);
-    setisFileDataFieldTableLoading(false);
-  };
-
-  const loadMumeneenDataFields = async () => {
-    setisMumeneenDataFieldTableLoading(true);
-    const data = await getMumeneenDataFields();
-    updateMumeneenFields(data);
-    setisMumeneenDataFieldTableLoading(false);
-  };
+    setSectorDetails(sectorDetailsData);
+  }, [mumeneenDataFields, fileDataFields, sectorDetailsData]);
 
   return (
     <Dashboardlayout headerTitle="Admin Settings">
@@ -100,70 +53,21 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
 
       <Row gutter={[{xs: 8, lg: 12}, 16]}>
         <Col xs={12}>
-          <DashboardDataFieldTableCard
-            cardTitle="Mumeneen data fields"
+          <MumeneenDataFieldTable
             data={mumeneenFields}
-            dataColumns={[
-              ...mumeneenDataFieldsColumns,
-              {
-                title: "Action",
-                dataIndex: "",
-                key: "x",
-                align: "center",
-
-                render: (text: any, record: databaseMumeneenFieldData) => (
-                  <div className="flex-align-center-justify-center text-align-center">
-                    <DeleteTwoTone
-                      onClick={() => handleMumeneenFieldDelete(record)}
-                      className="font-20"
-                    />
-                  </div>
-                ),
-                width: 50,
-              },
-            ]}
-            collectionName={mumeneenDetailsFieldCollectionName}
-            isTableLoading={isMumeneenDataFieldTableLoading}
-            onAddSuccess={loadMumeneenDataFields}
+            updateData={(data) => setMumeneenFields(data)}
           />
         </Col>
         <Col xs={12}>
-          <DashboardDataFieldTableCard
-            cardTitle="File data fields"
+          <FileDataFieldTable
             data={fileFields}
-            dataColumns={[
-              ...fileDataFieldsColumns,
-              {
-                title: "Action",
-                dataIndex: "",
-                key: "x",
-                align: "center",
-
-                render: (text: any, record: databaseMumeneenFieldData) => (
-                  <div className="flex-align-center-justify-center text-align-center">
-                    <DeleteTwoTone
-                      onClick={() => handleFileFieldDelete(record)}
-                      className="font-20"
-                    />
-                  </div>
-                ),
-                width: 50,
-              },
-            ]}
-            collectionName={fileDetailsFieldCollectionName}
-            isTableLoading={isFileDataFieldTableLoading}
-            onAddSuccess={loadFileDataFields}
+            updateData={(data) => setFileFields(data)}
           />
         </Col>
         <Col xs={24}>
-          <TableCardWithForm
-            modalTitle="Add Mohallah Form"
-            isTableLoading={false}
-            formFields={{}}
-            addBtnText="Add Mohallah"
-            onFormSubmit={() => {}}
-            tableComponent={<FileListTable />}
-            cardTitle="Mohallah Info"
+          <SectorDetailsComponent
+            data={sectorDetails}
+            updateData={(data) => setSectorDetails(data)}
           />
         </Col>
       </Row>
@@ -179,6 +83,7 @@ export const getServerSideProps: GetServerSideProps<
   const mumeneenDataFields: databaseMumeneenFieldData[] =
     await getMumeneenDataFields();
   const fileDataFields: databaseMumeneenFieldData[] = await getFileDataFields();
+  const sectorDetailsData: sectorData[] = await getSectorData();
 
-  return {props: {mumeneenDataFields, fileDataFields}};
+  return {props: {mumeneenDataFields, fileDataFields, sectorDetailsData}};
 };
