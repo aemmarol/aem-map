@@ -37,8 +37,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
   dataIndex,
   title,
   inputType,
-  record,
-  index,
   children,
   ...restProps
 }) => {
@@ -213,7 +211,7 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
       ...defaultDatabaseFields,
     });
     if (addDataSuccess) {
-      let newData = await getSectorData();
+      const newData = await getSectorData();
       updateData(newData);
       callback();
     }

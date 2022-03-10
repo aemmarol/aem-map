@@ -10,12 +10,10 @@ import {databaseMumeneenFieldData, sectorData} from "../../types";
 import {
   MumeneenDataFieldTable,
   FileDataFieldTable,
-  TableCardWithForm,
   UploadExcelFileCard,
   SectorDetailsComponent,
 } from "../../components";
 
-import {FileListTable} from "../../components/tables";
 import {getSectorData} from "../api/v1/db/sectorCrud";
 
 interface AdminSettingsProps {

@@ -1,9 +1,6 @@
-import {Button, Card, Form, Modal, Table} from "antd";
+import {Button, Card, Form, Modal} from "antd";
 import {FC, useState} from "react";
-import {addSectorData} from "../../pages/api/v1/db/sectorCrud";
-import {sectorDbData} from "../../sample_data/sector";
 import {sectorData} from "../../types";
-import {defaultDatabaseFields} from "../../utils";
 
 interface CardProps {
   cardTitle: string;
