@@ -43,10 +43,11 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
 
   return (
     <Dashboardlayout headerTitle="Admin Settings">
-      <Row className="mb-30">
+      <Row className="mb-30" gutter={[{xs: 8, lg: 12}, 16]}>
         <Col xs={12}>
           <UploadExcelFileCard />
         </Col>
+        <Col xs={12}>{/* <VersionSettingsCard/> */}</Col>
       </Row>
 
       <Row gutter={[{xs: 8, lg: 12}, 16]}>
