@@ -1,9 +1,13 @@
 import {sectorData} from "../../../../types";
 import {
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
   doc,
+  getDoc,
   getDocs,
+  limit,
   orderBy,
   query,
   updateDoc,
@@ -16,7 +20,7 @@ import moment from "moment";
 
 const sectorCollection = collection(firestore, sectorCollectionName);
 
-export const getSectorData = async (): Promise<sectorData[]> => {
+export const getSectorList = async (): Promise<sectorData[]> => {
   const resultArr: sectorData[] = [];
   const q = query(
     sectorCollection,
@@ -42,12 +46,12 @@ export const getSectorData = async (): Promise<sectorData[]> => {
     } = docs.data();
 
     resultArr.push({
+      id: docs.id,
       name,
       sub_sector_id,
       version,
       created_at,
       updated_at,
-      id: docs.id,
       primary_color,
       secondary_color,
       masool_name,
@@ -60,6 +64,36 @@ export const getSectorData = async (): Promise<sectorData[]> => {
   });
 
   return resultArr;
+};
+
+export const getSectorData = async (id: string): Promise<sectorData> => {
+  const docRef = doc(firestore, sectorCollectionName, id);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return {...docSnap.data(), id: docSnap.id} as sectorData;
+  }
+  return {} as sectorData;
+};
+
+export const getSectorDataByName = async (
+  name: string
+): Promise<sectorData> => {
+  let sectorInfo: sectorData = {} as sectorData;
+  const q = query(
+    sectorCollection,
+    where("version", "==", defaultDatabaseFields.version),
+    where("name", "==", name),
+    limit(1)
+  );
+  const querySnapshot = await getDocs(q);
+
+  querySnapshot.forEach((docs) => {
+    sectorInfo = {
+      ...docs.data(),
+      id: docs.id,
+    } as sectorData;
+  });
+  return sectorInfo;
 };
 
 export const addSectorData = async (data: sectorData): Promise<boolean> => {
@@ -76,6 +110,30 @@ export const updateSectorData = async (
   const dataCollection = doc(firestore, sectorCollectionName, id);
   await updateDoc(dataCollection, {
     ...data,
+    updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
+  });
+  return true;
+};
+
+export const addSubSectorIds = async (
+  id: string,
+  subSectorId: string
+): Promise<boolean> => {
+  const dataCollection = doc(firestore, sectorCollectionName, id);
+  await updateDoc(dataCollection, {
+    sub_sector_id: arrayUnion(subSectorId),
+    updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
+  });
+  return true;
+};
+
+export const removeSubSectorIds = async (
+  id: string,
+  subSectorId: string
+): Promise<boolean> => {
+  const dataCollection = doc(firestore, sectorCollectionName, id);
+  await updateDoc(dataCollection, {
+    sub_sector_id: arrayRemove(subSectorId),
     updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
   });
   return true;

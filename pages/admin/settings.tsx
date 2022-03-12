@@ -6,28 +6,38 @@ import {
   getFileDataFields,
   getMumeneenDataFields,
 } from "../api/v1/db/databaseFields";
-import {databaseMumeneenFieldData, sectorData} from "../../types";
+import {
+  databaseMumeneenFieldData,
+  sectorData,
+  subSectorData,
+} from "../../types";
 import {
   MumeneenDataFieldTable,
   FileDataFieldTable,
   UploadExcelFileCard,
   SectorDetailsComponent,
+  SubSectorDetailsComponent,
 } from "../../components";
-
-import {getSectorData} from "../api/v1/db/sectorCrud";
+import {getSectorList} from "../api/v1/db/sectorCrud";
+import {getSubSectorList} from "../api/v1/db/subSectorCrud";
 
 interface AdminSettingsProps {
   mumeneenDataFields: databaseMumeneenFieldData[];
   fileDataFields: databaseMumeneenFieldData[];
   sectorDetailsData: sectorData[];
+  subSectorDetailsList: subSectorData[];
 }
 
 const AdminSettings: NextPage<AdminSettingsProps> = ({
   mumeneenDataFields,
   fileDataFields,
   sectorDetailsData,
+  subSectorDetailsList,
 }) => {
   const [sectorDetails, setSectorDetails] = useState<sectorData[] | []>([]);
+  const [subsectorDetails, setSubsectorDetails] = useState<
+    subSectorData[] | []
+  >([]);
   const [mumeneenFields, setMumeneenFields] = useState<
     databaseMumeneenFieldData[] | []
   >([]);
@@ -39,7 +49,13 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     setMumeneenFields(mumeneenDataFields);
     setFileFields(fileDataFields);
     setSectorDetails(sectorDetailsData);
-  }, [mumeneenDataFields, fileDataFields, sectorDetailsData]);
+    setSubsectorDetails(subSectorDetailsList);
+  }, [
+    mumeneenDataFields,
+    fileDataFields,
+    sectorDetailsData,
+    subSectorDetailsList,
+  ]);
 
   return (
     <Dashboardlayout headerTitle="Admin Settings">
@@ -69,6 +85,12 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
             updateData={(data) => setSectorDetails(data)}
           />
         </Col>
+        <Col xs={24}>
+          <SubSectorDetailsComponent
+            data={subsectorDetails}
+            updateData={(data) => setSubsectorDetails(data)}
+          />
+        </Col>
       </Row>
     </Dashboardlayout>
   );
@@ -82,7 +104,15 @@ export const getServerSideProps: GetServerSideProps<
   const mumeneenDataFields: databaseMumeneenFieldData[] =
     await getMumeneenDataFields();
   const fileDataFields: databaseMumeneenFieldData[] = await getFileDataFields();
-  const sectorDetailsData: sectorData[] = await getSectorData();
+  const sectorDetailsData: sectorData[] = await getSectorList();
+  const subSectorDetailsList: subSectorData[] = await getSubSectorList();
 
-  return {props: {mumeneenDataFields, fileDataFields, sectorDetailsData}};
+  return {
+    props: {
+      mumeneenDataFields,
+      fileDataFields,
+      sectorDetailsData,
+      subSectorDetailsList,
+    },
+  };
 };
