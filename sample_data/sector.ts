@@ -146,4 +146,16 @@ export const sectorDbData: sectorData[] = [
     masoola_its: "88888888",
     masoola_contact: "9988998899",
   },
+  {
+    ...defaultDatabaseFields,
+    name: "ZZ NON RESIDENT",
+    primary_color: "#b71c1c",
+    secondary_color: "#ef5350",
+    masool_name: "Admin",
+    masool_its: "88888888",
+    masool_contact: "9988998899",
+    masoola_name: "Admin",
+    masoola_its: "88888888",
+    masoola_contact: "9988998899",
+  },
 ];

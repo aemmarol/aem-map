@@ -1,12 +1,11 @@
 import {Button, Card, Form, Modal} from "antd";
 import {FC, useState} from "react";
-import {sectorData} from "../../types";
 
 interface CardProps {
   cardTitle: string;
   modalTitle: string;
   addBtnText: string;
-  onFormSubmit: (data: sectorData, callback: () => any) => any;
+  onFormSubmit: (data: any, callback: () => any) => any;
   TableComponent: any;
   tableComponentProps: any;
   formFields: any;

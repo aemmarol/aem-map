@@ -8,18 +8,19 @@ import {
   Typography,
 } from "antd";
 import {FC, useState} from "react";
-import {SectorFormFields, TableCardWithForm} from "../..";
+import {TableCardWithForm, SubSectorFormFields} from "../..";
+import {addSubSectorIds} from "../../../pages/api/v1/db/sectorCrud";
 import {
-  addSectorData,
-  getSectorList,
-  updateSectorData,
-} from "../../../pages/api/v1/db/sectorCrud";
-import {sectorData} from "../../../types";
+  addSubSectorData,
+  getSubSectorList,
+  updateSubSectorData,
+} from "../../../pages/api/v1/db/subSectorCrud";
+import {subSectorData} from "../../../types";
 import {defaultDatabaseFields} from "../../../utils";
 
 interface CardProps {
   data: any[];
-  updateData: (data: sectorData[]) => any;
+  updateData: (data: subSectorData[]) => any;
 }
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
@@ -27,7 +28,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   dataIndex: string;
   title: any;
   inputType: "number" | "text";
-  record: sectorData;
+  record: subSectorData;
   index: number;
   children: React.ReactNode;
 }
@@ -64,13 +65,16 @@ const EditableCell: React.FC<EditableCellProps> = ({
   );
 };
 
-export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
+export const SubSectorDetailsComponent: FC<CardProps> = ({
+  data,
+  updateData,
+}) => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState<string | undefined>("");
 
-  const isEditing = (record: sectorData) => record.id === editingKey;
+  const isEditing = (record: subSectorData) => record.id === editingKey;
 
-  const edit = (record: Partial<sectorData>) => {
+  const edit = (record: Partial<subSectorData>) => {
     form.setFieldsValue({...record});
     setEditingKey(record.id);
   };
@@ -81,10 +85,10 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
 
   const save = async (key: string | undefined) => {
     try {
-      const row = (await form.validateFields()) as sectorData;
+      const row = (await form.validateFields()) as subSectorData;
       if (key) {
-        await updateSectorData(key, row);
-        const newData = await getSectorList();
+        await updateSubSectorData(key, row);
+        const newData = await getSubSectorList();
         updateData(newData);
         setEditingKey("");
       }
@@ -109,52 +113,47 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
       fixed: "left",
     },
     {
-      title: "primary_color",
-      dataIndex: "primary_color",
+      title: "Sector",
       width: 150,
-      editable: true,
-      render: (value: any) => <Tag color={value}>{value}</Tag>,
+      editable: false,
+      render: (_: any, record: subSectorData) => (
+        <Tag color={record.sector.primary_color}>{record.sector.name}</Tag>
+      ),
     },
+
     {
-      title: "secondary_color",
-      dataIndex: "secondary_color",
-      width: 150,
-      editable: true,
-      render: (value: any) => <Tag color={value}>{value}</Tag>,
-    },
-    {
-      title: "masool_its",
-      dataIndex: "masool_its",
+      title: "musaid_its",
+      dataIndex: "musaid_its",
       width: 150,
       editable: true,
     },
     {
-      title: "masool_name",
-      dataIndex: "masool_name",
+      title: "musaid_name",
+      dataIndex: "musaid_name",
       width: 150,
       editable: true,
     },
     {
-      title: "masool_contact",
-      dataIndex: "masool_contact",
+      title: "musaid_contact",
+      dataIndex: "musaid_contact",
       width: 150,
       editable: true,
     },
     {
-      title: "masoola_its",
-      dataIndex: "masoola_its",
+      title: "musaida_its",
+      dataIndex: "musaida_its",
       width: 150,
       editable: true,
     },
     {
-      title: "masoola_name",
-      dataIndex: "masoola_name",
+      title: "musaida_name",
+      dataIndex: "musaida_name",
       width: 150,
       editable: true,
     },
     {
-      title: "masoola_contact",
-      dataIndex: "masoola_contact",
+      title: "musaida_contact",
+      dataIndex: "musaida_contact",
       width: 150,
       editable: true,
     },
@@ -167,7 +166,7 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
       dataIndex: "operation",
       width: 150,
       fixed: "right",
-      render: (_: any, record: sectorData) => {
+      render: (_: any, record: subSectorData) => {
         const editable = isEditing(record);
         return editable ? (
           <span>
@@ -197,7 +196,7 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
     }
     return {
       ...col,
-      onCell: (record: sectorData) => ({
+      onCell: (record: subSectorData) => ({
         record,
         inputType: "text",
         dataIndex: col.dataIndex,
@@ -207,14 +206,21 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
     };
   });
 
-  const handleAddSector = async (data: sectorData, callback: () => any) => {
-    const addDataSuccess = await addSectorData({
+  const handleAddSector = async (data: any, callback: () => any) => {
+    const sectorDetails = data.sector.split("|");
+    const addDataSuccess = await addSubSectorData({
       ...data,
-      sub_sector_id: [],
       ...defaultDatabaseFields,
+      sector: {
+        id: sectorDetails[0],
+        name: sectorDetails[1],
+        primary_color: sectorDetails[2],
+        secondary_color: sectorDetails[3],
+      },
     });
     if (addDataSuccess) {
-      const newData = await getSectorList();
+      await addSubSectorIds(sectorDetails[0] as string, addDataSuccess);
+      const newData = await getSubSectorList();
       updateData(newData);
       callback();
     }
@@ -223,9 +229,9 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
   return (
     <Form form={form} component={false}>
       <TableCardWithForm
-        cardTitle="Mohallah Info"
-        modalTitle="Add Mohallah Form"
-        addBtnText="Add Mohallah"
+        cardTitle="Sub Sector Info"
+        modalTitle="Add Sub Sector Form"
+        addBtnText="Add Sub Sector"
         onFormSubmit={handleAddSector}
         TableComponent={Table}
         tableComponentProps={{
@@ -239,7 +245,7 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
             },
           },
         }}
-        formFields={<SectorFormFields />}
+        formFields={<SubSectorFormFields />}
       />
     </Form>
   );
