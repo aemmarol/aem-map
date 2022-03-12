@@ -117,7 +117,7 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
       width: 150,
       editable: false,
       render: (_: any, record: subSectorData) => (
-        <Tag>{record.sector.name}</Tag>
+        <Tag color={record.sector.primary_color}>{record.sector.name}</Tag>
       ),
     },
 
@@ -214,6 +214,8 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
       sector: {
         id: sectorDetails[0],
         name: sectorDetails[1],
+        primary_color: sectorDetails[2],
+        secondary_color: sectorDetails[3],
       },
     });
     if (addDataSuccess) {

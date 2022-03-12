@@ -31,7 +31,18 @@ export const SubSectorFormFields: FC = () => {
       >
         <Select>
           {sectorDetails.map((value) => (
-            <Select.Option key={value.id} value={value.id + "|" + value.name}>
+            <Select.Option
+              key={value.id}
+              value={
+                value.id +
+                "|" +
+                value.name +
+                "|" +
+                value.primary_color +
+                "|" +
+                value.secondary_color
+              }
+            >
               {value.name}
             </Select.Option>
           ))}

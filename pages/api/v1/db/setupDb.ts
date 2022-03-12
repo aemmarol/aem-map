@@ -27,6 +27,8 @@ export const addSubSectors = async () => {
       const sectorDetails: sectorDetailsForSubSector = {
         id: sectorInfo.id,
         name: sectorInfo.name,
+        primary_color: sectorInfo.primary_color,
+        secondary_color: sectorInfo.secondary_color,
       };
 
       const successId = await addSubSectorData({
