@@ -1,4 +1,4 @@
-import { Col, Row} from "antd";
+import {Col, Row} from "antd";
 import {GetServerSideProps, NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import {useEffect, useState} from "react";
@@ -56,8 +56,6 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     sectorDetailsData,
     subSectorDetailsList,
   ]);
-
-  
 
   return (
     <Dashboardlayout headerTitle="Admin Settings">
