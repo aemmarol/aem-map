@@ -1,13 +1,26 @@
 import {sectorData, sectorDetailsForSubSector} from "../../../../types";
 import subsectorSampleData from "../../../../sample_data/subsector.json";
+import fileFields from "../../../../sample_data/fileField.json";
+import memberFields from "../../../../sample_data/mumeneenDataField.json";
 import {
   addSectorData,
   addSubSectorIds,
   getSectorDataByName,
 } from "./sectorCrud";
-import {addSubSectorData} from "./subSectorCrud";
+import {
+  addSubSectorData,
+  getSubSectorList,
+  resetSubSectorFilesData,
+} from "./subSectorCrud";
 import {defaultDatabaseFields} from "../../../../utils";
 import {sectorDbData} from "../../../../sample_data/sector";
+import {deleteFileData, getFileDataList} from "./fileCrud";
+import {deleteMemberData, getMemberDataList} from "./memberCrud";
+import {addDataField} from "./databaseFields";
+import {
+  fileDetailsFieldCollectionName,
+  mumeneenDetailsFieldCollectionName,
+} from "../../../../firebase/dbCollectionNames";
 
 export const addSectors = async () => {
   await Promise.all(
@@ -40,7 +53,7 @@ export const addSubSectors = async () => {
         musaida_its: value.musaida_its,
         musaida_name: value.musaida_name,
         no_of_females: 0,
-        no_of_files: 0,
+        files: [],
         no_of_males: 0,
         sector: sectorDetails,
         ...defaultDatabaseFields,
@@ -52,6 +65,50 @@ export const addSubSectors = async () => {
       );
 
       return successFlag;
+    })
+  );
+};
+
+export const setDbFields = async () => {
+  await Promise.all(
+    fileFields.map(async (value) => {
+      await addDataField(fileDetailsFieldCollectionName, {
+        ...value,
+        ...defaultDatabaseFields,
+      });
+    })
+  );
+  await Promise.all(
+    memberFields.map(async (value) => {
+      await addDataField(mumeneenDetailsFieldCollectionName, {
+        ...value,
+        ...defaultDatabaseFields,
+      });
+    })
+  );
+};
+
+export const resetFileData = async () => {
+  const subSectors = await getSubSectorList();
+
+  const files = await getFileDataList();
+  const members = await getMemberDataList();
+
+  await Promise.all(
+    subSectors.map(async (value) => {
+      await resetSubSectorFilesData(value.id as string);
+    })
+  );
+
+  await Promise.all(
+    files.map(async (value: any) => {
+      await deleteFileData(value.id);
+    })
+  );
+
+  await Promise.all(
+    members.map(async (value: any) => {
+      await deleteMemberData(value.id);
     })
   );
 };
