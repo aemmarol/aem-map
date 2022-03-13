@@ -5,6 +5,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -31,7 +32,8 @@ export const getMumeneenDataFields = async (): Promise<
   const resultArr: databaseMumeneenFieldData[] = [];
   const q = query(
     mumeneenDetailsFieldCollection,
-    where("version", "==", defaultDatabaseFields.version)
+    where("version", "==", defaultDatabaseFields.version),
+    orderBy("name", "asc")
   );
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((docs) => {
@@ -55,7 +57,8 @@ export const getFileDataFields = async (): Promise<
   const resultArr: databaseMumeneenFieldData[] = [];
   const q = query(
     fileDetailsFieldCollection,
-    where("version", "==", defaultDatabaseFields.version)
+    where("version", "==", defaultDatabaseFields.version),
+    orderBy("name", "asc")
   );
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((docs) => {

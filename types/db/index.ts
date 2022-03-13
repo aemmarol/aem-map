@@ -38,5 +38,5 @@ export interface subSectorData extends defaultFields {
   musaida_contact: string;
   no_of_males?: number;
   no_of_females?: number;
-  no_of_files?: number;
+  files?: string[];
 }

@@ -217,6 +217,9 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
         primary_color: sectorDetails[2],
         secondary_color: sectorDetails[3],
       },
+      number_of_males: 0,
+      number_of_females: 0,
+      files: [],
     });
     if (addDataSuccess) {
       await addSubSectorIds(sectorDetails[0] as string, addDataSuccess);

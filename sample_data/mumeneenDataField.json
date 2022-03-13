@@ -1,0 +1,20 @@
+[
+  {"name": "hof_fm_type"},
+  {"name": "full_name"},
+  {"name": "first_prefix"},
+  {"name": "age"},
+  {"name": "gender"},
+  {"name": "misaq"},
+  {"name": "marital_status"},
+  {"name": "mobile"},
+  {"name": "email"},
+  {"name": "title"},
+  {"name": "idara"},
+  {"name": "qualification"},
+  {"name": "occupation"},
+  {"name": "sub_occupation"},
+  {"name": "quran_sanad"},
+  {"name": "data_verifcation_status"},
+  {"name": "photo_verifcation_status"},
+  {"name": "has_medical_issue"}
+]

@@ -46,10 +46,12 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   >([]);
 
   useEffect(() => {
-    setMumeneenFields(mumeneenDataFields);
-    setFileFields(fileDataFields);
-    setSectorDetails(sectorDetailsData);
-    setSubsectorDetails(subSectorDetailsList);
+    setMumeneenFields(mumeneenDataFields.map((val) => ({...val, key: val.id})));
+    setFileFields(fileDataFields.map((val) => ({...val, key: val.id})));
+    setSectorDetails(sectorDetailsData.map((val) => ({...val, key: val.id})));
+    setSubsectorDetails(
+      subSectorDetailsList.map((val) => ({...val, key: val.id}))
+    );
   }, [
     mumeneenDataFields,
     fileDataFields,
