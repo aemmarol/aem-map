@@ -1,6 +1,8 @@
 import { NextPage } from "next";
+import { useEffect } from "react";
 import { Dashboardlayout } from "../layouts/dashboardLayout";
 import styles from "../styles/map.module.scss";
+import useWindowDimensions from "../utils/windowDimensions";
 
 // create a div with height 642
 // set background image
@@ -37,6 +39,13 @@ const sectorImgArr = [
 ];
 
 const Map: NextPage = () => {
+
+  const {height:windowHeight,width:windowWidth} = useWindowDimensions()
+
+  useEffect(()=>{
+    console.log("dimensions",windowHeight,windowWidth);
+  },[windowHeight,windowWidth]);
+
   return (
     <Dashboardlayout headerTitle="Map View">
       <div className={styles.mainWrapper}>
