@@ -1,6 +1,6 @@
-import { NextPage } from "next";
-import { useEffect } from "react";
-import { Dashboardlayout } from "../layouts/dashboardLayout";
+import {NextPage} from "next";
+import {useEffect} from "react";
+import {Dashboardlayout} from "../layouts/dashboardLayout";
 import styles from "../styles/map.module.scss";
 import useWindowDimensions from "../utils/windowDimensions";
 
@@ -39,12 +39,11 @@ const sectorImgArr = [
 ];
 
 const Map: NextPage = () => {
+  const {height: windowHeight, width: windowWidth} = useWindowDimensions();
 
-  const {height:windowHeight,width:windowWidth} = useWindowDimensions()
-
-  useEffect(()=>{
-    console.log("dimensions",windowHeight,windowWidth);
-  },[windowHeight,windowWidth]);
+  useEffect(() => {
+    console.log("dimensions", windowHeight, windowWidth);
+  }, [windowHeight, windowWidth]);
 
   return (
     <Dashboardlayout headerTitle="Map View">
@@ -55,7 +54,7 @@ const Map: NextPage = () => {
             <img
               src={val.src}
               className={styles.areaImage}
-              style={{ left: val.left, top: val.top }}
+              style={{left: val.left, top: val.top}}
             />
           ))}
         </div>
