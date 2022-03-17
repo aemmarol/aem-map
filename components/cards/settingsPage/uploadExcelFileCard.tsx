@@ -14,11 +14,19 @@ import {
 
 import {addFileData} from "../../../pages/api/v1/db/fileCrud";
 import {addMemberData} from "../../../pages/api/v1/db/memberCrud";
+import {
+  addSectors,
+  addSubSectors,
+  resetFileData,
+  setDbFields,
+} from "../../../pages/api/v1/db/setupDb";
+import {useGlobalContext} from "../../../context/GlobalContext";
 
 const Dragger = Upload.Dragger;
 
 export const UploadExcelFileCard: FC = () => {
   const [excelFile, setexcelFile] = useState(null);
+  const {toggleProgressLoader, setProgressValue} = useGlobalContext();
 
   const draggerProps = {
     name: "file",
@@ -131,8 +139,12 @@ export const UploadExcelFileCard: FC = () => {
 
   const addDataToDb = async (data: any[]) => {
     if (verifyData(data)) {
+      toggleProgressLoader(true);
+      setProgressValue(0);
+      await resetFileData();
+      setProgressValue(40);
       const fileData = await getFileList(data);
-
+      setProgressValue(50);
       await Promise.all(
         fileData.map(async (file) => {
           const fileId: any = Object.keys(file)[0];
@@ -155,6 +167,10 @@ export const UploadExcelFileCard: FC = () => {
           return {addFileSuccess, updateSubSector, addMemberSuccess};
         })
       );
+      setProgressValue(100);
+      toggleProgressLoader(false);
+      setProgressValue(0);
+      setexcelFile(null)
       message.success("data uploaded successfully");
     } else {
       message.error("Improper file uploaded!");
