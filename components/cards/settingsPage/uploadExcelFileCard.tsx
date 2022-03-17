@@ -14,12 +14,7 @@ import {
 
 import {addFileData} from "../../../pages/api/v1/db/fileCrud";
 import {addMemberData} from "../../../pages/api/v1/db/memberCrud";
-import {
-  addSectors,
-  addSubSectors,
-  resetFileData,
-  setDbFields,
-} from "../../../pages/api/v1/db/setupDb";
+import {resetFileData} from "../../../pages/api/v1/db/setupDb";
 import {useGlobalContext} from "../../../context/GlobalContext";
 
 const Dragger = Upload.Dragger;
