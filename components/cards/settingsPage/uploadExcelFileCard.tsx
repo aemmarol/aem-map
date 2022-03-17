@@ -170,7 +170,7 @@ export const UploadExcelFileCard: FC = () => {
       setProgressValue(100);
       toggleProgressLoader(false);
       setProgressValue(0);
-      setexcelFile(null)
+      setexcelFile(null);
       message.success("data uploaded successfully");
     } else {
       message.error("Improper file uploaded!");
