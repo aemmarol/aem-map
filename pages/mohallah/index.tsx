@@ -1,7 +1,7 @@
 import {Button, Tabs} from "antd";
 import {NextPage} from "next";
 import {useRouter} from "next/router";
-import { MohallahListComponent } from "../../components";
+import {MohallahListComponent} from "../../components";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 
 const {TabPane} = Tabs;

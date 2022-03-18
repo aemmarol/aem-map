@@ -1,1 +1,1 @@
-export * from "./mohallahListComponent"
+export * from "./mohallahListComponent";
