@@ -30,32 +30,32 @@ const FileList: NextPage = () => {
             <InchargeDetailsCard
               cardTitle="Masool"
               inchargeName={data.masool_name}
-              inchargeIts={data.masool_its}
-              inchargeContactNumber={data.masool_contact_number}
+              inchargeIts={data.masool_its.toString()}
+              inchargeContactNumber={data.masool_contact_number.toString()}
             />
           </Col>
           <Col span={4}>
             <InchargeDetailsCard
               cardTitle="Masoola"
               inchargeName={data.masoola_name}
-              inchargeIts={data.masoola_its}
-              inchargeContactNumber={data.masoola_contact_number}
+              inchargeIts={data.masoola_its.toString()}
+              inchargeContactNumber={data.masoola_contact_number.toString()}
             />
           </Col>
           <Col span={4}>
             <InchargeDetailsCard
               cardTitle="Musaid"
               inchargeName={data.musaid_name}
-              inchargeIts={data.musaid_its}
-              inchargeContactNumber={data.musaid_contact_number}
+              inchargeIts={data.musaid_its.toString()}
+              inchargeContactNumber={data.musaid_contact_number.toString()}
             />
           </Col>
           <Col span={4}>
             <InchargeDetailsCard
               cardTitle="Musaida"
               inchargeName={data.musaida_name}
-              inchargeIts={data.musaida_its}
-              inchargeContactNumber={data.musaida_contact_number}
+              inchargeIts={data.musaida_its.toString()}
+              inchargeContactNumber={data.musaida_contact_number.toString()}
             />
           </Col>
           <Col span={4} className={styles.infoCol}>

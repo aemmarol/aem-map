@@ -1,9 +1,8 @@
+import { faPerson, faPersonDress } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {Card} from "antd";
 import {FC} from "react";
 import styles from "../../styles/components/cards/subSectorCard.module.scss";
-// import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-
-// import {faPerson, faPersonDress} from "@fortawesome/free-solid-svg-icons";
 
 export const SubSectorCard: FC<{
   musaidName: string;
@@ -12,12 +11,16 @@ export const SubSectorCard: FC<{
   eta: string;
   cardHeading: string;
   backgroundColor?: string;
+  number_of_males: number;
+  number_of_females: number;
 }> = ({
   musaidName,
   musaidaName,
   distance,
   eta,
   cardHeading,
+  number_of_females,
+  number_of_males,
   backgroundColor = "#000000",
 }) => {
   return (
@@ -40,13 +43,13 @@ export const SubSectorCard: FC<{
           <p className={styles.footerContentTitle}>Total Mumineen</p>
           <div className={styles.footerDetails}>
             <span className={styles.personIcon}>
-              {/* <FontAwesomeIcon icon={faPerson} /> */}
+              <FontAwesomeIcon icon={faPerson} />
             </span>
-            <span className={styles.personCount}>100</span>
+            <span className={styles.personCount}>{number_of_males}</span>
             <span className={styles.personIcon}>
-              {/* <FontAwesomeIcon icon={faPersonDress} /> */}
+              <FontAwesomeIcon icon={faPersonDress} />
             </span>
-            <span className={styles.personCount}>100</span>
+            <span className={styles.personCount}>{number_of_females}</span>
           </div>
         </div>
       </div>
