@@ -1,5 +1,5 @@
-import { faPerson, faPersonDress } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faPerson, faPersonDress} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Card} from "antd";
 import {FC} from "react";
 import styles from "../../styles/components/cards/subSectorCard.module.scss";

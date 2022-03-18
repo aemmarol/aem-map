@@ -15,7 +15,6 @@ import {
 } from "../../components";
 import {isEmpty} from "lodash";
 
-
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
   const {mohallahId} = router.query;
@@ -72,7 +71,6 @@ const SingleMohallah: NextPage = () => {
     }
   }, [mohallahDetails]);
 
-
   return (
     <Dashboardlayout
       backgroundColor={mohallahDetails.secondary_color || "#efefef"}
@@ -118,7 +116,7 @@ const SingleMohallah: NextPage = () => {
                   eta="1 Minute"
                   cardHeading={value.name}
                   backgroundColor={mohallahDetails.primary_color}
-                  number_of_females={value.no_of_females as number }
+                  number_of_females={value.no_of_females as number}
                   number_of_males={value.no_of_males as number}
                 />
               </Col>
