@@ -27,6 +27,7 @@ h2 {
 h3 {
   font-size: 20px;
   line-height: 1.5;
+  font-weight: 600;
 }
 
 a {
@@ -60,6 +61,10 @@ a {
   margin-right: 16px;
 }
 
+.border-radius-10 {
+  border-radius: 10px;
+}
+
 .font-20 {
   font-size: 20px;
 }
@@ -80,4 +85,11 @@ a {
 
 .border-radius-10 {
   border-radius: 10px !important;
+}
+
+// antd
+.card-padding-20 {
+  .ant-card-body {
+    padding: 20px;
+  }
 }
