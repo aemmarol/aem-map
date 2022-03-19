@@ -2,22 +2,21 @@ import {Col, Row} from "antd";
 import {NextPage} from "next";
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
-import {useGlobalContext} from "../../context/GlobalContext";
-import {Dashboardlayout} from "../../layouts/dashboardLayout";
-import {sectorData, subSectorData} from "../../types";
-import {getSectorData} from "../api/v1/db/sectorCrud";
-import {getSubSectorData} from "../api/v1/db/subSectorCrud";
-import styles from "../../styles/SubSectorList.module.scss";
+import {useGlobalContext} from "../../../context/GlobalContext";
+import {Dashboardlayout} from "../../../layouts/dashboardLayout";
+import {sectorData, subSectorData} from "../../../types";
+import {getSectorDataByName} from "../../api/v1/db/sectorCrud";
+import {getSubSectorData} from "../../api/v1/db/subSectorCrud";
 import {
   DistanceCard,
   InchargeDetailsCard,
   SubSectorCard,
-} from "../../components";
+} from "../../../components";
 import {isEmpty} from "lodash";
 
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
-  const {mohallahId} = router.query;
+  const {mohallahName} = router.query;
   const {toggleLoader} = useGlobalContext();
 
   const [mohallahDetails, setMohallahDetails] = useState<sectorData>(
@@ -30,9 +29,14 @@ const SingleMohallah: NextPage = () => {
 
   const getSectorDetails = async () => {
     toggleLoader(true);
-    const sectorDetails = await getSectorData(mohallahId as string);
-    toggleLoader(false);
-    setMohallahDetails(sectorDetails);
+    const sectorDetails = await getSectorDataByName(mohallahName as string);
+    console.log("sector", sectorDetails);
+    if (!isEmpty(sectorDetails)) {
+      toggleLoader(false);
+      setMohallahDetails(sectorDetails);
+    } else {
+      router.push("/");
+    }
   };
 
   const getSubSectorDetails = async () => {
@@ -56,10 +60,10 @@ const SingleMohallah: NextPage = () => {
   };
 
   useEffect(() => {
-    if (mohallahId) {
+    if (mohallahName) {
       getSectorDetails();
     }
-  }, [mohallahId]);
+  }, [mohallahName]);
 
   useEffect(() => {
     if (
@@ -76,10 +80,10 @@ const SingleMohallah: NextPage = () => {
       backgroundColor={mohallahDetails.secondary_color || "#efefef"}
       headerTitle={mohallahDetails.name || ""}
     >
-      <div className={styles.mainWrapper}>
+      <div>
         {!isEmpty(mohallahDetails) ? (
-          <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
-            <Col span={6}>
+          <Row className="mb-16" gutter={[{xs: 8, sm: 16, md: 24, lg: 32}, 16]}>
+            <Col xs={24} sm={12} lg={8} xl={6}>
               <InchargeDetailsCard
                 cardTitle="Masool"
                 inchargeName={mohallahDetails.masool_name}
@@ -87,7 +91,7 @@ const SingleMohallah: NextPage = () => {
                 inchargeContactNumber={mohallahDetails.masool_contact}
               />
             </Col>
-            <Col span={6}>
+            <Col xs={24} sm={12} lg={8} xl={6}>
               <InchargeDetailsCard
                 cardTitle="Masoola"
                 inchargeName={mohallahDetails.masoola_name}
@@ -95,7 +99,7 @@ const SingleMohallah: NextPage = () => {
                 inchargeContactNumber={mohallahDetails.masoola_contact}
               />
             </Col>
-            <Col span={6} className={styles.infoCol}>
+            <Col className="d-flex" xs={24} sm={12} lg={8} xl={6}>
               <DistanceCard
                 backgroundColor={mohallahDetails.primary_color}
                 distance="0.1 KM"
@@ -106,9 +110,9 @@ const SingleMohallah: NextPage = () => {
         ) : null}
 
         {mohallahSubSectorsDetails.length > 0 ? (
-          <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32}}>
+          <Row gutter={[{xs: 8, sm: 16, md: 24, lg: 32}, 16]}>
             {mohallahSubSectorsDetails.map((value) => (
-              <Col key={value.id} span={6}>
+              <Col key={value.id} xs={24} sm={12} lg={8} xl={6}>
                 <SubSectorCard
                   musaidName={value.musaid_name}
                   musaidaName={value.musaida_name}

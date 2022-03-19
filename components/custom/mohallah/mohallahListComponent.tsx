@@ -26,8 +26,8 @@ export const MohallahListComponent: FC = () => {
     return name.charAt(0).toUpperCase();
   };
 
-  const redirectToMohallahPage = (id: string) => {
-    router.push("/mohallah/" + id);
+  const redirectToMohallahPage = (name: string) => {
+    router.push("/mohallah/" + name);
   };
 
   return (
@@ -36,7 +36,7 @@ export const MohallahListComponent: FC = () => {
         {mohallahlist.map((val) => (
           <Col key={val.id} xs={12} sm={8} md={6} lg={6} xl={4}>
             <Card
-              onClick={() => redirectToMohallahPage(val.id as string)}
+              onClick={() => redirectToMohallahPage(val.name as string)}
               style={{backgroundColor: val.primary_color}}
               className="border-radius-10 card-padding-20"
             >
