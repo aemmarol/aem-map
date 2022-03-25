@@ -31,6 +31,25 @@ export const getMemberDataList = async (): Promise<any[]> => {
   return resultArr;
 };
 
+export const getMemberListByHofId = async (hofId: string): Promise<any[]> => {
+  const resultArr: any[] = [];
+  const q = query(
+    dataCollection,
+    where("version", "==", defaultDatabaseFields.version),
+    where("hof_id", "==", hofId)
+  );
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((docs) => {
+    const file: any = {
+      id: docs.id.toString(),
+      ...docs.data(),
+    };
+    resultArr.push(file);
+  });
+
+  return resultArr;
+};
+
 export const addMemberData = async (
   id: string,
   data: any

@@ -41,6 +41,27 @@ export const getFileData = async (id: string): Promise<any> => {
   return {};
 };
 
+export const getFileDataByFileNumber = async (
+  fileNumber: string
+): Promise<any> => {
+  const resultArr: any[] = [];
+  const q = query(
+    dataCollection,
+    where("version", "==", defaultDatabaseFields.version),
+    where("tanzeem_file_no", "==", fileNumber)
+  );
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((docs) => {
+    const file: any = {
+      id: docs.id.toString(),
+      ...docs.data(),
+    };
+    resultArr.push(file);
+  });
+
+  return resultArr[0];
+};
+
 export const addFileData = async (id: string, data: any): Promise<boolean> => {
   await setDoc(doc(firestore, fileCollectionName, id), data);
   return true;
