@@ -13,6 +13,7 @@ export const SubSectorCard: FC<{
   backgroundColor?: string;
   number_of_males: number;
   number_of_females: number;
+  handleClick: () => any;
 }> = ({
   musaidName,
   musaidaName,
@@ -22,9 +23,14 @@ export const SubSectorCard: FC<{
   number_of_females,
   number_of_males,
   backgroundColor = "#000000",
+  handleClick,
 }) => {
   return (
-    <Card className={styles.subSectorCard} bodyStyle={{padding: 0}}>
+    <Card
+      onClick={handleClick}
+      className={styles.subSectorCard}
+      bodyStyle={{padding: 0}}
+    >
       <div className={styles.cardContent}>
         <h2 className={styles.cardHeading}>{cardHeading}</h2>
         <div className={styles.inchargeDetails}>

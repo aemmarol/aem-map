@@ -106,6 +106,7 @@ export const UploadExcelFileCard: FC = () => {
             [userDetails.hof_id]: {
               ...fileFieldsData,
               ...defaultDatabaseFields,
+              hof_name:userDetails.full_name,
               sub_sector: {
                 name: subsector.name,
                 id: subsector.id,

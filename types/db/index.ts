@@ -2,6 +2,7 @@ import {defaultFields} from "..";
 
 export interface databaseMumeneenFieldData extends defaultFields {
   name: string;
+  label?: string;
   id?: string;
 }
 

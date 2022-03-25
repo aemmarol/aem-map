@@ -8,6 +8,12 @@ export const mumeneenDataFieldsColumns: any[] = [
     width: 100,
   },
   {
+    title: "Label",
+    dataIndex: "label",
+    key: "label",
+    width: 100,
+  },
+  {
     title: "Created At",
     dataIndex: "created_at",
     key: "created_at",
@@ -20,6 +26,12 @@ export const fileDataFieldsColumns: any[] = [
     title: "Name",
     dataIndex: "name",
     key: "name",
+    width: 100,
+  },
+  {
+    title: "Label",
+    dataIndex: "label",
+    key: "label",
     width: 100,
   },
   {

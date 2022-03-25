@@ -38,7 +38,7 @@ export const MohallahListComponent: FC = () => {
             <Card
               onClick={() => redirectToMohallahPage(val.name as string)}
               style={{backgroundColor: val.primary_color}}
-              className="border-radius-10 card-padding-20"
+              className="border-radius-10 card-padding-20 cursor-pointer"
             >
               <div className={styles.nameWrapper}>
                 <span className={styles.icon}>{getIconLetter(val.name)}</span>

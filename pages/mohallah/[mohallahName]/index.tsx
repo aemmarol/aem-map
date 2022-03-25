@@ -30,11 +30,11 @@ const SingleMohallah: NextPage = () => {
   const getSectorDetails = async () => {
     toggleLoader(true);
     const sectorDetails = await getSectorDataByName(mohallahName as string);
-    console.log("sector", sectorDetails);
     if (!isEmpty(sectorDetails)) {
       toggleLoader(false);
       setMohallahDetails(sectorDetails);
     } else {
+      toggleLoader(false);
       router.push("/");
     }
   };
@@ -57,6 +57,10 @@ const SingleMohallah: NextPage = () => {
       setMohallahSubSectorsDetails(subSectorDetails);
       toggleLoader(false);
     }
+  };
+
+  const redirectToSubsector = (name: string) => {
+    router.push("/mohallah/" + mohallahName + "/" + name);
   };
 
   useEffect(() => {
@@ -114,6 +118,7 @@ const SingleMohallah: NextPage = () => {
             {mohallahSubSectorsDetails.map((value) => (
               <Col key={value.id} xs={24} sm={12} lg={8} xl={6}>
                 <SubSectorCard
+                  handleClick={() => redirectToSubsector(value.name)}
                   musaidName={value.musaid_name}
                   musaidaName={value.musaida_name}
                   distance="0.1 KM"
