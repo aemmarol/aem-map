@@ -37,11 +37,12 @@ export const getMumeneenDataFields = async (): Promise<
   );
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((docs) => {
-    const {name, version, created_at, updated_at} = docs.data();
+    const {name, version, created_at, updated_at, label} = docs.data();
 
     resultArr.push({
       name,
       version,
+      label,
       created_at,
       updated_at,
       id: docs.id,
@@ -62,11 +63,12 @@ export const getFileDataFields = async (): Promise<
   );
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((docs) => {
-    const {name, version, created_at, updated_at} = docs.data();
+    const {name, version, created_at, updated_at, label} = docs.data();
     resultArr.push({
       name,
       version,
       created_at,
+      label,
       id: docs.id,
       updated_at,
     });

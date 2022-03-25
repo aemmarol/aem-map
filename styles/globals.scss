@@ -27,6 +27,7 @@ h2 {
 h3 {
   font-size: 20px;
   line-height: 1.5;
+  font-weight: 600;
 }
 
 a {
@@ -52,6 +53,10 @@ a {
   padding: 0 32px !important;
 }
 
+.mb-16 {
+  margin-bottom: 16px;
+}
+
 .mb-30 {
   margin-bottom: 30px;
 }
@@ -60,12 +65,24 @@ a {
   margin-right: 16px;
 }
 
+.border-radius-10 {
+  border-radius: 10px;
+}
+
 .font-20 {
   font-size: 20px;
 }
 
+.d-flex {
+  display: flex !important;
+}
+
 .max-height-500 {
   max-height: 500px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .overflow-y-auto {
@@ -80,4 +97,11 @@ a {
 
 .border-radius-10 {
   border-radius: 10px !important;
+}
+
+// antd
+.card-padding-20 {
+  .ant-card-body {
+    padding: 20px;
+  }
 }

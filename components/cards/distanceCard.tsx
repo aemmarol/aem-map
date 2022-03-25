@@ -1,8 +1,7 @@
 import {FC} from "react";
-// import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-// import {faLocationDot} from "@fortawesome/free-solid-svg-icons";
 import styles from "../../styles/components/cards/distanceCard.module.scss";
 import {Card} from "antd";
+import {GoLocation} from "react-icons/go";
 
 export const DistanceCard: FC<{
   backgroundColor?: string;
@@ -12,11 +11,10 @@ export const DistanceCard: FC<{
   return (
     <Card style={{background: backgroundColor}} className={styles.distanceCard}>
       <div className={styles.distanceCardContent}>
-        <div>
-          {/* <FontAwesomeIcon
-            icon={faLocationDot}
-            className={styles.locationIcon}
-          /> */}
+        <div className={styles.locationIcon}>
+          <span>
+            <GoLocation />
+          </span>
         </div>
         <div className={styles.distanceInfo}>
           <p>{distance}</p>

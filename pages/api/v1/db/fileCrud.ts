@@ -2,6 +2,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
   setDoc,
@@ -29,6 +30,15 @@ export const getFileDataList = async (): Promise<any[]> => {
   });
 
   return resultArr;
+};
+
+export const getFileData = async (id: string): Promise<any> => {
+  const docRef = doc(firestore, fileCollectionName, id);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return {...docSnap.data(), id: docSnap.id};
+  }
+  return {};
 };
 
 export const addFileData = async (id: string, data: any): Promise<boolean> => {

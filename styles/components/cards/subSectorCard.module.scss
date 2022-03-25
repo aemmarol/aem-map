@@ -1,7 +1,7 @@
 .subSectorCard {
   width: 100%;
-  margin-top: 20px;
   border-radius: 10px;
+  cursor: pointer;
   .cardContent {
     padding: 24px;
     .cardHeading {
@@ -9,11 +9,13 @@
       text-align: center;
     }
     .inchargeDetails {
-      line-height: 0.5;
+      line-height: 1;
       margin-top: 30px;
       .detailsTitle {
         font-size: 16px;
         color: gray;
+        margin-bottom: 0;
+        line-height: 1.5;
       }
       .detailsValue {
         font-size: 18px;
@@ -29,13 +31,13 @@
         font-size: 20px;
       }
       .footerDetails {
+        display: flex;
+        flex-direction: row;
         .personIcon {
           font-size: 40px;
-          margin: 0 10px;
         }
         .personCount {
-          font-size: 40px;
-          margin: 0 10px;
+          font-size: 36px;
         }
       }
     }
