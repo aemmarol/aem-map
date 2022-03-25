@@ -4,3 +4,4 @@ export * from "./inchargeDetailsCard";
 export * from "./subSectorCard";
 export * from "./settingsPage";
 export * from "./tableCardWithForm";
+export * from "./member";
