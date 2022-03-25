@@ -20,6 +20,7 @@ import {
 } from "../../components";
 import {getSectorList} from "../api/v1/db/sectorCrud";
 import {getSubSectorList} from "../api/v1/db/subSectorCrud";
+import {ResetSettingsCard} from "../../components/custom/settings/resestSettings";
 
 interface AdminSettingsProps {
   mumeneenDataFields: databaseMumeneenFieldData[];
@@ -65,7 +66,12 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
         <Col xs={12}>
           <UploadExcelFileCard />
         </Col>
-        <Col xs={12}>{/* <VersionSettingsCard/> */}</Col>
+        <Col xs={12}>
+          <ResetSettingsCard
+            updateMumeneenFieldsData={(data) => setMumeneenFields(data)}
+            updateFileFieldsData={(data) => setFileFields(data)}
+          />
+        </Col>
       </Row>
 
       <Row gutter={[{xs: 8, lg: 12}, 16]}>

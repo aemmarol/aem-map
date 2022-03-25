@@ -3,6 +3,7 @@ import {
   addDoc,
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -116,5 +117,10 @@ export const resetSubSectorFilesData = async (id: string): Promise<boolean> => {
     no_of_males: 0,
     updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
   });
+  return true;
+};
+
+export const deleteSubSectorData = async (id: string): Promise<boolean> => {
+  await deleteDoc(doc(firestore, subsectorCollectionName, id));
   return true;
 };
