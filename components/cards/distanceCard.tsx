@@ -1,15 +1,15 @@
-import { FC } from "react";
+import {FC} from "react";
 import styles from "../../styles/components/cards/distanceCard.module.scss";
-import { Card } from "antd";
-import { GoLocation } from "react-icons/go";
+import {Card} from "antd";
+import {GoLocation} from "react-icons/go";
 
 export const DistanceCard: FC<{
   backgroundColor?: string;
   distance: string;
   eta: string;
-}> = ({ backgroundColor = "#000000", distance, eta }) => {
+}> = ({backgroundColor = "#000000", distance, eta}) => {
   return (
-    <Card style={{ background: backgroundColor }} className={styles.distanceCard}>
+    <Card style={{background: backgroundColor}} className={styles.distanceCard}>
       <div className={styles.distanceCardContent}>
         <div className={styles.locationIcon}>
           <span>
