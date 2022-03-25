@@ -31,13 +31,13 @@
         font-size: 20px;
       }
       .footerDetails {
+        display: flex;
+        flex-direction: row;
         .personIcon {
           font-size: 40px;
-          margin: 0 10px;
         }
         .personCount {
           font-size: 36px;
-          margin: 0 10px;
         }
       }
     }

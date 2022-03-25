@@ -1,8 +1,7 @@
-import {faPerson, faPersonDress} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Card} from "antd";
 import {FC} from "react";
 import styles from "../../styles/components/cards/subSectorCard.module.scss";
+import {ImMan, ImWoman} from "react-icons/im";
 
 export const SubSectorCard: FC<{
   musaidName: string;
@@ -48,14 +47,18 @@ export const SubSectorCard: FC<{
         <div className={styles.footerContent}>
           <p className={styles.footerContentTitle}>Total Mumineen</p>
           <div className={styles.footerDetails}>
-            <span className={styles.personIcon}>
-              <FontAwesomeIcon icon={faPerson} />
-            </span>
-            <span className={styles.personCount}>{number_of_males}</span>
-            <span className={styles.personIcon}>
-              <FontAwesomeIcon icon={faPersonDress} />
-            </span>
-            <span className={styles.personCount}>{number_of_females}</span>
+            <div>
+              <span className={styles.personIcon}>
+                <ImMan />
+              </span>
+              <span className={styles.personCount}>{number_of_males}</span>
+            </div>
+            <div style={{marginLeft: "50px"}}>
+              <span className={styles.personIcon}>
+                <ImWoman />
+              </span>
+              <span className={styles.personCount}>{number_of_females}</span>
+            </div>
           </div>
         </div>
       </div>
