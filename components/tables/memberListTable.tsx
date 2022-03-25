@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from "react";
 import {Table} from "antd";
 import styles from "../../styles/components/tables/fileListTable.module.scss";
-import { getMumeneenDataFields} from "../../pages/api/v1/db/databaseFields";
+import {getMumeneenDataFields} from "../../pages/api/v1/db/databaseFields";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {useRouter} from "next/router";
 

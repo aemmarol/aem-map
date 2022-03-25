@@ -1,2 +1,2 @@
 export * from "./subSectorFileListTable";
-export * from "./memberListTable"
+export * from "./memberListTable";

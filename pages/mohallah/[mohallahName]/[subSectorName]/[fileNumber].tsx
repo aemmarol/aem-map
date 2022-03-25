@@ -72,7 +72,7 @@ const FileMemberDetailsPage: NextPage = () => {
             />
           </Col>
           <Col xs={24}>
-              <MemberListTable dataSource={memberList}/>
+            <MemberListTable dataSource={memberList} />
           </Col>
         </Row>
       </div>
