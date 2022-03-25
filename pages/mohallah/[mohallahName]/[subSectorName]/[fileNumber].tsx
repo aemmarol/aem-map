@@ -1,4 +1,4 @@
-import {Card, Col, Row} from "antd";
+import {Col, Row} from "antd";
 import {isEmpty} from "lodash";
 import {NextPage} from "next";
 import {useRouter} from "next/router";
