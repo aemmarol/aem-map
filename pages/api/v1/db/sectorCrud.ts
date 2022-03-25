@@ -4,6 +4,7 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -136,5 +137,10 @@ export const removeSubSectorIds = async (
     sub_sector_id: arrayRemove(subSectorId),
     updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
   });
+  return true;
+};
+
+export const deleteSectorData = async (id: string): Promise<boolean> => {
+  await deleteDoc(doc(firestore, sectorCollectionName, id));
   return true;
 };

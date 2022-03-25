@@ -5,10 +5,13 @@ import memberFields from "../../../../sample_data/mumeneenDataField.json";
 import {
   addSectorData,
   addSubSectorIds,
+  deleteSectorData,
   getSectorDataByName,
+  getSectorList,
 } from "./sectorCrud";
 import {
   addSubSectorData,
+  deleteSubSectorData,
   getSubSectorList,
   resetSubSectorFilesData,
 } from "./subSectorCrud";
@@ -23,6 +26,14 @@ import {
 } from "../../../../firebase/dbCollectionNames";
 
 export const addSectors = async () => {
+  const sectorList = await getSectorList();
+
+  await Promise.all(
+    sectorList.map(async (val) => {
+      await deleteSectorData(val.id as string);
+    })
+  );
+
   await Promise.all(
     sectorDbData.map(async (value) => {
       const successFlag = addSectorData(value);
@@ -32,6 +43,14 @@ export const addSectors = async () => {
 };
 
 export const addSubSectors = async () => {
+  const subsectList = await getSubSectorList();
+
+  await Promise.all(
+    subsectList.map(async (val) => {
+      await deleteSubSectorData(val.id as string);
+    })
+  );
+
   await Promise.all(
     subsectorSampleData.map(async (value: any) => {
       const sectorInfo: sectorData = await getSectorDataByName(
