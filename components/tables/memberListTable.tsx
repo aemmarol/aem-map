@@ -28,7 +28,7 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
       },
       ...fieldData
         .filter((val) => val.name !== "tanzeem_file_no")
-        .map((val) => ({
+        .map((val:any) => ({
           title: val.label,
           dataIndex: val.name,
           width:
@@ -55,13 +55,6 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
       className={styles.fileListTable}
       pagination={false}
       scroll={{x: "150px", y: "500px"}}
-      rowClassName="cursor-pointer"
-      onRow={(record) => ({
-        onClick: () =>
-          router.push(
-            `/mohallah/${record.sub_sector.sector.name}/${record.sub_sector.name}/${record.tanzeem_file_no}`
-          ),
-      })}
     />
   );
 };

@@ -1,18 +1,18 @@
-import {FC, useEffect, useState} from "react";
-import {Table} from "antd";
+import { FC, useEffect, useState } from "react";
+import { Table } from "antd";
 import styles from "../../styles/components/tables/fileListTable.module.scss";
-import {getFileDataFields} from "../../pages/api/v1/db/databaseFields";
-import {useGlobalContext} from "../../context/GlobalContext";
-import {useRouter} from "next/router";
+import { getFileDataFields } from "../../pages/api/v1/db/databaseFields";
+import { useGlobalContext } from "../../context/GlobalContext";
+import { useRouter } from "next/router";
 
 interface TableProps {
   dataSource: any[];
 }
 
-export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
+export const SubSectorFileListTable: FC<TableProps> = ({ dataSource }) => {
   const [columns, setcolumns] = useState<any[]>([]);
 
-  const {toggleLoader} = useGlobalContext();
+  const { toggleLoader } = useGlobalContext();
   const router = useRouter();
 
   const getFileTableColumns = async () => {
@@ -53,8 +53,8 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
           dataIndex: val.name,
           width:
             val.name === "address" ||
-            val.name === "address_fmb" ||
-            val.name === "building_fmb"
+              val.name === "address_fmb" ||
+              val.name === "building_fmb"
               ? 250
               : 100,
           key: val.name,
@@ -70,17 +70,20 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
 
   return (
     <Table
-      dataSource={dataSource.map((val) => ({...val, key: val.id}))}
+      dataSource={dataSource.map((val) => ({ ...val, key: val.id }))}
       columns={columns}
       className={styles.fileListTable}
       pagination={false}
-      scroll={{x: "500px", y: "500px"}}
+      scroll={{ x: "500px", y: "500px" }}
       rowClassName="cursor-pointer"
       onRow={(record) => ({
-        onClick: () =>
-          router.push(
-            `/mohallah/${record.sub_sector.sector.name}/${record.sub_sector.name}/${record.tanzeem_file_no}`
-          ),
+        onClick: () => {
+          if (record && record.tanzeem_file_no) {
+            router.push(
+              `/mohallah/${record.sub_sector.sector.name}/${record.sub_sector.name}/${record.tanzeem_file_no}`
+            );
+          }
+        },
       })}
     />
   );
