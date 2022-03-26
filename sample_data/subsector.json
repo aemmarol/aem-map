@@ -1,57 +1,802 @@
 [
   {
-    "sub_sector_name": "BURJ BURHAN",
-    "sub_sector_id": 1,
-    "sector_id": 1,
-    "musaid_name": "Aziz Ahmedabadwala",
-    "musaid_its": 123456,
-    "musaid_contact_number": 1234567890,
-    "musaida_name": "Farida Mandsaurwala",
-    "musaida_its": 654321,
-    "musaida_contact_number": 987654321
+    "sector_name": "BADRI",
+    "name": "BURJ BURHAN",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
   },
   {
-    "sub_sector_name": "SAIFEE-A",
-    "sub_sector_id": 2,
-    "sector_id": 1,
-    "musaid_name": "Aziz Ahmedabadwala",
-    "musaid_its": 123456,
-    "musaid_contact_number": 1234567890,
-    "musaida_name": "Farida Mandsaurwala",
-    "musaida_its": 654321,
-    "musaida_contact_number": 987654321
+    "sector_name": "BADRI",
+    "name": "FAKHRI-A",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
   },
   {
-    "sub_sector_name": "SAIFEE-B",
-    "sub_sector_id": 3,
-    "sector_id": 1,
-    "musaid_name": "Aziz Ahmedabadwala",
-    "musaid_its": 123456,
-    "musaid_contact_number": 1234567890,
-    "musaida_name": "Farida Mandsaurwala",
-    "musaida_its": 654321,
-    "musaida_contact_number": 987654321
+    "sector_name": "BADRI",
+    "name": "FAKHRI-B",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
   },
   {
-    "sub_sector_name": "FAKHRI-A",
-    "sub_sector_id": 4,
-    "sector_id": 1,
-    "musaid_name": "Aziz Ahmedabadwala",
-    "musaid_its": 123456,
-    "musaid_contact_number": 1234567890,
-    "musaida_name": "Farida Mandsaurwala",
-    "musaida_its": 654321,
-    "musaida_contact_number": 987654321
+    "sector_name": "BADRI",
+    "name": "SAIFEE-A",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
   },
   {
-    "sub_sector_name": "FAKHRI-B",
-    "sub_sector_id": 5,
-    "sector_id": 1,
-    "musaid_name": "Aziz Ahmedabadwala",
-    "musaid_its": 123456,
-    "musaid_contact_number": 1234567890,
-    "musaida_name": "Farida Mandsaurwala",
-    "musaida_its": 654321,
-    "musaida_contact_number": 987654321
+    "sector_name": "BADRI",
+    "name": "SAIFEE-B",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "BURHANI",
+    "name": "BURHANI",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "BURHANI",
+    "name": "GABAJIWALA",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "BURHANI",
+    "name": "HATIMI",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "BURHANI",
+    "name": "MAIMOON-A",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "BURHANI",
+    "name": "MAIMOON-B",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "BURHANI",
+    "name": "MAIMOON-C",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "BURHANI",
+    "name": "MUFADDAL",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "BURHANI",
+    "name": "NAFEES",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "BURHANI",
+    "name": "NEW JAMALI",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "BURHANI",
+    "name": "NEW TAHERI",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "EZZI",
+    "name": "Bazar Area 1",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "EZZI",
+    "name": "Bazar Area 2",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "EZZI",
+    "name": "Behind  Frankie Video",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "EZZI",
+    "name": "Decent Tailor",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "EZZI",
+    "name": "Frankie Video",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "EZZI",
+    "name": "Gurunanak",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "EZZI",
+    "name": "KOHINOOR BAKERY",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "EZZI",
+    "name": "Opp Al Mufaddal",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "EZZI",
+    "name": "Shiv Sena X Lane",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "EZZI",
+    "name": "ShivSena Gali",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "FATEMI",
+    "name": "AL-DUVAIRAT",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "FATEMI",
+    "name": "GHURFAT-A",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "FATEMI",
+    "name": "GHURFAT-B",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "FATEMI",
+    "name": "MASJID COMPLEX",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "FATEMI",
+    "name": "MASKAN",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "FATEMI",
+    "name": "MUBARAK",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "FATEMI",
+    "name": "SHIKKAT",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "HAKIMI",
+    "name": "ASHOK TOWER",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "HAKIMI",
+    "name": "ASHOK VIHAR",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "HAKIMI",
+    "name": "BAMANDAYAPADA",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "HAKIMI",
+    "name": "MANAVSTHAL",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "JAMALI",
+    "name": "FATEMA",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "JAMALI",
+    "name": "OLD JAMALI",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "JAMALI",
+    "name": "RAFEA",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "JAMALI",
+    "name": "SAFAVI-A",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "JAMALI",
+    "name": "SAFAVI-B",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "JAMALI",
+    "name": "TASHYEED-A",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "JAMALI",
+    "name": "TASHYEED-B",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "MOHAMMEDI",
+    "name": "HIRANANDANI",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "MOHAMMEDI",
+    "name": "NAHAR",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "NAJMI",
+    "name": "BHAVANI NAGAR",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "NAJMI",
+    "name": "ECO PARK",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "NAJMI",
+    "name": "SAKINAKA",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "NAJMI",
+    "name": "VASANT",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "NAJMI",
+    "name": "VIJAY NAGAR",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "SAIFEE",
+    "name": "AL-TAHERI-A",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "SAIFEE",
+    "name": "AL-TAHERI-B",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "SAIFEE",
+    "name": "MOHAMMEDI-A",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "SAIFEE",
+    "name": "MOHAMMEDI-B",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "SAIFEE",
+    "name": "YAMANI-2",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "SHUJAYI",
+    "name": "ANMOL",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "SHUJAYI",
+    "name": "ARISTO",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "SHUJAYI",
+    "name": "CHAKALA",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "SHUJAYI",
+    "name": "CHURCH ROAD",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "SHUJAYI",
+    "name": "HILL-1",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "SHUJAYI",
+    "name": "HILL-2",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "SHUJAYI",
+    "name": "PIPELINE",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "VAJIHI",
+    "name": "AMEEN",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "VAJIHI",
+    "name": "BAZAAR ROAD-1",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "VAJIHI",
+    "name": "BAZAAR ROAD-2",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "VAJIHI",
+    "name": "CRESCENT",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "VAJIHI",
+    "name": "LOK-A",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "VAJIHI",
+    "name": "LOK-B",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "VAJIHI",
+    "name": "MAPKHAN",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "VAJIHI",
+    "name": "MAROL MAROSHI ROAD",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "VAJIHI",
+    "name": "SHIRIN",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "ZAINEE",
+    "name": "AL-BURHAN",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "ZAINEE",
+    "name": "QUTBI MANZIL",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "ZAINEE",
+    "name": "SHAMIKH",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "ZAINEE",
+    "name": "ZAINEE-A",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "ZAINEE",
+    "name": "ZAINEE-B",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "ZAINEE",
+    "name": "ZAINEE-C",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "ZZ NON RESIDENT",
+    "name": "NON TRACEABLE",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "ZZ NON RESIDENT",
+    "name": "NRI",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "ZZ NON RESIDENT",
+    "name": "NRM",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899"
   }
 ]

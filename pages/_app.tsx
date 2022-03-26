@@ -1,13 +1,16 @@
-import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
-import {config} from "@fortawesome/fontawesome-svg-core";
-config.autoAddCss = false;
-
 import "../styles/globals.scss";
 import "../firebase/firebaseConfig";
 import type {AppProps} from "next/app";
+import {GlobalProvider} from "../context/GlobalContext";
 
-function MyApp({Component, pageProps}: AppProps) {
-  return <Component {...pageProps} />;
-}
+const MyApp = ({Component, pageProps}: AppProps) => {
+  return (
+    <>
+      <GlobalProvider>
+        <Component {...pageProps} />
+      </GlobalProvider>
+    </>
+  );
+};
 
 export default MyApp;

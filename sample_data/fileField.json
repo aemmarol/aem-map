@@ -1,0 +1,10 @@
+[
+  {"name": "tanzeem_file_no", "label": "File Number"},
+  {"name": "address", "label": "Address"},
+  {"name": "address_fmb", "label": "Address FMB"},
+  {"name": "building_fmb", "label": "Building FMB"},
+  {"name": "muvasat", "label": "Muvasat"},
+  {"name": "thali_taking", "label": "Takes Thali"},
+  {"name": "foster", "label": "Foster"},
+  {"name": "qaza", "label": "Qaza"}
+]

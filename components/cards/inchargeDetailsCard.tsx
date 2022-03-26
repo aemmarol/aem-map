@@ -5,8 +5,8 @@ import styles from "../../styles/components/cards/inchargeDetailsCard.module.scs
 export const InchargeDetailsCard: FC<{
   cardTitle: string;
   inchargeName: string;
-  inchargeIts: number;
-  inchargeContactNumber: number;
+  inchargeIts: string;
+  inchargeContactNumber: string;
 }> = ({cardTitle, inchargeName, inchargeIts, inchargeContactNumber}) => {
   return (
     <Card className={styles.masoolCard}>

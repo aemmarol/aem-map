@@ -1,4 +1,5 @@
 import {Divider, Drawer, Image, Menu} from "antd";
+import {useRouter} from "next/router";
 import {FC} from "react";
 import styles from "../../styles/components/sidebars/dashboardSidebar.module.scss";
 
@@ -6,6 +7,8 @@ export const DashboardSidebar: FC<{
   visible: boolean;
   handleClose: () => any;
 }> = ({visible, handleClose}) => {
+  const router = useRouter();
+
   return (
     <Drawer
       width={250}
@@ -26,9 +29,9 @@ export const DashboardSidebar: FC<{
       </div>
       <Divider />
       <Menu theme="light" mode="inline" defaultSelectedKeys={["1"]}>
-        <Menu.Item key="1">Mohallah List</Menu.Item>
-        <Menu.Item key="2">File List</Menu.Item>
-        <Menu.Item key="3">User List</Menu.Item>
+        <Menu.Item key="1" onClick={() => router.push("/mohallah")}>
+          Mohallah
+        </Menu.Item>
         <Menu.Item key="4">Escalations</Menu.Item>
       </Menu>
     </Drawer>

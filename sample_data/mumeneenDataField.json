@@ -1,0 +1,20 @@
+[
+  {"name": "hof_fm_type", "label": "Family Member Type"},
+  {"name": "full_name", "label": "Full name"},
+  {"name": "first_prefix", "label": "prefix"},
+  {"name": "age", "label": "Age"},
+  {"name": "gender", "label": "gender"},
+  {"name": "misaq", "label": "Misaq done"},
+  {"name": "marital_status", "label": "Marital Status"},
+  {"name": "mobile", "label": "Mobile Number"},
+  {"name": "email", "label": "Email"},
+  {"name": "title", "label": "Title"},
+  {"name": "idara", "label": "Idara"},
+  {"name": "qualification", "label": "Qualification"},
+  {"name": "occupation", "label": "Occupation"},
+  {"name": "sub_occupation", "label": "Sub Occupation"},
+  {"name": "quran_sanad", "label": "Quran Sanad"},
+  {"name": "data_verifcation_status", "label": "Data Verification Status"},
+  {"name": "photo_verifcation_status", "label": "Photo verification Status"},
+  {"name": "has_medical_issue", "label": "Has medical issue?"}
+]
