@@ -28,7 +28,7 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
       },
       ...fieldData
         .filter((val) => val.name !== "tanzeem_file_no")
-        .map((val:any) => ({
+        .map((val: any) => ({
           title: val.label,
           dataIndex: val.name,
           width:

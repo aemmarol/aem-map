@@ -8,8 +8,8 @@ import {Dashboardlayout} from "../../../../layouts/dashboardLayout";
 import {getFileDataByFileNumber} from "../../../api/v1/db/fileCrud";
 import {getMemberListByHofId} from "../../../api/v1/db/memberCrud";
 import styles from "../../../../styles/FileList.module.scss";
-import { MemberProfileCard} from "../../../../components";
-import { MemberListTable } from "../../../../components/tables/memberListTable";
+import {MemberProfileCard} from "../../../../components";
+import {MemberListTable} from "../../../../components/tables/memberListTable";
 
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();
