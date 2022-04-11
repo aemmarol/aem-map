@@ -1,7 +1,7 @@
 import {Card} from "antd";
 import {FC} from "react";
 import styles from "../../styles/components/cards/subSectorCard.module.scss";
-import {ImMan, ImWoman} from "react-icons/im";
+import {ImMan, ImWoman, ImFolderOpen} from "react-icons/im";
 
 export const SubSectorCard: FC<{
   musaidName: string;
@@ -12,6 +12,7 @@ export const SubSectorCard: FC<{
   backgroundColor?: string;
   number_of_males: number;
   number_of_females: number;
+  number_of_files: number;
   handleClick: () => any;
 }> = ({
   musaidName,
@@ -21,6 +22,7 @@ export const SubSectorCard: FC<{
   cardHeading,
   number_of_females,
   number_of_males,
+  number_of_files,
   backgroundColor = "#000000",
   handleClick,
 }) => {
@@ -58,6 +60,12 @@ export const SubSectorCard: FC<{
                 <ImWoman />
               </span>
               <span className={styles.personCount}>{number_of_females}</span>
+            </div>
+            <div style={{marginLeft: "50px"}}>
+              <span className={styles.personIcon}>
+                <ImFolderOpen />
+              </span>
+              <span className={styles.personCount}>{number_of_files}</span>
             </div>
           </div>
         </div>
