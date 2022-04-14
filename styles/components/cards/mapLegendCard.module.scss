@@ -1,0 +1,17 @@
+.legendContainer {
+  .title {
+    text-align: center;
+  }
+  width: 15em;
+  padding: 1.5em;
+  .legends {
+    display: flex;
+    justify-content: space-around;
+    align-items: baseline;
+    .bullet {
+      width: 3em;
+      height: 1em;
+      margin-right: 1em;
+    }
+  }
+}

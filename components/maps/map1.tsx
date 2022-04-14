@@ -5,7 +5,7 @@ import useWindowDimensions from "../../utils/windowDimensions";
 import {Popover} from "antd";
 import {getSectorList} from "../../pages/api/v1/db/sectorCrud";
 import {sectorData} from "../../types";
-import {get, find, findIndex} from "lodash";
+import {get, findIndex} from "lodash";
 
 const sectorImgArr = [
   {

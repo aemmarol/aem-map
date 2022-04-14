@@ -1,0 +1,90 @@
+import {sectorData, subSectorData} from "../../types";
+
+export const sectors: sectorData[] = [
+  {
+    name: "Vajihi",
+    bounds: [
+      [19.116806661602393, 72.87637718646818],
+      [19.117086215812808, 72.87627097641715],
+      [19.116806661602393, 72.87983659955856],
+      [19.10889570265626, 72.87802159672522],
+      [19.109562138721195, 72.87605812102957],
+      [19.112907918155518, 72.8769225596808],
+      [19.11296359709976, 72.87785385489497],
+      [19.116170322819038, 72.8782876543435],
+    ],
+    primary_color: "#FFA500",
+    secondary_color: "#ccc",
+    masool_name: "string",
+    masool_its: "string",
+    masool_contact: "string",
+    masoola_name: "string",
+    masoola_its: "string",
+    masoola_contact: "string",
+    version: 1,
+    updated_at: "test",
+  },
+];
+
+export const subsectors: subSectorData[] = [
+  {
+    name: "Shirin",
+    latlng: [19.115961342345738, 72.87837429223087],
+    sector: {
+      name: "Vajihi",
+    },
+    musaid_name: "string",
+    musaid_its: "string",
+    musaid_contact: "string",
+    musaida_name: "string",
+    musaida_its: "string",
+    musaida_contact: "string",
+    version: 1,
+    updated_at: "test",
+  },
+  {
+    name: "Maimoon",
+    latlng: [19.116346586057833, 72.87560909449026],
+    sector: {
+      name: "Burhani",
+    },
+    musaid_name: "string",
+    musaid_its: "string",
+    musaid_contact: "string",
+    musaida_name: "string",
+    musaida_its: "string",
+    musaida_contact: "string",
+    version: 1,
+    updated_at: "test",
+  },
+  {
+    name: "Saifee masjid",
+    latlng: [19.114092679220292, 72.87610986824751],
+    sector: {
+      name: "Root",
+    },
+    musaid_name: "string",
+    musaid_its: "string",
+    musaid_contact: "string",
+    musaida_name: "string",
+    musaida_its: "string",
+    musaida_contact: "string",
+    version: 1,
+    updated_at: "test",
+  },
+  {
+    name: "Al- burhan",
+    latlng: [19.114838567013617, 72.87596100790853],
+    sector: {
+      name: "Burhani",
+    },
+    musaid_name: "string",
+    musaid_its: "string",
+    musaid_contact: "string",
+    musaida_name: "string",
+    musaida_its: "string",
+    musaida_contact: "string",
+    version: 1,
+    updated_at: "test",
+  },
+];

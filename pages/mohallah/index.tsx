@@ -2,7 +2,7 @@ import {Button, Tabs} from "antd";
 import {NextPage} from "next";
 import {useRouter} from "next/router";
 import {MohallahListComponent} from "../../components";
-// import {Map1} from "../../components/maps";
+import {Map1} from "../../components/maps";
 import dynamic from "next/dynamic";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 
@@ -27,6 +27,9 @@ const Dashboard: NextPage = () => {
       >
         <TabPane tab="List View" key="1">
           <MohallahListComponent />
+        </TabPane>
+        <TabPane tab="Map View1" key="3">
+          <Map1 />
         </TabPane>
         <TabPane tab="Map View" key="2">
           <Map />

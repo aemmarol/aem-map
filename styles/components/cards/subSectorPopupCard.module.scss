@@ -1,0 +1,14 @@
+.subSectorPopupContainer {
+  display: flex;
+  flex-direction: column;
+}
+.subSectorPopupContainerImage {
+  width: 100%;
+  height: 10em;
+}
+
+.subSectorPopupContainerDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
