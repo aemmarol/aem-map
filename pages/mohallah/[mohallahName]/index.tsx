@@ -116,18 +116,32 @@ const SingleMohallah: NextPage = () => {
         {mohallahSubSectorsDetails.length > 0 ? (
           <Row gutter={[{xs: 8, sm: 16, md: 24, lg: 32}, 16]}>
             {mohallahSubSectorsDetails.map((mohallahSubSectorsDetail) => (
-              <Col key={mohallahSubSectorsDetail.id} xs={24} sm={12} lg={8} xl={6}>
+              <Col
+                key={mohallahSubSectorsDetail.id}
+                xs={24}
+                sm={12}
+                lg={8}
+                xl={6}
+              >
                 <SubSectorCard
-                  handleClick={() => redirectToSubsector(mohallahSubSectorsDetail.name)}
+                  handleClick={() =>
+                    redirectToSubsector(mohallahSubSectorsDetail.name)
+                  }
                   musaidName={mohallahSubSectorsDetail.musaid_name}
                   musaidaName={mohallahSubSectorsDetail.musaida_name}
                   distance="0.1 KM"
                   eta="1 Minute"
                   cardHeading={mohallahSubSectorsDetail.name}
                   backgroundColor={mohallahDetails.primary_color}
-                  number_of_females={mohallahSubSectorsDetail.no_of_females as number}
-                  number_of_males={mohallahSubSectorsDetail.no_of_males as number}
-                  number_of_files={mohallahSubSectorsDetail.files?.length as number}
+                  number_of_females={
+                    mohallahSubSectorsDetail.no_of_females as number
+                  }
+                  number_of_males={
+                    mohallahSubSectorsDetail.no_of_males as number
+                  }
+                  number_of_files={
+                    mohallahSubSectorsDetail.files?.length as number
+                  }
                 />
               </Col>
             ))}
