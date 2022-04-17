@@ -1,0 +1,34 @@
+.legendContainer {
+  .title {
+    text-align: center;
+  }
+
+  padding: 15px 20px;
+  max-height: calc(100vh - 220px);
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .legends {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    .bullet {
+      width: 48px;
+      height: 16px;
+      margin-right: 10px;
+      @media screen and (max-width: 768px) {
+        width: 24px;
+      }
+    }
+    h4 {
+      margin-bottom: 0;
+    }
+  }
+}

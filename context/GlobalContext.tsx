@@ -11,6 +11,7 @@ interface AppContextInterface {
   toggleProgressLoader: Function;
   progressValue: number;
   setProgressValue: Function;
+  center: any;
 }
 
 const GlobalContext = React.createContext<AppContextInterface>({
@@ -20,6 +21,7 @@ const GlobalContext = React.createContext<AppContextInterface>({
   toggleLoader: () => {},
   toggleProgressLoader: () => {},
   setProgressValue: () => {},
+  center: {},
 });
 
 export const useGlobalContext = () => {
@@ -38,6 +40,11 @@ export const GlobalProvider = ({children}: Props) => {
     setShowProgressLoader(flag);
   };
 
+  const center = {
+    name: "Marol Saifee Masjid",
+    latlng: [19.114092679220292, 72.87610986824751],
+  };
+
   return (
     <GlobalContext.Provider
       value={{
@@ -47,6 +54,7 @@ export const GlobalProvider = ({children}: Props) => {
         showProgressLoader,
         progressValue,
         setProgressValue: (flag: number) => setProgressValue(flag),
+        center,
       }}
     >
       {children}

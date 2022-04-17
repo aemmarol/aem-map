@@ -1,0 +1,18 @@
+.mainWrapper {
+  display: flex;
+  justify-content: center;
+  .relativeWrapper {
+    position: relative;
+  }
+  .baseImage {
+    height: 642px;
+    display: block;
+  }
+  .areaImage {
+    position: absolute;
+  }
+  .marker {
+    position: absolute;
+    font-size: 32px;
+  }
+}
