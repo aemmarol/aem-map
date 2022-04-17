@@ -4,7 +4,6 @@ import {useRouter} from "next/router";
 import {MohallahListComponent} from "../../components";
 import dynamic from "next/dynamic";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
-import styles from "../../styles/pages/mohallah.module.scss";
 
 const {TabPane} = Tabs;
 
@@ -29,9 +28,7 @@ const Dashboard: NextPage = () => {
           <MohallahListComponent />
         </TabPane>
         <TabPane tab="Map View" key="2">
-          <div className={styles.mapWrapper}>
-            <Map />
-          </div>
+          <Map />
         </TabPane>
       </Tabs>
     </Dashboardlayout>

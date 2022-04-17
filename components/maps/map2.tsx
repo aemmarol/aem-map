@@ -39,7 +39,7 @@ const Map2 = () => {
         center={gContext.center.latlng}
         zoom={16}
         scrollWheelZoom={true}
-        style={{height: "80vh", width: "100%"}}
+        style={{height: "calc(100vh - 175px)", width: "100%"}}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -72,15 +72,6 @@ const Map2 = () => {
             >
               <Popup minWidth={200} maxWidth={200} maxHeight={1000}>
                 <SubSectorPopupCard subsector={subsector} />
-                {/* <div
-                className="subsector__marker--Popup"
-                style={{
-                  height: "100px",
-                  width: "100px",
-                }}
-              >
-                {subsector.name}
-              </div> */}
               </Popup>
             </Marker>
           );
@@ -92,7 +83,7 @@ const Map2 = () => {
             fillColor={sector.primary_color}
             positions={sector.bounds as LatLngExpression[]}
             color={sector.primary_color}
-          ></Polygon>
+          />
         ))}
       </MapContainer>
     </div>
