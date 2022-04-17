@@ -2,16 +2,33 @@
   .title {
     text-align: center;
   }
-  width: 15em;
-  padding: 1.5em;
+
+  padding: 15px 20px;
+  max-height: calc(100vh - 220px);
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
   .legends {
     display: flex;
-    justify-content: space-around;
-    align-items: baseline;
+    align-items: center;
+    margin-right: 10px;
     .bullet {
-      width: 3em;
-      height: 1em;
-      margin-right: 1em;
+      width: 48px;
+      height: 16px;
+      margin-right: 10px;
+      @media screen and (max-width: 768px) {
+        width: 24px;
+      }
+    }
+    h4{
+      margin-bottom: 0;
     }
   }
 }

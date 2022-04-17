@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {sectorData} from "../../types";
-
 import styles from "../../styles/components/cards/mapLegendCard.module.scss";
+
 const MapLegendCard: FC<{sectorList: sectorData[]}> = ({sectorList}) => {
   return (
     <div className={styles.legendContainer}>
@@ -12,8 +12,8 @@ const MapLegendCard: FC<{sectorList: sectorData[]}> = ({sectorList}) => {
             style={{
               background: sector.primary_color,
             }}
-          ></div>
-          <h2 style={{color: "black"}}>{sector.name}</h2>
+          />
+          <h4>{sector.name}</h4>
         </div>
       ))}
     </div>

@@ -26,11 +26,11 @@ const Map2 = () => {
       <div
         style={{
           position: "absolute",
-          top: "1em",
-          right: "1em",
+          top: "0",
+          right: "0",
           background: "white",
-          opacity: 0.9,
-          zIndex: 999,
+          opacity: 0.8,
+          zIndex: 401,
         }}
       >
         <MapLegendCard sectorList={sectorsList} />
