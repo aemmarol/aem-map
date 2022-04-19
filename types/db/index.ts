@@ -19,6 +19,7 @@ export interface sectorData extends defaultFields {
   masoola_its: string;
   masoola_contact: string;
   bounds?: number[][];
+  latlng?: number[];
 }
 
 export interface sectorDetailsForSubSector {
