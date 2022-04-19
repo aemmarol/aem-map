@@ -83,7 +83,7 @@ const Map2 = () => {
         style={{height: "calc(100vh - 175px)", width: "100%"}}
       >
         <ChangeMapView sector={currMapSector} />
-        <LayersControl position="bottomleft">
+        <LayersControl position="topleft">
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
