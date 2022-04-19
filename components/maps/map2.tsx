@@ -1,5 +1,13 @@
 import React, {useState} from "react";
-import {MapContainer, Marker, Polygon, Popup, TileLayer} from "react-leaflet";
+import {
+  LayersControl,
+  LayerGroup,
+  MapContainer,
+  Marker,
+  Polygon,
+  Popup,
+  TileLayer,
+} from "react-leaflet";
 import {divIcon, LatLngExpression} from "leaflet";
 // import {Library} from "@fortawesome/fontawesome-svg-core";
 // import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -54,6 +62,9 @@ const Map2 = () => {
           background: "white",
           opacity: 0.8,
           zIndex: 401,
+          maxWidth: "80%",
+          maxHeight: "50%",
+          overflowY: "scroll",
         }}
       >
         <MapLegendCard
@@ -67,59 +78,68 @@ const Map2 = () => {
       </div>
       <MapContainer
         center={gContext.center.latlng}
-        zoom={10}
+        zoom={15}
         scrollWheelZoom={true}
         style={{height: "calc(100vh - 175px)", width: "100%"}}
       >
         <ChangeMapView sector={currMapSector} />
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {/* <Marker icon={customMarkerIcon} position={position}>
+        <LayersControl position="bottomleft">
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {/* <Marker icon={customMarkerIcon} position={position}>
           <Popup>
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
         </Marker> */}
-        {subSectorList.map((subsector: subSectorData, idx) => {
-          const markerIcon = divIcon({
-            html: `<span style="display:flex;"> <img src="/building.svg"/ style="height:2em;width:2em"> &nbsp&nbsp <b>${subsector.name}</b></span>`,
-            className: "dummy",
-          });
-          return (
-            <Marker
-              key={idx}
-              icon={markerIcon}
-              position={subsector.latlng as LatLngExpression}
-              riseOnHover={true}
-              eventHandlers={{}}
-              title={subsector.name}
-              // on={(e) => {
-              //   e.target.openPopup();
-              // }}
-              // onMouseOut={(e) => {
-              //   e.target.closePopup();
-              // }}
-            >
-              <Popup minWidth={200} maxWidth={200} maxHeight={1000}>
-                <SubSectorPopupCard subsector={subsector} />
-              </Popup>
-            </Marker>
-          );
-        })}
-
-        {mapSectorData.map((mapSector, idx) => {
-          debugger;
-          return (
-            <Polygon
-              key={idx}
-              fillOpacity={0.5}
-              fillColor={mapSector.primary_color}
-              positions={mapSector.bounds as LatLngExpression[]}
-              color={mapSector.primary_color}
-            />
-          );
-        })}
+          <LayersControl.Overlay name="Sub-sectors" checked={true}>
+            <LayerGroup>
+              {subSectorList.map((subsector: subSectorData, idx) => {
+                const markerIcon = divIcon({
+                  html: `<span style="display:flex;"> <img src="/building.svg"/ style="height:2em;width:2em"> &nbsp&nbsp <b>${subsector.name}</b></span>`,
+                  className: "dummy",
+                });
+                return (
+                  <Marker
+                    key={idx}
+                    icon={markerIcon}
+                    position={subsector.latlng as LatLngExpression}
+                    riseOnHover={true}
+                    eventHandlers={{}}
+                    title={subsector.name}
+                    // on={(e) => {
+                    //   e.target.openPopup();
+                    // }}
+                    // onMouseOut={(e) => {
+                    //   e.target.closePopup();
+                    // }}
+                  >
+                    <Popup minWidth={200} maxWidth={200} maxHeight={1000}>
+                      <SubSectorPopupCard subsector={subsector} />
+                    </Popup>
+                  </Marker>
+                );
+              })}
+            </LayerGroup>
+          </LayersControl.Overlay>
+          {mapSectorData.map((mapSector, idx) => {
+            debugger;
+            return (
+              <Polygon
+                key={idx}
+                fillOpacity={0.5}
+                fillColor={mapSector.primary_color}
+                positions={mapSector.bounds as LatLngExpression[]}
+                color={mapSector.primary_color}
+              />
+            );
+          })}
+          {/* <LayersControl.Overlay name="Sectors">
+            <LayerGroup>
+            </LayerGroup>
+          </LayersControl.Overlay> */}
+        </LayersControl>
       </MapContainer>
     </div>
   ) : null;
