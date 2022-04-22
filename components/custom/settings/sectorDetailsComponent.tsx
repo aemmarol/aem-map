@@ -9,15 +9,13 @@ import {
   Typography,
 } from "antd";
 import {FC, useState} from "react";
-import {SectorFormFields, TableCardWithForm} from "../..";
+import { TableCardWithForm} from "../..";
 import {
-  addSectorData,
   getSectorList,
   updateSectorData,
 } from "../../../pages/api/v1/db/sectorCrud";
 import {updateSectorsToDefault} from "../../../pages/api/v1/db/setupDb";
 import {sectorData} from "../../../types";
-import {defaultDatabaseFields} from "../../../utils";
 
 interface CardProps {
   data: any[];

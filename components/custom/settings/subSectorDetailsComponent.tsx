@@ -9,16 +9,13 @@ import {
   Typography,
 } from "antd";
 import {FC, useState} from "react";
-import {TableCardWithForm, SubSectorFormFields} from "../..";
-import {addSubSectorIds} from "../../../pages/api/v1/db/sectorCrud";
+import {TableCardWithForm} from "../..";
 import {updateSubSectorsToDefault} from "../../../pages/api/v1/db/setupDb";
 import {
-  addSubSectorData,
   getSubSectorList,
   updateSubSectorData,
 } from "../../../pages/api/v1/db/subSectorCrud";
 import {subSectorData} from "../../../types";
-import {defaultDatabaseFields} from "../../../utils";
 
 interface CardProps {
   data: any[];
