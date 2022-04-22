@@ -33,7 +33,7 @@ export const ResetSettingsCard: FC<CardProps> = ({
     <Card className="border-radius-10" title="Version Settings">
       <Row>
         <Col xs={24} sm={12}>
-          <Popconfirm
+          {/* <Popconfirm
             title="Are you sure to reset db fields?"
             onConfirm={handleSetDbFields}
             onCancel={() => {
@@ -45,7 +45,7 @@ export const ResetSettingsCard: FC<CardProps> = ({
             <Button size="large" shape="round" type="primary">
               Set DB Fields
             </Button>
-          </Popconfirm>
+          </Popconfirm> */}
         </Col>
       </Row>
     </Card>

@@ -233,9 +233,6 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
     <Form form={form} component={false}>
       <TableCardWithForm
         cardTitle="Sub Sector Info"
-        modalTitle="Add Sub Sector Form"
-        addBtnText="Add Sub Sector"
-        onFormSubmit={handleAddSector}
         TableComponent={Table}
         tableComponentProps={{
           dataSource: data,
@@ -248,7 +245,7 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
             },
           },
         }}
-        formFields={<SubSectorFormFields />}
+        extraComponents={null}
       />
     </Form>
   );

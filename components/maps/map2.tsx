@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
   LayersControl,
   LayerGroup,
@@ -8,28 +8,43 @@ import {
   Popup,
   TileLayer,
 } from "react-leaflet";
-import {divIcon, LatLngExpression} from "leaflet";
+import { divIcon, LatLngExpression } from "leaflet";
 // import {Library} from "@fortawesome/fontawesome-svg-core";
 // import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 // import {faCoffee} from "@fortawesome/free-solid-svg-icons";
-import {sectors, subsectors} from "./mocksector";
+import { sectors, subsectors } from "./mocksector";
 import "leaflet/dist/leaflet.css";
-import {sectorData, subSectorData} from "../../types";
-import {useGlobalContext} from "../../context/GlobalContext";
+import { sectorData, subSectorData } from "../../types";
+import { useGlobalContext } from "../../context/GlobalContext";
 import SubSectorPopupCard from "../cards/subSectorPopupCard";
 import MapLegendCard from "../cards/mapLegendCard";
 import ChangeMapView from "./changeMapView";
+import { getSectorList } from "../../pages/api/v1/db/sectorCrud";
 
-const getCentroid = (bounds: number[][]): number[] => {
-  const x = bounds.reduce((sum, val) => sum + val[0] / bounds.length, 0);
-  const y = bounds.reduce((sum, val) => sum + val[1] / bounds.length, 0);
+const getCentroid = (bounds: any[]): number[] => {
+  const x = bounds.reduce((sum, val) => sum + val.lat / bounds.length, 0);
+  const y = bounds.reduce((sum, val) => sum + val.lang / bounds.length, 0);
   return [x, y];
 };
 
 const Map2 = () => {
-  const sectorsList = sectors; //tobe replaced with dataservice call
-  const [mapSectorData] = useState(
-    sectorsList.map((sector) => {
+  // const sectorsList = sectors; //tobe replaced with dataservice call
+  const [sectorList, setSectorList] = useState<any[]>([]);
+  const [mapSectorData, setMapSectorData] = useState<any[]>([]);
+
+  const subSectorList = subsectors; //to be replaced with dataservice call
+  const gContext = useGlobalContext();
+  const [currMapSector, setCurrMapSector] = useState<any>(null);
+
+  useEffect(() => {
+    setList();
+  }, []);
+
+  const setList = async () => {
+    gContext.toggleLoader(true);
+    const listData: sectorData[] = await getSectorList();
+    setSectorList(listData);
+    const temp = await listData.map((sector) => {
       sector.latlng =
         sector.bounds && !sector.latlng
           ? getCentroid(sector.bounds)
@@ -37,11 +52,22 @@ const Map2 = () => {
 
       return sector;
     })
-  );
 
-  const subSectorList = subsectors; //to be replaced with dataservice call
-  const gContext = useGlobalContext();
-  const [currMapSector, setCurrMapSector] = useState<any>(null);
+    setMapSectorData(temp)
+
+
+    // setMapSectorData(
+    //   listData.map((sector) => {
+    //     sector.latlng =
+    //       sector.bounds && !sector.latlng
+    //         ? getCentroid(sector.bounds)
+    //         : sector.latlng;
+
+    //     return sector;
+    //   })
+    // );
+    gContext.toggleLoader(false);
+  };
 
   // useEffect(() => {
   //   sectorsList.forEach((sector) => {
@@ -53,7 +79,7 @@ const Map2 = () => {
   // }, []);
 
   return !!gContext.center.latlng ? (
-    <div style={{position: "relative"}}>
+    <div style={{ position: "relative" }}>
       <div
         style={{
           position: "absolute",
@@ -68,7 +94,7 @@ const Map2 = () => {
         }}
       >
         <MapLegendCard
-          sectorList={sectorsList}
+          sectorList={sectorList}
           clickHandler={(sector: sectorData) => {
             setCurrMapSector(
               mapSectorData.find((mapSector) => mapSector.name == sector.name)
@@ -80,7 +106,7 @@ const Map2 = () => {
         center={gContext.center.latlng}
         zoom={15}
         scrollWheelZoom={true}
-        style={{height: "calc(100vh - 175px)", width: "100%"}}
+        style={{ height: "calc(100vh - 200px)", width: "100%" }}
       >
         <ChangeMapView sector={currMapSector} />
         <LayersControl position="topleft">
@@ -108,12 +134,12 @@ const Map2 = () => {
                     riseOnHover={true}
                     eventHandlers={{}}
                     title={subsector.name}
-                    // on={(e) => {
-                    //   e.target.openPopup();
-                    // }}
-                    // onMouseOut={(e) => {
-                    //   e.target.closePopup();
-                    // }}
+                  // on={(e) => {
+                  //   e.target.openPopup();
+                  // }}
+                  // onMouseOut={(e) => {
+                  //   e.target.closePopup();
+                  // }}
                   >
                     <Popup minWidth={200} maxWidth={200} maxHeight={1000}>
                       <SubSectorPopupCard subsector={subsector} />
@@ -124,13 +150,12 @@ const Map2 = () => {
             </LayerGroup>
           </LayersControl.Overlay>
           {mapSectorData.map((mapSector, idx) => {
-            debugger;
             return (
               <Polygon
                 key={idx}
                 fillOpacity={0.5}
                 fillColor={mapSector.primary_color}
-                positions={mapSector.bounds as LatLngExpression[]}
+                positions={mapSector.bounds.map((val: any) => ({ lat: val.lat, lng: val.lang })) as LatLngExpression[]}
                 color={mapSector.primary_color}
               />
             );

@@ -1,4 +1,5 @@
 import {
+  Button,
   Form,
   Input,
   InputNumber,
@@ -14,6 +15,7 @@ import {
   getSectorList,
   updateSectorData,
 } from "../../../pages/api/v1/db/sectorCrud";
+import {updateSectorsToDefault} from "../../../pages/api/v1/db/setupDb";
 import {sectorData} from "../../../types";
 import {defaultDatabaseFields} from "../../../utils";
 
@@ -67,6 +69,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
 export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState<string | undefined>("");
+  const [isLoading, setisLoading] = useState<boolean>(false);
 
   const isEditing = (record: sectorData) => record.id === editingKey;
 
@@ -126,37 +129,37 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
       title: "masool_its",
       dataIndex: "masool_its",
       width: 150,
-      editable: true,
+      editable: false,
     },
     {
       title: "masool_name",
       dataIndex: "masool_name",
       width: 150,
-      editable: true,
+      editable: false,
     },
     {
       title: "masool_contact",
       dataIndex: "masool_contact",
       width: 150,
-      editable: true,
+      editable: false,
     },
     {
       title: "masoola_its",
       dataIndex: "masoola_its",
       width: 150,
-      editable: true,
+      editable: false,
     },
     {
       title: "masoola_name",
       dataIndex: "masoola_name",
       width: 150,
-      editable: true,
+      editable: false,
     },
     {
       title: "masoola_contact",
       dataIndex: "masoola_contact",
       width: 150,
-      editable: true,
+      editable: false,
     },
   ];
 
@@ -220,13 +223,16 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
     }
   };
 
+  const resetSectorsToDefault = async () => {
+    setisLoading(true);
+    await updateSectorsToDefault();
+    setisLoading(false);
+  };
+
   return (
     <Form form={form} component={false}>
       <TableCardWithForm
         cardTitle="Mohallah Info"
-        modalTitle="Add Mohallah Form"
-        addBtnText="Add Mohallah"
-        onFormSubmit={handleAddSector}
         TableComponent={Table}
         tableComponentProps={{
           dataSource: data,
@@ -238,8 +244,16 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
               cell: EditableCell,
             },
           },
+          loading: isLoading,
         }}
-        formFields={<SectorFormFields />}
+        extraComponents={
+          <div className="flex-align-center-justify-center">
+            <Button onClick={resetSectorsToDefault} className="mr-10">
+              Reset Sectors
+            </Button>
+            <Button type="primary">Add Sector</Button>
+          </div>
+        }
       />
     </Form>
   );

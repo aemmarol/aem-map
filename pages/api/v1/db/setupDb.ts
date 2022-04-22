@@ -8,6 +8,7 @@ import {
   deleteSectorData,
   getSectorDataByName,
   getSectorList,
+  updateSectorData,
 } from "./sectorCrud";
 import {
   addSubSectorData,
@@ -24,6 +25,7 @@ import {
   fileDetailsFieldCollectionName,
   mumeneenDetailsFieldCollectionName,
 } from "../../../../firebase/dbCollectionNames";
+import {find} from "lodash";
 
 export const addSectors = async () => {
   const sectorList = await getSectorList();
@@ -36,8 +38,32 @@ export const addSectors = async () => {
 
   await Promise.all(
     sectorDbData.map(async (value) => {
-      const successFlag = addSectorData(value);
+      const boundsArr = value.bounds?.map((val) => ({
+        lat: val[0],
+        lang: val[1],
+      }));
+      const successFlag = addSectorData({...value, bounds: boundsArr});
       return successFlag;
+    })
+  );
+};
+
+export const updateSectorsToDefault = async () => {
+  const sectorList = await getSectorList();
+
+  await Promise.all(
+    sectorList.map(async (val) => {
+      const sectorVal = find(sectorDbData, {name: val.name});
+      if (sectorVal) {
+        const boundsArr = sectorVal.bounds?.map((val) => ({
+          lat: val[0],
+          lang: val[1],
+        }));
+        await updateSectorData(val.id as string, {
+          ...sectorVal,
+          bounds: boundsArr,
+        });
+      }
     })
   );
 };
