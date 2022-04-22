@@ -1,4 +1,5 @@
 import {
+  Button,
   Form,
   Input,
   InputNumber,
@@ -10,6 +11,7 @@ import {
 import {FC, useState} from "react";
 import {TableCardWithForm, SubSectorFormFields} from "../..";
 import {addSubSectorIds} from "../../../pages/api/v1/db/sectorCrud";
+import {updateSubSectorsToDefault} from "../../../pages/api/v1/db/setupDb";
 import {
   addSubSectorData,
   getSubSectorList,
@@ -71,6 +73,7 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
 }) => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState<string | undefined>("");
+  const [isLoading, setisLoading] = useState<boolean>(false);
 
   const isEditing = (record: subSectorData) => record.id === editingKey;
 
@@ -206,27 +209,33 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
     };
   });
 
-  const handleAddSector = async (data: any, callback: () => any) => {
-    const sectorDetails = data.sector.split("|");
-    const addDataSuccess = await addSubSectorData({
-      ...data,
-      ...defaultDatabaseFields,
-      sector: {
-        id: sectorDetails[0],
-        name: sectorDetails[1],
-        primary_color: sectorDetails[2],
-        secondary_color: sectorDetails[3],
-      },
-      number_of_males: 0,
-      number_of_females: 0,
-      files: [],
-    });
-    if (addDataSuccess) {
-      await addSubSectorIds(sectorDetails[0] as string, addDataSuccess);
-      const newData = await getSubSectorList();
-      updateData(newData);
-      callback();
-    }
+  // const handleAddSector = async (data: any, callback: () => any) => {
+  //   const sectorDetails = data.sector.split("|");
+  //   const addDataSuccess = await addSubSectorData({
+  //     ...data,
+  //     ...defaultDatabaseFields,
+  //     sector: {
+  //       id: sectorDetails[0],
+  //       name: sectorDetails[1],
+  //       primary_color: sectorDetails[2],
+  //       secondary_color: sectorDetails[3],
+  //     },
+  //     number_of_males: 0,
+  //     number_of_females: 0,
+  //     files: [],
+  //   });
+  //   if (addDataSuccess) {
+  //     await addSubSectorIds(sectorDetails[0] as string, addDataSuccess);
+  //     const newData = await getSubSectorList();
+  //     updateData(newData);
+  //     callback();
+  //   }
+  // };
+
+  const resetSubSectorsToDefault = async () => {
+    setisLoading(true);
+    await updateSubSectorsToDefault();
+    setisLoading(false);
   };
 
   return (
@@ -244,8 +253,17 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
               cell: EditableCell,
             },
           },
+          loading: isLoading,
         }}
-        extraComponents={null}
+        extraComponents={
+          <div className="flex-align-center-justify-center">
+            <Button onClick={resetSubSectorsToDefault} className="mr-10">
+              Reset SubSectors
+            </Button>
+            <Button className="mr-10">Update Musaid Details</Button>
+            <Button type="primary">Add Sub Sector</Button>
+          </div>
+        }
       />
     </Form>
   );

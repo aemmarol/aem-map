@@ -7,6 +7,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113122381378936, 72.87497323926726],
     "musaida_contact": "9988998899"
   },
   {
@@ -17,6 +18,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113646990865014, 72.87499201473024],
     "musaida_contact": "9988998899"
   },
   {
@@ -27,6 +29,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113646990865014, 72.87499201473024],
     "musaida_contact": "9988998899"
   },
   {
@@ -37,6 +40,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11326177053521, 72.87479621347346],
     "musaida_contact": "9988998899"
   },
   {
@@ -47,6 +51,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11326177053521, 72.87479621347346],
     "musaida_contact": "9988998899"
   },
   {
@@ -57,6 +62,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.115354370056535, 72.87543929887346],
     "musaida_contact": "9988998899"
   },
   {
@@ -67,7 +73,8 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
-    "musaida_contact": "9988998899"
+    "musaida_contact": "9988998899",
+    "latlng": [19.115980119396283, 72.87537956189912]
   },
   {
     "sector_name": "BURHANI",
@@ -77,6 +84,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11547863759926, 72.87529033035077],
     "musaida_contact": "9988998899"
   },
   {
@@ -87,7 +95,8 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
-    "musaida_contact": "9988998899"
+    "musaida_contact": "9988998899",
+    "latlng": [19.116346586057833, 72.87560909449026]
   },
   {
     "sector_name": "BURHANI",
@@ -97,7 +106,8 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
-    "musaida_contact": "9988998899"
+    "musaida_contact": "9988998899",
+    "latlng": [19.116346586057833, 72.87560909449026]
   },
   {
     "sector_name": "BURHANI",
@@ -107,6 +117,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.116346586057833, 72.87560909449026],
     "musaida_contact": "9988998899"
   },
   {
@@ -117,6 +128,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11524472318856, 72.87557407991778],
     "musaida_contact": "9988998899"
   },
   {
@@ -127,6 +139,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.115111670155976, 72.87574964996237],
     "musaida_contact": "9988998899"
   },
   {
@@ -137,6 +150,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.115687932957262, 72.8751307212193],
     "musaida_contact": "9988998899"
   },
   {
@@ -147,66 +161,73 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
-    "musaida_contact": "9988998899"
+    "musaida_contact": "9988998899",
+    "latlng": [19.1158238208435, 72.875279689742]
   },
   {
     "sector_name": "EZZI",
-    "name": "Bazar Area 1",
+    "name": "BAZAR AREA 1",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113860208453074, 72.87730915745331],
     "musaida_contact": "9988998899"
   },
   {
     "sector_name": "EZZI",
-    "name": "Bazar Area 2",
+    "name": "BAZAR AREA 2",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113860208453074, 72.87770915745331],
     "musaida_contact": "9988998899"
   },
   {
     "sector_name": "EZZI",
-    "name": "Behind  Frankie Video",
+    "name": "BEHIND  FRANKIE VIDEO",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11601639916771, 72.87749228294217],
     "musaida_contact": "9988998899"
   },
   {
     "sector_name": "EZZI",
-    "name": "Decent Tailor",
+    "name": "DECENT TAILOR",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.114864208453074, 72.87752915745331],
     "musaida_contact": "9988998899"
   },
   {
     "sector_name": "EZZI",
-    "name": "Frankie Video",
+    "name": "FRANKIE VIDEO",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11601639916771, 72.87789228294217],
     "musaida_contact": "9988998899"
   },
   {
     "sector_name": "EZZI",
-    "name": "Gurunanak",
+    "name": "GURUNANAK",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113091409453384, 72.8777344242312],
     "musaida_contact": "9988998899"
   },
   {
@@ -217,36 +238,51 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.114994208453074, 72.87776915745331],
     "musaida_contact": "9988998899"
   },
   {
     "sector_name": "EZZI",
-    "name": "Opp Al Mufaddal",
+    "name": "OPP AL MUFADDAL",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.114460208453074, 72.87742915745331],
     "musaida_contact": "9988998899"
   },
   {
     "sector_name": "EZZI",
-    "name": "Shiv Sena X Lane",
+    "name": "SHIV SENA X LANE",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.115430035971556, 72.87706648718033],
     "musaida_contact": "9988998899"
   },
   {
     "sector_name": "EZZI",
-    "name": "ShivSena Gali",
+    "name": "SHIVSENA GALI",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.115030035971556, 72.87719648718033],
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "EZZI",
+    "name": "SP TUTORIALS",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "latlng": [19.113860208453074, 72.87730915745331],
     "musaida_contact": "9988998899"
   },
   {
@@ -257,6 +293,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113592791868676, 72.87636589583758],
     "musaida_contact": "9988998899"
   },
   {
@@ -267,6 +304,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113795539115547, 72.87556927976378],
     "musaida_contact": "9988998899"
   },
   {
@@ -277,6 +315,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113795539115547, 72.87556927976378],
     "musaida_contact": "9988998899"
   },
   {
@@ -287,6 +326,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.114092679220292, 72.87610986824751],
     "musaida_contact": "9988998899"
   },
   {
@@ -297,6 +337,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113716974586463, 72.87582677182746],
     "musaida_contact": "9988998899"
   },
   {
@@ -307,6 +348,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113970408418304, 72.87642222222652],
     "musaida_contact": "9988998899"
   },
   {
@@ -317,6 +359,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11365361606918, 72.8761030393559],
     "musaida_contact": "9988998899"
   },
   {
@@ -327,6 +370,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.118941042742957, 72.88778406650158],
     "musaida_contact": "9988998899"
   },
   {
@@ -337,6 +381,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.116802630624704, 72.88670424320352],
     "musaida_contact": "9988998899"
   },
   {
@@ -347,6 +392,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.121618143652366, 72.88595444063579],
     "musaida_contact": "9988998899"
   },
   {
@@ -357,6 +403,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.116967668014304, 72.88724438709147],
     "musaida_contact": "9988998899"
   },
   {
@@ -367,6 +414,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.114455379999026, 72.87610139043191],
     "musaida_contact": "9988998899"
   },
   {
@@ -377,6 +425,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.114854224712296, 72.87610224703886],
     "musaida_contact": "9988998899"
   },
   {
@@ -387,6 +436,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.114579281837077, 72.87636099305536],
     "musaida_contact": "9988998899"
   },
   {
@@ -397,6 +447,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.115049658270532, 72.87658471564143],
     "musaida_contact": "9988998899"
   },
   {
@@ -407,6 +458,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.115049658270532, 72.87658471564143],
     "musaida_contact": "9988998899"
   },
   {
@@ -417,6 +469,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11467275048706, 72.87666702866838],
     "musaida_contact": "9988998899"
   },
   {
@@ -427,6 +480,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11467275048706, 72.87666702866838],
     "musaida_contact": "9988998899"
   },
   {
@@ -437,6 +491,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11815934986008, 72.9019813075574],
     "musaida_contact": "9988998899"
   },
   {
@@ -447,6 +502,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.107045865459884, 72.89830578231246],
     "musaida_contact": "9988998899"
   },
   {
@@ -457,6 +513,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.119668825127206, 72.88037205700707],
     "musaida_contact": "9988998899"
   },
   {
@@ -467,6 +524,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.115974771180447, 72.88405908219319],
     "musaida_contact": "9988998899"
   },
   {
@@ -477,6 +535,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.106258461980193, 72.8874794485835],
     "musaida_contact": "9988998899"
   },
   {
@@ -487,6 +546,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.1147494357769, 72.88401397465638],
     "musaida_contact": "9988998899"
   },
   {
@@ -497,6 +557,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.1147494357769, 72.88401397465638],
     "musaida_contact": "9988998899"
   },
   {
@@ -507,6 +568,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113274442270864, 72.87513685401606],
     "musaida_contact": "9988998899"
   },
   {
@@ -517,6 +579,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113274442270864, 72.87513685401606],
     "musaida_contact": "9988998899"
   },
   {
@@ -527,6 +590,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113606441398883, 72.87530315097386],
     "musaida_contact": "9988998899"
   },
   {
@@ -537,6 +601,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113606441398883, 72.87530315097386],
     "musaida_contact": "9988998899"
   },
   {
@@ -547,6 +612,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113938439860235, 72.875185133778],
     "musaida_contact": "9988998899"
   },
   {
@@ -557,6 +623,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.109590259591606, 72.87257729569225],
     "musaida_contact": "9988998899"
   },
   {
@@ -567,6 +634,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11164289053718, 72.87577742848445],
     "musaida_contact": "9988998899"
   },
   {
@@ -577,6 +645,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.111899562581485, 72.8669844868095],
     "musaida_contact": "9988998899"
   },
   {
@@ -587,6 +656,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11164289053718, 72.87399742848445],
     "musaida_contact": "9988998899"
   },
   {
@@ -597,6 +667,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11257015295161, 72.87444598638452],
     "musaida_contact": "9988998899"
   },
   {
@@ -607,6 +678,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11257015295161, 72.87444598638452],
     "musaida_contact": "9988998899"
   },
   {
@@ -617,6 +689,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.109489921953056, 72.8702643305713],
     "musaida_contact": "9988998899"
   },
   {
@@ -627,6 +700,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.112950998597803, 72.87775499908872],
     "musaida_contact": "9988998899"
   },
   {
@@ -637,6 +711,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113950049179408, 72.87877216560912],
     "musaida_contact": "9988998899"
   },
   {
@@ -647,6 +722,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.113950049179408, 72.87877216560912],
     "musaida_contact": "9988998899"
   },
   {
@@ -657,6 +733,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.116089855864544, 72.87881549909403],
     "musaida_contact": "9988998899"
   },
   {
@@ -667,6 +744,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11668401384233, 72.8772616572806],
     "musaida_contact": "9988998899"
   },
   {
@@ -677,6 +755,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11668401384233, 72.8772616572806],
     "musaida_contact": "9988998899"
   },
   {
@@ -687,6 +766,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.110975203660644, 72.87751730730373],
     "musaida_contact": "9988998899"
   },
   {
@@ -697,6 +777,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.109938286292454, 72.8776560943412],
     "musaida_contact": "9988998899"
   },
   {
@@ -707,6 +788,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.115961342345738, 72.87837429223087],
     "musaida_contact": "9988998899"
   },
   {
@@ -717,6 +799,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11468177881598, 72.87578104624822],
     "musaida_contact": "9988998899"
   },
   {
@@ -727,6 +810,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.114991835976776, 72.87524204945547],
     "musaida_contact": "9988998899"
   },
   {
@@ -737,6 +821,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.114567082251394, 72.87538786923001],
     "musaida_contact": "9988998899"
   },
   {
@@ -747,6 +832,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11431627297809, 72.87519160426421],
     "musaida_contact": "9988998899"
   },
   {
@@ -757,6 +843,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11431627297809, 72.87519160426421],
     "musaida_contact": "9988998899"
   },
   {
@@ -767,6 +854,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
+    "latlng": [19.11431627297809, 72.87519160426421],
     "musaida_contact": "9988998899"
   },
   {
@@ -777,7 +865,8 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
-    "musaida_contact": "9988998899"
+    "musaida_contact": "9988998899",
+    "latlng": [0,0]
   },
   {
     "sector_name": "ZZ NON RESIDENT",
@@ -787,7 +876,8 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
-    "musaida_contact": "9988998899"
+    "musaida_contact": "9988998899",
+    "latlng": [0,0]
   },
   {
     "sector_name": "ZZ NON RESIDENT",
@@ -797,6 +887,7 @@
     "musaid_contact": "9988998899",
     "musaida_name": "Admin",
     "musaida_its": "33333333",
-    "musaida_contact": "9988998899"
+    "musaida_contact": "9988998899",
+    "latlng": [0,0]
   }
 ]

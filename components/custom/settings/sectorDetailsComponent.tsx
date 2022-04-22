@@ -210,18 +210,18 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
     };
   });
 
-  const handleAddSector = async (data: sectorData, callback: () => any) => {
-    const addDataSuccess = await addSectorData({
-      ...data,
-      sub_sector_id: [],
-      ...defaultDatabaseFields,
-    });
-    if (addDataSuccess) {
-      const newData = await getSectorList();
-      updateData(newData);
-      callback();
-    }
-  };
+  // const handleAddSector = async (data: sectorData, callback: () => any) => {
+  //   const addDataSuccess = await addSectorData({
+  //     ...data,
+  //     sub_sector_id: [],
+  //     ...defaultDatabaseFields,
+  //   });
+  //   if (addDataSuccess) {
+  //     const newData = await getSectorList();
+  //     updateData(newData);
+  //     callback();
+  //   }
+  // };
 
   const resetSectorsToDefault = async () => {
     setisLoading(true);
@@ -251,6 +251,7 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
             <Button onClick={resetSectorsToDefault} className="mr-10">
               Reset Sectors
             </Button>
+            <Button className="mr-10">Update Masool Details</Button>
             <Button type="primary">Add Sector</Button>
           </div>
         }

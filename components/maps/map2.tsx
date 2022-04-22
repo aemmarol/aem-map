@@ -9,10 +9,6 @@ import {
   TileLayer,
 } from "react-leaflet";
 import {divIcon, LatLngExpression} from "leaflet";
-// import {Library} from "@fortawesome/fontawesome-svg-core";
-// import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-// import {faCoffee} from "@fortawesome/free-solid-svg-icons";
-import {sectors, subsectors} from "./mocksector";
 import "leaflet/dist/leaflet.css";
 import {sectorData, subSectorData} from "../../types";
 import {useGlobalContext} from "../../context/GlobalContext";
@@ -20,6 +16,7 @@ import SubSectorPopupCard from "../cards/subSectorPopupCard";
 import MapLegendCard from "../cards/mapLegendCard";
 import ChangeMapView from "./changeMapView";
 import {getSectorList} from "../../pages/api/v1/db/sectorCrud";
+import { getSubSectorList } from "../../pages/api/v1/db/subSectorCrud";
 
 const getCentroid = (bounds: any[]): number[] => {
   const x = bounds.reduce((sum, val) => sum + val.lat / bounds.length, 0);
@@ -30,9 +27,10 @@ const getCentroid = (bounds: any[]): number[] => {
 const Map2 = () => {
   // const sectorsList = sectors; //tobe replaced with dataservice call
   const [sectorList, setSectorList] = useState<any[]>([]);
+  const [subSectorList, setsubSectorList] = useState<any[]>([]);
   const [mapSectorData, setMapSectorData] = useState<any[]>([]);
 
-  const subSectorList = subsectors; //to be replaced with dataservice call
+  // const subSectorList = subsectors; //to be replaced with dataservice call
   const gContext = useGlobalContext();
   const [currMapSector, setCurrMapSector] = useState<any>(null);
 
@@ -43,6 +41,7 @@ const Map2 = () => {
   const setList = async () => {
     gContext.toggleLoader(true);
     const listData: sectorData[] = await getSectorList();
+    const subSectorListData: subSectorData[] = await getSubSectorList();
     setSectorList(listData);
     const temp = await listData.map((sector) => {
       sector.latlng =
@@ -52,30 +51,10 @@ const Map2 = () => {
 
       return sector;
     });
-
     setMapSectorData(temp);
-
-    // setMapSectorData(
-    //   listData.map((sector) => {
-    //     sector.latlng =
-    //       sector.bounds && !sector.latlng
-    //         ? getCentroid(sector.bounds)
-    //         : sector.latlng;
-
-    //     return sector;
-    //   })
-    // );
+    setsubSectorList(subSectorListData)
     gContext.toggleLoader(false);
   };
-
-  // useEffect(() => {
-  //   sectorsList.forEach((sector) => {
-  //     sector.latlng =
-  //       sector.bounds && !sector.latlng
-  //         ? getCentroid(sector.bounds)
-  //         : sector.latlng;
-  //   });
-  // }, []);
 
   return !!gContext.center.latlng ? (
     <div style={{position: "relative"}}>
@@ -93,7 +72,9 @@ const Map2 = () => {
         }}
       >
         <MapLegendCard
-          sectorList={sectorList}
+          sectorList={sectorList.filter(
+            (val) => val.name !== "ZZ NON RESIDENT"
+          )}
           clickHandler={(sector: sectorData) => {
             setCurrMapSector(
               mapSectorData.find((mapSector) => mapSector.name == sector.name)
