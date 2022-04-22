@@ -9,7 +9,7 @@ import {
   Typography,
 } from "antd";
 import {FC, useState} from "react";
-import { TableCardWithForm} from "../..";
+import {TableCardWithForm} from "../..";
 import {
   getSectorList,
   updateSectorData,
