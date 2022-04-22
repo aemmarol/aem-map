@@ -16,7 +16,7 @@ import SubSectorPopupCard from "../cards/subSectorPopupCard";
 import MapLegendCard from "../cards/mapLegendCard";
 import ChangeMapView from "./changeMapView";
 import {getSectorList} from "../../pages/api/v1/db/sectorCrud";
-import { getSubSectorList } from "../../pages/api/v1/db/subSectorCrud";
+import {getSubSectorList} from "../../pages/api/v1/db/subSectorCrud";
 
 const getCentroid = (bounds: any[]): number[] => {
   const x = bounds.reduce((sum, val) => sum + val.lat / bounds.length, 0);
@@ -52,7 +52,7 @@ const Map2 = () => {
       return sector;
     });
     setMapSectorData(temp);
-    setsubSectorList(subSectorListData)
+    setsubSectorList(subSectorListData);
     gContext.toggleLoader(false);
   };
 

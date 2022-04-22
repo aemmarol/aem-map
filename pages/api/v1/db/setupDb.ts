@@ -1,4 +1,4 @@
-import { sectorData, sectorDetailsForSubSector } from "../../../../types";
+import {sectorData, sectorDetailsForSubSector} from "../../../../types";
 import subsectorSampleData from "../../../../sample_data/subsector.json";
 import fileFields from "../../../../sample_data/fileField.json";
 import memberFields from "../../../../sample_data/mumeneenDataField.json";
@@ -17,16 +17,16 @@ import {
   resetSubSectorFilesData,
   updateSubSectorData,
 } from "./subSectorCrud";
-import { defaultDatabaseFields } from "../../../../utils";
-import { sectorDbData } from "../../../../sample_data/sector";
-import { deleteFileData, getFileDataList } from "./fileCrud";
-import { deleteMemberData, getMemberDataList } from "./memberCrud";
-import { addDataField } from "./databaseFields";
+import {defaultDatabaseFields} from "../../../../utils";
+import {sectorDbData} from "../../../../sample_data/sector";
+import {deleteFileData, getFileDataList} from "./fileCrud";
+import {deleteMemberData, getMemberDataList} from "./memberCrud";
+import {addDataField} from "./databaseFields";
 import {
   fileDetailsFieldCollectionName,
   mumeneenDetailsFieldCollectionName,
 } from "../../../../firebase/dbCollectionNames";
-import { find } from "lodash";
+import {find} from "lodash";
 
 export const addSectors = async () => {
   const sectorList = await getSectorList();
@@ -43,7 +43,7 @@ export const addSectors = async () => {
         lat: val[0],
         lang: val[1],
       }));
-      const successFlag = addSectorData({ ...value, bounds: boundsArr });
+      const successFlag = addSectorData({...value, bounds: boundsArr});
       return successFlag;
     })
   );
@@ -54,7 +54,7 @@ export const updateSectorsToDefault = async () => {
 
   await Promise.all(
     sectorList.map(async (val) => {
-      const sectorVal = find(sectorDbData, { name: val.name });
+      const sectorVal = find(sectorDbData, {name: val.name});
       if (sectorVal) {
         const boundsArr = sectorVal.bounds?.map((val) => ({
           lat: val[0],
@@ -119,11 +119,13 @@ export const addSubSectors = async () => {
 export const updateSubSectorsToDefault = async () => {
   const subsectList = await getSubSectorList();
 
-
   await Promise.all(
     subsectList.map(async (val) => {
-      const subSectorVal = find(subsectorSampleData, { name: val.name });
-      await updateSubSectorData(val.id as string, { ...subSectorVal, name: val.name.toUpperCase() })
+      const subSectorVal = find(subsectorSampleData, {name: val.name});
+      await updateSubSectorData(val.id as string, {
+        ...subSectorVal,
+        name: val.name.toUpperCase(),
+      });
     })
   );
 };

@@ -866,7 +866,7 @@
     "musaida_name": "Admin",
     "musaida_its": "33333333",
     "musaida_contact": "9988998899",
-    "latlng": [0,0]
+    "latlng": [0, 0]
   },
   {
     "sector_name": "ZZ NON RESIDENT",
@@ -877,7 +877,7 @@
     "musaida_name": "Admin",
     "musaida_its": "33333333",
     "musaida_contact": "9988998899",
-    "latlng": [0,0]
+    "latlng": [0, 0]
   },
   {
     "sector_name": "ZZ NON RESIDENT",
@@ -888,6 +888,6 @@
     "musaida_name": "Admin",
     "musaida_its": "33333333",
     "musaida_contact": "9988998899",
-    "latlng": [0,0]
+    "latlng": [0, 0]
   }
 ]
