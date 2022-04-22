@@ -48,7 +48,6 @@ export const getMumeneenDataFields = async (): Promise<
       id: docs.id,
     });
   });
-
   return resultArr;
 };
 
