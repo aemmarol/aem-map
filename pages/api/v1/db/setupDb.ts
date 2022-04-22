@@ -8,12 +8,14 @@ import {
   deleteSectorData,
   getSectorDataByName,
   getSectorList,
+  updateSectorData,
 } from "./sectorCrud";
 import {
   addSubSectorData,
   deleteSubSectorData,
   getSubSectorList,
   resetSubSectorFilesData,
+  updateSubSectorData,
 } from "./subSectorCrud";
 import {defaultDatabaseFields} from "../../../../utils";
 import {sectorDbData} from "../../../../sample_data/sector";
@@ -24,6 +26,7 @@ import {
   fileDetailsFieldCollectionName,
   mumeneenDetailsFieldCollectionName,
 } from "../../../../firebase/dbCollectionNames";
+import {find} from "lodash";
 
 export const addSectors = async () => {
   const sectorList = await getSectorList();
@@ -36,8 +39,32 @@ export const addSectors = async () => {
 
   await Promise.all(
     sectorDbData.map(async (value) => {
-      const successFlag = addSectorData(value);
+      const boundsArr = value.bounds?.map((val) => ({
+        lat: val[0],
+        lang: val[1],
+      }));
+      const successFlag = addSectorData({...value, bounds: boundsArr});
       return successFlag;
+    })
+  );
+};
+
+export const updateSectorsToDefault = async () => {
+  const sectorList = await getSectorList();
+
+  await Promise.all(
+    sectorList.map(async (val) => {
+      const sectorVal = find(sectorDbData, {name: val.name});
+      if (sectorVal) {
+        const boundsArr = sectorVal.bounds?.map((val) => ({
+          lat: val[0],
+          lang: val[1],
+        }));
+        await updateSectorData(val.id as string, {
+          ...sectorVal,
+          bounds: boundsArr,
+        });
+      }
     })
   );
 };
@@ -71,6 +98,7 @@ export const addSubSectors = async () => {
         musaida_contact: value.musaida_contact,
         musaida_its: value.musaida_its,
         musaida_name: value.musaida_name,
+        latlng: value.latlng,
         no_of_females: 0,
         files: [],
         no_of_males: 0,
@@ -84,6 +112,20 @@ export const addSubSectors = async () => {
       );
 
       return successFlag;
+    })
+  );
+};
+
+export const updateSubSectorsToDefault = async () => {
+  const subsectList = await getSubSectorList();
+
+  await Promise.all(
+    subsectList.map(async (val) => {
+      const subSectorVal = find(subsectorSampleData, {name: val.name});
+      await updateSubSectorData(val.id as string, {
+        ...subSectorVal,
+        name: val.name.toUpperCase(),
+      });
     })
   );
 };
