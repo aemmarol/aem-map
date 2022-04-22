@@ -44,7 +44,7 @@ export const getSectorList = async (): Promise<sectorData[]> => {
       masoola_contact,
       masoola_its,
       masoola_name,
-      bounds
+      bounds,
     } = docs.data();
 
     resultArr.push({
@@ -62,7 +62,7 @@ export const getSectorList = async (): Promise<sectorData[]> => {
       masoola_name,
       masoola_its,
       masoola_contact,
-      bounds
+      bounds,
     });
   });
 
