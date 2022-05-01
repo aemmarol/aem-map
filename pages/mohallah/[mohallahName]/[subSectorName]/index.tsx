@@ -3,22 +3,23 @@ import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import {useGlobalContext} from "../../../../context/GlobalContext";
 import {Dashboardlayout} from "../../../../layouts/dashboardLayout";
-import {sectorData, subSectorData} from "../../../../types";
+import {authUser, sectorData, subSectorData} from "../../../../types";
 import {getSubSectorDataByName} from "../../../api/v1/db/subSectorCrud";
 import {isEmpty} from "lodash";
 import {getFileData} from "../../../api/v1/db/fileCrud";
 import styles from "../../../../styles/FileList.module.scss";
-import {Col, Row} from "antd";
+import {Col, message, Row} from "antd";
 import {
   DistanceCard,
   InchargeDetailsCard,
   SubSectorFileListTable,
 } from "../../../../components";
 import {getSectorData} from "../../../api/v1/db/sectorCrud";
+import {logout, verifyUser} from "../../../api/v1/authentication";
 
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
-  const {subSectorName} = router.query;
+  const {subSectorName, mohallahName} = router.query;
   const {toggleLoader} = useGlobalContext();
 
   const [mohallahDetails, setMohallahDetails] = useState<sectorData>(
@@ -73,9 +74,34 @@ const SingleMohallah: NextPage = () => {
     }
   };
 
+  const notVerifierUserLogout = () => {
+    message.info("user does not have access");
+    logout();
+    router.push("/");
+  };
+
   useEffect(() => {
     if (subSectorName) {
-      getSubSectorDetails();
+      if (typeof verifyUser() !== "string") {
+        const {userRole, assignedArea} = verifyUser() as authUser;
+        if (
+          userRole.includes("Admin") ||
+          (userRole.includes("Masool") &&
+            assignedArea.includes(mohallahName as string)) ||
+          (userRole.includes("Masoola") &&
+            assignedArea.includes(mohallahName as string)) ||
+          (userRole.includes("Musaid") &&
+            assignedArea.includes(subSectorName as string)) ||
+          (userRole.includes("Musaida") &&
+            assignedArea.includes(subSectorName as string))
+        ) {
+          getSubSectorDetails();
+        } else {
+          notVerifierUserLogout();
+        }
+      } else {
+        notVerifierUserLogout();
+      }
     }
   }, [subSectorName]);
 

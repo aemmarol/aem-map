@@ -4,11 +4,63 @@ import type {NextPage} from "next";
 import styles from "../styles/SignInPage.module.scss";
 import {Signinlayout} from "../layouts/signInLayout";
 import {SigninCard} from "../components";
-import {login} from "../pages/api/v1/authentication";
-import {authenticationProps, loginResponseData} from "../types";
+import {login, verifyUser} from "../pages/api/v1/authentication";
+import {authenticationProps, authUser, loginResponseData} from "../types";
+import {useEffect} from "react";
+import {useRouter} from "next/router";
+import {getSubSectorDataByName} from "./api/v1/db/subSectorCrud";
 
 const SignInPage: NextPage = () => {
   const [form] = Form.useForm();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (typeof verifyUser() !== "string") {
+      const {userRole, assignedArea} = verifyUser() as authUser;
+      verifyUserAndRedirect(userRole, assignedArea);
+    }
+  }, []);
+
+  const verifyUserAndRedirect = async (
+    userRole: string[],
+    assignedArea: string[]
+  ) => {
+    switch (userRole[0]) {
+      case "Admin":
+        router.push("/mohallah");
+        break;
+      case "Masool":
+        router.push("/mohallah/" + assignedArea[0]);
+        break;
+      case "Masoola":
+        router.push("/mohallah/" + assignedArea[0]);
+        break;
+      case "Musaid":
+        const musaidAssignedAreaDetails = await getSubSectorDataByName(
+          assignedArea[0]
+        );
+        router.push(
+          "/mohallah/" +
+            musaidAssignedAreaDetails.sector.name +
+            "/" +
+            assignedArea[0]
+        );
+        break;
+      case "Musaida":
+        const musaidaAssignedAreaDetails = await getSubSectorDataByName(
+          assignedArea[0]
+        );
+        router.push(
+          "/mohallah/" +
+            musaidaAssignedAreaDetails.sector.name +
+            "/" +
+            assignedArea[0]
+        );
+        break;
+      default:
+        break;
+    }
+  };
 
   const onFinish = (values: authenticationProps) => {
     login(values)
@@ -18,6 +70,7 @@ const SignInPage: NextPage = () => {
           message: userResponse.msg,
         });
         form.resetFields();
+        router.reload();
       })
       .catch((error) => {
         notification.error({

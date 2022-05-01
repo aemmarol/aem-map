@@ -1,4 +1,4 @@
-import {Col, Row} from "antd";
+import {Col, message, Row} from "antd";
 import {isEmpty} from "lodash";
 import {NextPage} from "next";
 import {useRouter} from "next/router";
@@ -9,10 +9,12 @@ import {getFileDataByFileNumber} from "../../../api/v1/db/fileCrud";
 import {getMemberListByHofId} from "../../../api/v1/db/memberCrud";
 import styles from "../../../../styles/FileList.module.scss";
 import {MemberListTable, MemberProfileCard} from "../../../../components";
+import {logout, verifyUser} from "../../../api/v1/authentication";
+import {authUser} from "../../../../types";
 
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();
-  const {fileNumber} = router.query;
+  const {fileNumber, mohallahName, subSectorName} = router.query;
   const {toggleLoader} = useGlobalContext();
 
   const [fileDetails, setFileDetails] = useState<any>({});
@@ -38,16 +40,40 @@ const FileMemberDetailsPage: NextPage = () => {
         {label: "Address", value: filedata.address},
       ]);
       toggleLoader(false);
-      console.log("fileData", memberDataList);
     } else {
       toggleLoader(false);
       router.push("/");
     }
   };
 
+  const notVerifierUserLogout = () => {
+    message.info("user does not have access");
+    logout();
+    router.push("/");
+  };
+
   useEffect(() => {
     if (fileNumber) {
-      getFileDetails(fileNumber);
+      if (typeof verifyUser() !== "string") {
+        const {userRole, assignedArea} = verifyUser() as authUser;
+        if (
+          userRole.includes("Admin") ||
+          (userRole.includes("Masool") &&
+            assignedArea.includes(mohallahName as string)) ||
+          (userRole.includes("Masoola") &&
+            assignedArea.includes(mohallahName as string)) ||
+          (userRole.includes("Musaid") &&
+            assignedArea.includes(subSectorName as string)) ||
+          (userRole.includes("Musaida") &&
+            assignedArea.includes(subSectorName as string))
+        ) {
+          getFileDetails(fileNumber);
+        } else {
+          notVerifierUserLogout();
+        }
+      } else {
+        notVerifierUserLogout();
+      }
     }
   }, [fileNumber]);
 

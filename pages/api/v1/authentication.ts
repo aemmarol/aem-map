@@ -3,20 +3,13 @@ import Joi from "joi";
 import Airtable from "airtable";
 import {sign, verify} from "jsonwebtoken";
 import "../../../firebase/firebaseConfig";
-import {authenticationProps, loginResponseData} from "../../../types";
+import {authenticationProps, authUser, loginResponseData} from "../../../types";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
 }).base("app7V1cg4ibiooxcn");
 
 const userTable = airtableBase("userList");
-
-interface authUser {
-  itsId: string;
-  name: string;
-  userRole: Array<string>;
-  assignedArea: Array<string>;
-}
 
 interface verifiedToken {
   iat: number;
@@ -49,11 +42,17 @@ export const login = async (
       throw new Error("user not found!");
     } else {
       const userData = {...data[0].fields};
-      const {name, itsId, assignedArea, userRole} = userData;
+      const {name, itsId, assignedArea, userRole, assignedUmoor} = userData;
       if (userData.password !== password) {
         throw new Error("invalid credentials!!");
       }
-      const userTokenData = {name, itsId, assignedArea, userRole};
+      const userTokenData = {
+        name,
+        itsId,
+        assignedArea,
+        userRole,
+        assignedUmoor,
+      };
       const accessToken: string = sign(
         {exp: Math.floor(Date.now() / 1000) + 60 * 60 * 6, data: userTokenData},
         process.env.NEXT_PUBLIC_ACCESS_TOKEN_SALT as string
@@ -68,7 +67,7 @@ export const logout = () => {
   localStorage.removeItem("user");
 };
 
-export const verifyUser = (): authUser | Error => {
+export const verifyUser = (): authUser | string => {
   try {
     const accessToken = localStorage.getItem("user");
     const userData = verify(
@@ -77,6 +76,6 @@ export const verifyUser = (): authUser | Error => {
     ) as verifiedToken;
     return userData.data as authUser;
   } catch (error) {
-    throw new Error("User not verified!!");
+    return "User not verified!";
   }
 };

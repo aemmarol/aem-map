@@ -9,3 +9,11 @@ export interface loginResponseData {
   msg: string;
   success: boolean;
 }
+
+export interface authUser {
+  itsId: string;
+  name: string;
+  userRole: Array<string>;
+  assignedArea: Array<string>;
+  assignedUmoor: Array<string>;
+}
