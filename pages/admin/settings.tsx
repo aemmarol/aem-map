@@ -1,4 +1,4 @@
-import {Col, Row} from "antd";
+import {Col, message, Row} from "antd";
 import {GetServerSideProps, NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import {useEffect, useState} from "react";
@@ -7,6 +7,7 @@ import {
   getMumeneenDataFields,
 } from "../api/v1/db/databaseFields";
 import {
+  authUser,
   databaseMumeneenFieldData,
   sectorData,
   subSectorData,
@@ -20,6 +21,9 @@ import {
 } from "../../components";
 import {getSectorList} from "../api/v1/db/sectorCrud";
 import {getSubSectorList} from "../api/v1/db/subSectorCrud";
+import {logout, verifyUser} from "../api/v1/authentication";
+import {useRouter} from "next/router";
+import {useGlobalContext} from "../../context/GlobalContext";
 
 interface AdminSettingsProps {
   mumeneenDataFields: databaseMumeneenFieldData[];
@@ -34,6 +38,9 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   sectorDetailsData,
   subSectorDetailsList,
 }) => {
+  const router = useRouter();
+  const {toggleLoader} = useGlobalContext();
+
   const [sectorDetails, setSectorDetails] = useState<sectorData[] | []>([]);
   const [subsectorDetails, setSubsectorDetails] = useState<
     subSectorData[] | []
@@ -58,6 +65,25 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     sectorDetailsData,
     subSectorDetailsList,
   ]);
+
+  useEffect(() => {
+    toggleLoader(true);
+    if (typeof verifyUser() !== "string") {
+      const {userRole} = verifyUser() as authUser;
+      if (!userRole.includes("Admin")) {
+        notVerifierUserLogout();
+      }
+    } else {
+      notVerifierUserLogout();
+    }
+    toggleLoader(false);
+  }, []);
+
+  const notVerifierUserLogout = () => {
+    message.info("user does not have access");
+    logout();
+    router.push("/");
+  };
 
   return (
     <Dashboardlayout headerTitle="Admin Settings">

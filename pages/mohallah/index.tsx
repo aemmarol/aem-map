@@ -1,14 +1,35 @@
-import {Button, Tabs} from "antd";
+import {Button, message, Tabs} from "antd";
 import {NextPage} from "next";
 import {useRouter} from "next/router";
 import {MohallahListComponent} from "../../components";
 import dynamic from "next/dynamic";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
+import {useEffect} from "react";
+import {logout, verifyUser} from "../api/v1/authentication";
+import {authUser} from "../../types";
 
 const {TabPane} = Tabs;
 
 const Dashboard: NextPage = () => {
   const router = useRouter();
+
+  useEffect(() => {
+    if (typeof verifyUser() !== "string") {
+      const {userRole} = verifyUser() as authUser;
+      if (!userRole.includes("Admin")) {
+        notVerifierUserLogout();
+      }
+    } else {
+      notVerifierUserLogout();
+    }
+  }, []);
+
+  const notVerifierUserLogout = () => {
+    message.info("user does not have access");
+    logout();
+    router.push("/");
+  };
+
   const redirectToAdminSettings = () => {
     router.push("/admin/settings");
   };

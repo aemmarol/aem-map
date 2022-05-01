@@ -1,10 +1,10 @@
-import {Col, Row} from "antd";
+import {Col, message, Row} from "antd";
 import {NextPage} from "next";
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import {useGlobalContext} from "../../../context/GlobalContext";
 import {Dashboardlayout} from "../../../layouts/dashboardLayout";
-import {sectorData, subSectorData} from "../../../types";
+import {authUser, sectorData, subSectorData} from "../../../types";
 import {getSectorDataByName} from "../../api/v1/db/sectorCrud";
 import {getSubSectorData} from "../../api/v1/db/subSectorCrud";
 import {
@@ -13,6 +13,7 @@ import {
   SubSectorCard,
 } from "../../../components";
 import {isEmpty} from "lodash";
+import {logout, verifyUser} from "../../api/v1/authentication";
 
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
@@ -63,9 +64,30 @@ const SingleMohallah: NextPage = () => {
     router.push("/mohallah/" + mohallahName + "/" + name);
   };
 
+  const notVerifierUserLogout = () => {
+    message.info("user does not have access");
+    logout();
+    router.push("/");
+  };
+
   useEffect(() => {
     if (mohallahName) {
-      getSectorDetails();
+      if (typeof verifyUser() !== "string") {
+        const {userRole, assignedArea} = verifyUser() as authUser;
+        if (
+          userRole.includes("Admin") ||
+          (userRole.includes("Masool") &&
+            assignedArea.includes(mohallahName as string)) ||
+          (userRole.includes("Masoola") &&
+            assignedArea.includes(mohallahName as string))
+        ) {
+          getSectorDetails();
+        } else {
+          notVerifierUserLogout();
+        }
+      } else {
+        notVerifierUserLogout();
+      }
     }
   }, [mohallahName]);
 
