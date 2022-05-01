@@ -1,30 +1,32 @@
-import { Divider, Drawer, Image, Menu } from "antd";
-import { useRouter } from "next/router";
-import { FC } from "react";
-import { verifyUser } from "../../pages/api/v1/authentication";
-import { getSubSectorDataByName } from "../../pages/api/v1/db/subSectorCrud";
+import {Divider, Drawer, Image, Menu} from "antd";
+import {useRouter} from "next/router";
+import {FC} from "react";
+import {verifyUser} from "../../pages/api/v1/authentication";
+import {getSubSectorDataByName} from "../../pages/api/v1/db/subSectorCrud";
 import styles from "../../styles/components/sidebars/dashboardSidebar.module.scss";
-import { authUser } from "../../types";
+import {authUser} from "../../types";
 
 export const DashboardSidebar: FC<{
   visible: boolean;
   handleClose: () => any;
-}> = ({ visible, handleClose }) => {
+}> = ({visible, handleClose}) => {
   const router = useRouter();
 
   const handleMohallahRouting = async () => {
     if (typeof verifyUser() !== "string") {
-      const { userRole, assignedArea } = verifyUser() as authUser;
+      const {userRole, assignedArea} = verifyUser() as authUser;
       if (userRole.includes("Admin")) {
-        router.push("/mohallah")
+        router.push("/mohallah");
       } else if (userRole.includes("Masool") || userRole.includes("Masoola")) {
-        router.push("/mohallah/" + assignedArea[0])
+        router.push("/mohallah/" + assignedArea[0]);
       } else if (userRole.includes("Musaid") || userRole.includes("Musaida")) {
-        const subsectorDetails = await getSubSectorDataByName(assignedArea[0])
-        router.push("/mohallah/" + subsectorDetails.sector.name + "/" + assignedArea[0])
+        const subsectorDetails = await getSubSectorDataByName(assignedArea[0]);
+        router.push(
+          "/mohallah/" + subsectorDetails.sector.name + "/" + assignedArea[0]
+        );
       }
     }
-  }
+  };
 
   return (
     <Drawer
