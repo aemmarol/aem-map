@@ -1,7 +1,9 @@
 import {FC} from "react";
-import {Avatar, Button, Layout} from "antd";
-import {MenuOutlined, UserOutlined} from "@ant-design/icons";
+import {Avatar, Button, Layout, Tooltip} from "antd";
+import {LogoutOutlined, MenuOutlined} from "@ant-design/icons";
 import styles from "../../styles/components/headers/dashboardHeader.module.scss";
+import {logout} from "../../pages/api/v1/authentication";
+import {useRouter} from "next/router";
 
 const {Header} = Layout;
 
@@ -9,6 +11,13 @@ export const DashboardHeader: FC<{
   handleToggle: () => any;
   headerTitle: string;
 }> = ({handleToggle, headerTitle}) => {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
+
   return (
     <Header className={styles.header}>
       <Button
@@ -18,7 +27,15 @@ export const DashboardHeader: FC<{
         onClick={handleToggle}
       />
       <h1 className={styles.headerTitle}>{headerTitle}</h1>
-      <Avatar className={styles.avatar} size={48} icon={<UserOutlined />} />
+      <Tooltip title="Logout">
+        <button className={styles.btnAvatar} onClick={handleLogout}>
+          <Avatar
+            className={styles.avatar}
+            size={48}
+            icon={<LogoutOutlined />}
+          />
+        </button>
+      </Tooltip>
     </Header>
   );
 };
