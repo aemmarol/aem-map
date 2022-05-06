@@ -4,3 +4,4 @@ export const memberCollectionName = "member";
 export const fileCollectionName = "file";
 export const subsectorCollectionName = "subsector";
 export const sectorCollectionName = "sector";
+export const escalationCollectionName = "escalation";

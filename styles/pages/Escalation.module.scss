@@ -1,0 +1,12 @@
+.escalationWrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 32px;
+
+  .escalationHeader {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+}

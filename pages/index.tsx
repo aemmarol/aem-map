@@ -9,10 +9,12 @@ import {authenticationProps, authUser, loginResponseData} from "../types";
 import {useEffect} from "react";
 import {useRouter} from "next/router";
 import {getSubSectorDataByName} from "./api/v1/db/subSectorCrud";
+import {useGlobalContext} from "../context/GlobalContext";
 
 const SignInPage: NextPage = () => {
   const [form] = Form.useForm();
   const router = useRouter();
+  const {changeSelectedSidebarKey} = useGlobalContext();
 
   useEffect(() => {
     if (typeof verifyUser() !== "string") {
@@ -27,15 +29,19 @@ const SignInPage: NextPage = () => {
   ) => {
     switch (userRole[0]) {
       case "Admin":
+        changeSelectedSidebarKey("1");
         router.push("/mohallah");
         break;
       case "Masool":
+        changeSelectedSidebarKey("1");
         router.push("/mohallah/" + assignedArea[0]);
         break;
       case "Masoola":
+        changeSelectedSidebarKey("1");
         router.push("/mohallah/" + assignedArea[0]);
         break;
       case "Musaid":
+        changeSelectedSidebarKey("1");
         const musaidAssignedAreaDetails = await getSubSectorDataByName(
           assignedArea[0]
         );
@@ -47,6 +53,7 @@ const SignInPage: NextPage = () => {
         );
         break;
       case "Musaida":
+        changeSelectedSidebarKey("1");
         const musaidaAssignedAreaDetails = await getSubSectorDataByName(
           assignedArea[0]
         );
@@ -56,6 +63,10 @@ const SignInPage: NextPage = () => {
             "/" +
             assignedArea[0]
         );
+        break;
+      case "Umoor":
+        changeSelectedSidebarKey("2");
+        router.push("/escalations");
         break;
       default:
         break;

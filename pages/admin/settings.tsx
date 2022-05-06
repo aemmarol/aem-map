@@ -39,7 +39,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   subSectorDetailsList,
 }) => {
   const router = useRouter();
-  const {toggleLoader} = useGlobalContext();
+  const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
 
   const [sectorDetails, setSectorDetails] = useState<sectorData[] | []>([]);
   const [subsectorDetails, setSubsectorDetails] = useState<
@@ -67,6 +67,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   ]);
 
   useEffect(() => {
+    changeSelectedSidebarKey("0");
     toggleLoader(true);
     if (typeof verifyUser() !== "string") {
       const {userRole} = verifyUser() as authUser;

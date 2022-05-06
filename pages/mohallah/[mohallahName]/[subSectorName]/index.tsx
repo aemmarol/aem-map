@@ -20,7 +20,7 @@ import {logout, verifyUser} from "../../../api/v1/authentication";
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
   const {subSectorName, mohallahName} = router.query;
-  const {toggleLoader} = useGlobalContext();
+  const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
 
   const [mohallahDetails, setMohallahDetails] = useState<sectorData>(
     {} as sectorData
@@ -82,6 +82,8 @@ const SingleMohallah: NextPage = () => {
 
   useEffect(() => {
     if (subSectorName) {
+      changeSelectedSidebarKey("1");
+
       if (typeof verifyUser() !== "string") {
         const {userRole, assignedArea} = verifyUser() as authUser;
         if (

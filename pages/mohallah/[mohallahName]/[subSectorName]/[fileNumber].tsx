@@ -15,7 +15,7 @@ import {authUser} from "../../../../types";
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();
   const {fileNumber, mohallahName, subSectorName} = router.query;
-  const {toggleLoader} = useGlobalContext();
+  const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
 
   const [fileDetails, setFileDetails] = useState<any>({});
   const [memberList, setMemberList] = useState<any[]>([]);
@@ -54,6 +54,8 @@ const FileMemberDetailsPage: NextPage = () => {
 
   useEffect(() => {
     if (fileNumber) {
+      changeSelectedSidebarKey("1");
+
       if (typeof verifyUser() !== "string") {
         const {userRole, assignedArea} = verifyUser() as authUser;
         if (

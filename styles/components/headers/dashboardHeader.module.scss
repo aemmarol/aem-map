@@ -11,6 +11,15 @@
     margin-bottom: 0;
     margin-left: 32px;
     justify-self: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    flex-grow: 1;
+
+    @media screen and (max-width: "576px") {
+      font-size: 20px;
+      margin-left: 16px;
+    }
   }
 
   .btnAvatar {
@@ -21,6 +30,7 @@
     height: 48px;
     display: flex;
     border-radius: 24px;
+
     :hover {
       cursor: pointer;
     }

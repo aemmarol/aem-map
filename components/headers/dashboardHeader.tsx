@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {Avatar, Button, Layout, Tooltip} from "antd";
+import {Avatar, Button, Layout, message, Tooltip} from "antd";
 import {LogoutOutlined, MenuOutlined} from "@ant-design/icons";
 import styles from "../../styles/components/headers/dashboardHeader.module.scss";
 import {logout} from "../../pages/api/v1/authentication";
@@ -15,6 +15,7 @@ export const DashboardHeader: FC<{
 
   const handleLogout = () => {
     logout();
+    message.info("User Logged Out!");
     router.push("/");
   };
 
