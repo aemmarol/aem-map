@@ -53,8 +53,16 @@ a {
   padding: 0 32px !important;
 }
 
+.mb-0 {
+  margin-bottom: 0px !important;
+}
+
+.mb-8 {
+  margin-bottom: 8px !important;
+}
+
 .mb-16 {
-  margin-bottom: 16px;
+  margin-bottom: 16px !important;
 }
 
 .mb-30 {
@@ -67,6 +75,10 @@ a {
 
 .mr-16 {
   margin-right: 16px;
+}
+
+.ml-auto {
+  margin-left: auto;
 }
 
 .border-radius-10 {

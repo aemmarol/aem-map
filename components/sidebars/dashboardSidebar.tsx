@@ -18,7 +18,6 @@ export const DashboardSidebar: FC<{
   useEffect(() => {
     if (typeof verifyUser() !== "string") {
       const {userRole} = verifyUser() as authUser;
-      console.log();
       setappUserRole(userRole);
     }
   }, []);

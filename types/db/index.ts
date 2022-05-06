@@ -63,11 +63,7 @@ export type comment = {
 
 export interface escalationData extends defaultFields {
   id?: string;
-  escalation_id: number;
-  sector_name: string;
-  sub_sector_name: string;
   created_by: adminDetails;
-  file_number: string;
   file_details: any;
   status: string;
   issue: string;
