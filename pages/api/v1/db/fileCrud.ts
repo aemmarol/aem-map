@@ -99,7 +99,7 @@ export const getFileDataByFileNumber = async (
     resultArr.push(file);
   });
 
-  return resultArr[0];
+  return resultArr[0] || null;
 };
 
 export const addFileData = async (id: string, data: any): Promise<boolean> => {

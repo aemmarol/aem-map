@@ -105,19 +105,39 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   };
 
   const onFileSearch = async (values: any) => {
-    if (!values.fileNumber || !allowedFileNumbers.includes(values.fileNumber)) {
-      setshowFileNotFoundError(true);
-      setFileDetails({});
-    } else {
+    if (adminDetails?.userRole.includes("Admin")) {
       const data = await getFileDataByFileNumber(values.fileNumber);
-      const hof_data = await getMemberDataById(data.id);
-      setFileDetails({
-        hofName: hof_data.full_name,
-        hofContact: hof_data.mobile,
-        subSector: data.sub_sector.name,
-        fileData: data,
-      });
-      setshowFileNotFoundError(false);
+      if (!!data) {
+        const hof_data = await getMemberDataById(data.id);
+        setFileDetails({
+          hofName: hof_data.full_name,
+          hofContact: hof_data.mobile,
+          subSector: data.sub_sector.name,
+          fileData: data,
+        });
+        setshowFileNotFoundError(false);
+      } else {
+        setshowFileNotFoundError(true);
+        setFileDetails({});
+      }
+    } else {
+      if (
+        !values.fileNumber ||
+        !allowedFileNumbers.includes(values.fileNumber)
+      ) {
+        setshowFileNotFoundError(true);
+        setFileDetails({});
+      } else {
+        const data = await getFileDataByFileNumber(values.fileNumber);
+        const hof_data = await getMemberDataById(data.id);
+        setFileDetails({
+          hofName: hof_data.full_name,
+          hofContact: hof_data.mobile,
+          subSector: data.sub_sector.name,
+          fileData: data,
+        });
+        setshowFileNotFoundError(false);
+      }
     }
   };
 
@@ -263,9 +283,21 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
                 },
               ]}
             >
-              <Select>
+              <Select
+                showSearch={true}
+                filterOption={(inputValue, option: any) =>
+                  option.props.children
+                    .toString()
+                    .toLowerCase()
+                    .includes(inputValue.toLowerCase())
+                }
+              >
                 {issueTypeOptions.map((val: any) => (
-                  <Select.Option value={val.value} key={val.value}>
+                  <Select.Option
+                    label={val.label}
+                    value={val.value}
+                    key={val.value}
+                  >
                     {val.label}
                   </Select.Option>
                 ))}

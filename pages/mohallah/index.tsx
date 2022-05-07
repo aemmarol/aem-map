@@ -7,13 +7,13 @@ import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import {useEffect} from "react";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {authUser} from "../../types";
-import {useGlobalContext} from "../../context/GlobalContext";
+// import {useGlobalContext} from "../../context/GlobalContext";
 
 const {TabPane} = Tabs;
 
 const Dashboard: NextPage = () => {
   const router = useRouter();
-  const {changeSelectedSidebarKey} = useGlobalContext();
+  // const {changeSelectedSidebarKey} = useGlobalContext();
 
   useEffect(() => {
     // changeSelectedSidebarKey("1");
