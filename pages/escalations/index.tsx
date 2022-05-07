@@ -5,7 +5,7 @@ import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import {useEffect, useState} from "react";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {authUser} from "../../types";
-import styles from "../../styles/pages/Escalation.module.scss";
+// import styles from "../../styles/pages/Escalation.module.scss";
 import {AddEscalationModal} from "../../components";
 import {useGlobalContext} from "../../context/GlobalContext";
 
@@ -74,7 +74,7 @@ const Dashboard: NextPage = () => {
         <AddEscalationModal
           handleClose={() => setShowEscalationModal(false)}
           showModal={showEscalationModal}
-          adminDetails={adminDetails}
+          adminDetails={adminDetails as authUser}
         />
       ) : null}
     </Dashboardlayout>

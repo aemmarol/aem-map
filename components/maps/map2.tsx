@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {
   LayersControl,
   LayerGroup,
@@ -15,8 +15,6 @@ import {useGlobalContext} from "../../context/GlobalContext";
 import SubSectorPopupCard from "../cards/subSectorPopupCard";
 import MapLegendCard from "../cards/mapLegendCard";
 import ChangeMapView from "./changeMapView";
-import {getSectorList} from "../../pages/api/v1/db/sectorCrud";
-import {getSubSectorList} from "../../pages/api/v1/db/subSectorCrud";
 
 const getCentroid = (bounds: any[]): number[] => {
   const x = bounds.reduce((sum, val) => sum + val.lat / bounds.length, 0);
@@ -24,10 +22,13 @@ const getCentroid = (bounds: any[]): number[] => {
   return [x, y];
 };
 
-const Map2 = () => {
+interface Map2Props {
+  secData: sectorData[];
+  subSecData: subSectorData[];
+}
+
+const Map2: FC<Map2Props> = ({secData, subSecData}) => {
   // const sectorsList = sectors; //tobe replaced with dataservice call
-  const [sectorList, setSectorList] = useState<any[]>([]);
-  const [subSectorList, setsubSectorList] = useState<any[]>([]);
   const [mapSectorData, setMapSectorData] = useState<any[]>([]);
 
   // const subSectorList = subsectors; //to be replaced with dataservice call
@@ -39,21 +40,16 @@ const Map2 = () => {
   }, []);
 
   const setList = async () => {
-    gContext.toggleLoader(true);
-    const listData: sectorData[] = await getSectorList();
-    const subSectorListData: subSectorData[] = await getSubSectorList();
-    setSectorList(listData);
-    const temp = await listData.map((sector) => {
-      sector.latlng =
-        sector.bounds && !sector.latlng
-          ? getCentroid(sector.bounds)
-          : sector.latlng;
+    setMapSectorData(
+      secData.map((sector) => {
+        sector.latlng =
+          sector.bounds && !sector.latlng
+            ? getCentroid(sector.bounds)
+            : sector.latlng;
 
-      return sector;
-    });
-    setMapSectorData(temp);
-    setsubSectorList(subSectorListData);
-    gContext.toggleLoader(false);
+        return sector;
+      })
+    );
   };
 
   return !!gContext.center.latlng ? (
@@ -72,9 +68,7 @@ const Map2 = () => {
         }}
       >
         <MapLegendCard
-          sectorList={sectorList.filter(
-            (val) => val.name !== "ZZ NON RESIDENT"
-          )}
+          sectorList={secData.filter((val) => val.name !== "ZZ NON RESIDENT")}
           clickHandler={(sector: sectorData) => {
             setCurrMapSector(
               mapSectorData.find((mapSector) => mapSector.name == sector.name)
@@ -101,7 +95,7 @@ const Map2 = () => {
         </Marker> */}
           <LayersControl.Overlay name="Sub-sectors" checked={true}>
             <LayerGroup>
-              {subSectorList.map((subsector: subSectorData, idx) => {
+              {subSecData.map((subsector: subSectorData, idx) => {
                 const markerIcon = divIcon({
                   html: `<span style="display:flex;"> <img src="/building.svg"/ style="height:2em;width:2em"> &nbsp&nbsp <b>${subsector.name}</b></span>`,
                   className: "dummy",
