@@ -1,4 +1,4 @@
-import {Col, message, Row} from "antd";
+import {Button, Col, message, Row} from "antd";
 import {GetServerSideProps, NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import {useEffect, useState} from "react";
@@ -24,6 +24,7 @@ import {getSubSectorList} from "../api/v1/db/subSectorCrud";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {useRouter} from "next/router";
 import {useGlobalContext} from "../../context/GlobalContext";
+import { createDbSettings } from "../api/v1/settings";
 
 interface AdminSettingsProps {
   mumeneenDataFields: databaseMumeneenFieldData[];
@@ -86,11 +87,18 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     router.push("/");
   };
 
+  const handleAddSettings = async()=>{
+    await createDbSettings()
+  }
+
   return (
     <Dashboardlayout headerTitle="Admin Settings">
       <Row className="mb-30" gutter={[{xs: 8, lg: 12}, 16]}>
         <Col xs={12}>
           <UploadExcelFileCard />
+        </Col>
+        <Col xs={12} >
+          <Button onClick={handleAddSettings} >add Admin Settings</Button>
         </Col>
       </Row>
 
