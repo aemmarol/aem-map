@@ -1,6 +1,6 @@
 import {Card, Col, Row} from "antd";
 import {useRouter} from "next/router";
-import React, {FC } from "react";
+import React, {FC} from "react";
 import styles from "../../../styles/components/mohallah/mohallah.module.scss";
 import {sectorData} from "../../../types";
 
