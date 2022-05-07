@@ -23,6 +23,10 @@ import {authUser, comment, escalationData} from "../../types";
 import {defaultDatabaseFields} from "../../utils";
 import moment from "moment";
 import {addEscalationData} from "../../pages/api/v1/db/escalationsCrud";
+import {
+  getDbSettings,
+  incrementEscalationAutoNumber,
+} from "../../pages/api/v1/settings";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -122,6 +126,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   };
 
   const handleEscalationFormSubmit = async (values: any) => {
+    const dbSettings = await getDbSettings();
     const firstComment: comment = {
       msg: "Issue is added on " + moment(new Date()).format("DD-MM-YYYY"),
       name: adminDetails.name,
@@ -157,9 +162,13 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       issue: values.issue,
       type: values.escalationType,
       comments: [firstComment],
+      escalation_id: "esc-" + dbSettings.escalation_auto_number,
     };
     const result = await addEscalationData(data);
     if (result) {
+      await incrementEscalationAutoNumber(
+        dbSettings.escalation_auto_number + 1
+      );
       message.success("Escalation added!");
       escalationForm.resetFields();
       fileForm.resetFields();
