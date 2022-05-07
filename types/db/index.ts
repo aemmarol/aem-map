@@ -61,10 +61,19 @@ export type comment = {
   time: string;
 };
 
+export type fileDetails = {
+  tanzeem_file_no: string;
+  address: string;
+  sub_sector: Partial<subSectorData>;
+  hof_name: string;
+  hof_contact: string;
+  hof_its: string;
+};
+
 export interface escalationData extends defaultFields {
   id?: string;
   created_by: adminDetails;
-  file_details: any;
+  file_details: fileDetails;
   status: string;
   issue: string;
   comments: comment[];

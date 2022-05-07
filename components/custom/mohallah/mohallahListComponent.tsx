@@ -1,13 +1,13 @@
-import {Card, Col, Row} from "antd";
-import {useRouter} from "next/router";
-import React, {FC, useEffect, useState} from "react";
-import {useGlobalContext} from "../../../context/GlobalContext";
-import {getSectorList} from "../../../pages/api/v1/db/sectorCrud";
+import { Card, Col, Row } from "antd";
+import { useRouter } from "next/router";
+import React, { FC, useEffect, useState } from "react";
+import { useGlobalContext } from "../../../context/GlobalContext";
+import { getSectorList } from "../../../pages/api/v1/db/sectorCrud";
 import styles from "../../../styles/components/mohallah/mohallah.module.scss";
-import {sectorData} from "../../../types";
+import { sectorData } from "../../../types";
 
 export const MohallahListComponent: FC = () => {
-  const {toggleLoader} = useGlobalContext();
+  const { toggleLoader } = useGlobalContext();
   const router = useRouter();
   const [mohallahlist, setMohallahlist] = useState<sectorData[]>([]);
 
@@ -34,10 +34,10 @@ export const MohallahListComponent: FC = () => {
     <div>
       <Row gutter={[16, 16]}>
         {mohallahlist.map((val) => (
-          <Col key={val.id} xs={12} sm={8} md={6} lg={6} xl={4}>
+          <Col key={val.id} xs={24} sm={12} md={6} lg={6} xl={4}>
             <Card
               onClick={() => redirectToMohallahPage(val.name as string)}
-              style={{backgroundColor: val.primary_color}}
+              style={{ backgroundColor: val.primary_color }}
               className="border-radius-10 card-padding-20 cursor-pointer"
             >
               <div className={styles.nameWrapper}>

@@ -16,7 +16,7 @@ const Dashboard: NextPage = () => {
   const {changeSelectedSidebarKey} = useGlobalContext();
 
   useEffect(() => {
-    changeSelectedSidebarKey("1");
+    // changeSelectedSidebarKey("1");
 
     if (typeof verifyUser() !== "string") {
       const {userRole} = verifyUser() as authUser;

@@ -3,6 +3,7 @@ import {
   Col,
   Form,
   Input,
+  message,
   Modal,
   Result,
   Row,
@@ -18,6 +19,10 @@ import {
 } from "../../pages/api/v1/db/fileCrud";
 import {getMemberDataById} from "../../pages/api/v1/db/memberCrud";
 import Airtable from "airtable";
+import {authUser, comment, escalationData} from "../../types";
+import {defaultDatabaseFields} from "../../utils";
+import moment from "moment";
+import {addEscalationData} from "../../pages/api/v1/db/escalationsCrud";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -28,15 +33,13 @@ const umoorTable = airtableBase("umoorList");
 type AddEscalationModalProps = {
   showModal: boolean;
   handleClose: () => any;
-  role: string[];
-  assignedArea: string[];
+  adminDetails: authUser;
 };
 
 export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   showModal,
   handleClose,
-  assignedArea,
-  role,
+  adminDetails,
 }) => {
   const [fileForm] = Form.useForm();
   const [escalationForm] = Form.useForm();
@@ -80,13 +83,23 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   };
 
   const getRoleBasedFileNumbers = async () => {
-    if (role.includes("Masool") || role.includes("Masoola")) {
-      const fileList = await getFileDataListBySector(assignedArea[0]);
+    if (
+      adminDetails.userRole.includes("Masool") ||
+      adminDetails.userRole.includes("Masoola")
+    ) {
+      const fileList = await getFileDataListBySector(
+        adminDetails.assignedArea[0]
+      );
       setAllowedFileNumbers(
         fileList.map((val: any) => val.tanzeem_file_no.toString())
       );
-    } else if (role.includes("Musaid") || role.includes("Musaida")) {
-      const fileList = await getFileDataListBySubsector(assignedArea[0]);
+    } else if (
+      adminDetails.userRole.includes("Musaid") ||
+      adminDetails.userRole.includes("Musaida")
+    ) {
+      const fileList = await getFileDataListBySubsector(
+        adminDetails.assignedArea[0]
+      );
       setAllowedFileNumbers(fileList.map((val: any) => val.tanzeem_file_no));
     }
   };
@@ -102,13 +115,56 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
         hofName: hof_data.full_name,
         hofContact: hof_data.mobile,
         subSector: data.sub_sector.name,
+        fileData: data,
       });
       setshowFileNotFoundError(false);
     }
   };
 
-  const handleEscalationFormSubmit = (values: any) => {
-    console.log("values", values);
+  const handleEscalationFormSubmit = async (values: any) => {
+    const firstComment: comment = {
+      msg: "Issue is added on " + moment(new Date()).format("DD-MM-YYYY"),
+      name: adminDetails.name,
+      contact_number: adminDetails.contact,
+      userRole: adminDetails.userRole.includes("Masool")
+        ? "Masool"
+        : adminDetails.userRole.includes("Masoola")
+        ? "Masoola"
+        : adminDetails.userRole.includes("Musaid")
+        ? "Musaid"
+        : adminDetails.userRole.includes("Musaida")
+        ? "Musaida"
+        : adminDetails.userRole[0],
+      time: moment(new Date()).format(),
+    };
+    const data: escalationData = {
+      ...defaultDatabaseFields,
+      created_by: {
+        name: adminDetails.name,
+        its_number: adminDetails.itsId,
+        contact_number: adminDetails.contact,
+        userRole: firstComment.userRole,
+      },
+      file_details: {
+        tanzeem_file_no: fileDetails.fileData.tanzeem_file_no,
+        address: fileDetails.fileData.address,
+        sub_sector: fileDetails.fileData.sub_sector,
+        hof_its: fileDetails.fileData.id,
+        hof_name: fileDetails.hofName,
+        hof_contact: fileDetails.hofContact,
+      },
+      status: "Issue Reported",
+      issue: values.issue,
+      type: values.escalationType,
+      comments: [firstComment],
+    };
+    const result = await addEscalationData(data);
+    if (result) {
+      message.success("Escalation added!");
+      escalationForm.resetFields();
+      fileForm.resetFields();
+      handleClose();
+    }
   };
 
   return (

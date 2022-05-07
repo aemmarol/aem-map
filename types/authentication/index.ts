@@ -13,6 +13,7 @@ export interface loginResponseData {
 export interface authUser {
   itsId: string;
   name: string;
+  contact: string;
   userRole: Array<string>;
   assignedArea: Array<string>;
   assignedUmoor: Array<string>;
