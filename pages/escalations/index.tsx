@@ -74,7 +74,7 @@ const Dashboard: NextPage = () => {
         <AddEscalationModal
           handleClose={() => setShowEscalationModal(false)}
           showModal={showEscalationModal}
-          adminDetails={adminDetails}
+          adminDetails={adminDetails as authUser}
         />
       ) : null}
     </Dashboardlayout>
