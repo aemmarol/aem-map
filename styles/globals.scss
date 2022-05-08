@@ -111,6 +111,11 @@ a {
   overflow-y: auto;
 }
 
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 .flex-align-center-justify-center {
   display: flex;
   justify-content: center;
