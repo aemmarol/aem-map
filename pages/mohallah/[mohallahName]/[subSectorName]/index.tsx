@@ -13,6 +13,7 @@ import {
   DistanceCard,
   InchargeDetailsCard,
   SubSectorFileListTable,
+  Backbutton,
 } from "../../../../components";
 import {getSectorData} from "../../../api/v1/db/sectorCrud";
 import {logout, verifyUser} from "../../../api/v1/authentication";
@@ -121,6 +122,7 @@ const SingleMohallah: NextPage = () => {
       headerTitle={subSectorName as string}
     >
       <div className={styles.mainWrapper}>
+        <Backbutton></Backbutton>
         <Row className="mb-16" gutter={[{xs: 8, sm: 16, md: 24, lg: 32}, 16]}>
           <Col xs={24} sm={12} lg={8} xl={6}>
             <InchargeDetailsCard

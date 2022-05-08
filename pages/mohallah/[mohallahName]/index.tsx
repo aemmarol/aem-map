@@ -8,6 +8,7 @@ import {authUser, sectorData, subSectorData} from "../../../types";
 import {getSectorDataByName} from "../../api/v1/db/sectorCrud";
 import {getSubSectorData} from "../../api/v1/db/subSectorCrud";
 import {
+  Backbutton,
   DistanceCard,
   InchargeDetailsCard,
   SubSectorCard,
@@ -130,6 +131,11 @@ const SingleMohallah: NextPage = () => {
                 backgroundColor={mohallahDetails.primary_color}
                 distance="0.1 KM"
                 eta="1 Minute"
+              />
+            </Col>
+            <Col>
+              <Backbutton
+                backgroundColor={mohallahDetails.primary_color || "#1890ff"}
               />
             </Col>
           </Row>
