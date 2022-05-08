@@ -134,7 +134,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
 
   const handleAirtableEscalationSync = async () => {
     toggleLoader(true);
-    let inputEscalationListData: any[] = [];
+    const inputEscalationListData: any[] = [];
     escalationListTable
       .select({
         view: "Grid view",
@@ -163,7 +163,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     inProcessComment: string,
     doneComment: string
   ) => {
-    let commentArr: comment[] = [
+    const commentArr: comment[] = [
       {
         msg: "Issue is added on " + moment(createdDate).format("DD-MM-YYYY"),
         name: reporter.full_name,
