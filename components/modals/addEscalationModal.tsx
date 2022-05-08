@@ -49,7 +49,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   const [escalationForm] = Form.useForm();
 
   const [allowedFileNumbers, setAllowedFileNumbers] = useState<string[]>([]);
-  const [issueTypeOptions, setIssueTypeOptions] = useState<string[]>([]);
+  const [issueTypeOptions, setIssueTypeOptions] = useState<any[]>([]);
   const [showFileNotFoundError, setshowFileNotFoundError] =
     useState<boolean>(false);
   const [fileDetails, setFileDetails] = useState<any>({});

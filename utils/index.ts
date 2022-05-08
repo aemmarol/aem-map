@@ -13,7 +13,7 @@ export const escalationIssueStatusList = [
     color: "blue",
   },
   {
-    value: "In Progress",
+    value: "Resolution In Process",
     color: "orange",
   },
   {
