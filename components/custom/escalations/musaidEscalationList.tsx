@@ -1,4 +1,4 @@
-import {Card, Col, Row, Statistic, Tag} from "antd";
+import {Card, Col, Row, Tag} from "antd";
 import {FC} from "react";
 import {escalationData} from "../../../types";
 import styles from "../../../styles/pages/Escalation.module.scss";
