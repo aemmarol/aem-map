@@ -19,8 +19,8 @@ export const DashboardHeader: FC<{
         icon={<MenuOutlined />}
         onClick={handleToggle}
       />
-      <h1 className={styles.headerTitle}>{headerTitle}</h1>
       {displayBackButton ? <Backbutton></Backbutton> : null}
+      <h1 className={styles.headerTitle}>{headerTitle}</h1>
       <Avatar className={styles.avatar} size={48} icon={<UserOutlined />} />
     </Header>
   );
