@@ -11,6 +11,7 @@ import {
   databaseMumeneenFieldData,
   sectorData,
   subSectorData,
+  userRoles,
 } from "../../types";
 import {
   MumeneenDataFieldTable,
@@ -85,7 +86,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     // getUmoorList();
     if (typeof verifyUser() !== "string") {
       const {userRole} = verifyUser() as authUser;
-      if (!userRole.includes("Admin")) {
+      if (!userRole.includes(userRoles.Admin)) {
         notVerifierUserLogout();
       }
     } else {

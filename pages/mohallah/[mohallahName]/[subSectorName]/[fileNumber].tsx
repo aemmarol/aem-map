@@ -10,7 +10,7 @@ import {getMemberListByHofId} from "../../../api/v1/db/memberCrud";
 import styles from "../../../../styles/FileList.module.scss";
 import {MemberListTable, MemberProfileCard} from "../../../../components";
 import {logout, verifyUser} from "../../../api/v1/authentication";
-import {authUser} from "../../../../types";
+import {authUser, userRoles} from "../../../../types";
 
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();
@@ -59,14 +59,14 @@ const FileMemberDetailsPage: NextPage = () => {
       if (typeof verifyUser() !== "string") {
         const {userRole, assignedArea} = verifyUser() as authUser;
         if (
-          userRole.includes("Admin") ||
-          (userRole.includes("Masool") &&
+          userRole.includes(userRoles.Admin) ||
+          (userRole.includes(userRoles.Masool) &&
             assignedArea.includes(mohallahName as string)) ||
-          (userRole.includes("Masoola") &&
+          (userRole.includes(userRoles.Masoola) &&
             assignedArea.includes(mohallahName as string)) ||
-          (userRole.includes("Musaid") &&
+          (userRole.includes(userRoles.Musaid) &&
             assignedArea.includes(subSectorName as string)) ||
-          (userRole.includes("Musaida") &&
+          (userRole.includes(userRoles.Musaida) &&
             assignedArea.includes(subSectorName as string))
         ) {
           getFileDetails(fileNumber);
