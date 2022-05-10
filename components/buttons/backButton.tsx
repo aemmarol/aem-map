@@ -1,11 +1,17 @@
-import { Button } from "antd"
-import { useRouter } from "next/router"
-import { FC } from "react"
-import { RollbackOutlined } from "@ant-design/icons"
+import {Button} from "antd";
+import {useRouter} from "next/router";
+import {FC} from "react";
+import {RollbackOutlined} from "@ant-design/icons";
+import styles from "../../styles/components/buttons/BackButton.module.scss";
 
-export const Backbutton: FC<{ backgroundColor?: string }> = ({ backgroundColor = "#1890ff" }) => {
-    const router = useRouter()
-    return (
-        <Button style={{ background: backgroundColor, borderColor: backgroundColor, borderRadius: "6px" }} type='primary' size="large" icon={<RollbackOutlined />} onClick={() => router.back()}>Back</Button>
-    )
-} 
+export const Backbutton: FC = () => {
+  const router = useRouter();
+  return (
+    <Button
+      className={styles.button}
+      type="primary"
+      icon={<RollbackOutlined />}
+      onClick={() => router.back()}
+    ></Button>
+  );
+};

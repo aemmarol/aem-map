@@ -39,7 +39,7 @@ const Dashboard: NextPage = () => {
   );
 
   return (
-    <Dashboardlayout headerTitle="">
+    <Dashboardlayout headerTitle="" displayBackButton={false}>
       <Tabs
         tabBarExtraContent={
           <Button onClick={redirectToAdminSettings}>Admin Settings</Button>
