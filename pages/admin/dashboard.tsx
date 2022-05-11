@@ -110,7 +110,7 @@ const AdminDashboard: NextPage<AdminDashboardProps> = ({escalationsList}) => {
           <Row gutter={[16, 16]}>
             {escalationsByUmoor.map((escalationGroup, idx) => {
               return (
-                <Col span={6} key={idx}>
+                <Col xs={24} sm={12} md={8} xl={6} key={idx}>
                   <Card
                     title={
                       umoorList.find(
@@ -141,7 +141,7 @@ const AdminDashboard: NextPage<AdminDashboardProps> = ({escalationsList}) => {
       <Row gutter={[16, 16]}>
         {escalationsByRegion.map((escalationGroup, idx) => {
           return (
-            <Col span={6} key={idx}>
+            <Col xs={24} sm={12} md={8} xl={6} key={idx}>
               <Card
                 title={escalationGroup.groupName}
                 onClick={() =>
