@@ -71,8 +71,8 @@ export const DashboardSidebar: FC<{
       <Divider />
       <Menu theme="light" mode="inline" selectedKeys={[selectedSidebarKey]}>
         {appUserRole.length === 1 && appUserRole[0] === "Admin" ? (
-          <Menu.Item key="0" onClick={() => router.push("/admin/settings")}>
-            Settings
+          <Menu.Item key="0" onClick={() => router.push("/admin/dashboard")}>
+            Dashboard
           </Menu.Item>
         ) : null}
         {appUserRole.length === 1 && appUserRole[0] === "Umoor" ? null : (
@@ -83,6 +83,11 @@ export const DashboardSidebar: FC<{
         <Menu.Item onClick={redirectToEscalations} key="2">
           Escalations
         </Menu.Item>
+        {appUserRole.length === 1 && appUserRole[0] === "Admin" ? (
+          <Menu.Item key="3" onClick={() => router.push("/admin/settings")}>
+            Settings
+          </Menu.Item>
+        ) : null}
       </Menu>
     </Drawer>
   );

@@ -9,6 +9,8 @@ import {authUser, userRoles} from "../../types";
 import {AddEscalationModal} from "../../components";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {EscalationList} from "../../components/custom/escalations/escalationList";
+import {getSectorList} from "../api/v1/db/sectorCrud";
+import {getUmoorList} from "../api/v1/db/umoorsCrud";
 
 const Dashboard: NextPage = () => {
   const router = useRouter();
@@ -25,8 +27,9 @@ const Dashboard: NextPage = () => {
   useEffect(() => {
     if (typeof verifyUser() !== "string") {
       const user: authUser = verifyUser() as authUser;
-      setAdminDetails(user);
-      setSelectedView(user.userRole[0]);
+      // setAdminDetails(user);
+      // setSelectedView(user.userRole[0]);
+      setUserDetails(user);
       // setSelectedRegion(user.assignedArea[0]);
       // setSelectedUmoor(user.assignedUmoor[0]);
       changeSelectedSidebarKey("2");
@@ -34,6 +37,17 @@ const Dashboard: NextPage = () => {
       notVerifierUserLogout();
     }
   }, []);
+
+  const setUserDetails = async (user: authUser) => {
+    if (user.userRole[0].includes(userRoles.Admin)) {
+      const sectors = await getSectorList();
+      user.assignedArea = sectors.map((sector) => sector.name);
+      const umoors = await getUmoorList();
+      user.assignedUmoor = umoors;
+    }
+    setAdminDetails(user);
+    setSelectedView(user.userRole[0]);
+  };
 
   const notVerifierUserLogout = () => {
     message.info("user does not have access");

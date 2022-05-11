@@ -2,7 +2,7 @@ import moment from "moment";
 import React, {FC, useEffect, useState} from "react";
 import {
   Criteria,
-  escalationFields,
+  escalationDBFields,
   getEscalationListByCriteria,
 } from "../../../pages/api/v1/db/escalationsCrud";
 import {authUser, escalationData, userRoles} from "../../../types";
@@ -22,7 +22,6 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
   const [escalationList, setEscalationList] = useState<escalationData[]>([]);
   const [title, setTitle] = useState<EscalationListTitle>();
   useEffect(() => {
-    console.log("ESCALATION LIST");
     getEscalationList();
   }, [userRole]);
   const getEscalationList = async () => {
@@ -33,7 +32,7 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
         setTitle({label: "Region", value: user.assignedArea[0]});
         criteria = [
           {
-            field: escalationFields.sectorName,
+            field: escalationDBFields.sectorName,
             value: user.assignedArea[0],
             operator: "==",
           },
@@ -44,7 +43,7 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
         setTitle({label: "Region", value: user.assignedArea[0]});
         criteria = [
           {
-            field: escalationFields.subsectorName,
+            field: escalationDBFields.subsectorName,
             value: user.assignedArea[0],
             operator: "==",
           },
@@ -54,9 +53,9 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
         setTitle({label: "Category", value: user.assignedUmoor[0]});
         criteria = [
           {
-            field: escalationFields.umoorName,
-            value: user.assignedUmoor[0],
-            operator: "==",
+            field: escalationDBFields.umoorName,
+            value: [user.assignedUmoor[0]],
+            operator: "in",
           },
         ];
         break;
@@ -75,7 +74,7 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
   };
   return (
     <div className="flex-column">
-      <h3>{`${title?.label} : ` + title?.value}</h3>
+      {title?.value ? <h3>{`${title?.label} : ` + title?.value}</h3> : null}
       {isMobile() ? (
         escalationList.map((val, idx) => (
           <EscalationCard key={idx} escalation={val} />

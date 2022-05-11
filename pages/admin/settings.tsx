@@ -81,7 +81,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   ]);
 
   useEffect(() => {
-    changeSelectedSidebarKey("0");
+    changeSelectedSidebarKey("3");
     toggleLoader(true);
     // getUmoorList();
     if (typeof verifyUser() !== "string") {

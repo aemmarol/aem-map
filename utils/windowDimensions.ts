@@ -13,7 +13,7 @@ function getWindowDimensions() {
 
 export function isMobile() {
   const dim = getWindowDimensions();
-  return dim.width && dim.width < 550;
+  return dim.width && dim.width < 576;
 }
 
 export default function useWindowDimensions() {

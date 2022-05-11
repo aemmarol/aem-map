@@ -15,7 +15,7 @@ import {defaultDatabaseFields} from "../../../../utils";
 
 const dataCollection = collection(firestore, escalationCollectionName);
 
-export enum escalationFields {
+export enum escalationDBFields {
   subsectorName = "file_details.sub_sector.name",
   sectorName = "file_details.sub_sector.sector.name",
   umoorName = "type.value",
@@ -48,6 +48,47 @@ export const getEscalationListBySubSector = async (
   return resultArr;
 };
 
+export const groupEscalationListBy = (
+  escalations: escalationData[],
+  groupByField: string,
+  counterField = "status"
+) => {
+  const groups: any = {};
+  escalations.forEach((escalation: any) => {
+    const groupName = getFieldValue(escalation, groupByField);
+    if (!groups.hasOwnProperty(groupName)) {
+      groups[groupName] = {
+        groupName,
+        data: [],
+        stats: {
+          total: 0,
+          "Issue Reported": 0,
+          "Resolution In Process": 0,
+          Resolved: 0,
+        },
+      };
+    }
+    const counterName = getFieldValue(escalation, counterField);
+    // if (!groups[groupName]["stats"].hasOwnProperty(counterName)) {
+    //   groups[groupName]["stats"][counterName] = 0;
+    // }
+    groups[groupName].data.push(escalation);
+    groups[groupName]["stats"][counterName]++;
+    groups[groupName]["stats"].total++;
+  });
+  return Object.keys(groups)
+    .sort()
+    .map((groupName) => groups[groupName]);
+};
+
+const getFieldValue = (obj: any, field: string) => {
+  const fieldpath = field.split(".");
+  for (const key of fieldpath) {
+    obj = obj[key];
+  }
+  return obj;
+};
+
 export const getEscalationListByCriteria = async (
   criteria: Criteria[]
 ): Promise<any> => {
@@ -60,7 +101,7 @@ export const getEscalationListByCriteria = async (
     })
     // where("file_details.sub_sector.name", "==", sector)
   );
-  console.log(q);
+  // console.log(q);
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((docs) => {
     const file: any = {

@@ -2,7 +2,7 @@ import {FC, useEffect, useState} from "react";
 import {authUser, escalationData} from "../../../types";
 
 import {
-  escalationFields,
+  escalationDBFields,
   getEscalationListByCriteria,
 } from "../../../pages/api/v1/db/escalationsCrud";
 import moment from "moment";
@@ -27,7 +27,7 @@ export const MusaidEscalationList: FC<MusaidEscalationListType> = ({user}) => {
     // );
     const escList: escalationData[] = await getEscalationListByCriteria([
       {
-        field: escalationFields.subsectorName,
+        field: escalationDBFields.subsectorName,
         value: selectedRegion,
         operator: "==",
       },
