@@ -5,7 +5,6 @@ import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import {useEffect, useState} from "react";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {authUser, userRoles} from "../../types";
-// import styles from "../../styles/pages/Escalation.module.scss";
 import {AddEscalationModal} from "../../components";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {EscalationList} from "../../components/custom/escalations/escalationList";
@@ -20,18 +19,11 @@ const Dashboard: NextPage = () => {
   const [showEscalationModal, setShowEscalationModal] =
     useState<boolean>(false);
   const [selectedView, setSelectedView] = useState<userRoles>();
-  // const [selectedRegion, setSelectedRegion] = useState<string>("");
-  // const [selectedUmoor, setSelectedUmoor] = useState<string>("");
-  // const [escalationList, setEscalationList] = useState<escalationData[]>([]);
 
   useEffect(() => {
     if (typeof verifyUser() !== "string") {
       const user: authUser = verifyUser() as authUser;
-      // setAdminDetails(user);
-      // setSelectedView(user.userRole[0]);
       setUserDetails(user);
-      // setSelectedRegion(user.assignedArea[0]);
-      // setSelectedUmoor(user.assignedUmoor[0]);
       changeSelectedSidebarKey("2");
     } else {
       notVerifierUserLogout();
@@ -43,10 +35,11 @@ const Dashboard: NextPage = () => {
       const sectors = await getSectorList();
       user.assignedArea = sectors.map((sector) => sector.name);
       const umoors = await getUmoorList();
-      user.assignedUmoor = umoors;
+      user.assignedUmoor = umoors.map((umoor: any) => umoor.value);
     }
     setAdminDetails(user);
     setSelectedView(user.userRole[0]);
+    // console.log(user);
   };
 
   const notVerifierUserLogout = () => {
@@ -58,32 +51,6 @@ const Dashboard: NextPage = () => {
   const showAddEscalationModal = () => {
     setShowEscalationModal(true);
   };
-
-  // const getEscalationList = async () => {
-  //   // const escList: escalationData[] = await getEscalationListBySubSector(
-  //   //   selectedRegion
-  //   // );
-  //   const escList: escalationData[] = await getEscalationListByCriteria([
-  //     // {
-  //     //   field: escalationFields.subsectorName,
-  //     //   value: selectedRegion,
-  //     //   operator: "==",
-  //     // },
-  //     {
-  //       field: escalationFields.sectorName,
-  //       value: "HAKIMI",
-  //       operator: "==",
-  //     },
-  //   ]);
-  //   setEscalationList(
-  //     escList.sort((a, b) =>
-  //       moment(a.updated_at, "DD-MM-YYYY HH:mm:ss").diff(
-  //         moment(b.updated_at, "DD-MM-YYYY HH:mm:ss")
-  //       )
-  //     )
-  //   );
-  //   console.log("list", escList);
-  // };
 
   return (
     <Dashboardlayout headerTitle="Escalations">
@@ -121,11 +88,7 @@ const Dashboard: NextPage = () => {
         </div>
       ) : null}
 
-      {/* <MusaidEscalationList
-        region={selectedRegion}
-        escalationlist={escalationList}
-      /> */}
-      {!!selectedView ? (
+      {selectedView && adminDetails ? (
         <EscalationList user={adminDetails} userRole={selectedView} />
       ) : null}
 

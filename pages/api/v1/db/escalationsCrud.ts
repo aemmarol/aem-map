@@ -27,6 +27,30 @@ export interface Criteria {
   operator: WhereFilterOp;
 }
 
+let escalationList: escalationData[];
+
+export const getEscalationList = async () => {
+  if (escalationList) {
+    console.log("USING CACHE FOR ESCALATION LIST");
+    return escalationList;
+  }
+  const resultArr: any[] = [];
+  const q = query(
+    dataCollection,
+    where("version", "==", defaultDatabaseFields.version)
+  );
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((docs) => {
+    const file: any = {
+      id: docs.id.toString(),
+      ...docs.data(),
+    };
+    resultArr.push(file);
+  });
+  escalationList = resultArr;
+  return escalationList;
+};
+
 export const getEscalationListBySubSector = async (
   sector: string
 ): Promise<any> => {
@@ -76,9 +100,11 @@ export const groupEscalationListBy = (
     groups[groupName]["stats"][counterName]++;
     groups[groupName]["stats"].total++;
   });
-  return Object.keys(groups)
-    .sort()
-    .map((groupName) => groups[groupName]);
+
+  // return Object.keys(groups)
+  //   .sort()
+  //   .map((groupName) => groups[groupName]);
+  return groups;
 };
 
 const getFieldValue = (obj: any, field: string) => {
@@ -89,29 +115,46 @@ const getFieldValue = (obj: any, field: string) => {
   return obj;
 };
 
-export const getEscalationListByCriteria = async (
-  criteria: Criteria[]
-): Promise<any> => {
-  const resultArr: any[] = [];
-  const q = query(
-    dataCollection,
-    where("version", "==", defaultDatabaseFields.version),
-    ...criteria.map((c: Criteria) => {
-      return where(c.field, c.operator, c.value);
-    })
-    // where("file_details.sub_sector.name", "==", sector)
-  );
-  // console.log(q);
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((docs) => {
-    const file: any = {
-      id: docs.id.toString(),
-      ...docs.data(),
-    };
-    resultArr.push(file);
-  });
+// export const getEscalationListByCriteria = async (
+//   criteria: Criteria[]
+// ): Promise<any> => {
+//   const resultArr: any[] = [];
+//   const q = query(
+//     dataCollection,
+//     where("version", "==", defaultDatabaseFields.version),
+//     ...criteria.map((c: Criteria) => {
+//       return where(c.field, c.operator, c.value);
+//     })
+//     // where("file_details.sub_sector.name", "==", sector)
+//   );
+//   const querySnapshot = await getDocs(q);
+//   querySnapshot.forEach((docs) => {
+//     const file: any = {
+//       id: docs.id.toString(),
+//       ...docs.data(),
+//     };
+//     resultArr.push(file);
+//   });
 
-  return resultArr;
+//   return resultArr;
+// };
+
+export const getEscalationListByCriteriaClientSide = async (
+  criterias: Criteria[]
+): Promise<any> => {
+  let filteredArr = await getEscalationList();
+  criterias.forEach((criteria) => {
+    if (criteria.operator == "==") {
+      filteredArr = filteredArr.filter(
+        (val) => getFieldValue(val, criteria.field) == criteria.value
+      );
+    } else if (criteria.operator == "in") {
+      filteredArr = filteredArr.filter((val) =>
+        criteria.value.includes(getFieldValue(val, criteria.field))
+      );
+    }
+  });
+  return filteredArr;
 };
 
 export const addEscalationData = async (

@@ -20,8 +20,13 @@ import {defaultDatabaseFields} from "../../../../utils";
 import moment from "moment";
 
 const sectorCollection = collection(firestore, sectorCollectionName);
+let sectorList: sectorData[];
 
 export const getSectorList = async (): Promise<sectorData[]> => {
+  if (sectorList) {
+    console.log("USING SECTOR LIST FROM CACHE");
+    return sectorList;
+  }
   const resultArr: sectorData[] = [];
   const q = query(
     sectorCollection,
@@ -65,8 +70,8 @@ export const getSectorList = async (): Promise<sectorData[]> => {
       bounds,
     });
   });
-
-  return resultArr;
+  sectorList = resultArr;
+  return sectorList;
 };
 
 export const getSectorData = async (id: string): Promise<sectorData> => {
