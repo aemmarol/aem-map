@@ -11,6 +11,7 @@ import {
   databaseMumeneenFieldData,
   sectorData,
   subSectorData,
+  userRoles,
 } from "../../types";
 import {
   MumeneenDataFieldTable,
@@ -24,6 +25,18 @@ import {getSubSectorList} from "../api/v1/db/subSectorCrud";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {useRouter} from "next/router";
 import {useGlobalContext} from "../../context/GlobalContext";
+
+// const escAirtableBase = new Airtable({
+//   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
+// }).base("appHju317Ez55YdW0");
+
+// const airtableBase = new Airtable({
+//   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
+// }).base("app7V1cg4ibiooxcn");
+
+// const umoorTable = airtableBase("umoorList");
+
+// const escalationListTable = escAirtableBase("Escalation List");
 
 interface AdminSettingsProps {
   mumeneenDataFields: databaseMumeneenFieldData[];
@@ -39,7 +52,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   subSectorDetailsList,
 }) => {
   const router = useRouter();
-  const {toggleLoader} = useGlobalContext();
+  const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
 
   const [sectorDetails, setSectorDetails] = useState<sectorData[] | []>([]);
   const [subsectorDetails, setSubsectorDetails] = useState<
@@ -51,6 +64,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   const [fileFields, setFileFields] = useState<
     databaseMumeneenFieldData[] | []
   >([]);
+  // const [issueTypeOptions, setIssueTypeOptions] = useState<any[]>([]);
 
   useEffect(() => {
     setMumeneenFields(mumeneenDataFields.map((val) => ({...val, key: val.id})));
@@ -67,10 +81,12 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   ]);
 
   useEffect(() => {
+    changeSelectedSidebarKey("3");
     toggleLoader(true);
+    // getUmoorList();
     if (typeof verifyUser() !== "string") {
       const {userRole} = verifyUser() as authUser;
-      if (!userRole.includes("Admin")) {
+      if (!userRole.includes(userRoles.Admin)) {
         notVerifierUserLogout();
       }
     } else {
@@ -84,6 +100,151 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     logout();
     router.push("/");
   };
+
+  // const getUmoorList = async () => {
+  //   const temp: any = [];
+  //   umoorTable
+  //     .select({
+  //       view: "Grid view",
+  //     })
+  //     .eachPage(
+  //       function page(records, fetchNextPage) {
+  //         records.forEach(function (record) {
+  //           temp.push(record.fields);
+  //         });
+  //         fetchNextPage();
+  //       },
+  //       function done(err) {
+  //         if (err) {
+  //           console.error(err);
+  //           return;
+  //         }
+  //         setIssueTypeOptions(temp);
+  //       }
+  //     );
+  // };
+
+  // const handleAirtableEscalationSync = async () => {
+  //   toggleLoader(true);
+  //   const inputEscalationListData: any[] = [];
+  //   escalationListTable
+  //     .select({
+  //       view: "Grid view",
+  //       maxRecords: 1000,
+  //     })
+  //     .eachPage(
+  //       function page(records, fetchNextPage) {
+  //         inputEscalationListData.push(...records);
+  //         fetchNextPage();
+  //       },
+  //       function done(err) {
+  //         if (err) {
+  //           console.error(err);
+  //           return;
+  //         }
+  //         addEscalationDataToDb(
+  //           inputEscalationListData.map((val) => val.fields)
+  //         );
+  //       }
+  //     );
+  // };
+
+  // const createCommentsArr = (
+  //   reporter: any,
+  //   createdDate: string,
+  //   inProcessComment: string,
+  //   doneComment: string
+  // ) => {
+  //   const commentArr: comment[] = [
+  //     {
+  //       msg: "Issue is added on " + moment(createdDate).format("DD-MM-YYYY"),
+  //       name: reporter.full_name,
+  //       contact_number: reporter.mobile,
+  //       userRole: "SED",
+  //       time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
+  //     },
+  //   ];
+  //   if (inProcessComment) {
+  //     commentArr.push({
+  //       msg: inProcessComment,
+  //       name: "SED Umoor",
+  //       contact_number: "",
+  //       userRole: "SED",
+  //       time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
+  //     });
+  //   }
+  //   if (doneComment) {
+  //     commentArr.push({
+  //       msg: doneComment,
+  //       name: "SED Umoor",
+  //       contact_number: "",
+  //       userRole: "SED",
+  //       time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
+  //     });
+  //   }
+  //   return commentArr;
+  // };
+
+  // const addEscalationDataToDb = async (data: any[]) => {
+  //   const newData = await Promise.all(
+  //     data.map(async (val, index) => {
+  //       const escFileDetails = await getFileDataByFileNumber(
+  //         val["File No."].toString()
+  //       );
+  //       const reporter = await getMemberDataById(
+  //         val["Reported by"] ? val["Reported by"] : "30408608"
+  //       );
+  //       const escType = find(issueTypeOptions, { label: val.type });
+  //       const newComments = createCommentsArr(
+  //         reporter,
+  //         val["Date of Submission"],
+  //         val["Resolution In Process Notes"],
+  //         val["Resolved Notes"]
+  //       );
+  //       const tempEscalation: escalationData = {
+  //         escalation_id: "esc-" + (index + 1),
+  //         created_by: {
+  //           name: reporter.full_name,
+  //           its_number: reporter.id,
+  //           contact_number: reporter.mobile,
+  //           userRole: "SED",
+  //         },
+  //         file_details: {
+  //           tanzeem_file_no: val["File No."],
+  //           address:
+  //             escFileDetails && escFileDetails.address
+  //               ? escFileDetails.address
+  //               : "",
+  //           sub_sector:
+  //             escFileDetails && escFileDetails.sub_sector
+  //               ? escFileDetails.sub_sector
+  //               : {},
+  //           hof_name: val["HOF NAME"],
+  //           hof_contact: val["HOF Contact Number"],
+  //           hof_its:
+  //             escFileDetails && escFileDetails.id ? escFileDetails.id : "",
+  //         },
+  //         status: val["Status"],
+  //         issue: val["Notes"],
+  //         comments: newComments,
+  //         type: escType,
+  //         created_at: moment(val["Date of Submission"]).format(
+  //           "DD-MM-YYYY HH:mm:ss"
+  //         ),
+  //         version: defaultDatabaseFields.version,
+  //         updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
+  //       };
+  //       return tempEscalation;
+  //     })
+  //   );
+
+  //   Promise.all(
+  //     newData.map(async (val) => {
+  //       await addEscalationData(val);
+  //     })
+  //   );
+  //   toggleLoader(false);
+  // };
 
   return (
     <Dashboardlayout headerTitle="Admin Settings">

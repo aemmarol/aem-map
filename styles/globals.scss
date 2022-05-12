@@ -10,6 +10,7 @@ h1 {
   font-size: 36px;
   line-height: 1.5;
   font-weight: 600;
+
   @media screen and (max-width: "480px") {
     font-size: 24px;
   }
@@ -19,6 +20,7 @@ h2 {
   font-size: 24px;
   line-height: 1.5;
   font-weight: 600;
+
   @media screen and (max-width: "480px") {
     font-size: 18px;
   }
@@ -53,8 +55,20 @@ a {
   padding: 0 32px !important;
 }
 
+.w-150 {
+  width: 150px;
+}
+
+.mb-0 {
+  margin-bottom: 0px !important;
+}
+
+.mb-8 {
+  margin-bottom: 8px !important;
+}
+
 .mb-16 {
-  margin-bottom: 16px;
+  margin-bottom: 16px !important;
 }
 
 .mb-30 {
@@ -69,6 +83,10 @@ a {
   margin-right: 16px;
 }
 
+.ml-auto {
+  margin-left: auto;
+}
+
 .border-radius-10 {
   border-radius: 10px;
 }
@@ -79,6 +97,10 @@ a {
 
 .d-flex {
   display: flex !important;
+}
+
+.flex-1 {
+  flex: 1;
 }
 
 .max-height-500 {
@@ -93,9 +115,19 @@ a {
   overflow-y: auto;
 }
 
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 .flex-align-center-justify-center {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.flex-align-center {
+  display: flex;
   align-items: center;
 }
 

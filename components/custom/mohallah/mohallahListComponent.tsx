@@ -1,26 +1,15 @@
 import {Card, Col, Row} from "antd";
 import {useRouter} from "next/router";
-import React, {FC, useEffect, useState} from "react";
-import {useGlobalContext} from "../../../context/GlobalContext";
-import {getSectorList} from "../../../pages/api/v1/db/sectorCrud";
+import React, {FC} from "react";
 import styles from "../../../styles/components/mohallah/mohallah.module.scss";
 import {sectorData} from "../../../types";
 
-export const MohallahListComponent: FC = () => {
-  const {toggleLoader} = useGlobalContext();
+interface MohallahListProps {
+  secData: sectorData[];
+}
+
+export const MohallahListComponent: FC<MohallahListProps> = ({secData}) => {
   const router = useRouter();
-  const [mohallahlist, setMohallahlist] = useState<sectorData[]>([]);
-
-  useEffect(() => {
-    setList();
-  }, []);
-
-  const setList = async () => {
-    toggleLoader(true);
-    const listData: sectorData[] = await getSectorList();
-    setMohallahlist(listData);
-    toggleLoader(false);
-  };
 
   const getIconLetter = (name: string) => {
     return name.charAt(0).toUpperCase();
@@ -33,8 +22,8 @@ export const MohallahListComponent: FC = () => {
   return (
     <div>
       <Row gutter={[16, 16]}>
-        {mohallahlist.map((val) => (
-          <Col key={val.id} xs={12} sm={8} md={6} lg={6} xl={4}>
+        {secData.map((val) => (
+          <Col key={val.id} xs={24} sm={12} md={8} lg={6} xl={4}>
             <Card
               onClick={() => redirectToMohallahPage(val.name as string)}
               style={{backgroundColor: val.primary_color}}

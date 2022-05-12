@@ -11,7 +11,9 @@ interface AppContextInterface {
   toggleProgressLoader: Function;
   progressValue: number;
   setProgressValue: Function;
+  changeSelectedSidebarKey: Function;
   center: any;
+  selectedSidebarKey: string;
 }
 
 const GlobalContext = React.createContext<AppContextInterface>({
@@ -22,6 +24,8 @@ const GlobalContext = React.createContext<AppContextInterface>({
   toggleProgressLoader: () => {},
   setProgressValue: () => {},
   center: {},
+  selectedSidebarKey: "0",
+  changeSelectedSidebarKey: () => {},
 });
 
 export const useGlobalContext = () => {
@@ -32,6 +36,7 @@ export const GlobalProvider = ({children}: Props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [showProgressLoader, setShowProgressLoader] = useState(false);
   const [progressValue, setProgressValue] = useState(0);
+  const [selectedSidebarKey, setSelectedSidebarKey] = useState("0");
 
   const toggleLoader = (flag: boolean) => {
     setShowLoader(flag);
@@ -39,7 +44,9 @@ export const GlobalProvider = ({children}: Props) => {
   const toggleProgressLoader = (flag: boolean) => {
     setShowProgressLoader(flag);
   };
-
+  const changeSelectedSidebarKey = (key: string) => {
+    setSelectedSidebarKey(key);
+  };
   const center = {
     name: "Marol Saifee Masjid",
     latlng: [19.114092679220292, 72.87610986824751],
@@ -55,6 +62,8 @@ export const GlobalProvider = ({children}: Props) => {
         progressValue,
         setProgressValue: (flag: number) => setProgressValue(flag),
         center,
+        selectedSidebarKey,
+        changeSelectedSidebarKey,
       }}
     >
       {children}

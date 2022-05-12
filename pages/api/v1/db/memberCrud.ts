@@ -2,6 +2,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
   setDoc,
@@ -29,6 +30,15 @@ export const getMemberDataList = async (): Promise<any[]> => {
   });
 
   return resultArr;
+};
+
+export const getMemberDataById = async (itsId: string): Promise<any> => {
+  const docRef = doc(firestore, memberCollectionName, itsId);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return {...docSnap.data(), id: docSnap.id};
+  }
+  return {};
 };
 
 export const getMemberListByHofId = async (hofId: string): Promise<any[]> => {

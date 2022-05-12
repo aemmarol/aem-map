@@ -32,6 +32,46 @@ export const getFileDataList = async (): Promise<any[]> => {
   return resultArr;
 };
 
+export const getFileDataListBySubsector = async (
+  subSector: string
+): Promise<any> => {
+  const resultArr: any[] = [];
+  const q = query(
+    dataCollection,
+    where("version", "==", defaultDatabaseFields.version),
+    where("sub_sector.name", "==", subSector)
+  );
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((docs) => {
+    const file: any = {
+      id: docs.id.toString(),
+      ...docs.data(),
+    };
+    resultArr.push(file);
+  });
+
+  return resultArr;
+};
+
+export const getFileDataListBySector = async (sector: string): Promise<any> => {
+  const resultArr: any[] = [];
+  const q = query(
+    dataCollection,
+    where("version", "==", defaultDatabaseFields.version),
+    where("sub_sector.sector.name", "==", sector)
+  );
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((docs) => {
+    const file: any = {
+      id: docs.id.toString(),
+      ...docs.data(),
+    };
+    resultArr.push(file);
+  });
+
+  return resultArr;
+};
+
 export const getFileData = async (id: string): Promise<any> => {
   const docRef = doc(firestore, fileCollectionName, id);
   const docSnap = await getDoc(docRef);
@@ -59,7 +99,7 @@ export const getFileDataByFileNumber = async (
     resultArr.push(file);
   });
 
-  return resultArr[0];
+  return resultArr[0] || null;
 };
 
 export const addFileData = async (id: string, data: any): Promise<boolean> => {

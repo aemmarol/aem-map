@@ -3,7 +3,12 @@ import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import {useGlobalContext} from "../../../../context/GlobalContext";
 import {Dashboardlayout} from "../../../../layouts/dashboardLayout";
-import {authUser, sectorData, subSectorData} from "../../../../types";
+import {
+  authUser,
+  sectorData,
+  subSectorData,
+  userRoles,
+} from "../../../../types";
 import {getSubSectorDataByName} from "../../../api/v1/db/subSectorCrud";
 import {isEmpty} from "lodash";
 import {getFileData} from "../../../api/v1/db/fileCrud";
@@ -20,7 +25,7 @@ import {logout, verifyUser} from "../../../api/v1/authentication";
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
   const {subSectorName, mohallahName} = router.query;
-  const {toggleLoader} = useGlobalContext();
+  const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
 
   const [mohallahDetails, setMohallahDetails] = useState<sectorData>(
     {} as sectorData
@@ -82,17 +87,19 @@ const SingleMohallah: NextPage = () => {
 
   useEffect(() => {
     if (subSectorName) {
+      changeSelectedSidebarKey("1");
+
       if (typeof verifyUser() !== "string") {
         const {userRole, assignedArea} = verifyUser() as authUser;
         if (
-          userRole.includes("Admin") ||
-          (userRole.includes("Masool") &&
+          userRole.includes(userRoles.Admin) ||
+          (userRole.includes(userRoles.Masool) &&
             assignedArea.includes(mohallahName as string)) ||
-          (userRole.includes("Masoola") &&
+          (userRole.includes(userRoles.Masoola) &&
             assignedArea.includes(mohallahName as string)) ||
-          (userRole.includes("Musaid") &&
+          (userRole.includes(userRoles.Musaid) &&
             assignedArea.includes(subSectorName as string)) ||
-          (userRole.includes("Musaida") &&
+          (userRole.includes(userRoles.Musaida) &&
             assignedArea.includes(subSectorName as string))
         ) {
           getSubSectorDetails();

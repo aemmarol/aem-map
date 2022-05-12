@@ -10,12 +10,12 @@ import {getMemberListByHofId} from "../../../api/v1/db/memberCrud";
 import styles from "../../../../styles/FileList.module.scss";
 import {MemberListTable, MemberProfileCard} from "../../../../components";
 import {logout, verifyUser} from "../../../api/v1/authentication";
-import {authUser} from "../../../../types";
+import {authUser, userRoles} from "../../../../types";
 
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();
   const {fileNumber, mohallahName, subSectorName} = router.query;
-  const {toggleLoader} = useGlobalContext();
+  const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
 
   const [fileDetails, setFileDetails] = useState<any>({});
   const [memberList, setMemberList] = useState<any[]>([]);
@@ -54,17 +54,19 @@ const FileMemberDetailsPage: NextPage = () => {
 
   useEffect(() => {
     if (fileNumber) {
+      changeSelectedSidebarKey("1");
+
       if (typeof verifyUser() !== "string") {
         const {userRole, assignedArea} = verifyUser() as authUser;
         if (
-          userRole.includes("Admin") ||
-          (userRole.includes("Masool") &&
+          userRole.includes(userRoles.Admin) ||
+          (userRole.includes(userRoles.Masool) &&
             assignedArea.includes(mohallahName as string)) ||
-          (userRole.includes("Masoola") &&
+          (userRole.includes(userRoles.Masoola) &&
             assignedArea.includes(mohallahName as string)) ||
-          (userRole.includes("Musaid") &&
+          (userRole.includes(userRoles.Musaid) &&
             assignedArea.includes(subSectorName as string)) ||
-          (userRole.includes("Musaida") &&
+          (userRole.includes(userRoles.Musaida) &&
             assignedArea.includes(subSectorName as string))
         ) {
           getFileDetails(fileNumber);

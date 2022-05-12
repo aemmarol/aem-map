@@ -45,3 +45,38 @@ export interface subSectorData extends defaultFields {
   latlng?: number[];
   image?: string;
 }
+
+export type adminDetails = {
+  name: string;
+  its_number: string;
+  contact_number: string;
+  userRole: string;
+};
+
+export type comment = {
+  msg: string;
+  name: string;
+  contact_number: string;
+  userRole: string;
+  time: string;
+};
+
+export type fileDetails = {
+  tanzeem_file_no: string;
+  address: string;
+  sub_sector: Partial<subSectorData>;
+  hof_name: string;
+  hof_contact: string;
+  hof_its: string;
+};
+
+export interface escalationData extends defaultFields {
+  id?: string;
+  escalation_id: string;
+  created_by: adminDetails;
+  file_details: fileDetails;
+  status: string;
+  issue: string;
+  comments: comment[];
+  type: string;
+}

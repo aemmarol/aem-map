@@ -13,7 +13,17 @@ export interface loginResponseData {
 export interface authUser {
   itsId: string;
   name: string;
-  userRole: Array<string>;
+  contact: string;
+  userRole: Array<userRoles>;
   assignedArea: Array<string>;
   assignedUmoor: Array<string>;
+}
+
+export enum userRoles {
+  Masool = "Masool",
+  Masoola = "Masoola",
+  Musaid = "Musaid",
+  Musaida = "Musaida",
+  Umoor = "Umoor",
+  Admin = "Admin",
 }
