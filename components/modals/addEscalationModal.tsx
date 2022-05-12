@@ -19,7 +19,7 @@ import {
 } from "../../pages/api/v1/db/fileCrud";
 import {getMemberDataById} from "../../pages/api/v1/db/memberCrud";
 import Airtable from "airtable";
-import {authUser, comment, escalationData} from "../../types";
+import {authUser, comment, escalationData, userRoles} from "../../types";
 import {defaultDatabaseFields} from "../../utils";
 import moment from "moment";
 import {addEscalationData} from "../../pages/api/v1/db/escalationsCrud";
@@ -88,8 +88,8 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
 
   const getRoleBasedFileNumbers = async () => {
     if (
-      adminDetails.userRole.includes("Masool") ||
-      adminDetails.userRole.includes("Masoola")
+      adminDetails.userRole.includes(userRoles.Masool) ||
+      adminDetails.userRole.includes(userRoles.Masoola)
     ) {
       const fileList = await getFileDataListBySector(
         adminDetails.assignedArea[0]
@@ -98,8 +98,8 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
         fileList.map((val: any) => val.tanzeem_file_no.toString())
       );
     } else if (
-      adminDetails.userRole.includes("Musaid") ||
-      adminDetails.userRole.includes("Musaida")
+      adminDetails.userRole.includes(userRoles.Musaid) ||
+      adminDetails.userRole.includes(userRoles.Musaida)
     ) {
       const fileList = await getFileDataListBySubsector(
         adminDetails.assignedArea[0]
@@ -109,7 +109,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   };
 
   const onFileSearch = async (values: any) => {
-    if (adminDetails?.userRole.includes("Admin")) {
+    if (adminDetails?.userRole.includes(userRoles.Admin)) {
       const data = await getFileDataByFileNumber(values.fileNumber);
       if (!!data) {
         const hof_data = await getMemberDataById(data.id);
@@ -151,13 +151,13 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       msg: "Issue is added on " + moment(new Date()).format("DD-MM-YYYY"),
       name: adminDetails.name,
       contact_number: adminDetails.contact,
-      userRole: adminDetails.userRole.includes("Masool")
+      userRole: adminDetails.userRole.includes(userRoles.Masool)
         ? "Masool"
-        : adminDetails.userRole.includes("Masoola")
+        : adminDetails.userRole.includes(userRoles.Masoola)
         ? "Masoola"
-        : adminDetails.userRole.includes("Musaid")
+        : adminDetails.userRole.includes(userRoles.Musaid)
         ? "Musaid"
-        : adminDetails.userRole.includes("Musaida")
+        : adminDetails.userRole.includes(userRoles.Musaida)
         ? "Musaida"
         : adminDetails.userRole[0],
       time: moment(new Date()).format(),

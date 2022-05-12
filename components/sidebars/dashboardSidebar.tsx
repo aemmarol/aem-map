@@ -5,7 +5,7 @@ import {useGlobalContext} from "../../context/GlobalContext";
 import {verifyUser} from "../../pages/api/v1/authentication";
 import {getSubSectorDataByName} from "../../pages/api/v1/db/subSectorCrud";
 import styles from "../../styles/components/sidebars/dashboardSidebar.module.scss";
-import {authUser} from "../../types";
+import {authUser, userRoles} from "../../types";
 
 export const DashboardSidebar: FC<{
   visible: boolean;
@@ -26,11 +26,17 @@ export const DashboardSidebar: FC<{
     changeSelectedSidebarKey("1");
     if (typeof verifyUser() !== "string") {
       const {userRole, assignedArea} = verifyUser() as authUser;
-      if (userRole.includes("Admin")) {
+      if (userRole.includes(userRoles.Admin)) {
         router.push("/mohallah");
-      } else if (userRole.includes("Masool") || userRole.includes("Masoola")) {
+      } else if (
+        userRole.includes(userRoles.Masool) ||
+        userRole.includes(userRoles.Masoola)
+      ) {
         router.push("/mohallah/" + assignedArea[0]);
-      } else if (userRole.includes("Musaid") || userRole.includes("Musaida")) {
+      } else if (
+        userRole.includes(userRoles.Musaid) ||
+        userRole.includes(userRoles.Musaida)
+      ) {
         const subsectorDetails = await getSubSectorDataByName(assignedArea[0]);
         router.push(
           "/mohallah/" + subsectorDetails.sector.name + "/" + assignedArea[0]
@@ -65,8 +71,8 @@ export const DashboardSidebar: FC<{
       <Divider />
       <Menu theme="light" mode="inline" selectedKeys={[selectedSidebarKey]}>
         {appUserRole.length === 1 && appUserRole[0] === "Admin" ? (
-          <Menu.Item key="0" onClick={() => router.push("/admin/settings")}>
-            Settings
+          <Menu.Item key="0" onClick={() => router.push("/admin/dashboard")}>
+            Dashboard
           </Menu.Item>
         ) : null}
         {appUserRole.length === 1 && appUserRole[0] === "Umoor" ? null : (
@@ -77,6 +83,11 @@ export const DashboardSidebar: FC<{
         <Menu.Item onClick={redirectToEscalations} key="2">
           Escalations
         </Menu.Item>
+        {appUserRole.length === 1 && appUserRole[0] === "Admin" ? (
+          <Menu.Item key="3" onClick={() => router.push("/admin/settings")}>
+            Settings
+          </Menu.Item>
+        ) : null}
       </Menu>
     </Drawer>
   );

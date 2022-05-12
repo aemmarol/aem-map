@@ -99,6 +99,10 @@ a {
   display: flex !important;
 }
 
+.flex-1 {
+  flex: 1;
+}
+
 .max-height-500 {
   max-height: 500px;
 }
@@ -109,6 +113,11 @@ a {
 
 .overflow-y-auto {
   overflow-y: auto;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
 }
 
 .flex-align-center-justify-center {

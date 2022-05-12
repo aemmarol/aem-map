@@ -11,6 +11,7 @@ import {
   databaseMumeneenFieldData,
   sectorData,
   subSectorData,
+  userRoles,
 } from "../../types";
 import {
   MumeneenDataFieldTable,
@@ -80,12 +81,12 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   ]);
 
   useEffect(() => {
-    changeSelectedSidebarKey("0");
+    changeSelectedSidebarKey("3");
     toggleLoader(true);
     // getUmoorList();
     if (typeof verifyUser() !== "string") {
       const {userRole} = verifyUser() as authUser;
-      if (!userRole.includes("Admin")) {
+      if (!userRole.includes(userRoles.Admin)) {
         notVerifierUserLogout();
       }
     } else {

@@ -4,7 +4,7 @@ import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import {useGlobalContext} from "../../../context/GlobalContext";
 import {Dashboardlayout} from "../../../layouts/dashboardLayout";
-import {authUser, sectorData, subSectorData} from "../../../types";
+import {authUser, sectorData, subSectorData, userRoles} from "../../../types";
 import {getSectorDataByName} from "../../api/v1/db/sectorCrud";
 import {getSubSectorData} from "../../api/v1/db/subSectorCrud";
 import {
@@ -76,10 +76,10 @@ const SingleMohallah: NextPage = () => {
       if (typeof verifyUser() !== "string") {
         const {userRole, assignedArea} = verifyUser() as authUser;
         if (
-          userRole.includes("Admin") ||
-          (userRole.includes("Masool") &&
+          userRole.includes(userRoles.Admin) ||
+          (userRole.includes(userRoles.Masool) &&
             assignedArea.includes(mohallahName as string)) ||
-          (userRole.includes("Masoola") &&
+          (userRole.includes(userRoles.Masoola) &&
             assignedArea.includes(mohallahName as string))
         ) {
           getSectorDetails();

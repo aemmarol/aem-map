@@ -14,7 +14,16 @@ export interface authUser {
   itsId: string;
   name: string;
   contact: string;
-  userRole: Array<string>;
+  userRole: Array<userRoles>;
   assignedArea: Array<string>;
   assignedUmoor: Array<string>;
+}
+
+export enum userRoles {
+  Masool = "Masool",
+  Masoola = "Masoola",
+  Musaid = "Musaid",
+  Musaida = "Musaida",
+  Umoor = "Umoor",
+  Admin = "Admin",
 }

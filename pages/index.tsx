@@ -29,8 +29,8 @@ const SignInPage: NextPage = () => {
   ) => {
     switch (userRole[0]) {
       case "Admin":
-        changeSelectedSidebarKey("1");
-        router.push("/mohallah");
+        changeSelectedSidebarKey("0");
+        router.push("/admin/dashboard");
         break;
       case "Masool":
         changeSelectedSidebarKey("1");
