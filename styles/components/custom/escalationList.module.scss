@@ -1,23 +1,23 @@
 .container {
-    display: flex;
-    justify-content: space-between;
-    // background: white;
+  display: flex;
+  justify-content: space-between;
+  // background: white;
 }
 
 .filtersContainer {
-    width: 10%;
-    border-right: 1px solid #ddd;
-    background: white;
-    padding: 1em;
-    margin-right: 1em;
-    height: 50em;
-    overflow:auto
+  width: 10%;
+  border-right: 1px solid #ddd;
+  background: white;
+  padding: 1em;
+  margin-right: 1em;
+  height: 50em;
+  overflow: auto;
 }
 
 .filterContainer {
-    border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 
 .filterContainer:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
