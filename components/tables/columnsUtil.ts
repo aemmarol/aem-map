@@ -21,7 +21,7 @@ export const getMumineenTableUserColumns = (userRole: userRoles) => {
     case userRoles.Musaid:
     case userRoles.Musaida:
     case userRoles.Umoor:
-      return ["id", "age", "gender", "mobile", "fullname"];
+      return ["id", "age", "gender", "mobile", "full_name"];
 
     case userRoles.Admin:
       return [];
