@@ -174,7 +174,7 @@ export const addEscalationData = async (
 ): Promise<boolean> => {
   try {
     await addDoc(dataCollection, data);
-    escalationList=null
+    escalationList = null;
     return true;
   } catch {
     return false;

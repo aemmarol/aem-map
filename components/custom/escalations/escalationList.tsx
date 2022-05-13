@@ -1,21 +1,21 @@
 import moment from "moment";
-import React, { FC, useEffect, useState } from "react";
+import React, {FC, useEffect, useState} from "react";
 import {
   Criteria,
   escalationDBFields,
   getEscalationListByCriteriaClientSide,
 } from "../../../pages/api/v1/db/escalationsCrud";
-import { authUser, escalationData, userRoles } from "../../../types";
-import useWindowDimensions, { isMobile } from "../../../utils/windowDimensions";
-import { EscalationCard } from "./escalationCard";
-import { EscalationTable } from "./escalationTable";
+import {authUser, escalationData, userRoles} from "../../../types";
+import useWindowDimensions, {isMobile} from "../../../utils/windowDimensions";
+import {EscalationCard} from "./escalationCard";
+import {EscalationTable} from "./escalationTable";
 
 import styles from "../../../styles/components/custom/escalationList.module.scss";
-import { EscalationFilter, EscalationFilterType } from "./escalationFilter";
-import { filterOption } from "../../../types/escalation";
-import { useRouter } from "next/router";
-import { getUmoorList } from "../../../pages/api/v1/db/umoorsCrud";
-import { Col, Empty, Row } from "antd";
+import {EscalationFilter, EscalationFilterType} from "./escalationFilter";
+import {filterOption} from "../../../types/escalation";
+import {useRouter} from "next/router";
+import {getUmoorList} from "../../../pages/api/v1/db/umoorsCrud";
+import {Col, Empty, Row} from "antd";
 
 interface EscalationListType {
   user: authUser;
@@ -26,9 +26,9 @@ interface selectedFilterItemsType {
   selectedRegions: filterOption[];
   ready: boolean;
 }
-export const EscalationList: FC<EscalationListType> = ({ user, userRole }) => {
+export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
   const router = useRouter();
-  const { height } = useWindowDimensions();
+  const {height} = useWindowDimensions();
   const [escalationList, setEscalationList] = useState<escalationData[]>([]);
   const [umoorList, setUmoorList] = useState([]);
   const [selectedfilterItems, setSelectedFilterItems] =
@@ -56,27 +56,27 @@ export const EscalationList: FC<EscalationListType> = ({ user, userRole }) => {
     setUmoorList(umoors);
     setSelectedFilterItems({
       selectedRegions: querySector
-        ? [{ label: querySector, value: querySector }]
+        ? [{label: querySector, value: querySector}]
         : user.assignedArea
-          ? user.assignedArea.map((area) => {
-            return { label: area, value: area };
+        ? user.assignedArea.map((area) => {
+            return {label: area, value: area};
           })
-          : [],
+        : [],
       selectedUmoors: queryUmoor
         ? [
-          {
-            label: umoors.find((item: any) => item.value == queryUmoor).label,
-            value: queryUmoor,
-          },
-        ]
+            {
+              label: umoors.find((item: any) => item.value == queryUmoor).label,
+              value: queryUmoor,
+            },
+          ]
         : user.assignedUmoor
-          ? user.assignedUmoor.map((umoor) => {
+        ? user.assignedUmoor.map((umoor) => {
             return {
               label: umoors.find((item: any) => item.value == umoor).label,
               value: umoor,
             };
           })
-          : [],
+        : [],
       // : [],
       ready: true,
     });
@@ -96,10 +96,10 @@ export const EscalationList: FC<EscalationListType> = ({ user, userRole }) => {
           {
             title: "Selected Regions",
             options: user.assignedArea.map((area) => {
-              return { label: area, value: area };
+              return {label: area, value: area};
             }),
             selectedOptions: user.assignedArea.map((area) => {
-              return { label: area, value: area };
+              return {label: area, value: area};
             }),
             disabled: true,
             onChange: null,
@@ -120,10 +120,10 @@ export const EscalationList: FC<EscalationListType> = ({ user, userRole }) => {
           {
             title: "Selected Regions",
             options: user.assignedArea.map((area) => {
-              return { label: area, value: area };
+              return {label: area, value: area};
             }),
             selectedOptions: user.assignedArea.map((area) => {
-              return { label: area, value: area };
+              return {label: area, value: area};
             }),
             disabled: true,
             onChange: null,
@@ -145,14 +145,14 @@ export const EscalationList: FC<EscalationListType> = ({ user, userRole }) => {
             {
               title: "Selected Umoors",
               options: user.assignedUmoor.map((umoor) => {
-                return { label: getLabelForUmoor(umoor), value: umoor };
+                return {label: getLabelForUmoor(umoor), value: umoor};
               }),
               selectedOptions: selectedfilterItems.selectedUmoors,
               onChange: (selectedUmoors: string[]) =>
                 setSelectedFilterItems({
                   ...selectedfilterItems,
                   selectedUmoors: selectedUmoors.map((umoor) => {
-                    return { label: getLabelForUmoor(umoor), value: umoor };
+                    return {label: getLabelForUmoor(umoor), value: umoor};
                   }),
                 }),
             },
@@ -173,28 +173,28 @@ export const EscalationList: FC<EscalationListType> = ({ user, userRole }) => {
           {
             title: "Selected Umoors",
             options: user.assignedUmoor.map((umoor) => {
-              return { label: getLabelForUmoor(umoor), value: umoor };
+              return {label: getLabelForUmoor(umoor), value: umoor};
             }),
             selectedOptions: selectedfilterItems.selectedUmoors,
             onChange: (selectedUmoors: string[]) =>
               setSelectedFilterItems({
                 ...selectedfilterItems,
                 selectedUmoors: selectedUmoors.map((umoor) => {
-                  return { label: getLabelForUmoor(umoor), value: umoor };
+                  return {label: getLabelForUmoor(umoor), value: umoor};
                 }),
               }),
           },
           {
             title: "Selected Regions",
             options: user.assignedArea.map((area) => {
-              return { label: area, value: area };
+              return {label: area, value: area};
             }),
             selectedOptions: selectedfilterItems.selectedRegions,
             onChange: (selectedRegions: string[]) =>
               setSelectedFilterItems({
                 ...selectedfilterItems,
                 selectedRegions: selectedRegions.map((region) => {
-                  return { label: region, value: region };
+                  return {label: region, value: region};
                 }),
               }),
           },
@@ -229,9 +229,12 @@ export const EscalationList: FC<EscalationListType> = ({ user, userRole }) => {
     setIsReady(true);
   };
   return isReady ? (
-    <Row gutter={[16,16]} >
-      <Col style={{ maxHeight: height ? height - 175 + "px" : "500px" }}
-        className={styles.filtersContainer} xs={5}>
+    <Row gutter={[16, 16]}>
+      <Col
+        style={{maxHeight: height ? height - 175 + "px" : "500px"}}
+        className={styles.filtersContainer}
+        xs={5}
+      >
         {filterProps.map((filterProp, idx) => {
           return (
             <div key={idx} className={styles.filterContainer}>
@@ -261,5 +264,7 @@ export const EscalationList: FC<EscalationListType> = ({ user, userRole }) => {
         </div>
       </Col>
     </Row>
-  ) : <Empty/>;
+  ) : (
+    <Empty />
+  );
 };

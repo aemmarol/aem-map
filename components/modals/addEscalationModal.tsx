@@ -158,7 +158,9 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
         : adminDetails.userRole[0],
       time: moment(new Date()).format(),
     };
-    const escalationIssueType = find(issueTypeOptions,{value:values.escalationType})
+    const escalationIssueType = find(issueTypeOptions, {
+      value: values.escalationType,
+    });
     const data: escalationData = {
       ...defaultDatabaseFields,
       created_by: {
