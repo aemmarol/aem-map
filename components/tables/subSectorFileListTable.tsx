@@ -1,9 +1,12 @@
 import {FC, useEffect, useState} from "react";
-import {Table} from "antd";
+import {message, Table} from "antd";
 import styles from "../../styles/components/tables/fileListTable.module.scss";
 import {getFileDataFields} from "../../pages/api/v1/db/databaseFields";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {useRouter} from "next/router";
+import {logout, verifyUser} from "../../pages/api/v1/authentication";
+import {authUser} from "../../types";
+import {getFileTableUserColumns} from "./columnsUtil";
 
 interface TableProps {
   dataSource: any[];
@@ -15,10 +18,23 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
   const {toggleLoader} = useGlobalContext();
   const router = useRouter();
 
+  const notVerifierUserLogout = () => {
+    message.info("user does not have access");
+    logout();
+    router.push("/");
+  };
   const getFileTableColumns = async () => {
     toggleLoader(true);
+    let userRole;
+    if (typeof verifyUser() !== "string") {
+      const user = verifyUser() as authUser;
+      userRole = user.userRole[0];
+    } else {
+      notVerifierUserLogout();
+    }
+
     const fieldData = await getFileDataFields();
-    const dataColumns = [
+    let dataColumns = [
       {
         title: "HOF ITS",
         dataIndex: "id",
@@ -60,6 +76,15 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
           key: val.name,
         })),
     ];
+    if (userRole) {
+      const userColumns = getFileTableUserColumns(userRole);
+      console.log(userColumns, userRole);
+      if (userColumns && userColumns.length > 0) {
+        dataColumns = dataColumns.filter((dataColumn) =>
+          userColumns.includes(dataColumn.key)
+        );
+      }
+    }
     setcolumns(dataColumns);
     toggleLoader(false);
   };

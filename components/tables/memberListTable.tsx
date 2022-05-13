@@ -1,9 +1,12 @@
 import {FC, useEffect, useState} from "react";
-import {Table} from "antd";
+import {message, Table} from "antd";
 import styles from "../../styles/components/tables/fileListTable.module.scss";
 import {getMumeneenDataFields} from "../../pages/api/v1/db/databaseFields";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {useRouter} from "next/router";
+import {logout, verifyUser} from "../../pages/api/v1/authentication";
+import {authUser} from "../../types";
+import {getMumineenTableUserColumns} from "./columnsUtil";
 
 interface TableProps {
   dataSource: any[];
@@ -15,10 +18,22 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
   const {toggleLoader} = useGlobalContext();
   const router = useRouter();
 
+  const notVerifierUserLogout = () => {
+    message.info("user does not have access");
+    logout();
+    router.push("/");
+  };
   const getFileTableColumns = async () => {
     toggleLoader(true);
+    let userRole;
+    if (typeof verifyUser() !== "string") {
+      const user = verifyUser() as authUser;
+      userRole = user.userRole[0];
+    } else {
+      notVerifierUserLogout();
+    }
     const fieldData = await getMumeneenDataFields();
-    const dataColumns = [
+    let dataColumns = [
       {
         title: "ITS",
         dataIndex: "id",
@@ -40,6 +55,15 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
           key: val.name,
         })),
     ];
+    if (userRole) {
+      const userColumns = getMumineenTableUserColumns(userRole);
+      console.log(userColumns, userRole);
+      if (userColumns && userColumns.length > 0) {
+        dataColumns = dataColumns.filter((dataColumn) =>
+          userColumns.includes(dataColumn.key)
+        );
+      }
+    }
     setcolumns(dataColumns);
     toggleLoader(false);
   };

@@ -5,22 +5,34 @@ import {GoLocation} from "react-icons/go";
 
 export const DistanceCard: FC<{
   backgroundColor?: string;
-  distance: string;
-  eta: string;
-}> = ({backgroundColor = "#000000", distance, eta}) => {
+  directionLink: string;
+  fromLocation: string;
+}> = ({
+  backgroundColor = "#000000",
+  directionLink,
+  fromLocation = "your location",
+}) => {
   return (
     <Card style={{background: backgroundColor}} className={styles.distanceCard}>
-      <div className={styles.distanceCardContent}>
-        <div className={styles.locationIcon}>
-          <span>
-            <GoLocation />
-          </span>
+      <a
+        className={styles.hyperlink}
+        href={directionLink}
+        target="_blank"
+        rel="noreferrer"
+      >
+        <div className={styles.distanceCardContent}>
+          <div className={styles.locationIcon}>
+            <span>
+              <GoLocation />
+            </span>
+          </div>
+          <div className={styles.distanceInfo}>
+            <p>Direction from</p>
+            <p>{fromLocation}</p>
+            {/* <p className={styles.eta}>{eta}</p> */}
+          </div>
         </div>
-        <div className={styles.distanceInfo}>
-          <p>{distance}</p>
-          <p className={styles.eta}>{eta}</p>
-        </div>
-      </div>
+      </a>
     </Card>
   );
 };

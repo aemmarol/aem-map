@@ -25,7 +25,7 @@ import {logout, verifyUser} from "../../../api/v1/authentication";
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
   const {subSectorName, mohallahName} = router.query;
-  const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
+  const {toggleLoader, changeSelectedSidebarKey, center} = useGlobalContext();
 
   const [mohallahDetails, setMohallahDetails] = useState<sectorData>(
     {} as sectorData
@@ -148,9 +148,22 @@ const SingleMohallah: NextPage = () => {
           <Col xs={24} sm={12} lg={8} xl={6} className={styles.infoCol}>
             <DistanceCard
               backgroundColor={mohallahDetails.primary_color}
-              distance="0.1 KM"
-              eta="1 Minute"
+              directionLink={`https://www.google.com/maps/dir/${
+                center.latlng[0]
+              },${center.latlng[1]}/${
+                mohallahSubSectorsDetails.latlng
+                  ? mohallahSubSectorsDetails.latlng[0]
+                  : ""
+              },${
+                mohallahSubSectorsDetails.latlng
+                  ? mohallahSubSectorsDetails?.latlng[1]
+                  : ""
+              }/`}
+              fromLocation={center.name}
             />
+            {/* <Card style={{backgroundColor: mohallahDetails.primary_color}}>
+              <GoLocation />
+            </Card> */}
           </Col>
           <Col xs={0} sm={0} lg={0} xl={6}></Col>
           <Col xs={24} sm={12} lg={8} xl={6}>
