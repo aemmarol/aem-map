@@ -68,7 +68,7 @@ export const EscalationTable: FC<EscalationTableType> = ({
       key: "created_at",
       render: (created_at: any) =>
         moment(created_at, "DD-MM-YYYY HH:mm:ss").format("DD-MM-YYYY"),
-      width: 100,
+      width: 150,
     },
     {
       title: "Status",
@@ -79,7 +79,7 @@ export const EscalationTable: FC<EscalationTableType> = ({
           {status}
         </Tag>
       ),
-      width: 125,
+      width: 150,
     },
     {
       title: "Latest Comment",
@@ -106,7 +106,7 @@ export const EscalationTable: FC<EscalationTableType> = ({
       dataSource={escalationList.map((val) => ({...val, key: val.id}))}
       columns={getTableColumns() as any}
       pagination={false}
-      scroll={{y: height ? height - 250 + "px" : 500 + "px", x: 200 + "px"}}
+      scroll={{x: "100px", y: height ? height - 250 + "px" : "500px" + "px"}}
     />
   );
 };

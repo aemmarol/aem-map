@@ -28,7 +28,7 @@ export interface Criteria {
   operator: WhereFilterOp;
 }
 
-let escalationList: escalationData[];
+let escalationList: escalationData[] | null;
 
 export const getEscalationList = async () => {
   if (escalationList) {
@@ -174,6 +174,7 @@ export const addEscalationData = async (
 ): Promise<boolean> => {
   try {
     await addDoc(dataCollection, data);
+    escalationList=null
     return true;
   } catch {
     return false;
