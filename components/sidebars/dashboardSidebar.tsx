@@ -47,7 +47,11 @@ export const DashboardSidebar: FC<{
 
   const redirectToEscalations = () => {
     changeSelectedSidebarKey("2");
-    router.push("/escalations");
+    if (appUserRole.includes(userRoles.Admin)) {
+      router.push("/admin/dashboard");
+    } else {
+      router.push("/escalations");
+    }
   };
 
   return (

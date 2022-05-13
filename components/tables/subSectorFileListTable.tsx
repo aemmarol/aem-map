@@ -78,7 +78,6 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
     ];
     if (userRole) {
       const userColumns = getFileTableUserColumns(userRole);
-      console.log(userColumns, userRole);
       if (userColumns && userColumns.length > 0) {
         dataColumns = dataColumns.filter((dataColumn) =>
           userColumns.includes(dataColumn.key)
