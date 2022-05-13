@@ -3,7 +3,7 @@ import {authUser, escalationData} from "../../../types";
 
 import {
   escalationDBFields,
-  getEscalationListByCriteria,
+  getEscalationListByCriteriaClientSide,
 } from "../../../pages/api/v1/db/escalationsCrud";
 import moment from "moment";
 
@@ -25,13 +25,14 @@ export const MusaidEscalationList: FC<MusaidEscalationListType> = ({user}) => {
     // const escList: escalationData[] = await getEscalationListBySubSector(
     //   selectedRegion
     // );
-    const escList: escalationData[] = await getEscalationListByCriteria([
-      {
-        field: escalationDBFields.subsectorName,
-        value: selectedRegion,
-        operator: "==",
-      },
-    ]);
+    const escList: escalationData[] =
+      await getEscalationListByCriteriaClientSide([
+        {
+          field: escalationDBFields.subsectorName,
+          value: selectedRegion,
+          operator: "==",
+        },
+      ]);
     setEscalationList(
       escList.sort((a, b) =>
         moment(a.updated_at, "DD-MM-YYYY HH:mm:ss").diff(
@@ -39,7 +40,6 @@ export const MusaidEscalationList: FC<MusaidEscalationListType> = ({user}) => {
         )
       )
     );
-    console.log("list", escList);
   };
   return (
     <div className="flex-column">

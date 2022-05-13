@@ -29,6 +29,12 @@ const columns = [
     render: (type: any) => type.label,
   },
   {
+    title: "Sector",
+    dataIndex: "file_details",
+    key: "file_details",
+    render: (file_details: any) => file_details.sub_sector.sector.name,
+  },
+  {
     title: "Issue",
     dataIndex: "issue",
     key: "issue",

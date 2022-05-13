@@ -4,3 +4,8 @@ export interface EscStatType {
   type?: string;
   tagColor?: string;
 }
+
+export interface filterOption {
+  label: string;
+  value: string;
+}
