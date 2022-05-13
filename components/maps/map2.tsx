@@ -32,7 +32,7 @@ const Map2: FC<Map2Props> = ({secData, subSecData}) => {
   const [mapSectorData, setMapSectorData] = useState<any[]>([]);
 
   // const subSectorList = subsectors; //to be replaced with dataservice call
-  const gContext = useGlobalContext();
+  const {center} = useGlobalContext();
   const [currMapSector, setCurrMapSector] = useState<any>(null);
 
   useEffect(() => {
@@ -52,7 +52,12 @@ const Map2: FC<Map2Props> = ({secData, subSecData}) => {
     );
   };
 
-  return !!gContext.center.latlng ? (
+  const centerMarkerIcon = divIcon({
+    html: `<span style="display:flex;"> <img src="images/marker-icon-2x.png" style="height:3em;width:3em"> &nbsp&nbsp <b style="font-size:10px">${center.name}</b></span>`,
+    className: "dummy",
+  });
+
+  return !!center.latlng ? (
     <div style={{position: "relative"}}>
       <div
         style={{
@@ -77,7 +82,7 @@ const Map2: FC<Map2Props> = ({secData, subSecData}) => {
         />
       </div>
       <MapContainer
-        center={gContext.center.latlng}
+        center={center.latlng}
         zoom={15}
         scrollWheelZoom={true}
         style={{height: "calc(100vh - 200px)", width: "100%"}}
@@ -93,18 +98,44 @@ const Map2: FC<Map2Props> = ({secData, subSecData}) => {
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
         </Marker> */}
-          <LayersControl.Overlay name="Sub-sectors" checked={true}>
+          <Marker
+            key={center.name}
+            icon={centerMarkerIcon}
+            position={center.latlng as LatLngExpression}
+            riseOnHover={true}
+            eventHandlers={{}}
+            title={center.name}
+            // on={(e) => {
+            //   e.target.openPopup();
+            // }}
+            // onMouseOut={(e) => {
+            //   e.target.closePopup();
+            // }}
+          >
+            {/* <Popup minWidth={200} maxWidth={200} maxHeight={1000}>
+                  <SubSectorPopupCard subsector={subsector} />
+                </Popup> */}
+          </Marker>
+          <LayersControl.Overlay name="Sub-sectors" checked={false}>
             <LayerGroup>
               {subSecData.map((subsector: subSectorData, idx) => {
                 const markerIcon = divIcon({
-                  html: `<span style="display:flex;"> <img src="/building.svg"/ style="height:2em;width:2em"> &nbsp&nbsp <b>${subsector.name}</b></span>`,
+                  html: `<span style="display:flex;"> <img src="images/marker-icon.png" style="height:2em;width:2em"> &nbsp&nbsp <b style="font-size:10px">${subsector.name}</b></span>`,
                   className: "dummy",
                 });
                 return (
                   <Marker
                     key={idx}
-                    icon={markerIcon}
-                    position={subsector.latlng as LatLngExpression}
+                    icon={
+                      subsector.name == center.name
+                        ? centerMarkerIcon
+                        : markerIcon
+                    }
+                    position={
+                      subsector.name == center.name
+                        ? center.latlng
+                        : (subsector.latlng as LatLngExpression)
+                    }
                     riseOnHover={true}
                     eventHandlers={{}}
                     title={subsector.name}
