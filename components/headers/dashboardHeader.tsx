@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {Avatar, Button, Layout, message, Tooltip} from "antd";
-import {LogoutOutlined, MenuOutlined} from "@ant-design/icons";
+import {LeftOutlined, LogoutOutlined, MenuOutlined} from "@ant-design/icons";
 import styles from "../../styles/components/headers/dashboardHeader.module.scss";
 import {logout} from "../../pages/api/v1/authentication";
 import {useRouter} from "next/router";
@@ -10,7 +10,8 @@ const {Header} = Layout;
 export const DashboardHeader: FC<{
   handleToggle: () => any;
   headerTitle: string;
-}> = ({handleToggle, headerTitle}) => {
+  showBackButton?: boolean;
+}> = ({handleToggle, headerTitle, showBackButton}) => {
   const router = useRouter();
 
   const handleLogout = () => {
@@ -27,7 +28,15 @@ export const DashboardHeader: FC<{
         icon={<MenuOutlined />}
         onClick={handleToggle}
       />
-      <h1 className={styles.headerTitle}>{headerTitle}</h1>
+      <h1 className={styles.headerTitle}>
+        {showBackButton ? (
+          <LeftOutlined
+            className="cursor-pointer"
+            onClick={() => router.back()}
+          />
+        ) : null}
+        {headerTitle}
+      </h1>
       <Tooltip title="Logout">
         <button className={styles.btnAvatar} onClick={handleLogout}>
           <Avatar
