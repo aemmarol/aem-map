@@ -49,7 +49,7 @@ export const GlobalProvider = ({children}: Props) => {
   };
   const center = {
     name: "Marol Saifee Masjid",
-    latlng: [19.114092679220292, 72.87610986824751],
+    latlng: [19.114085290747965, 72.87583087016348],
   };
 
   return (
