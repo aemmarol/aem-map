@@ -1,13 +1,14 @@
 import {Card} from "antd";
-import {FC} from "react";
+import {FC, useContext} from "react";
 import styles from "../../styles/components/cards/subSectorCard.module.scss";
 import {ImMan, ImWoman, ImFolderOpen} from "react-icons/im";
+import GlobalContext from "../../context/GlobalContext";
+import {GoLocation} from "react-icons/go";
 
 export const SubSectorCard: FC<{
   musaidName: string;
   musaidaName: string;
-  distance: string;
-  eta: string;
+  directionLink: string;
   cardHeading: string;
   backgroundColor?: string;
   number_of_males: number;
@@ -17,8 +18,7 @@ export const SubSectorCard: FC<{
 }> = ({
   musaidName,
   musaidaName,
-  distance,
-  eta,
+  directionLink,
   cardHeading,
   number_of_females,
   number_of_males,
@@ -26,6 +26,7 @@ export const SubSectorCard: FC<{
   backgroundColor = "#000000",
   handleClick,
 }) => {
+  const {center} = useContext(GlobalContext);
   return (
     <Card
       onClick={handleClick}
@@ -39,9 +40,19 @@ export const SubSectorCard: FC<{
           <p className={styles.detailsValue}>{musaidName}</p>
           <p className={styles.detailsTitle}>Musaida</p>
           <p className={styles.detailsValue}>{musaidaName}</p>
-          <p className={styles.detailsTitle}>Distance</p>
-          <p className={styles.detailsValue}>
-            {distance} / {eta}
+          {/* <p className={styles.detailsTitle}></p> */}
+          <p className={styles.detailsTitle}>
+            Directions from {center.name}
+            <a
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              href={directionLink}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <GoLocation size={"28px"} />
+            </a>
           </p>
         </div>
       </div>
