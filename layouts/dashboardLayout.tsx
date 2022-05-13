@@ -15,12 +15,12 @@ const {Content} = Layout;
 export const Dashboardlayout: FC<{
   headerTitle: string;
   backgroundColor?: string;
-  displayBackButton: boolean;
+  displayBackButton?: boolean;
 }> = ({
   children,
   headerTitle,
   backgroundColor = "#efefef",
-  displayBackButton,
+  displayBackButton = true,
 }) => {
   const [visible, setVisible] = useState(false);
   const {showLoader, showProgressLoader, progressValue, setProgressValue} =

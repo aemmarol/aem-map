@@ -91,6 +91,15 @@ const SingleMohallah: NextPage = () => {
     }
   }, [mohallahName]);
 
+  const handleBackButton = () => {
+    const {userRole} = verifyUser() as authUser;
+    if (userRole != undefined) {
+      if (userRole.includes("Masool") || userRole.includes("Masoola")) {
+        return false;
+      }
+    }
+  };
+
   useEffect(() => {
     if (
       mohallahDetails &&
@@ -105,6 +114,7 @@ const SingleMohallah: NextPage = () => {
     <Dashboardlayout
       backgroundColor={mohallahDetails.secondary_color || "#efefef"}
       headerTitle={mohallahDetails.name || ""}
+      displayBackButton={handleBackButton()}
     >
       <div>
         {!isEmpty(mohallahDetails) ? (

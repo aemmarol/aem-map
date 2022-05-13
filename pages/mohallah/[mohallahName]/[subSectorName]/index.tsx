@@ -99,11 +99,18 @@ const SingleMohallah: NextPage = () => {
         } else {
           notVerifierUserLogout();
         }
-      } else {
-        notVerifierUserLogout();
       }
     }
   }, [subSectorName]);
+
+  const handleBackButton = () => {
+    const {userRole} = verifyUser() as authUser;
+    if (userRole != undefined) {
+      if (userRole.includes("Musaid") || userRole.includes("Musaida")) {
+        return false;
+      }
+    }
+  };
 
   useEffect(() => {
     if (
@@ -119,6 +126,7 @@ const SingleMohallah: NextPage = () => {
     <Dashboardlayout
       backgroundColor={mohallahDetails.secondary_color || "#efefef"}
       headerTitle={subSectorName as string}
+      displayBackButton={handleBackButton()}
     >
       <div className={styles.mainWrapper}>
         <Row className="mb-16" gutter={[{xs: 8, sm: 16, md: 24, lg: 32}, 16]}>
