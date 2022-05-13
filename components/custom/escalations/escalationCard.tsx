@@ -5,6 +5,7 @@ import styles from "../../../styles/pages/Escalation.module.scss";
 import {escalationData} from "../../../types";
 import {escalationIssueStatusList} from "../../../utils";
 import {EscStat} from "./escalationStatus";
+
 export const EscalationCard: FC<{
   escalation: escalationData;
 }> = ({escalation}) => {

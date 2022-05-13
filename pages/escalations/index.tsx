@@ -1,19 +1,19 @@
-import {Button, message, Select} from "antd";
-import {NextPage} from "next";
-import {useRouter} from "next/router";
-import {Dashboardlayout} from "../../layouts/dashboardLayout";
-import {useEffect, useState} from "react";
-import {logout, verifyUser} from "../api/v1/authentication";
-import {authUser, userRoles} from "../../types";
-import {AddEscalationModal} from "../../components";
-import {useGlobalContext} from "../../context/GlobalContext";
-import {EscalationList} from "../../components/custom/escalations/escalationList";
-import {getSectorList} from "../api/v1/db/sectorCrud";
-import {getUmoorList} from "../api/v1/db/umoorsCrud";
+import { Button, message, Select } from "antd";
+import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { Dashboardlayout } from "../../layouts/dashboardLayout";
+import { useEffect, useState } from "react";
+import { logout, verifyUser } from "../api/v1/authentication";
+import { authUser, userRoles } from "../../types";
+import { AddEscalationModal } from "../../components";
+import { useGlobalContext } from "../../context/GlobalContext";
+import { EscalationList } from "../../components/custom/escalations/escalationList";
+import { getSectorList } from "../api/v1/db/sectorCrud";
+import { getUmoorList } from "../api/v1/db/umoorsCrud";
 
 const Dashboard: NextPage = () => {
   const router = useRouter();
-  const {changeSelectedSidebarKey} = useGlobalContext();
+  const { changeSelectedSidebarKey } = useGlobalContext();
 
   const [adminDetails, setAdminDetails] = useState<authUser>({} as authUser);
   const [showEscalationModal, setShowEscalationModal] =
@@ -54,11 +54,12 @@ const Dashboard: NextPage = () => {
 
   return (
     <Dashboardlayout headerTitle="Escalations">
-      {adminDetails &&
-      adminDetails.userRole &&
-      adminDetails.userRole.length > 1 ? (
-        <div className="d-flex">
-          <div className="flex-align-center mb-16 flex-1">
+      <div className="d-flex mb-16">
+
+        {adminDetails &&
+          adminDetails.userRole &&
+          adminDetails.userRole.length > 1 ? (
+          <div className="flex-align-center flex-1">
             <h4 className="mr-10 mb-0">Select View : </h4>
             <Select
               onChange={(e) => setSelectedView(e)}
@@ -73,20 +74,25 @@ const Dashboard: NextPage = () => {
                 ))}
             </Select>
           </div>
-          {selectedView === "Umoor" ? null : (
-            <div className="d-flex float-right">
-              <Button
-                className="ml-auto"
-                onClick={showAddEscalationModal}
-                type="primary"
-                size="large"
-              >
-                Raise Escalation
-              </Button>
-            </div>
-          )}
-        </div>
-      ) : null}
+        ) : null}
+
+        {selectedView === "Umoor" ? null : (
+          <div className="d-flex w-full float-right">
+            <Button
+              className="ml-auto"
+              onClick={showAddEscalationModal}
+              type="primary"
+              size="large"
+            >
+              Raise Escalation
+            </Button>
+          </div>
+        )}
+
+      </div>
+
+
+
 
       {selectedView && adminDetails ? (
         <EscalationList user={adminDetails} userRole={selectedView} />

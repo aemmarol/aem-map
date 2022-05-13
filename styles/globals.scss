@@ -59,8 +59,16 @@ a {
   width: 150px;
 }
 
+.w-full{
+  width: 100%;
+}
+
 .mb-0 {
   margin-bottom: 0px !important;
+}
+
+.mb-4 {
+  margin-bottom: 4px !important;
 }
 
 .mb-8 {
@@ -87,6 +95,10 @@ a {
   margin-left: auto;
 }
 
+.width-200 {
+  width: 200px;
+}
+
 .border-radius-10 {
   border-radius: 10px;
 }
@@ -108,7 +120,7 @@ a {
 }
 
 .cursor-pointer {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 .overflow-y-auto {
@@ -131,6 +143,10 @@ a {
   align-items: center;
 }
 
+.justify-end {
+  justify-content: end;
+}
+
 .border-radius-10 {
   border-radius: 10px !important;
 }
@@ -140,4 +156,14 @@ a {
   .ant-card-body {
     padding: 20px;
   }
+}
+
+.comment-card {
+  .ant-card-body {
+    padding: 16px;
+  }
+}
+
+.ant-tag {
+  cursor: pointer;
 }

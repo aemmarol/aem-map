@@ -7,7 +7,11 @@ export const EscStat: FC<EscStatType> = ({label, value, type, tagColor}) => (
   <div className="flex-column">
     <p className={styles.escStatLabel}>{label}</p>
     {type === "tag" ? (
-      <Tag color={tagColor}>{value}</Tag>
+      <div>
+        <Tag color={tagColor}>
+          <span className={styles.statTag}>{value}</span>
+        </Tag>
+      </div>
     ) : (
       <p className={styles.escStatValue}>{value}</p>
     )}
