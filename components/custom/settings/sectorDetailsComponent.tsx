@@ -246,7 +246,7 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
     const masoolaData = await userTable
       .select({
         view: "Grid view",
-        filterByFormula: `({userRole} = 'Masool')`,
+        filterByFormula: `({userRole} = 'Masoola')`,
       })
       .firstPage();
 
