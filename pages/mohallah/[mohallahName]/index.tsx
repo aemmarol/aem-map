@@ -7,18 +7,14 @@ import {Dashboardlayout} from "../../../layouts/dashboardLayout";
 import {authUser, sectorData, subSectorData, userRoles} from "../../../types";
 import {getSectorDataByName} from "../../api/v1/db/sectorCrud";
 import {getSubSectorData} from "../../api/v1/db/subSectorCrud";
-import {
-  DistanceCard,
-  InchargeDetailsCard,
-  SubSectorCard,
-} from "../../../components";
+import {InchargeDetailsCard, SubSectorCard} from "../../../components";
 import {isEmpty} from "lodash";
 import {logout, verifyUser} from "../../api/v1/authentication";
 
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
   const {mohallahName} = router.query;
-  const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
+  const {toggleLoader, changeSelectedSidebarKey, center} = useGlobalContext();
 
   const [mohallahDetails, setMohallahDetails] = useState<sectorData>(
     {} as sectorData
@@ -126,13 +122,13 @@ const SingleMohallah: NextPage = () => {
                 inchargeContactNumber={mohallahDetails.masoola_contact}
               />
             </Col>
-            <Col className="d-flex" xs={24} sm={12} lg={8} xl={6}>
+            {/* <Col className="d-flex" xs={24} sm={12} lg={8} xl={6}>
               <DistanceCard
                 backgroundColor={mohallahDetails.primary_color}
                 distance="0.1 KM"
                 eta="1 Minute"
               />
-            </Col>
+            </Col> */}
           </Row>
         ) : null}
 
@@ -152,8 +148,17 @@ const SingleMohallah: NextPage = () => {
                   }
                   musaidName={mohallahSubSectorsDetail.musaid_name}
                   musaidaName={mohallahSubSectorsDetail.musaida_name}
-                  distance="0.1 KM"
-                  eta="1 Minute"
+                  directionLink={`https://www.google.com/maps/dir/${
+                    center.latlng[0]
+                  },${center.latlng[1]}/${
+                    mohallahSubSectorsDetail.latlng
+                      ? mohallahSubSectorsDetail.latlng[0]
+                      : ""
+                  },${
+                    mohallahSubSectorsDetail.latlng
+                      ? mohallahSubSectorsDetail?.latlng[1]
+                      : ""
+                  }/`}
                   cardHeading={mohallahSubSectorsDetail.name}
                   backgroundColor={mohallahDetails.primary_color}
                   number_of_females={
