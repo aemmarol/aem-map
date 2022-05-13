@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {Table, Tag} from "antd";
-import {comment, escalationData, fileDetails} from "../../../types";
+import {comment, escalationData, fileDetails, userRoles} from "../../../types";
 import moment from "moment";
 import {find} from "lodash";
 import {escalationIssueStatusList} from "../../../utils";
@@ -10,11 +10,13 @@ import useWindowDimensions from "../../../utils/windowDimensions";
 interface EscalationTableType {
   escalationList: escalationData[];
   hideDetails: boolean;
+  userRole: userRoles;
 }
 
 export const EscalationTable: FC<EscalationTableType> = ({
   escalationList,
   hideDetails,
+  userRole,
 }) => {
   const router = useRouter();
   const {height} = useWindowDimensions();
@@ -98,7 +100,9 @@ export const EscalationTable: FC<EscalationTableType> = ({
   };
 
   const handleOpenEscalation = (escId: string) => {
-    router.push("/escalations/" + escId);
+    if (userRole === userRoles.Admin || userRole === userRoles.Umoor) {
+      router.push("/escalations/" + escId);
+    }
   };
 
   return (

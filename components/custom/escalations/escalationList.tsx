@@ -51,6 +51,7 @@ export const EscalationList: FC<EscalationListType> = ({
                   userRole !== userRoles.Admin && userRole !== userRoles.Umoor
                 }
                 escalationList={escalationList}
+                userRole={userRole}
               />
             ) : null
           ) : (
