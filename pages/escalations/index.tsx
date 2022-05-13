@@ -54,12 +54,12 @@ const Dashboard: NextPage = () => {
 
   return (
     <Dashboardlayout headerTitle="Escalations">
-      {adminDetails &&
-      adminDetails.userRole &&
-      adminDetails.userRole.length > 1 ? (
-        <div className="d-flex">
-          <div className="flex-align-center mb-16 flex-1">
-            <h4 className="mr-10 mb-0">Select View : </h4>
+      <div className="d-flex mb-16">
+        {adminDetails &&
+        adminDetails.userRole &&
+        adminDetails.userRole.length > 1 ? (
+          <div className="flex-align-center flex-1">
+            <h4 className="mr-10 mb-0 w-100">Select View : </h4>
             <Select
               onChange={(e) => setSelectedView(e)}
               value={selectedView}
@@ -73,20 +73,21 @@ const Dashboard: NextPage = () => {
                 ))}
             </Select>
           </div>
-          {selectedView === "Umoor" ? null : (
-            <div className="d-flex float-right">
-              <Button
-                className="ml-auto"
-                onClick={showAddEscalationModal}
-                type="primary"
-                size="large"
-              >
-                Raise Escalation
-              </Button>
-            </div>
-          )}
-        </div>
-      ) : null}
+        ) : null}
+
+        {selectedView === "Umoor" ? null : (
+          <div className="d-flex w-full float-right">
+            <Button
+              className="ml-auto"
+              onClick={showAddEscalationModal}
+              type="primary"
+              size="large"
+            >
+              Raise Escalation
+            </Button>
+          </div>
+        )}
+      </div>
 
       {selectedView && adminDetails ? (
         <EscalationList user={adminDetails} userRole={selectedView} />

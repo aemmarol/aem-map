@@ -6,7 +6,7 @@ import {
   getEscalationListByCriteriaClientSide,
 } from "../../../pages/api/v1/db/escalationsCrud";
 import {authUser, escalationData, userRoles} from "../../../types";
-import {isMobile} from "../../../utils/windowDimensions";
+import useWindowDimensions, {isMobile} from "../../../utils/windowDimensions";
 import {EscalationCard} from "./escalationCard";
 import {EscalationTable} from "./escalationTable";
 
@@ -27,6 +27,7 @@ interface selectedFilterItemsType {
 }
 export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
   const router = useRouter();
+  const {height} = useWindowDimensions();
   const [escalationList, setEscalationList] = useState<escalationData[]>([]);
   const [umoorList, setUmoorList] = useState([]);
   const [selectedfilterItems, setSelectedFilterItems] =
@@ -55,9 +56,11 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
     setSelectedFilterItems({
       selectedRegions: querySector
         ? [{label: querySector, value: querySector}]
-        : user.assignedArea.map((area) => {
+        : user.assignedArea
+        ? user.assignedArea.map((area) => {
             return {label: area, value: area};
-          }),
+          })
+        : [],
       selectedUmoors: queryUmoor
         ? [
             {
@@ -65,12 +68,15 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
               value: queryUmoor,
             },
           ]
-        : user.assignedUmoor.map((umoor) => {
+        : user.assignedUmoor
+        ? user.assignedUmoor.map((umoor) => {
             return {
               label: umoors.find((item: any) => item.value == umoor).label,
               value: umoor,
             };
-          }),
+          })
+        : [],
+      // : [],
       ready: true,
     });
   };
@@ -142,7 +148,6 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
               }),
               selectedOptions: selectedfilterItems.selectedUmoors,
               onChange: (selectedUmoors: string[]) =>
-                // console.log(selectedUmoors),
                 setSelectedFilterItems({
                   ...selectedfilterItems,
                   selectedUmoors: selectedUmoors.map((umoor) => {
@@ -215,8 +220,8 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
       await getEscalationListByCriteriaClientSide(criteria);
     setEscalationList(
       escList.sort((a, b) =>
-        moment(a.updated_at, "DD-MM-YYYY HH:mm:ss").diff(
-          moment(b.updated_at, "DD-MM-YYYY HH:mm:ss")
+        moment(b.created_at, "DD-MM-YYYY HH:mm:ss").diff(
+          moment(a.created_at, "DD-MM-YYYY HH:mm:ss")
         )
       )
     );
@@ -224,7 +229,10 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
   };
   return isReady ? (
     <div className={styles.container}>
-      <div className={styles.filtersContainer}>
+      <div
+        style={{maxHeight: height ? height - 175 + "px" : "500px"}}
+        className={styles.filtersContainer}
+      >
         {filterProps.map((filterProp, idx) => {
           return (
             <div key={idx} className={styles.filterContainer}>
@@ -240,7 +248,12 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
               <EscalationCard key={idx} escalation={val} />
             ))
           ) : escalationList && escalationList.length > 0 ? (
-            <EscalationTable escalationList={escalationList} />
+            <EscalationTable
+              hideDetails={
+                userRole !== userRoles.Admin && userRole !== userRoles.Umoor
+              }
+              escalationList={escalationList}
+            />
           ) : null
         ) : (
           <h2 className="text-align-center mt-10">No data</h2>

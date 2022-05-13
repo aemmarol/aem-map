@@ -3,6 +3,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
   where,
@@ -105,6 +106,17 @@ export const groupEscalationListBy = (
   //   .sort()
   //   .map((groupName) => groups[groupName]);
   return groups;
+};
+
+export const getEscalationData = async (
+  id: string
+): Promise<escalationData> => {
+  const docRef = doc(firestore, escalationCollectionName, id);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return {...docSnap.data(), id: docSnap.id} as escalationData;
+  }
+  return {} as escalationData;
 };
 
 const getFieldValue = (obj: any, field: string) => {

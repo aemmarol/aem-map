@@ -59,10 +59,6 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
     getUmoorList();
   }, []);
 
-  useEffect(() => {
-    console.log("files", allowedFileNumbers);
-  }, [allowedFileNumbers]);
-
   const getUmoorList = async () => {
     const temp: any = [];
     await umoorTable
