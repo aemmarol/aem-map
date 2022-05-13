@@ -15,6 +15,7 @@ import {EscalationFilter, EscalationFilterType} from "./escalationFilter";
 import {filterOption} from "../../../types/escalation";
 import {useRouter} from "next/router";
 import {getUmoorList} from "../../../pages/api/v1/db/umoorsCrud";
+import {Col, Empty, Row} from "antd";
 
 interface EscalationListType {
   user: authUser;
@@ -228,10 +229,11 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
     setIsReady(true);
   };
   return isReady ? (
-    <div className={styles.container}>
-      <div
+    <Row gutter={[16, 16]}>
+      <Col
         style={{maxHeight: height ? height - 175 + "px" : "500px"}}
         className={styles.filtersContainer}
+        xs={5}
       >
         {filterProps.map((filterProp, idx) => {
           return (
@@ -240,25 +242,29 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
             </div>
           );
         })}
-      </div>
-      <div className="flex-column flex-1">
-        {escalationList.length > 0 ? (
-          isMobile() ? (
-            escalationList.map((val, idx) => (
-              <EscalationCard key={idx} escalation={val} />
-            ))
-          ) : escalationList && escalationList.length > 0 ? (
-            <EscalationTable
-              hideDetails={
-                userRole !== userRoles.Admin && userRole !== userRoles.Umoor
-              }
-              escalationList={escalationList}
-            />
-          ) : null
-        ) : (
-          <h2 className="text-align-center mt-10">No data</h2>
-        )}
-      </div>
-    </div>
-  ) : null;
+      </Col>
+      <Col xs={19}>
+        <div className="flex-column">
+          {escalationList.length > 0 ? (
+            isMobile() ? (
+              escalationList.map((val, idx) => (
+                <EscalationCard key={idx} escalation={val} />
+              ))
+            ) : escalationList && escalationList.length > 0 ? (
+              <EscalationTable
+                hideDetails={
+                  userRole !== userRoles.Admin && userRole !== userRoles.Umoor
+                }
+                escalationList={escalationList}
+              />
+            ) : null
+          ) : (
+            <h2 className="text-align-center mt-10">No data</h2>
+          )}
+        </div>
+      </Col>
+    </Row>
+  ) : (
+    <Empty />
+  );
 };

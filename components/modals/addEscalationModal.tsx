@@ -10,7 +10,7 @@ import {
   Select,
   Statistic,
 } from "antd";
-import {isEmpty} from "lodash";
+import {find, isEmpty} from "lodash";
 import {FC, useEffect, useState} from "react";
 import {
   getFileDataByFileNumber,
@@ -158,6 +158,9 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
         : adminDetails.userRole[0],
       time: moment(new Date()).format(),
     };
+    const escalationIssueType = find(issueTypeOptions, {
+      value: values.escalationType,
+    });
     const data: escalationData = {
       ...defaultDatabaseFields,
       created_by: {
@@ -176,7 +179,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       },
       status: "Issue Reported",
       issue: values.issue,
-      type: values.escalationType,
+      type: escalationIssueType,
       comments: [firstComment],
       escalation_id: "esc-" + dbSettings.escalation_auto_number,
     };

@@ -5,13 +5,9 @@
 }
 
 .filtersContainer {
-  width: 20%;
-  min-width: 200px;
   border-right: 1px solid #ddd;
   background: white;
-  padding: 1em;
-  margin-right: 1em;
-  overflow: auto;
+  overflow-y: auto;
 }
 
 .filterContainer {
