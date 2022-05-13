@@ -1,10 +1,10 @@
-import React, { FC } from "react";
-import { Table, Tag } from "antd";
-import { comment, escalationData, fileDetails } from "../../../types";
+import React, {FC} from "react";
+import {Table, Tag} from "antd";
+import {comment, escalationData, fileDetails, userRoles} from "../../../types";
 import moment from "moment";
-import { find } from "lodash";
-import { escalationIssueStatusList } from "../../../utils";
-import { useRouter } from "next/router";
+import {find} from "lodash";
+import {escalationIssueStatusList} from "../../../utils";
+import {useRouter} from "next/router";
 import useWindowDimensions from "../../../utils/windowDimensions";
 
 interface EscalationTableType {
@@ -17,7 +17,7 @@ export const EscalationTable: FC<EscalationTableType> = ({
   hideDetails,
 }) => {
   const router = useRouter();
-  const { height } = useWindowDimensions()
+  const {height} = useWindowDimensions();
   const columns = [
     {
       title: "Id",
@@ -32,7 +32,7 @@ export const EscalationTable: FC<EscalationTableType> = ({
         </Tag>
       ),
       width: 100,
-      fixed:"left"
+      fixed: "left",
     },
     {
       title: "File No",
@@ -75,7 +75,7 @@ export const EscalationTable: FC<EscalationTableType> = ({
       dataIndex: "status",
       key: "status",
       render: (status: any) => (
-        <Tag color={find(escalationIssueStatusList, { value: status })?.color}>
+        <Tag color={find(escalationIssueStatusList, {value: status})?.color}>
           {status}
         </Tag>
       ),
@@ -103,10 +103,10 @@ export const EscalationTable: FC<EscalationTableType> = ({
 
   return (
     <Table
-      dataSource={escalationList.map((val) => ({ ...val, key: val.id }))}
+      dataSource={escalationList.map((val) => ({...val, key: val.id}))}
       columns={getTableColumns() as any}
       pagination={false}
-      scroll={{ y: height ? height - 250 : 500 }}
+      scroll={{y: height ? height - 250 : 500, x:200}}
     />
   );
 };
