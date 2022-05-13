@@ -1,3 +1,4 @@
+import Airtable from "airtable";
 import {
   Button,
   Form,
@@ -11,11 +12,18 @@ import {
 import {FC, useState} from "react";
 import {TableCardWithForm} from "../..";
 import {
+  getSectorDataByName,
   getSectorList,
   updateSectorData,
 } from "../../../pages/api/v1/db/sectorCrud";
 import {updateSectorsToDefault} from "../../../pages/api/v1/db/setupDb";
 import {sectorData} from "../../../types";
+
+const airtableBase = new Airtable({
+  apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
+}).base("app7V1cg4ibiooxcn");
+
+const userTable = airtableBase("userList");
 
 interface CardProps {
   data: any[];
@@ -227,6 +235,53 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
     setisLoading(false);
   };
 
+  const handleUpdateMasoolDetails = async () => {
+    setisLoading(true);
+    const masoolData = await userTable
+      .select({
+        view: "Grid view",
+        filterByFormula: `({userRole} = 'Masool')`,
+      })
+      .firstPage();
+    const masoolaData = await userTable
+      .select({
+        view: "Grid view",
+        filterByFormula: `({userRole} = 'Masool')`,
+      })
+      .firstPage();
+
+    await Promise.all(
+      masoolData
+        .map((val) => val.fields)
+        .map(async (value: any) => {
+          const tempSector = await getSectorDataByName(value.assignedArea[0]);
+          await updateSectorData(tempSector.id as string, {
+            masool_contact: value.contact,
+            masool_name: value.name,
+            masool_its: value.itsId.toString(),
+          });
+        })
+    );
+
+    await Promise.all(
+      masoolaData
+        .map((val) => val.fields)
+        .map(async (value: any) => {
+          const tempSector = await getSectorDataByName(value.assignedArea[0]);
+          await updateSectorData(tempSector.id as string, {
+            masoola_contact: value.contact,
+            masoola_name: value.name,
+            masoola_its: value.itsId.toString(),
+          });
+        })
+    );
+
+    const newData = await getSectorList();
+    updateData(newData);
+
+    setisLoading(false);
+  };
+
   return (
     <Form form={form} component={false}>
       <TableCardWithForm
@@ -249,7 +304,9 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
             <Button onClick={resetSectorsToDefault} className="mr-10">
               Reset Sectors
             </Button>
-            <Button className="mr-10">Update Masool Details</Button>
+            <Button onClick={handleUpdateMasoolDetails} className="mr-10">
+              Update Masool Details
+            </Button>
             <Button type="primary">Add Sector</Button>
           </div>
         }

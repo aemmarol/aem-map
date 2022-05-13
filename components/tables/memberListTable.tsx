@@ -57,7 +57,6 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
     ];
     if (userRole) {
       const userColumns = getMumineenTableUserColumns(userRole);
-      console.log(userColumns, userRole);
       if (userColumns && userColumns.length > 0) {
         dataColumns = dataColumns.filter((dataColumn) =>
           userColumns.includes(dataColumn.key)

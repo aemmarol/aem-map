@@ -1,3 +1,4 @@
+import Airtable from "airtable";
 import {
   Button,
   Form,
@@ -12,10 +13,17 @@ import {FC, useState} from "react";
 import {TableCardWithForm} from "../..";
 import {updateSubSectorsToDefault} from "../../../pages/api/v1/db/setupDb";
 import {
+  getSubSectorDataByName,
   getSubSectorList,
   updateSubSectorData,
 } from "../../../pages/api/v1/db/subSectorCrud";
 import {subSectorData} from "../../../types";
+
+const airtableBase = new Airtable({
+  apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
+}).base("app7V1cg4ibiooxcn");
+
+const userTable = airtableBase("userList");
 
 interface CardProps {
   data: any[];
@@ -235,13 +243,64 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
     setisLoading(false);
   };
 
+  const handleUpdateMusaidDetails = async () => {
+    setisLoading(true);
+    const musaidData = await userTable
+      .select({
+        view: "Grid view",
+        filterByFormula: `({userRole} = 'Musaid')`,
+      })
+      .firstPage();
+    const musaidaData = await userTable
+      .select({
+        view: "Grid view",
+        filterByFormula: `({userRole} = 'Musaida')`,
+      })
+      .firstPage();
+
+    await Promise.all(
+      musaidData
+        .map((val) => val.fields)
+        .map(async (value: any) => {
+          const tempSector = await getSubSectorDataByName(
+            value.assignedArea[0]
+          );
+          await updateSubSectorData(tempSector.id as string, {
+            musaid_contact: value.contact,
+            musaid_name: value.name,
+            musaid_its: value.itsId.toString(),
+          });
+        })
+    );
+
+    await Promise.all(
+      musaidaData
+        .map((val) => val.fields)
+        .map(async (value: any) => {
+          const tempSector = await getSubSectorDataByName(
+            value.assignedArea[0]
+          );
+          await updateSubSectorData(tempSector.id as string, {
+            musaida_contact: value.contact,
+            musaida_name: value.name,
+            musaida_its: value.itsId.toString(),
+          });
+        })
+    );
+
+    const newData = await getSubSectorList();
+    updateData(newData);
+
+    setisLoading(false);
+  };
+
   return (
     <Form form={form} component={false}>
       <TableCardWithForm
         cardTitle="Sub Sector Info"
         TableComponent={Table}
         tableComponentProps={{
-          dataSource: data,
+          dataSource: data.map((val, index) => ({...val, key: index})),
           columns: mergedColumns,
           pagination: false,
           scroll: {x: "450px", y: "400px"},
@@ -257,7 +316,9 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
             <Button onClick={resetSubSectorsToDefault} className="mr-10">
               Reset SubSectors
             </Button>
-            <Button className="mr-10">Update Musaid Details</Button>
+            <Button onClick={handleUpdateMusaidDetails} className="mr-10">
+              Update Musaid Details
+            </Button>
             <Button type="primary">Add Sub Sector</Button>
           </div>
         }

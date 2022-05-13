@@ -128,7 +128,10 @@ const SingleMohallah: NextPage = () => {
       headerTitle={subSectorName as string}
     >
       <div className={styles.mainWrapper}>
-        <Row className="mb-16" gutter={[{xs: 8, sm: 16, md: 24, lg: 32}, 16]}>
+        <Row
+          className="mb-16 d-flex"
+          gutter={[{xs: 8, sm: 16, md: 24, lg: 32}, 16]}
+        >
           <Col xs={24} sm={12} lg={8} xl={6}>
             <InchargeDetailsCard
               cardTitle="Masool"

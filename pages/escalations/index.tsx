@@ -254,7 +254,6 @@ const Dashboard: NextPage = () => {
     }
     setAdminDetails(user);
     setSelectedView(user.userRole[0]);
-    // console.log(user);
   };
 
   const notVerifierUserLogout = () => {
