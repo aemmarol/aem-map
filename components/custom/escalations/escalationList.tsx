@@ -249,7 +249,9 @@ export const EscalationList: FC<EscalationListType> = ({user, userRole}) => {
             ))
           ) : escalationList && escalationList.length > 0 ? (
             <EscalationTable
-              hideDetails={userRole !== userRoles.Admin && userRole !== userRoles.Umoor }
+              hideDetails={
+                userRole !== userRoles.Admin && userRole !== userRoles.Umoor
+              }
               escalationList={escalationList}
             />
           ) : null

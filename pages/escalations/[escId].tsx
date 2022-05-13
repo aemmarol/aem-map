@@ -272,8 +272,11 @@ const FileMemberDetailsPage: NextPage = () => {
                     <h3>Comments</h3>
                     <Button type="primary"> Add Comment</Button>
                   </div>
-                  {issueComments.map((val) => (
-                    <Card className="comment-card mb-8 border-radius-10">
+                  {issueComments.map((val, idx) => (
+                    <Card
+                      key={idx}
+                      className="comment-card mb-8 border-radius-10"
+                    >
                       <p className={styles.comentMsg}>{val.msg}</p>
                       <div className={styles.contentInfo}>
                         <span className={styles.owner}>From: {val.name}</span>
