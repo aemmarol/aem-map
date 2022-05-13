@@ -35,6 +35,7 @@ const SingleMohallah: NextPage = () => {
     useState<subSectorData>({} as subSectorData);
 
   const [fileDetails, setFileDetails] = useState<any[]>([]);
+  const [userDetails, setUserDetails] = useState<authUser>({} as authUser);
 
   const getSubSectorDetails = async () => {
     toggleLoader(true);
@@ -90,7 +91,9 @@ const SingleMohallah: NextPage = () => {
       changeSelectedSidebarKey("1");
 
       if (typeof verifyUser() !== "string") {
-        const {userRole, assignedArea} = verifyUser() as authUser;
+        const user = verifyUser() as authUser;
+        const {userRole, assignedArea} = user;
+        setUserDetails(user);
         if (
           userRole.includes(userRoles.Admin) ||
           (userRole.includes(userRoles.Masool) &&
@@ -126,6 +129,12 @@ const SingleMohallah: NextPage = () => {
     <Dashboardlayout
       backgroundColor={mohallahDetails.secondary_color || "#efefef"}
       headerTitle={subSectorName as string}
+      showBackButton={
+        userDetails.userRole &&
+        (userDetails.userRole.includes(userRoles.Admin) ||
+          userDetails.userRole.includes(userRoles.Masool) ||
+          userDetails.userRole.includes(userRoles.Masoola))
+      }
     >
       <div className={styles.mainWrapper}>
         <Row

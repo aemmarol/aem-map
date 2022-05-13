@@ -267,7 +267,12 @@ const Dashboard: NextPage = () => {
   };
 
   return (
-    <Dashboardlayout headerTitle="Escalations">
+    <Dashboardlayout
+      showBackButton={
+        adminDetails.userRole && adminDetails.userRole.includes(userRoles.Admin)
+      }
+      headerTitle="Escalations"
+    >
       <div className="d-flex mb-16">
         {adminDetails &&
         adminDetails.userRole &&

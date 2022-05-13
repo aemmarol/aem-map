@@ -15,7 +15,8 @@ const {Content} = Layout;
 export const Dashboardlayout: FC<{
   headerTitle: string;
   backgroundColor?: string;
-}> = ({children, headerTitle, backgroundColor = "#efefef"}) => {
+  showBackButton?: boolean;
+}> = ({children, headerTitle, backgroundColor = "#efefef", showBackButton}) => {
   const [visible, setVisible] = useState(false);
   const {showLoader, showProgressLoader, progressValue, setProgressValue} =
     useGlobalContext();
@@ -34,6 +35,7 @@ export const Dashboardlayout: FC<{
         <DashboardHeader
           headerTitle={headerTitle}
           handleToggle={() => setVisible(!visible)}
+          showBackButton={showBackButton}
         />
         <Content
           style={{background: backgroundColor}}

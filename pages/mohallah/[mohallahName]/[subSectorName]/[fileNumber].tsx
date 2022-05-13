@@ -86,6 +86,7 @@ const FileMemberDetailsPage: NextPage = () => {
         "#efefef"
       }
       headerTitle={fileNumber?.toString() as string}
+      showBackButton={true}
     >
       <div className={styles.mainWrapper}>
         <Row className="mb-16" gutter={[{xs: 8, sm: 16, md: 24, lg: 32}, 16]}>

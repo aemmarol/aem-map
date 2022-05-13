@@ -121,6 +121,7 @@ const FileMemberDetailsPage: NextPage = () => {
           ? escalationDetails.escalation_id
           : ""
       }
+      showBackButton={true}
     >
       <Row className="mb-16" gutter={[{xs: 8, sm: 16, md: 24, lg: 32}, 16]}>
         <Col md={4} />

@@ -24,6 +24,8 @@ const SingleMohallah: NextPage = () => {
     subSectorData[]
   >([]);
 
+  const [userDetails, setUserDetails] = useState<authUser>({} as authUser);
+
   const getSectorDetails = async () => {
     toggleLoader(true);
     const sectorDetails = await getSectorDataByName(mohallahName as string);
@@ -70,7 +72,9 @@ const SingleMohallah: NextPage = () => {
     if (mohallahName) {
       changeSelectedSidebarKey("1");
       if (typeof verifyUser() !== "string") {
-        const {userRole, assignedArea} = verifyUser() as authUser;
+        const user = verifyUser() as authUser;
+        const {userRole, assignedArea} = user;
+        setUserDetails(user);
         if (
           userRole.includes(userRoles.Admin) ||
           (userRole.includes(userRoles.Masool) &&
@@ -102,6 +106,9 @@ const SingleMohallah: NextPage = () => {
     <Dashboardlayout
       backgroundColor={mohallahDetails.secondary_color || "#efefef"}
       headerTitle={mohallahDetails.name || ""}
+      showBackButton={
+        userDetails.userRole && userDetails.userRole.includes(userRoles.Admin)
+      }
     >
       <div>
         {!isEmpty(mohallahDetails) ? (

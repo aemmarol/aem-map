@@ -5,7 +5,7 @@ import {GoLocation} from "react-icons/go";
 
 export const DistanceCard: FC<{
   backgroundColor?: string;
-  directionLink: string;
+  directionLink?: string;
   fromLocation: string;
 }> = ({
   backgroundColor = "#000000",
