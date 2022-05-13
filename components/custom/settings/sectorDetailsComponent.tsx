@@ -17,10 +17,6 @@ import {
   updateSectorData,
 } from "../../../pages/api/v1/db/sectorCrud";
 import {updateSectorsToDefault} from "../../../pages/api/v1/db/setupDb";
-import {
-  getSubSectorDataByName,
-  updateSubSectorData,
-} from "../../../pages/api/v1/db/subSectorCrud";
 import {sectorData} from "../../../types";
 
 const airtableBase = new Airtable({
@@ -276,57 +272,6 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
             masoola_contact: value.contact,
             masoola_name: value.name,
             masoola_its: value.itsId.toString(),
-          });
-        })
-    );
-
-    const newData = await getSectorList();
-    updateData(newData);
-
-    setisLoading(false);
-  };
-
-  const handleUpdateMusaidDetails = async () => {
-    setisLoading(true);
-    const musaidData = await userTable
-      .select({
-        view: "Grid view",
-        filterByFormula: `({userRole} = 'Musaid')`,
-      })
-      .firstPage();
-    const musaidaData = await userTable
-      .select({
-        view: "Grid view",
-        filterByFormula: `({userRole} = 'Musaida')`,
-      })
-      .firstPage();
-
-    await Promise.all(
-      musaidData
-        .map((val) => val.fields)
-        .map(async (value: any) => {
-          const tempSector = await getSubSectorDataByName(
-            value.assignedArea[0]
-          );
-          await updateSubSectorData(tempSector.id as string, {
-            musaid_contact: value.contact,
-            musaid_name: value.name,
-            musaid_its: value.itsId.toString(),
-          });
-        })
-    );
-
-    await Promise.all(
-      musaidaData
-        .map((val) => val.fields)
-        .map(async (value: any) => {
-          const tempSector = await getSubSectorDataByName(
-            value.assignedArea[0]
-          );
-          await updateSubSectorData(tempSector.id as string, {
-            musaida_contact: value.contact,
-            musaida_name: value.name,
-            musaida_its: value.itsId.toString(),
           });
         })
     );
