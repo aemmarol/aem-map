@@ -38,12 +38,14 @@ type AddEscalationModalProps = {
   showModal: boolean;
   handleClose: () => any;
   adminDetails: authUser;
+  submitCallback: () => any;
 };
 
 export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   showModal,
   handleClose,
   adminDetails,
+  submitCallback,
 }) => {
   const [fileForm] = Form.useForm();
   const [escalationForm] = Form.useForm();
@@ -191,6 +193,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       message.success("Escalation added!");
       escalationForm.resetFields();
       fileForm.resetFields();
+      submitCallback();
       handleClose();
     }
   };
