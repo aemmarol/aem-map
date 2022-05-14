@@ -6,6 +6,7 @@ import {
   getDoc,
   getDocs,
   query,
+  updateDoc,
   where,
   WhereFilterOp,
 } from "firebase/firestore";
@@ -13,6 +14,7 @@ import {escalationCollectionName} from "../../../../firebase/dbCollectionNames";
 import {firestore} from "../../../../firebase/firebaseConfig";
 import {escalationData} from "../../../../types";
 import {defaultDatabaseFields} from "../../../../utils";
+import moment from "moment";
 
 const dataCollection = collection(firestore, escalationCollectionName);
 
@@ -113,6 +115,7 @@ export const getEscalationData = async (
 ): Promise<escalationData> => {
   const docRef = doc(firestore, escalationCollectionName, id);
   const docSnap = await getDoc(docRef);
+  escalationList = null;
   if (docSnap.exists()) {
     return {...docSnap.data(), id: docSnap.id} as escalationData;
   }
@@ -179,6 +182,19 @@ export const addEscalationData = async (
   } catch {
     return false;
   }
+};
+
+export const updateEscalationData = async (
+  id: string,
+  data: Partial<escalationData>
+): Promise<boolean> => {
+  const dataCollection = doc(firestore, escalationCollectionName, id);
+  await updateDoc(dataCollection, {
+    ...data,
+    updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
+  });
+  escalationList = null;
+  return true;
 };
 
 export const deleteFileData = async (id: string): Promise<boolean> => {

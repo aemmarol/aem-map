@@ -158,7 +158,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
         : adminDetails.userRole.includes(userRoles.Musaida)
         ? "Musaida"
         : adminDetails.userRole[0],
-      time: moment(new Date()).format(),
+      time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
     };
     const escalationIssueType = find(issueTypeOptions, {
       value: values.escalationType,
