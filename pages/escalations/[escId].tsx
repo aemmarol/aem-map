@@ -1,5 +1,5 @@
 import {Button, Card, Col, Divider, message, Row, Select} from "antd";
-import {isEmpty} from "lodash";
+import {find, isEmpty} from "lodash";
 import {NextPage} from "next";
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
@@ -8,11 +8,15 @@ import {useGlobalContext} from "../../context/GlobalContext";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import {authUser, comment, escalationData, userRoles} from "../../types";
 import {logout, verifyUser} from "../api/v1/authentication";
-import {getEscalationData} from "../api/v1/db/escalationsCrud";
+import {
+  getEscalationData,
+  updateEscalationData,
+} from "../api/v1/db/escalationsCrud";
 import moment from "moment";
 import Airtable from "airtable";
 import styles from "../../styles/pages/Escalation.module.scss";
 import {escalationIssueStatusList} from "../../utils";
+import {AddEscalationCommentsModal} from "../../components";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -33,6 +37,8 @@ const FileMemberDetailsPage: NextPage = () => {
   const [selectIssueValue, setselectIssueValue] = useState<string>("");
   const [selectStatusValue, setSelectStatusValue] = useState<string>("");
   const [issueComments, setIssueComments] = useState<comment[]>([]);
+  const [showAddCommentsModal, setShowAddCommentsModal] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (escId) {
@@ -105,13 +111,60 @@ const FileMemberDetailsPage: NextPage = () => {
   };
 
   const handleSelectIssueChange = async (val: string) => {
-    setselectIssueValue(val);
+    toggleLoader(true);
+    await updateEscalation("type", val, userRoles.Admin);
+    await getEscatationDetails(escId as string);
+    message.success("Escalation type Changed!");
+    toggleLoader(false);
   };
 
   const handleSelectStatusChange = async (val: string) => {
-    setSelectStatusValue(val);
+    toggleLoader(true);
+    await updateEscalation("status", val, adminDetails.userRole[0]);
+    await getEscatationDetails(escId as string);
+    message.success("Status Changed!");
+    toggleLoader(false);
   };
-  handleSelectStatusChange;
+
+  const updateEscalation = async (
+    field: string,
+    value: string,
+    currentUserRole: string
+  ) => {
+    const valueBasedOnField =
+      field === "type"
+        ? find(issueTypeOptions, {value})
+        : field === "status"
+        ? value
+        : "";
+
+    const msgValue =
+      field === "type" ? valueBasedOnField.label : valueBasedOnField;
+    const newMsg =
+      adminDetails.name +
+      " changed " +
+      field +
+      " to " +
+      msgValue +
+      " on " +
+      moment(new Date()).format("DD-MM-YYYY hh:mm A");
+    const currentCommentsArr = [...escalationDetails.comments];
+    const newComment: comment = {
+      name: adminDetails.name,
+      msg: newMsg,
+      contact_number: adminDetails.contact,
+      userRole: currentUserRole,
+      time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
+    };
+    currentCommentsArr.push(newComment);
+
+    const data: Partial<escalationData> = {
+      comments: currentCommentsArr,
+      [field]: valueBasedOnField,
+    };
+
+    await updateEscalationData(escId as string, data);
+  };
 
   return (
     <Dashboardlayout
@@ -271,7 +324,13 @@ const FileMemberDetailsPage: NextPage = () => {
                 <Col xs={24}>
                   <div className={styles.commentsHeader}>
                     <h3>Comments</h3>
-                    <Button type="primary"> Add Comment</Button>
+                    <Button
+                      onClick={() => setShowAddCommentsModal(true)}
+                      type="primary"
+                    >
+                      {" "}
+                      Add Comment
+                    </Button>
                   </div>
                   {issueComments.map((val, idx) => (
                     <Card
@@ -296,6 +355,16 @@ const FileMemberDetailsPage: NextPage = () => {
         </Col>
         <Col md={4} />
       </Row>
+      {showAddCommentsModal ? (
+        <AddEscalationCommentsModal
+          handleClose={() => setShowAddCommentsModal(false)}
+          showModal={showAddCommentsModal}
+          currentComments={escalationDetails.comments}
+          escalationId={escalationDetails.id as string}
+          adminDetails={adminDetails}
+          submitCallback={() => getEscatationDetails(escId as string)}
+        />
+      ) : null}
     </Dashboardlayout>
   );
 };
