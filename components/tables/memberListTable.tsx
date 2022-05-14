@@ -78,13 +78,13 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
       className={styles.fileListTable}
       pagination={false}
       scroll={{x: "150px", y: "500px"}}
-      rowClassName="cursor-pointer"
-      onRow={(record) => ({
-        onClick: () =>
-          router.push(
-            `/mohallah/${record.sub_sector.sector.name}/${record.sub_sector.name}/${record.tanzeem_file_no}`
-          ),
-      })}
+      // rowClassName="cursor-pointer"
+      // onRow={(record) => ({
+      //   onClick: () =>
+      //     router.push(
+      //       `/mohallah/${record.sub_sector.sector.name}/${record.sub_sector.name}/${record.tanzeem_file_no}`
+      //     ),
+      // })}
     />
   );
 };
