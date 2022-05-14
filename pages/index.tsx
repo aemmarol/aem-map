@@ -76,7 +76,7 @@ const SignInPage: NextPage = () => {
   const onFinish = (values: authenticationProps) => {
     login(values)
       .then((response) => {
-        console.log(response)
+        console.log(response);
         form.resetFields();
         onLoginSuccess();
       })
@@ -91,7 +91,7 @@ const SignInPage: NextPage = () => {
     if (typeof verifyUser() !== "string") {
       const {userRole, assignedArea} = verifyUser() as authUser;
       verifyUserAndRedirect(userRole, assignedArea);
-      message.success("User Login Successful")
+      message.success("User Login Successful");
     }
   };
 
