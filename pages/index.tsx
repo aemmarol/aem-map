@@ -5,7 +5,7 @@ import styles from "../styles/SignInPage.module.scss";
 import {Signinlayout} from "../layouts/signInLayout";
 import {SigninCard} from "../components";
 import {login, verifyUser} from "../pages/api/v1/authentication";
-import {authenticationProps, authUser, loginResponseData} from "../types";
+import {authenticationProps, authUser} from "../types";
 import {useEffect} from "react";
 import {useRouter} from "next/router";
 import {getSubSectorDataByName} from "./api/v1/db/subSectorCrud";
