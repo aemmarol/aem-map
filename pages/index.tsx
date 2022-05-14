@@ -1,11 +1,11 @@
-import {Button, Form, Input, notification} from "antd";
+import {Button, Form, Input, message, notification} from "antd";
 import {UserOutlined, LockOutlined} from "@ant-design/icons";
 import type {NextPage} from "next";
 import styles from "../styles/SignInPage.module.scss";
 import {Signinlayout} from "../layouts/signInLayout";
 import {SigninCard} from "../components";
 import {login, verifyUser} from "../pages/api/v1/authentication";
-import {authenticationProps, authUser, loginResponseData} from "../types";
+import {authenticationProps, authUser} from "../types";
 import {useEffect} from "react";
 import {useRouter} from "next/router";
 import {getSubSectorDataByName} from "./api/v1/db/subSectorCrud";
@@ -76,10 +76,7 @@ const SignInPage: NextPage = () => {
   const onFinish = (values: authenticationProps) => {
     login(values)
       .then((response) => {
-        const userResponse: loginResponseData = response as loginResponseData;
-        notification.success({
-          message: userResponse.msg,
-        });
+        console.log(response);
         form.resetFields();
         onLoginSuccess();
       })
@@ -94,6 +91,7 @@ const SignInPage: NextPage = () => {
     if (typeof verifyUser() !== "string") {
       const {userRole, assignedArea} = verifyUser() as authUser;
       verifyUserAndRedirect(userRole, assignedArea);
+      message.success("User Login Successful");
     }
   };
 
