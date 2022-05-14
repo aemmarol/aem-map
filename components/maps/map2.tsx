@@ -120,7 +120,7 @@ const Map2: FC<Map2Props> = ({secData, subSecData}) => {
             <LayerGroup>
               {subSecData.map((subsector: subSectorData, idx) => {
                 const markerIcon = divIcon({
-                  html: `<span style="display:flex;"> <img src="images/marker-icon.png" style="height:2em;width:2em"> &nbsp&nbsp <b style="font-size:10px">${subsector.name}</b></span>`,
+                  html: `<span style="display:flex; flex-direction:column; width:10em"><b style="font-size:10px">${subsector.name}</b> <img src="images/marker-icon.png" style="height:2em;width:2em"></span>`,
                   className: "dummy",
                 });
                 return (
