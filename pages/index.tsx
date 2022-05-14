@@ -81,13 +81,20 @@ const SignInPage: NextPage = () => {
           message: userResponse.msg,
         });
         form.resetFields();
-        router.reload();
+        onLoginSuccess();
       })
       .catch((error) => {
         notification.error({
           message: error.message,
         });
       });
+  };
+
+  const onLoginSuccess = () => {
+    if (typeof verifyUser() !== "string") {
+      const {userRole, assignedArea} = verifyUser() as authUser;
+      verifyUserAndRedirect(userRole, assignedArea);
+    }
   };
 
   return (
