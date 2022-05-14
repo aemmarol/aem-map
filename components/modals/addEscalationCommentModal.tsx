@@ -1,10 +1,4 @@
-import {
-  Button,
-  Form,
-  Input,
-  message,
-  Modal,
-} from "antd";
+import {Button, Form, Input, message, Modal} from "antd";
 import {FC} from "react";
 
 import {authUser, comment} from "../../types";
