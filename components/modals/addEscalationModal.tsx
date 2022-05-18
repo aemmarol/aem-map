@@ -13,13 +13,20 @@ import {
 import {find, isEmpty} from "lodash";
 import {FC, useEffect, useState} from "react";
 import {
+  getFileDataList,
   getFileDataByFileNumber,
   getFileDataListBySector,
   getFileDataListBySubsector,
 } from "../../pages/api/v1/db/fileCrud";
 import {getMemberDataById} from "../../pages/api/v1/db/memberCrud";
 import Airtable from "airtable";
-import {authUser, comment, escalationData, userRoles} from "../../types";
+import {
+  authUser,
+  comment,
+  escalationData,
+  fileDetails,
+  userRoles,
+} from "../../types";
 import {defaultDatabaseFields} from "../../utils";
 import moment from "moment";
 import {addEscalationData} from "../../pages/api/v1/db/escalationsCrud";
@@ -27,6 +34,7 @@ import {
   getDbSettings,
   incrementEscalationAutoNumber,
 } from "../../pages/api/v1/settings";
+import {getUmoorList} from "../../pages/api/v1/db/umoorsCrud";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -50,7 +58,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   const [fileForm] = Form.useForm();
   const [escalationForm] = Form.useForm();
 
-  const [allowedFileNumbers, setAllowedFileNumbers] = useState<string[]>([]);
+  const [allowedFileNumbers, setAllowedFileNumbers] = useState<any[]>([]);
   const [issueTypeOptions, setIssueTypeOptions] = useState<any[]>([]);
   const [showFileNotFoundError, setshowFileNotFoundError] =
     useState<boolean>(false);
@@ -58,30 +66,32 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
 
   useEffect(() => {
     getRoleBasedFileNumbers();
-    getUmoorList();
+    setUmoorList();
   }, []);
 
-  const getUmoorList = async () => {
-    const temp: any = [];
-    await umoorTable
-      .select({
-        view: "Grid view",
-      })
-      .eachPage(
-        function page(records, fetchNextPage) {
-          records.forEach(function (record) {
-            temp.push(record.fields);
-          });
-          fetchNextPage();
-        },
-        function done(err) {
-          if (err) {
-            console.error(err);
-            return;
-          }
-          setIssueTypeOptions(temp);
-        }
-      );
+  const setUmoorList = async () => {
+    // const temp: any = [];
+    // await umoorTable
+    //   .select({
+    //     view: "Grid view",
+    //   })
+    //   .eachPage(
+    //     function page(records, fetchNextPage) {
+    //       records.forEach(function (record) {
+    //         temp.push(record.fields);
+    //       });
+    //       fetchNextPage();
+    //     },
+    //     function done(err) {
+    //       if (err) {
+    //         console.error(err);
+    //         return;
+    //       }
+    //       setIssueTypeOptions(temp);
+    //     }
+    //   );
+    const umoorList = await getUmoorList();
+    setIssueTypeOptions(umoorList);
   };
 
   const getRoleBasedFileNumbers = async () => {
@@ -103,6 +113,17 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
         adminDetails.assignedArea[0]
       );
       setAllowedFileNumbers(fileList.map((val: any) => val.tanzeem_file_no));
+    } else if (adminDetails.userRole.includes(userRoles.Admin)) {
+      const fileList = await getFileDataList();
+
+      setAllowedFileNumbers(
+        fileList.map((val: fileDetails) => {
+          return {
+            value: val.tanzeem_file_no,
+            label: `${val.tanzeem_file_no}(${val.hof_name})`,
+          };
+        })
+      );
     }
   };
 
@@ -111,7 +132,10 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       const data = await getFileDataByFileNumber(values.fileNumber);
       if (!!data) {
         const hof_data = await getMemberDataById(data.id);
+        // const hof_me
+        console.log(hof_data, data);
         setFileDetails({
+          id: hof_data.id,
           hofName: hof_data.full_name,
           hofContact: hof_data.mobile,
           subSector: data.sub_sector.name,
@@ -125,7 +149,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
     } else {
       if (
         !values.fileNumber ||
-        !allowedFileNumbers.includes(values.fileNumber)
+        !allowedFileNumbers.map((val) => val.value).includes(values.fileNumber)
       ) {
         setshowFileNotFoundError(true);
         setFileDetails({});
@@ -144,6 +168,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   };
 
   const handleEscalationFormSubmit = async (values: any) => {
+    console.log(values);
     const dbSettings = await getDbSettings();
     const firstComment: comment = {
       msg: "Issue is added on " + moment(new Date()).format("DD-MM-YYYY"),
@@ -185,17 +210,17 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       comments: [firstComment],
       escalation_id: "esc-" + dbSettings.escalation_auto_number,
     };
-    const result = await addEscalationData(data);
-    if (result) {
-      await incrementEscalationAutoNumber(
-        dbSettings.escalation_auto_number + 1
-      );
-      message.success("Escalation added!");
-      escalationForm.resetFields();
-      fileForm.resetFields();
-      submitCallback();
-      handleClose();
-    }
+    // const result = await addEscalationData(data);
+    // if (result) {
+    //   await incrementEscalationAutoNumber(
+    //     dbSettings.escalation_auto_number + 1
+    //   );
+    //   message.success("Escalation added!");
+    //   escalationForm.resetFields();
+    //   fileForm.resetFields();
+    //   submitCallback();
+    //   handleClose();
+    // }
   };
 
   return (
@@ -220,23 +245,42 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
               required: true,
               message: "Please enter file number!",
             },
-            {
-              max: 8,
-              message: "Please enter valid file number!",
-            },
-            () => ({
-              validator(_, value) {
-                if (!value || !isNaN(value)) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(
-                  new Error("Please enter valid file number!")
-                );
-              },
-            }),
+            // {
+            //   max: 8,
+            //   message: "Please enter valid file number!",
+            // },
+            // () => ({
+            //   validator(_, value) {
+            //     if (!value || !isNaN(value)) {
+            //       return Promise.resolve();
+            //     }
+            //     return Promise.reject(
+            //       new Error("Please enter valid file number!")
+            //     );
+            //   },
+            // }),
           ]}
         >
-          <Input />
+          {/* <Input /> */}
+          <Select
+            showSearch={true}
+            filterOption={(inputValue, option: any) =>
+              option.props.children
+                .toString()
+                .toLowerCase()
+                .includes(inputValue.toLowerCase())
+            }
+          >
+            {allowedFileNumbers.map((val: any) => (
+              <Select.Option
+                label={val.label}
+                value={val.value}
+                key={val.value}
+              >
+                {val.label}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item>
@@ -284,6 +328,25 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
               escalations: [{escalationType: "", escalationComments: ""}],
             }}
           >
+            <Form.Item
+              name="escalationRaisedForITS"
+              label="Issue raised for (Enter ITS)"
+              rules={[
+                {
+                  required: true,
+                  message:
+                    "Enter ITS of person for which issue is being raised.",
+                },
+                {min: 8, message: "ITS ID cannot be less than 8 characters"},
+                {max: 8, message: "ITS ID cannot be greater than 8 characters"},
+                {
+                  pattern: new RegExp(/^[0-9]+$/),
+                  message: "ITS ID should be a number",
+                },
+              ]}
+            >
+              <Input type={"number"}></Input>
+            </Form.Item>
             <Form.Item
               name="escalationType"
               label="Issue Category "
