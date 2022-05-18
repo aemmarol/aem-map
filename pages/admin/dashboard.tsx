@@ -1,4 +1,4 @@
-import {Card, Col, message, Row} from "antd";
+import {Col, message, Row} from "antd";
 import {GetServerSideProps, NextPage} from "next";
 import {useRouter} from "next/router";
 import React, {useEffect, useState} from "react";
@@ -11,9 +11,9 @@ import {
   groupEscalationListBy,
 } from "../api/v1/db/escalationsCrud";
 
-import styles from "../../styles/pages/dashboard.module.scss";
 import {getUmoorList} from "../api/v1/db/umoorsCrud";
 import {getSectorList} from "../api/v1/db/sectorCrud";
+import {StatsCard} from "../../components/cards/statsCard";
 
 interface AdminDashboardProps {
   escalationsList: escalationData[];
@@ -86,19 +86,11 @@ const AdminDashboard: NextPage<AdminDashboardProps> = ({escalationsList}) => {
 
               return (
                 <Col xs={24} sm={12} md={8} xl={6} key={idx}>
-                  <Card
+                  <StatsCard
                     title={umoor.label}
-                    onClick={() => showEscalations("umoor", umoor.value)}
-                    className={styles.statCard}
-                  >
-                    {Object.keys(escalationGroup.stats).map((key, idx) => {
-                      return (
-                        <p key={idx}>
-                          {key}: {escalationGroup.stats[key]}
-                        </p>
-                      );
-                    })}
-                  </Card>
+                    handleClick={() => showEscalations("umoor", umoor.value)}
+                    stats={escalationGroup.stats}
+                  ></StatsCard>
                 </Col>
               );
             })}
@@ -124,19 +116,11 @@ const AdminDashboard: NextPage<AdminDashboardProps> = ({escalationsList}) => {
           }
           return (
             <Col xs={24} sm={12} md={8} xl={6} key={idx}>
-              <Card
+              <StatsCard
                 title={sector.name}
-                onClick={() => showEscalations("sector", sector.name)}
-                className={styles.statCard}
-              >
-                {Object.keys(escalationGroup.stats).map((key, idx) => {
-                  return (
-                    <p key={idx}>
-                      {key}: {escalationGroup.stats[key]}
-                    </p>
-                  );
-                })}
-              </Card>
+                handleClick={() => showEscalations("sector", sector.name)}
+                stats={escalationGroup.stats}
+              ></StatsCard>
             </Col>
           );
         })}
