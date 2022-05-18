@@ -33,17 +33,20 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
       notVerifierUserLogout();
     }
     const fieldData = await getMumeneenDataFields();
-    let dataColumns = [
-      {
+    let dataColumns = [];
+    const dataColumnsMap: any = {
+      id: {
         title: "ITS",
         dataIndex: "id",
         key: "id",
         width: 150,
         fixed: "left",
       },
-      ...fieldData
-        .filter((val) => val.name !== "tanzeem_file_no")
-        .map((val) => ({
+    };
+    fieldData
+      .filter((val) => val.name !== "tanzeem_file_no")
+      .forEach((val) => {
+        dataColumnsMap[val.name] = {
           title: val.label,
           dataIndex: val.name,
           width:
@@ -53,14 +56,12 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
               ? 250
               : 150,
           key: val.name,
-        })),
-    ];
+        };
+      });
     if (userRole) {
       const userColumns = getMumineenTableUserColumns(userRole);
       if (userColumns && userColumns.length > 0) {
-        dataColumns = dataColumns.filter((dataColumn) =>
-          userColumns.includes(dataColumn.key)
-        );
+        dataColumns = userColumns.map((column) => dataColumnsMap[column]);
       }
     }
     setcolumns(dataColumns);

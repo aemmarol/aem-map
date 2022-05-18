@@ -7,7 +7,7 @@ export const getFileTableUserColumns = (userRole: userRoles) => {
     case userRoles.Musaid:
     case userRoles.Musaida:
     case userRoles.Umoor:
-      return ["id", "tanzeem_file_no", "hof_name", "address"];
+      return ["tanzeem_file_no", "id", "hof_name", "address"];
 
     case userRoles.Admin:
       return [];
@@ -21,7 +21,7 @@ export const getMumineenTableUserColumns = (userRole: userRoles) => {
     case userRoles.Musaid:
     case userRoles.Musaida:
     case userRoles.Umoor:
-      return ["id", "age", "gender", "mobile", "full_name"];
+      return ["id", "full_name", "age", "gender", "mobile"];
 
     case userRoles.Admin:
       return [];
