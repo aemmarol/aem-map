@@ -14,6 +14,7 @@ export interface authUser {
   itsId: string;
   name: string;
   contact: string;
+  password?: string;
   userRole: Array<userRoles>;
   assignedArea: Array<string>;
   assignedUmoor: Array<string>;

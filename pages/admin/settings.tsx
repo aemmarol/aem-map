@@ -1,4 +1,4 @@
-import {Col, message, Row} from "antd";
+import {Button, Card, Col, message, Row} from "antd";
 import {GetServerSideProps, NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import {useEffect, useState} from "react";
@@ -22,19 +22,28 @@ import {
 } from "../../components";
 import {getSectorList} from "../api/v1/db/sectorCrud";
 import {getSubSectorList} from "../api/v1/db/subSectorCrud";
-import {logout, verifyUser} from "../api/v1/authentication";
+import {
+  addUser,
+  deleteUser,
+  getUserList,
+  logout,
+  verifyUser,
+} from "../api/v1/authentication";
 import {useRouter} from "next/router";
 import {useGlobalContext} from "../../context/GlobalContext";
+import Airtable from "airtable";
+import {addUmoor, deleteUmoor, getUmoorList} from "../api/v1/db/umoorsCrud";
 
 // const escAirtableBase = new Airtable({
 //   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
 // }).base("appHju317Ez55YdW0");
 
-// const airtableBase = new Airtable({
-//   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
-// }).base("app7V1cg4ibiooxcn");
+const airtableBase = new Airtable({
+  apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
+}).base("app7V1cg4ibiooxcn");
 
-// const umoorTable = airtableBase("umoorList");
+const userTable = airtableBase("userList");
+const umoorTable = airtableBase("umoorList");
 
 // const escalationListTable = escAirtableBase("Escalation List");
 
@@ -100,29 +109,6 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     logout();
     router.push("/");
   };
-
-  // const getUmoorList = async () => {
-  //   const temp: any = [];
-  //   umoorTable
-  //     .select({
-  //       view: "Grid view",
-  //     })
-  //     .eachPage(
-  //       function page(records, fetchNextPage) {
-  //         records.forEach(function (record) {
-  //           temp.push(record.fields);
-  //         });
-  //         fetchNextPage();
-  //       },
-  //       function done(err) {
-  //         if (err) {
-  //           console.error(err);
-  //           return;
-  //         }
-  //         setIssueTypeOptions(temp);
-  //       }
-  //     );
-  // };
 
   // const handleAirtableEscalationSync = async () => {
   //   toggleLoader(true);
@@ -246,11 +232,123 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   //   toggleLoader(false);
   // };
 
+  const handleSyncUsersFromAirtable = async () => {
+    toggleLoader(true);
+    const oldUserList = await getUserList();
+    await Promise.all(
+      oldUserList.map(async (val) => {
+        await deleteUser(val.itsId.toString());
+      })
+    );
+
+    const airtableUserList: any[] = [];
+
+    await userTable
+      .select({
+        maxRecords: 1000,
+        view: "Grid view",
+      })
+      .eachPage(
+        function page(records, fetchNextPage) {
+          records.forEach(function (record) {
+            airtableUserList.push(record.fields);
+          });
+          fetchNextPage();
+        },
+        function done(err) {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          addAirtableUsersToDb(airtableUserList);
+        }
+      );
+  };
+
+  const addAirtableUsersToDb = async (data: any[]) => {
+    await Promise.all(
+      data.map(async (val) => {
+        const userdbdata = {
+          itsId: val.itsId,
+          name: val.name,
+          contact: val.contact,
+          password: val.password,
+          userRole: val.userRole ? val.userRole : [],
+          assignedArea: val.assignedArea ? val.assignedArea : [],
+          assignedUmoor: val.assignedUmoor ? val.assignedUmoor : [],
+        };
+        await addUser(val.itsId.toString(), userdbdata);
+      })
+    );
+    toggleLoader(false);
+  };
+
+  const handleSyncUmoorsFromAirtable = async () => {
+    toggleLoader(true);
+    const oldUmoorList = await getUmoorList();
+    await Promise.all(
+      oldUmoorList.map(async (val) => {
+        await deleteUmoor(val.value);
+      })
+    );
+
+    const airtableUmoorList: any[] = [];
+
+    await umoorTable
+      .select({
+        view: "Grid view",
+      })
+      .eachPage(
+        function page(records, fetchNextPage) {
+          records.forEach(function (record) {
+            airtableUmoorList.push(record.fields);
+          });
+          fetchNextPage();
+        },
+        function done(err) {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          addAirtableUmoorsToDb(airtableUmoorList);
+        }
+      );
+  };
+
+  const addAirtableUmoorsToDb = async (data: any[]) => {
+    await Promise.all(
+      data.map(async (val) => {
+        const umoordbdata = {
+          value: val.value,
+          label: val.label,
+        };
+        await addUmoor(val.value, umoordbdata);
+      })
+    );
+    toggleLoader(false);
+  };
+
   return (
     <Dashboardlayout headerTitle="Admin Settings">
       <Row className="mb-30" gutter={[{xs: 8, lg: 12}, 16]}>
         <Col xs={12}>
           <UploadExcelFileCard />
+        </Col>
+        <Col xs={12}>
+          <Card className="border-radius-10" title="Sync Settings">
+            <Row gutter={[16, 16]}>
+              <Col xs={12}>
+                <Button onClick={handleSyncUsersFromAirtable} type="primary">
+                  Sync Users
+                </Button>
+              </Col>
+              <Col xs={12}>
+                <Button onClick={handleSyncUmoorsFromAirtable} type="primary">
+                  Sync Umoorlist
+                </Button>
+              </Col>
+            </Row>
+          </Card>
         </Col>
       </Row>
 

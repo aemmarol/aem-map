@@ -18,7 +18,6 @@ import {
   getFileDataListBySubsector,
 } from "../../pages/api/v1/db/fileCrud";
 import {getMemberDataById} from "../../pages/api/v1/db/memberCrud";
-import Airtable from "airtable";
 import {authUser, comment, escalationData, userRoles} from "../../types";
 import {defaultDatabaseFields} from "../../utils";
 import moment from "moment";
@@ -27,12 +26,7 @@ import {
   getDbSettings,
   incrementEscalationAutoNumber,
 } from "../../pages/api/v1/settings";
-
-const airtableBase = new Airtable({
-  apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
-}).base("app7V1cg4ibiooxcn");
-
-const umoorTable = airtableBase("umoorList");
+import {getUmoorList} from "../../pages/api/v1/db/umoorsCrud";
 
 type AddEscalationModalProps = {
   showModal: boolean;
@@ -58,30 +52,31 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
 
   useEffect(() => {
     getRoleBasedFileNumbers();
-    getUmoorList();
+    getUmoorListfromDb();
   }, []);
 
-  const getUmoorList = async () => {
-    const temp: any = [];
-    await umoorTable
-      .select({
-        view: "Grid view",
-      })
-      .eachPage(
-        function page(records, fetchNextPage) {
-          records.forEach(function (record) {
-            temp.push(record.fields);
-          });
-          fetchNextPage();
-        },
-        function done(err) {
-          if (err) {
-            console.error(err);
-            return;
-          }
-          setIssueTypeOptions(temp);
-        }
-      );
+  const getUmoorListfromDb = async () => {
+    const temp: any = await getUmoorList();
+    setIssueTypeOptions(temp);
+    // await umoorTable
+    //   .select({
+    //     view: "Grid view",
+    //   })
+    //   .eachPage(
+    //     function page(records, fetchNextPage) {
+    //       records.forEach(function (record) {
+    //         temp.push(record.fields);
+    //       });
+    //       fetchNextPage();
+    //     },
+    //     function done(err) {
+    //       if (err) {
+    //         console.error(err);
+    //         return;
+    //       }
+    //       setIssueTypeOptions(temp);
+    //     }
+    //   );
   };
 
   const getRoleBasedFileNumbers = async () => {

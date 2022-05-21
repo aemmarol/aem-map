@@ -21,7 +21,7 @@ interface AdminDashboardProps {
 const AdminDashboard: NextPage<AdminDashboardProps> = ({escalationsList}) => {
   const router = useRouter();
   const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
-  const [umoorList, setUmoorList] = useState([]);
+  const [umoorList, setUmoorList] = useState<any[]>([]);
   const [sectorList, setSectorList] = useState<sectorData[]>([]);
   const escalationsByUmoor = groupEscalationListBy(
     escalationsList,
@@ -48,7 +48,7 @@ const AdminDashboard: NextPage<AdminDashboardProps> = ({escalationsList}) => {
   }, []);
 
   const intiLists = async () => {
-    const umoors = await getUmoorList();
+    const umoors: any[] = await getUmoorList();
     setUmoorList(umoors);
     const sectors = await getSectorList();
     setSectorList(sectors);
