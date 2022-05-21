@@ -35,7 +35,7 @@ const Dashboard: NextPage = () => {
     useState<boolean>(false);
   const [selectedView, setSelectedView] = useState<userRoles>();
   const [filterProps, setFilterProps] = useState<EscalationFilterType[]>([]);
-  const [umoorList, setUmoorList] = useState([]);
+  const [umoorList, setUmoorList] = useState<any[]>([]);
   const [selectedfilterItems, setSelectedFilterItems] =
     useState<selectedFilterItemsType>({
       selectedUmoors: [],
@@ -71,7 +71,7 @@ const Dashboard: NextPage = () => {
   const initFilters = async () => {
     const queryUmoor = router.query.umoor?.toString();
     const querySector = router.query.sector?.toString();
-    const umoors = await getUmoorList();
+    const umoors: any[] = await getUmoorList();
     setUmoorList(umoors);
     setSelectedFilterItems({
       selectedRegions: querySector
