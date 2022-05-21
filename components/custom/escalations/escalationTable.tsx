@@ -83,6 +83,7 @@ export const EscalationTable: FC<EscalationTableType> = ({
         const now = moment(new Date());
         return `${now.diff(issueDate, "days")} days`;
       },
+      width: 150,
     },
     {
       title: "Status",
@@ -122,7 +123,7 @@ export const EscalationTable: FC<EscalationTableType> = ({
       dataSource={escalationList.map((val) => ({...val, key: val.id}))}
       columns={getTableColumns() as any}
       pagination={false}
-      scroll={{x: "100px", y: height ? height - 250 + "px" : "500px" + "px"}}
+      scroll={{x: "100px", y: height ? height - 278 + "px" : "500px" + "px"}}
     />
   );
 };
