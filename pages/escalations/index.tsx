@@ -14,10 +14,12 @@ import {
   Criteria,
   escalationDBFields,
   getEscalationListByCriteriaClientSide,
+  groupEscalationListBy,
 } from "../api/v1/db/escalationsCrud";
 import {EscalationFilterType} from "../../components/custom/escalations/escalationFilter";
 import {filterOption} from "../../types/escalation";
 import moment from "moment";
+import {StatsCard} from "../../components/cards/statsCard";
 
 interface selectedFilterItemsType {
   selectedUmoors: filterOption[];
@@ -40,6 +42,7 @@ const Dashboard: NextPage = () => {
       selectedRegions: [],
       ready: false,
     });
+  const [escalationsStatsGroup, setEscalationsStatsGroup] = useState();
   const [escalationList, setEscalationList] = useState<escalationData[]>([]);
   const [isReady, setIsReady] = useState(false);
 
@@ -102,12 +105,76 @@ const Dashboard: NextPage = () => {
     const umoor: any = umoorList.find((item: any) => item.value == value);
     return umoor ? umoor.label : null;
   };
+  const getStatCardList = () => {
+    if (!escalationsStatsGroup) return null;
+    switch (selectedView) {
+      case userRoles.Masool:
+      case userRoles.Masoola:
+      case userRoles.Musaid:
+      case userRoles.Musaida:
+        return adminDetails.assignedArea.map((area, idx) => {
+          let escalationGroup: any = escalationsStatsGroup[area];
+          if (!escalationGroup) {
+            escalationGroup = {
+              groupName: area,
+              data: [],
+              stats: {
+                total: 0,
+                "Issue Reported": 0,
+                "Resolution In Process": 0,
+                Resolved: 0,
+              },
+            };
+          }
+
+          return (
+            <div key={"stat_" + area + "_" + idx} className="mb-16">
+              <StatsCard
+                title={area}
+                handleClick={null}
+                stats={escalationGroup.stats}
+                horizontal={true}
+              ></StatsCard>
+            </div>
+          );
+        });
+      case userRoles.Umoor:
+        return adminDetails.assignedUmoor.map((umoor, idx) => {
+          let escalationGroup: any = escalationsStatsGroup[umoor];
+          if (!escalationGroup) {
+            escalationGroup = {
+              groupName: umoor,
+              data: [],
+              stats: {
+                total: 0,
+                "Issue Reported": 0,
+                "Resolution In Process": 0,
+                Resolved: 0,
+              },
+            };
+          }
+
+          return (
+            <div key={"stat_" + umoor + "_" + idx} className="mb-16">
+              <StatsCard
+                title={getLabelForUmoor(umoor)}
+                handleClick={null}
+                stats={escalationGroup.stats}
+                horizontal={true}
+              ></StatsCard>
+            </div>
+          );
+        });
+    }
+  };
   const getEscalationList = async () => {
     let criteria: Criteria[] = [];
+    let groupName;
     switch (selectedView) {
       case userRoles.Masool:
       case userRoles.Masoola:
         // setTitle({label: "Region", value: user.assignedArea[0]});
+        groupName = "file_details.sub_sector.sector.name";
         setFilterProps([
           {
             title: "Selected Regions",
@@ -132,6 +199,7 @@ const Dashboard: NextPage = () => {
       case userRoles.Musaid:
       case userRoles.Musaida:
         // setTitle({label: "Region", value: user.assignedArea[0]});
+        groupName = "file_details.sub_sector.name";
         setFilterProps([
           {
             title: "Selected Regions",
@@ -155,6 +223,7 @@ const Dashboard: NextPage = () => {
         break;
       case userRoles.Umoor:
         // setTitle({label: "Category", value: user.assignedUmoor[0]});
+        groupName = "type.value";
         if (!umoorList) getEscalationList();
         else {
           setFilterProps([
@@ -242,6 +311,9 @@ const Dashboard: NextPage = () => {
         )
       )
     );
+    if (groupName) {
+      setEscalationsStatsGroup(groupEscalationListBy(escList, groupName));
+    }
     setIsReady(true);
   };
 
@@ -273,6 +345,18 @@ const Dashboard: NextPage = () => {
       }
       headerTitle="Escalations"
     >
+      <div
+        className="d-flex"
+        style={{
+          flexDirection: "column",
+          justifyContent: "space-around",
+          marginBottom: "1em",
+          width: "50%",
+          margin: "0 auto",
+        }}
+      >
+        {getStatCardList()}
+      </div>
       <div className="d-flex mb-16">
         {adminDetails &&
         adminDetails.userRole &&
@@ -294,18 +378,16 @@ const Dashboard: NextPage = () => {
           </div>
         ) : null}
 
-        {selectedView === "Umoor" ? null : (
-          <div className="d-flex w-full float-right">
-            <Button
-              className="ml-auto"
-              onClick={showAddEscalationModal}
-              type="primary"
-              size="large"
-            >
-              Raise Escalation
-            </Button>
-          </div>
-        )}
+        <div className="d-flex w-full float-right">
+          <Button
+            className="ml-auto"
+            onClick={showAddEscalationModal}
+            type="primary"
+            size="large"
+          >
+            Raise Escalation
+          </Button>
+        </div>
       </div>
 
       {selectedView && isReady ? (

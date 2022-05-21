@@ -10,11 +10,18 @@ import {
 } from "firebase/firestore";
 import {fileCollectionName} from "../../../../firebase/dbCollectionNames";
 import {firestore} from "../../../../firebase/firebaseConfig";
+import {fileDetails} from "../../../../types";
 import {defaultDatabaseFields} from "../../../../utils";
 
 const dataCollection = collection(firestore, fileCollectionName);
 
+let fileList: fileDetails[];
+
 export const getFileDataList = async (): Promise<any[]> => {
+  if (fileList) {
+    console.log("USING FILE LIST FROM CACHE");
+    return fileList;
+  }
   const resultArr: any[] = [];
   const q = query(
     dataCollection,
@@ -28,8 +35,8 @@ export const getFileDataList = async (): Promise<any[]> => {
     };
     resultArr.push(file);
   });
-
-  return resultArr;
+  fileList = resultArr;
+  return fileList;
 };
 
 export const getFileDataListBySubsector = async (

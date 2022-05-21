@@ -34,37 +34,40 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
     }
 
     const fieldData = await getFileDataFields();
-    let dataColumns = [
-      {
+    let dataColumns = [];
+    const dataColumnsMap: any = {
+      id: {
         title: "HOF ITS",
         dataIndex: "id",
         key: "id",
         width: 150,
         fixed: "left",
       },
-      {
+      tanzeem_file_no: {
         title: "File Number",
         dataIndex: "tanzeem_file_no",
         key: "tanzeem_file_no",
         width: 150,
         fixed: "left",
       },
-      {
+      hof_name: {
         title: "HOF Name",
         dataIndex: "hof_name",
         key: "hof_name",
         width: 200,
         fixed: "left",
       },
-      {
+      no_family_members: {
         title: "Number of members",
         dataIndex: "no_family_members",
         key: "no_family_members",
         width: 150,
       },
-      ...fieldData
-        .filter((val) => val.name !== "tanzeem_file_no")
-        .map((val) => ({
+    };
+    fieldData
+      .filter((val) => val.name !== "tanzeem_file_no")
+      .forEach((val) => {
+        dataColumnsMap[val.name] = {
           title: val.label,
           dataIndex: val.name,
           width:
@@ -74,14 +77,13 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
               ? 250
               : 100,
           key: val.name,
-        })),
-    ];
+        };
+      });
+
     if (userRole) {
       const userColumns = getFileTableUserColumns(userRole);
       if (userColumns && userColumns.length > 0) {
-        dataColumns = dataColumns.filter((dataColumn) =>
-          userColumns.includes(dataColumn.key)
-        );
+        dataColumns = userColumns.map((column) => dataColumnsMap[column]);
       }
     }
     setcolumns(dataColumns);
