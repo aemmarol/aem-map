@@ -48,7 +48,7 @@ export const EscalationList: FC<EscalationListType> = ({
       </Row>
       <Row gutter={[16, 16]}>
         <Col
-          style={{maxHeight: height ? height - 175 + "px" : "500px"}}
+          style={{maxHeight: height ? height - 225 + "px" : "500px"}}
           className={styles.filtersContainer}
           xs={5}
         >
