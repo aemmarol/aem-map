@@ -74,25 +74,10 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
 
   const setUmoorList = async () => {
     // const temp: any = [];
-    // await umoorTable
-    //   .select({
-    //     view: "Grid view",
-    //   })
-    //   .eachPage(
-    //     function page(records, fetchNextPage) {
-    //       records.forEach(function (record) {
-    //         temp.push(record.fields);
-    //       });
-    //       fetchNextPage();
-    //     },
-    //     function done(err) {
-    //       if (err) {
-    //         console.error(err);
-    //         return;
-    //       }
-    //       setIssueTypeOptions(temp);
-    //     }
-    //   );
+    getUmoorListfromDb();
+  };
+
+  const getUmoorListfromDb = async () => {
     const umoorList = await getUmoorList();
     setIssueTypeOptions(umoorList);
   };

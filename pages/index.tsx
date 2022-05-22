@@ -14,7 +14,7 @@ import {useGlobalContext} from "../context/GlobalContext";
 const SignInPage: NextPage = () => {
   const [form] = Form.useForm();
   const router = useRouter();
-  const {changeSelectedSidebarKey} = useGlobalContext();
+  const {changeSelectedSidebarKey, toggleLoader} = useGlobalContext();
 
   useEffect(() => {
     if (typeof verifyUser() !== "string") {
@@ -74,6 +74,7 @@ const SignInPage: NextPage = () => {
   };
 
   const onFinish = (values: authenticationProps) => {
+    toggleLoader(true);
     login(values)
       .then((response) => {
         console.log(response);
@@ -84,6 +85,7 @@ const SignInPage: NextPage = () => {
         notification.error({
           message: error.message,
         });
+        toggleLoader(false);
       });
   };
 
@@ -93,6 +95,7 @@ const SignInPage: NextPage = () => {
       verifyUserAndRedirect(userRole, assignedArea);
       message.success("User Login Successful");
     }
+    toggleLoader(false);
   };
 
   return (

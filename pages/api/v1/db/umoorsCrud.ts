@@ -1,20 +1,36 @@
-import Airtable, {FieldSet, Records} from "airtable";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+} from "firebase/firestore";
+import {umoorListCollectionName} from "../../../../firebase/dbCollectionNames";
+import {firestore} from "../../../../firebase/firebaseConfig";
 
-const airtableBase = new Airtable({
-  apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
-}).base("app7V1cg4ibiooxcn");
+const dataCollection = collection(firestore, umoorListCollectionName);
 
-const umoorTable = airtableBase("umoorList");
+export const getUmoorList = async (): Promise<any[]> => {
+  const resultArr: any[] = [];
+  const q = query(dataCollection);
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((docs) => {
+    const file: any = {
+      ...docs.data(),
+    };
+    resultArr.push(file);
+  });
 
-let umoorList: any = null;
-export const getUmoorList = async () => {
-  if (umoorList) {
-    console.log("USING UMOOR LIST FROM CACHE");
-    return umoorList;
-  }
-  const temp = await umoorTable._selectRecords();
-  const records: Records<FieldSet> = await temp.all();
+  return resultArr;
+};
 
-  umoorList = records.map((record) => record.fields);
-  return umoorList;
+export const addUmoor = async (id: string, data: any): Promise<boolean> => {
+  await setDoc(doc(firestore, umoorListCollectionName, id), data);
+  return true;
+};
+
+export const deleteUmoor = async (id: string): Promise<boolean> => {
+  await deleteDoc(doc(firestore, umoorListCollectionName, id));
+  return true;
 };
