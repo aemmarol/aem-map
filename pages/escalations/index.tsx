@@ -168,6 +168,7 @@ const Dashboard: NextPage = () => {
     }
   };
   const getEscalationList = async () => {
+    setIsReady(false);
     let criteria: Criteria[] = [];
     let groupName;
     switch (selectedView) {
