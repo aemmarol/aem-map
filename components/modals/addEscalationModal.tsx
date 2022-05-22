@@ -18,8 +18,11 @@ import {
   getFileDataListBySector,
   getFileDataListBySubsector,
 } from "../../pages/api/v1/db/fileCrud";
-import {getMemberDataById} from "../../pages/api/v1/db/memberCrud";
-import Airtable from "airtable";
+import {
+  getMemberDataById,
+  getMemberListByHofId,
+} from "../../pages/api/v1/db/memberCrud";
+// import Airtable from "airtable";
 import {
   authUser,
   comment,
@@ -36,11 +39,11 @@ import {
 } from "../../pages/api/v1/settings";
 import {getUmoorList} from "../../pages/api/v1/db/umoorsCrud";
 
-const airtableBase = new Airtable({
-  apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
-}).base("app7V1cg4ibiooxcn");
+// const airtableBase = new Airtable({
+//   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
+// }).base("app7V1cg4ibiooxcn");
 
-const umoorTable = airtableBase("umoorList");
+// const umoorTable = airtableBase("umoorList");
 
 type AddEscalationModalProps = {
   showModal: boolean;
@@ -95,75 +98,96 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   };
 
   const getRoleBasedFileNumbers = async () => {
+    let fileList;
     if (
       adminDetails.userRole.includes(userRoles.Masool) ||
       adminDetails.userRole.includes(userRoles.Masoola)
     ) {
-      const fileList = await getFileDataListBySector(
-        adminDetails.assignedArea[0]
-      );
-      setAllowedFileNumbers(
-        fileList.map((val: any) => val.tanzeem_file_no.toString())
-      );
+      fileList = await getFileDataListBySector(adminDetails.assignedArea[0]);
+      // setAllowedFileNumbers(
+      //   fileList.map((val: any) => val.tanzeem_file_no.toString())
+      // );
     } else if (
       adminDetails.userRole.includes(userRoles.Musaid) ||
       adminDetails.userRole.includes(userRoles.Musaida)
     ) {
-      const fileList = await getFileDataListBySubsector(
-        adminDetails.assignedArea[0]
-      );
-      setAllowedFileNumbers(fileList.map((val: any) => val.tanzeem_file_no));
+      fileList = await getFileDataListBySubsector(adminDetails.assignedArea[0]);
+      // setAllowedFileNumbers(fileList.map((val: any) => val.tanzeem_file_no));
     } else if (adminDetails.userRole.includes(userRoles.Admin)) {
-      const fileList = await getFileDataList();
-
+      fileList = await getFileDataList();
+    }
+    if (fileList) {
       setAllowedFileNumbers(
         fileList.map((val: fileDetails) => {
           return {
             value: val.tanzeem_file_no,
-            label: `${val.tanzeem_file_no}(${val.hof_name})`,
+            label: `${val.tanzeem_file_no} (${val.hof_name})`,
           };
         })
       );
     }
   };
 
-  const onFileSearch = async (values: any) => {
-    if (adminDetails?.userRole.includes(userRoles.Admin)) {
-      const data = await getFileDataByFileNumber(values.fileNumber);
-      if (!!data) {
-        const hof_data = await getMemberDataById(data.id);
-        // const hof_me
-        console.log(hof_data, data);
-        setFileDetails({
-          id: hof_data.id,
-          hofName: hof_data.full_name,
-          hofContact: hof_data.mobile,
-          subSector: data.sub_sector.name,
-          fileData: data,
-        });
-        setshowFileNotFoundError(false);
-      } else {
-        setshowFileNotFoundError(true);
-        setFileDetails({});
-      }
+  // const onFileSearch = async (values: any) => {
+  //   if (adminDetails?.userRole.includes(userRoles.Admin)) {
+  //     const data = await getFileDataByFileNumber(values.fileNumber);
+  //     if (!!data) {
+  //       const hof_data = await getMemberDataById(data.id);
+  //       // const hof_me
+  //       console.log(hof_data, data);
+  //       setFileDetails({
+  //         id: hof_data.id,
+  //         hofName: hof_data.full_name,
+  //         hofContact: hof_data.mobile,
+  //         subSector: data.sub_sector.name,
+  //         fileData: data,
+  //       });
+  //       setshowFileNotFoundError(false);
+  //     } else {
+  //       setshowFileNotFoundError(true);
+  //       setFileDetails({});
+  //     }
+  //   } else {
+  //     if (
+  //       !values.fileNumber ||
+  //       !allowedFileNumbers.map((val) => val.value).includes(values.fileNumber)
+  //     ) {
+  //       setshowFileNotFoundError(true);
+  //       setFileDetails({});
+  //     } else {
+  //       const data = await getFileDataByFileNumber(values.fileNumber);
+  //       const hof_data = await getMemberDataById(data.id);
+  //       setFileDetails({
+  //         hofName: hof_data.full_name,
+  //         hofContact: hof_data.mobile,
+  //         subSector: data.sub_sector.name,
+  //         fileData: data,
+  //       });
+  //       setshowFileNotFoundError(false);
+  //     }
+  //   }
+  // };
+
+  const onFileSelect = async (values: any) => {
+    // console.log(values);
+    const data = await getFileDataByFileNumber(values);
+    if (!!data) {
+      const hof_data = await getMemberDataById(data.id);
+      const membersList = await getMemberListByHofId(hof_data.id);
+      console.log(membersList);
+      console.log(hof_data, data);
+      setFileDetails({
+        id: hof_data.id,
+        hofName: hof_data.full_name,
+        hofContact: hof_data.mobile,
+        subSector: data.sub_sector.name,
+        fileData: data,
+        membersList,
+      });
+      setshowFileNotFoundError(false);
     } else {
-      if (
-        !values.fileNumber ||
-        !allowedFileNumbers.map((val) => val.value).includes(values.fileNumber)
-      ) {
-        setshowFileNotFoundError(true);
-        setFileDetails({});
-      } else {
-        const data = await getFileDataByFileNumber(values.fileNumber);
-        const hof_data = await getMemberDataById(data.id);
-        setFileDetails({
-          hofName: hof_data.full_name,
-          hofContact: hof_data.mobile,
-          subSector: data.sub_sector.name,
-          fileData: data,
-        });
-        setshowFileNotFoundError(false);
-      }
+      setshowFileNotFoundError(true);
+      setFileDetails({});
     }
   };
 
@@ -210,17 +234,17 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       comments: [firstComment],
       escalation_id: "esc-" + dbSettings.escalation_auto_number,
     };
-    // const result = await addEscalationData(data);
-    // if (result) {
-    //   await incrementEscalationAutoNumber(
-    //     dbSettings.escalation_auto_number + 1
-    //   );
-    //   message.success("Escalation added!");
-    //   escalationForm.resetFields();
-    //   fileForm.resetFields();
-    //   submitCallback();
-    //   handleClose();
-    // }
+    const result = await addEscalationData(data);
+    if (result) {
+      await incrementEscalationAutoNumber(
+        dbSettings.escalation_auto_number + 1
+      );
+      message.success("Escalation added!");
+      escalationForm.resetFields();
+      fileForm.resetFields();
+      submitCallback();
+      handleClose();
+    }
   };
 
   return (
@@ -232,7 +256,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
     >
       <Form
         name="fileSearch"
-        onFinish={onFileSearch}
+        onFinish={onFileSelect}
         layout="vertical"
         form={fileForm}
       >
@@ -270,6 +294,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
                 .toLowerCase()
                 .includes(inputValue.toLowerCase())
             }
+            onChange={(id) => onFileSelect(id)}
           >
             {allowedFileNumbers.map((val: any) => (
               <Select.Option
@@ -283,11 +308,11 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
           </Select>
         </Form.Item>
 
-        <Form.Item>
+        {/* <Form.Item>
           <Button type="primary" htmlType="submit">
             Find
           </Button>
-        </Form.Item>
+        </Form.Item> */}
       </Form>
       {showFileNotFoundError ? (
         <Result status="error" title="File not found" />
@@ -337,15 +362,33 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
                   message:
                     "Enter ITS of person for which issue is being raised.",
                 },
-                {min: 8, message: "ITS ID cannot be less than 8 characters"},
-                {max: 8, message: "ITS ID cannot be greater than 8 characters"},
-                {
-                  pattern: new RegExp(/^[0-9]+$/),
-                  message: "ITS ID should be a number",
-                },
+                // {min: 8, message: "ITS ID cannot be less than 8 characters"},
+                // {max: 8, message: "ITS ID cannot be greater than 8 characters"},
+                // {
+                //   pattern: new RegExp(/^[0-9]+$/),
+                //   message: "ITS ID should be a number",
+                // },
               ]}
             >
-              <Input type={"number"}></Input>
+              <Select
+                showSearch={true}
+                filterOption={(inputValue, option: any) =>
+                  option.props.children
+                    .toString()
+                    .toLowerCase()
+                    .includes(inputValue.toLowerCase())
+                }
+              >
+                {fileDetails.membersList.map((memberData: any) => (
+                  <Select.Option
+                    label={`${memberData.id} (${memberData.full_name})`}
+                    value={memberData.id}
+                    key={memberData.id}
+                  >
+                    {`${memberData.id} (${memberData.full_name})`}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
             <Form.Item
               name="escalationType"
