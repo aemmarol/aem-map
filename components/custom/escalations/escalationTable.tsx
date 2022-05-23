@@ -2,10 +2,9 @@ import React, {FC} from "react";
 import {Table, Tag} from "antd";
 import {comment, escalationData, fileDetails, userRoles} from "../../../types";
 import moment from "moment";
-import {find} from "lodash";
-import {escalationIssueStatusList} from "../../../utils";
 import {useRouter} from "next/router";
 import useWindowDimensions from "../../../utils/windowDimensions";
+import {getEscalationStatusDetail} from "../../../utils";
 
 interface EscalationTableType {
   escalationList: escalationData[];
@@ -90,9 +89,7 @@ export const EscalationTable: FC<EscalationTableType> = ({
       dataIndex: "status",
       key: "status",
       render: (status: any) => (
-        <Tag color={find(escalationIssueStatusList, {value: status})?.color}>
-          {status}
-        </Tag>
+        <Tag color={getEscalationStatusDetail(status).color}>{status}</Tag>
       ),
       width: 150,
     },

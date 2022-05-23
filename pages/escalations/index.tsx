@@ -4,7 +4,12 @@ import {useRouter} from "next/router";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import {useEffect, useState} from "react";
 import {logout, verifyUser} from "../api/v1/authentication";
-import {authUser, escalationData, userRoles} from "../../types";
+import {
+  authUser,
+  escalationData,
+  escalationStatus,
+  userRoles,
+} from "../../types";
 import {AddEscalationModal} from "../../components";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {EscalationList} from "../../components/custom/escalations/escalationList";
@@ -120,11 +125,14 @@ const Dashboard: NextPage = () => {
               data: [],
               stats: {
                 total: 0,
-                "Issue Reported": 0,
-                "Resolution In Process": 0,
-                Resolved: 0,
+                // "Issue Reported": 0,
+                // "Resolution In Process": 0,
+                // Resolved: 0,
               },
             };
+            for (const escStatus of Object.values(escalationStatus)) {
+              escalationGroup["stats"][escStatus] = 0;
+            }
           }
 
           return (
@@ -147,11 +155,14 @@ const Dashboard: NextPage = () => {
               data: [],
               stats: {
                 total: 0,
-                "Issue Reported": 0,
-                "Resolution In Process": 0,
-                Resolved: 0,
+                // "Issue Reported": 0,
+                // "Resolution In Process": 0,
+                // Resolved: 0,
               },
             };
+            for (const escStatus of Object.values(escalationStatus)) {
+              escalationGroup["stats"][escStatus] = 0;
+            }
           }
 
           return (
@@ -168,6 +179,7 @@ const Dashboard: NextPage = () => {
     }
   };
   const getEscalationList = async () => {
+    setIsReady(false);
     let criteria: Criteria[] = [];
     let groupName;
     switch (selectedView) {

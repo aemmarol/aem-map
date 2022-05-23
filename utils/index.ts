@@ -1,5 +1,5 @@
 import moment from "moment";
-import {defaultFields} from "../types";
+import {defaultFields, escalationStatus} from "../types";
 
 export const defaultDatabaseFields: defaultFields = {
   version: 1,
@@ -7,21 +7,44 @@ export const defaultDatabaseFields: defaultFields = {
   created_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
 };
 
-export const escalationIssueStatusList = [
-  {
-    value: "Issue Reported",
-    color: "blue",
-  },
-  {
-    value: "Resolution In Process",
-    color: "orange",
-  },
-  {
-    value: "Resolved",
-    color: "green",
-  },
-  {
-    value: "Closed",
-    color: "magenta",
-  },
-];
+// export const escalationIssueStatusList = [
+//   {
+//     value: escalationStatus.ISSUE_REPORTED,
+//     color: "blue",
+//   },
+//   {
+//     value: escalationStatus.IN_PROGRESS,
+//     color: "orange",
+//   },
+//   {
+//     value: escalationStatus.ISSUE_REPORTED,
+//     color: "green",
+//   },
+//   {
+//     value: "Closed",
+//     color: "magenta",
+//   },
+// ];
+export const getEscalationStatusDetail = (escStatus: escalationStatus) => {
+  const escDetail = {
+    text: escStatus,
+    color: "white",
+  };
+  switch (escStatus) {
+    case escalationStatus.ISSUE_REPORTED:
+      escDetail.color = "blue";
+      break;
+    case escalationStatus.IN_PROGRESS:
+      escDetail.color = "orange";
+      break;
+    case escalationStatus.RESOLVED:
+      escDetail.color = "green";
+      break;
+    case escalationStatus.CLOSED:
+      escDetail.color = "magenta";
+      break;
+    default:
+      break;
+  }
+  return escDetail;
+};
