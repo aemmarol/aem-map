@@ -62,6 +62,10 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
       const userColumns = getMumineenTableUserColumns(userRole);
       if (userColumns && userColumns.length > 0) {
         dataColumns = userColumns.map((column) => dataColumnsMap[column]);
+      } else {
+        dataColumns = Object.keys(dataColumnsMap).map(
+          (column) => dataColumnsMap[column]
+        );
       }
     }
     setcolumns(dataColumns);

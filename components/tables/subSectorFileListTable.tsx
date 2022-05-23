@@ -84,6 +84,10 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
       const userColumns = getFileTableUserColumns(userRole);
       if (userColumns && userColumns.length > 0) {
         dataColumns = userColumns.map((column) => dataColumnsMap[column]);
+      } else {
+        dataColumns = Object.keys(dataColumnsMap).map(
+          (val) => dataColumnsMap[val]
+        );
       }
     }
     setcolumns(dataColumns);
