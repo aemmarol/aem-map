@@ -6,7 +6,14 @@ import {useEffect, useState} from "react";
 import {EscStat} from "../../components/custom/escalations/escalationStatus";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
-import {authUser, comment, escalationData, userRoles} from "../../types";
+import {
+  authUser,
+  comment,
+  escalationData,
+  sectorData,
+  subSectorData,
+  userRoles,
+} from "../../types";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {
   getEscalationData,
@@ -17,6 +24,8 @@ import Airtable from "airtable";
 import styles from "../../styles/pages/Escalation.module.scss";
 import {escalationIssueStatusList} from "../../utils";
 import {AddEscalationCommentsModal} from "../../components";
+import {getSectorDataByName} from "../api/v1/db/sectorCrud";
+import {getSubSectorDataByName} from "../api/v1/db/subSectorCrud";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -39,6 +48,8 @@ const FileMemberDetailsPage: NextPage = () => {
   const [issueComments, setIssueComments] = useState<comment[]>([]);
   const [showAddCommentsModal, setShowAddCommentsModal] =
     useState<boolean>(false);
+  const [sectorDetails, setSectorDetails] = useState<sectorData>();
+  const [subSectorDetails, setSubSectorDetails] = useState<subSectorData>();
 
   useEffect(() => {
     if (escId) {
@@ -61,6 +72,31 @@ const FileMemberDetailsPage: NextPage = () => {
       }
     }
   }, [escId]);
+
+  useEffect(() => {
+    if (escalationDetails) {
+      setSectorDetailsFromDB(escalationDetails);
+      setSubSectorDetailsFromDB(escalationDetails);
+    }
+  }, [escalationDetails]);
+
+  const setSectorDetailsFromDB = async (escDetails: escalationData) => {
+    if (escDetails.file_details.sub_sector.sector?.name) {
+      const sector = await getSectorDataByName(
+        escDetails.file_details.sub_sector.sector?.name
+      );
+      setSectorDetails(sector);
+    }
+  };
+
+  const setSubSectorDetailsFromDB = async (escDetails: escalationData) => {
+    if (escDetails.file_details.sub_sector.name) {
+      const subSector = await getSubSectorDataByName(
+        escDetails.file_details.sub_sector.name
+      );
+      setSubSectorDetails(subSector);
+    }
+  };
 
   const getUmoorList = async () => {
     const temp: any = [];
@@ -88,6 +124,7 @@ const FileMemberDetailsPage: NextPage = () => {
   const getEscatationDetails = async (id: string) => {
     toggleLoader(true);
     const escData = await getEscalationData(id);
+    console.table(escData);
     if (!isEmpty(escData)) {
       setEscalationDetails(escData);
       setselectIssueValue(getIssueType(escData.type, "value"));
@@ -276,28 +313,52 @@ const FileMemberDetailsPage: NextPage = () => {
                     value={escalationDetails.created_by.contact_number}
                   />
                 </Col>
-                <Col xs={8}>
-                  <EscStat
-                    label="Mohallah"
-                    value={
-                      escalationDetails.file_details.sub_sector.sector
-                        ?.name as string
-                    }
-                    type="tag"
-                    tagColor={
-                      escalationDetails.file_details.sub_sector.sector
-                        ?.primary_color as string
-                    }
-                  />
-                </Col>
-                <Col xs={8}>
-                  <EscStat
-                    label="SubSector"
-                    value={
-                      escalationDetails.file_details.sub_sector.name as string
-                    }
-                  />
-                </Col>
+                {sectorDetails ? (
+                  <>
+                    <Col xs={8}>
+                      <EscStat
+                        label="Mohallah"
+                        value={sectorDetails.name as string}
+                        type="tag"
+                        tagColor={sectorDetails.primary_color as string}
+                      />
+                    </Col>
+                    <Col xs={8}>
+                      <EscStat
+                        label="Masool"
+                        value={`${sectorDetails.masool_name} (${sectorDetails.masool_contact})`}
+                      />
+                    </Col>
+                    <Col xs={8}>
+                      <EscStat
+                        label="Masoola"
+                        value={`${sectorDetails.masoola_name} (${sectorDetails.masoola_contact})`}
+                      />
+                    </Col>
+                  </>
+                ) : null}
+                {subSectorDetails ? (
+                  <>
+                    <Col xs={8}>
+                      <EscStat
+                        label="SubSector"
+                        value={`${subSectorDetails.name}`}
+                      />
+                    </Col>
+                    <Col xs={8}>
+                      <EscStat
+                        label="Musaid"
+                        value={`${subSectorDetails.musaid_name} (${subSectorDetails.musaid_contact})`}
+                      />
+                    </Col>
+                    <Col xs={8}>
+                      <EscStat
+                        label="Musaida"
+                        value={`${subSectorDetails.musaida_name} (${subSectorDetails.musaida_contact})`}
+                      />
+                    </Col>
+                  </>
+                ) : null}
               </Row>
               <Divider />
               <Row gutter={[16, 8]}>
