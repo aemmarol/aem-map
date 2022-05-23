@@ -6,23 +6,22 @@ import {useEffect, useState} from "react";
 import {EscStat} from "../../components/custom/escalations/escalationStatus";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
-import {authUser, comment, escalationData, userRoles} from "../../types";
+import {
+  authUser,
+  comment,
+  escalationData,
+  escalationStatus,
+  userRoles,
+} from "../../types";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {
   getEscalationData,
   updateEscalationData,
 } from "../api/v1/db/escalationsCrud";
 import moment from "moment";
-import Airtable from "airtable";
 import styles from "../../styles/pages/Escalation.module.scss";
-import {escalationIssueStatusList} from "../../utils";
 import {AddEscalationCommentsModal} from "../../components";
-
-const airtableBase = new Airtable({
-  apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
-}).base("app7V1cg4ibiooxcn");
-
-const umoorTable = airtableBase("umoorList");
+import {getUmoorList} from "../api/v1/db/umoorsCrud";
 
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();
@@ -52,7 +51,7 @@ const FileMemberDetailsPage: NextPage = () => {
         ) {
           getEscatationDetails(escId as string);
           setAdminDetails(user);
-          getUmoorList();
+          getUmoorListfromDb();
         } else {
           notVerifierUserLogout();
         }
@@ -62,27 +61,31 @@ const FileMemberDetailsPage: NextPage = () => {
     }
   }, [escId]);
 
-  const getUmoorList = async () => {
-    const temp: any = [];
-    await umoorTable
-      .select({
-        view: "Grid view",
-      })
-      .eachPage(
-        function page(records, fetchNextPage) {
-          records.forEach(function (record) {
-            temp.push(record.fields);
-          });
-          fetchNextPage();
-        },
-        function done(err) {
-          if (err) {
-            console.error(err);
-            return;
-          }
-          setIssueTypeOptions(temp);
-        }
-      );
+  // const getUmoorList = async () => {
+  //   const temp: any = [];
+  //   await umoorTable
+  //     .select({
+  //       view: "Grid view",
+  //     })
+  //     .eachPage(
+  //       function page(records, fetchNextPage) {
+  //         records.forEach(function (record) {
+  //           temp.push(record.fields);
+  //         });
+  //         fetchNextPage();
+  //       },
+  //       function done(err) {
+  //         if (err) {
+  //           console.error(err);
+  //           return;
+  //         }
+  //         setIssueTypeOptions(temp);
+  //       }
+  //     );
+  // };
+  const getUmoorListfromDb = async () => {
+    const umoorList = await getUmoorList();
+    setIssueTypeOptions(umoorList);
   };
 
   const getEscatationDetails = async (id: string) => {
@@ -308,17 +311,21 @@ const FileMemberDetailsPage: NextPage = () => {
                     value={selectStatusValue}
                     className="width-200"
                   >
-                    {escalationIssueStatusList
-                      .filter((val) => val.value !== "Closed")
-                      .map((val: any) => (
-                        <Select.Option
-                          label={val.value}
-                          value={val.value}
-                          key={val.value}
-                        >
-                          {val.value}
-                        </Select.Option>
-                      ))}
+                    {Object.values(escalationStatus)
+                      .filter(
+                        (escStatus) => escStatus !== escalationStatus.CLOSED
+                      )
+                      .map((escStatus) => {
+                        return (
+                          <Select.Option
+                            label={escStatus}
+                            value={escStatus}
+                            key={escStatus}
+                          >
+                            {escStatus}
+                          </Select.Option>
+                        );
+                      })}
                   </Select>
                 </Col>
                 <Col xs={24}>

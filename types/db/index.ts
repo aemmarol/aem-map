@@ -75,8 +75,16 @@ export interface escalationData extends defaultFields {
   escalation_id: string;
   created_by: adminDetails;
   file_details: fileDetails;
-  status: string;
+  status: escalationStatus;
   issue: string;
   comments: comment[];
   type: string;
+  issueRaisedFor: number;
+}
+
+export enum escalationStatus {
+  ISSUE_REPORTED = "Issue Reported",
+  IN_PROGRESS = "Resolution In Process",
+  RESOLVED = "Resolved",
+  CLOSED = "Closed",
 }

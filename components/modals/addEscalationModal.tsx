@@ -27,6 +27,7 @@ import {
   authUser,
   comment,
   escalationData,
+  escalationStatus,
   fileDetails,
   userRoles,
 } from "../../types";
@@ -98,7 +99,10 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
     ) {
       fileList = await getFileDataListBySubsector(adminDetails.assignedArea[0]);
       // setAllowedFileNumbers(fileList.map((val: any) => val.tanzeem_file_no));
-    } else if (adminDetails.userRole.includes(userRoles.Admin)) {
+    } else if (
+      adminDetails.userRole.includes(userRoles.Admin) ||
+      adminDetails.userRole.includes(userRoles.Umoor)
+    ) {
       fileList = await getFileDataList();
     }
     if (fileList) {
@@ -213,11 +217,12 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
         hof_name: fileDetails.hofName,
         hof_contact: fileDetails.hofContact,
       },
-      status: "Issue Reported",
+      status: escalationStatus.ISSUE_REPORTED,
       issue: values.issue,
       type: escalationIssueType,
       comments: [firstComment],
       escalation_id: "esc-" + dbSettings.escalation_auto_number,
+      issueRaisedFor: values.escalationRaisedForITS,
     };
     const result = await addEscalationData(data);
     if (result) {

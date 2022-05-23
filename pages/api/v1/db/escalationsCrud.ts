@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import {escalationCollectionName} from "../../../../firebase/dbCollectionNames";
 import {firestore} from "../../../../firebase/firebaseConfig";
-import {escalationData} from "../../../../types";
+import {escalationData, escalationStatus} from "../../../../types";
 import {defaultDatabaseFields} from "../../../../utils";
 import moment from "moment";
 
@@ -89,11 +89,12 @@ export const groupEscalationListBy = (
         data: [],
         stats: {
           total: 0,
-          "Issue Reported": 0,
-          "Resolution In Process": 0,
-          Resolved: 0,
         },
       };
+      for (const escStatus of Object.values(escalationStatus)) {
+        console.log(escStatus, "ASDSADSAD");
+        groups[groupName]["stats"][escStatus] = 0;
+      }
     }
     const counterName = getFieldValue(escalation, counterField);
     // if (!groups[groupName]["stats"].hasOwnProperty(counterName)) {
