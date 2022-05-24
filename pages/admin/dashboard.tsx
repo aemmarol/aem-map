@@ -4,7 +4,13 @@ import {useRouter} from "next/router";
 import React, {useEffect, useState} from "react";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
-import {authUser, escalationData, sectorData, userRoles} from "../../types";
+import {
+  authUser,
+  escalationData,
+  escalationStatus,
+  sectorData,
+  userRoles,
+} from "../../types";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {
   getEscalationList,
@@ -77,11 +83,14 @@ const AdminDashboard: NextPage<AdminDashboardProps> = ({escalationsList}) => {
                   data: [],
                   stats: {
                     total: 0,
-                    "Issue Reported": 0,
-                    "Resolution In Process": 0,
-                    Resolved: 0,
+                    // "Issue Reported": 0,
+                    // "Resolution In Process": 0,
+                    // Resolved: 0,
                   },
                 };
+                for (const escStatus of Object.values(escalationStatus)) {
+                  escalationGroup["stats"][escStatus] = 0;
+                }
               }
 
               return (
@@ -108,11 +117,14 @@ const AdminDashboard: NextPage<AdminDashboardProps> = ({escalationsList}) => {
               data: [],
               stats: {
                 total: 0,
-                "Issue Reported": 0,
-                "Resolution In Process": 0,
-                Resolved: 0,
+                // "Issue Reported": 0,
+                // "Resolution In Process": 0,
+                // Resolved: 0,
               },
             };
+            for (const escStatus of Object.values(escalationStatus)) {
+              escalationGroup["stats"][escStatus] = 0;
+            }
           }
           return (
             <Col xs={24} sm={12} md={8} xl={6} key={idx}>

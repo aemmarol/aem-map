@@ -1,5 +1,5 @@
 import {Button, Card, Col, Divider, message, Row, Select} from "antd";
-import {find, isEmpty} from "lodash";
+import _, {find, isEmpty} from "lodash";
 import {NextPage} from "next";
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
@@ -12,6 +12,7 @@ import {
   escalationData,
   sectorData,
   subSectorData,
+  escalationStatus,
   userRoles,
 } from "../../types";
 import {logout, verifyUser} from "../api/v1/authentication";
@@ -20,18 +21,11 @@ import {
   updateEscalationData,
 } from "../api/v1/db/escalationsCrud";
 import moment from "moment";
-import Airtable from "airtable";
 import styles from "../../styles/pages/Escalation.module.scss";
-import {escalationIssueStatusList} from "../../utils";
 import {AddEscalationCommentsModal} from "../../components";
+import {getUmoorList} from "../api/v1/db/umoorsCrud";
 import {getSectorDataByName} from "../api/v1/db/sectorCrud";
 import {getSubSectorDataByName} from "../api/v1/db/subSectorCrud";
-
-const airtableBase = new Airtable({
-  apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
-}).base("app7V1cg4ibiooxcn");
-
-const umoorTable = airtableBase("umoorList");
 
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();
@@ -63,7 +57,7 @@ const FileMemberDetailsPage: NextPage = () => {
         ) {
           getEscatationDetails(escId as string);
           setAdminDetails(user);
-          getUmoorList();
+          getUmoorListfromDb();
         } else {
           notVerifierUserLogout();
         }
@@ -74,7 +68,7 @@ const FileMemberDetailsPage: NextPage = () => {
   }, [escId]);
 
   useEffect(() => {
-    if (escalationDetails) {
+    if (!_.isEmpty(escalationDetails)) {
       setSectorDetailsFromDB(escalationDetails);
       setSubSectorDetailsFromDB(escalationDetails);
     }
@@ -98,33 +92,58 @@ const FileMemberDetailsPage: NextPage = () => {
     }
   };
 
-  const getUmoorList = async () => {
-    const temp: any = [];
-    await umoorTable
-      .select({
-        view: "Grid view",
-      })
-      .eachPage(
-        function page(records, fetchNextPage) {
-          records.forEach(function (record) {
-            temp.push(record.fields);
-          });
-          fetchNextPage();
-        },
-        function done(err) {
-          if (err) {
-            console.error(err);
-            return;
-          }
-          setIssueTypeOptions(temp);
-        }
-      );
+  // const getUmoorList = async () => {
+  //   const temp: any = [];
+  //   await umoorTable
+  //     .select({
+  //       view: "Grid view",
+  //     })
+  //     .eachPage(
+  //       function page(records, fetchNextPage) {
+  //         records.forEach(function (record) {
+  //           temp.push(record.fields);
+  //         });
+  //         fetchNextPage();
+  //       },
+  //       function done(err) {
+  //         if (err) {
+  //           console.error(err);
+  //           return;
+  //         }
+  //         setIssueTypeOptions(temp);
+  //       }
+  //     );
+  // }
+  // const getUmoorList = async () => {
+  //   const temp: any = [];
+  //   await umoorTable
+  //     .select({
+  //       view: "Grid view",
+  //     })
+  //     .eachPage(
+  //       function page(records, fetchNextPage) {
+  //         records.forEach(function (record) {
+  //           temp.push(record.fields);
+  //         });
+  //         fetchNextPage();
+  //       },
+  //       function done(err) {
+  //         if (err) {
+  //           console.error(err);
+  //           return;
+  //         }
+  //         setIssueTypeOptions(temp);
+  //       }
+  //     );
+  // };
+  const getUmoorListfromDb = async () => {
+    const umoorList = await getUmoorList();
+    setIssueTypeOptions(umoorList);
   };
 
   const getEscatationDetails = async (id: string) => {
     toggleLoader(true);
     const escData = await getEscalationData(id);
-    console.table(escData);
     if (!isEmpty(escData)) {
       setEscalationDetails(escData);
       setselectIssueValue(getIssueType(escData.type, "value"));
@@ -369,17 +388,17 @@ const FileMemberDetailsPage: NextPage = () => {
                     value={selectStatusValue}
                     className="width-200"
                   >
-                    {escalationIssueStatusList
-                      .filter((val) => val.value !== "Closed")
-                      .map((val: any) => (
+                    {Object.values(escalationStatus).map((escStatus) => {
+                      return (
                         <Select.Option
-                          label={val.value}
-                          value={val.value}
-                          key={val.value}
+                          label={escStatus}
+                          value={escStatus}
+                          key={escStatus}
                         >
-                          {val.value}
+                          {escStatus}
                         </Select.Option>
-                      ))}
+                      );
+                    })}
                   </Select>
                 </Col>
                 <Col xs={24}>

@@ -1,9 +1,8 @@
 import {Card, Col, Row} from "antd";
-import {find} from "lodash";
 import {FC} from "react";
 import styles from "../../../styles/pages/Escalation.module.scss";
 import {escalationData} from "../../../types";
-import {escalationIssueStatusList} from "../../../utils";
+import {getEscalationStatusDetail} from "../../../utils";
 import {EscStat} from "./escalationStatus";
 
 export const EscalationCard: FC<{
@@ -20,9 +19,7 @@ export const EscalationCard: FC<{
             label="Status"
             value={escalation.status}
             type="tag"
-            tagColor={
-              find(escalationIssueStatusList, {value: escalation.status})?.color
-            }
+            tagColor={getEscalationStatusDetail(escalation.status).color}
           />
         </Col>
         <Col xs={24}>
