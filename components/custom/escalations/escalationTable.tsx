@@ -43,6 +43,13 @@ export const EscalationTable: FC<EscalationTableType> = ({
       width: 100,
     },
     {
+      title: "HOF",
+      dataIndex: "file_details",
+      key: "file_details",
+      render: (file_details: fileDetails) => file_details.hof_name,
+      width: 200,
+    },
+    {
       title: "Umoor",
       dataIndex: "type",
       key: "type",
@@ -55,6 +62,38 @@ export const EscalationTable: FC<EscalationTableType> = ({
       key: "file_details",
       render: (file_details: any) => file_details.sub_sector.sector.name,
       width: 125,
+    },
+    {
+      title: "Masool",
+      dataIndex: "file_details",
+      key: "file_details",
+      render: (file_details: any) =>
+        `${file_details.sub_sector.sector.masool_name} (${file_details.sub_sector.sector.masool_contact})`,
+      width: 225,
+    },
+    {
+      title: "Masoola",
+      dataIndex: "file_details",
+      key: "file_details",
+      render: (file_details: any) =>
+        `${file_details.sub_sector.sector.masoola_name} (${file_details.sub_sector.sector.masoola_contact})`,
+      width: 225,
+    },
+    {
+      title: "Musaid",
+      dataIndex: "file_details",
+      key: "file_details",
+      render: (file_details: any) =>
+        `${file_details.sub_sector.musaid_name} (${file_details.sub_sector.musaid_contact})`,
+      width: 225,
+    },
+    {
+      title: "Musaida",
+      dataIndex: "file_details",
+      key: "file_details",
+      render: (file_details: any) =>
+        `${file_details.sub_sector.musaida_name} (${file_details.sub_sector.musaida_contact})`,
+      width: 225,
     },
     {
       title: "Issue",

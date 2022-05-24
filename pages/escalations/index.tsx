@@ -16,6 +16,7 @@ import {EscalationList} from "../../components/custom/escalations/escalationList
 import {getSectorList} from "../api/v1/db/sectorCrud";
 import {getUmoorList} from "../api/v1/db/umoorsCrud";
 import {
+  addSectorAndSubSectorDetails,
   Criteria,
   escalationDBFields,
   getEscalationListByCriteriaClientSide,
@@ -314,8 +315,9 @@ const Dashboard: NextPage = () => {
         ];
         break;
     }
-    const escList: escalationData[] =
-      await getEscalationListByCriteriaClientSide(criteria);
+    const escList: escalationData[] = await addSectorAndSubSectorDetails(
+      await getEscalationListByCriteriaClientSide(criteria)
+    );
     setEscalationList(
       escList.sort((a, b) =>
         moment(b.created_at, "DD-MM-YYYY HH:mm:ss").diff(
@@ -326,6 +328,7 @@ const Dashboard: NextPage = () => {
     if (groupName) {
       setEscalationsStatsGroup(groupEscalationListBy(escList, groupName));
     }
+    console.log(escList, "ESCLIST");
     setIsReady(true);
   };
 
