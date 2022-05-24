@@ -222,8 +222,10 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       type: escalationIssueType,
       comments: [firstComment],
       escalation_id: "esc-" + dbSettings.escalation_auto_number,
-      issueRaisedFor: values.escalationRaisedForITS,
-      issueRaisedForContact: values.escalationRaisedForContact,
+      issueRaisedFor: {
+        ITS: values.escalationRaisedForITS.toString(),
+        contact: values.escalationRaisedForContact,
+      },
     };
     const result = await addEscalationData(data);
     if (result) {

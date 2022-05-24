@@ -79,8 +79,10 @@ export interface escalationData extends defaultFields {
   issue: string;
   comments: comment[];
   type: string;
-  issueRaisedFor: number;
-  issueRaisedForContact: number;
+  issueRaisedFor: {
+    ITS: "";
+    contact: "";
+  };
 }
 
 export enum escalationStatus {
