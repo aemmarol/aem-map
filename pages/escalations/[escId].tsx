@@ -230,8 +230,10 @@ const FileMemberDetailsPage: NextPage = () => {
                 </Col>
                 <Col xs={8}>
                   <EscStat
-                    label="HOF Contact number"
-                    value={escalationDetails.file_details.hof_contact}
+                    label="File No"
+                    value={
+                      escalationDetails.file_details.tanzeem_file_no as string
+                    }
                   />
                 </Col>
                 <Col xs={8}>
@@ -242,13 +244,10 @@ const FileMemberDetailsPage: NextPage = () => {
                 </Col>
                 <Col xs={8}>
                   <EscStat
-                    label="File No"
-                    value={
-                      escalationDetails.file_details.tanzeem_file_no as string
-                    }
+                    label="HOF Contact number"
+                    value={escalationDetails.file_details.hof_contact}
                   />
                 </Col>
-
                 <Col xs={24}>
                   <EscStat
                     label="Address"
@@ -279,6 +278,18 @@ const FileMemberDetailsPage: NextPage = () => {
                     value={escalationDetails.created_by.contact_number}
                   />
                 </Col>
+                <Col xs={8}>
+                  <EscStat
+                    label="Reported for ITS"
+                    value={escalationDetails.issueRaisedFor.toString()}
+                  />
+                </Col>
+                {/* <Col xs={8}>
+                  <EscStat
+                    label="Reported for Contact"
+                    value={escalationDetails.issueRaisedForContact}
+                  />
+                </Col> */}
                 <Col xs={8}>
                   <EscStat
                     label="Mohallah"
