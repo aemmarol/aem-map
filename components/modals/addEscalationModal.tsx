@@ -181,7 +181,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   };
 
   const handleEscalationFormSubmit = async (values: any) => {
-    console.log(values);
+    // console.log(values);
     const dbSettings = await getDbSettings();
     const firstComment: comment = {
       msg: "Issue is added on " + moment(new Date()).format("DD-MM-YYYY"),
@@ -222,7 +222,10 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       type: escalationIssueType,
       comments: [firstComment],
       escalation_id: "esc-" + dbSettings.escalation_auto_number,
-      issueRaisedFor: values.escalationRaisedForITS,
+      issueRaisedFor: {
+        ITS: values.escalationRaisedForITS.toString(),
+        contact: values.escalationRaisedForContact,
+      },
     };
     const result = await addEscalationData(data);
     if (result) {
@@ -379,6 +382,22 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
                   </Select.Option>
                 ))}
               </Select>
+            </Form.Item>
+            <Form.Item
+              name="escalationRaisedForContact"
+              label="Issue raised for (Enter contact)"
+              rules={[
+                {
+                  required: false,
+                },
+                {
+                  pattern: new RegExp(/^(\+[\d]{1,5}|0)?[7-9]\d{9}$/),
+                  message: "Please Enter a valid contact number",
+                },
+              ]}
+              validateTrigger="onBlur"
+            >
+              <Input />
             </Form.Item>
             <Form.Item
               name="escalationType"

@@ -1,5 +1,5 @@
 import {Button, Card, Col, Divider, message, Row, Select} from "antd";
-import {find, isEmpty} from "lodash";
+import _, {find, isEmpty} from "lodash";
 import {NextPage} from "next";
 import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
@@ -10,6 +10,8 @@ import {
   authUser,
   comment,
   escalationData,
+  sectorData,
+  subSectorData,
   escalationStatus,
   userRoles,
 } from "../../types";
@@ -22,6 +24,8 @@ import moment from "moment";
 import styles from "../../styles/pages/Escalation.module.scss";
 import {AddEscalationCommentsModal} from "../../components";
 import {getUmoorList} from "../api/v1/db/umoorsCrud";
+import {getSectorDataByName} from "../api/v1/db/sectorCrud";
+import {getSubSectorDataByName} from "../api/v1/db/subSectorCrud";
 
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();
@@ -38,6 +42,8 @@ const FileMemberDetailsPage: NextPage = () => {
   const [issueComments, setIssueComments] = useState<comment[]>([]);
   const [showAddCommentsModal, setShowAddCommentsModal] =
     useState<boolean>(false);
+  const [sectorDetails, setSectorDetails] = useState<sectorData>();
+  const [subSectorDetails, setSubSectorDetails] = useState<subSectorData>();
 
   useEffect(() => {
     if (escId) {
@@ -61,6 +67,53 @@ const FileMemberDetailsPage: NextPage = () => {
     }
   }, [escId]);
 
+  useEffect(() => {
+    if (!_.isEmpty(escalationDetails)) {
+      setSectorDetailsFromDB(escalationDetails);
+      setSubSectorDetailsFromDB(escalationDetails);
+    }
+  }, [escalationDetails]);
+
+  const setSectorDetailsFromDB = async (escDetails: escalationData) => {
+    if (escDetails.file_details.sub_sector.sector?.name) {
+      const sector = await getSectorDataByName(
+        escDetails.file_details.sub_sector.sector?.name
+      );
+      setSectorDetails(sector);
+    }
+  };
+
+  const setSubSectorDetailsFromDB = async (escDetails: escalationData) => {
+    if (escDetails.file_details.sub_sector.name) {
+      const subSector = await getSubSectorDataByName(
+        escDetails.file_details.sub_sector.name
+      );
+      setSubSectorDetails(subSector);
+    }
+  };
+
+  // const getUmoorList = async () => {
+  //   const temp: any = [];
+  //   await umoorTable
+  //     .select({
+  //       view: "Grid view",
+  //     })
+  //     .eachPage(
+  //       function page(records, fetchNextPage) {
+  //         records.forEach(function (record) {
+  //           temp.push(record.fields);
+  //         });
+  //         fetchNextPage();
+  //       },
+  //       function done(err) {
+  //         if (err) {
+  //           console.error(err);
+  //           return;
+  //         }
+  //         setIssueTypeOptions(temp);
+  //       }
+  //     );
+  // }
   // const getUmoorList = async () => {
   //   const temp: any = [];
   //   await umoorTable
@@ -278,40 +331,52 @@ const FileMemberDetailsPage: NextPage = () => {
                     value={escalationDetails.created_by.contact_number}
                   />
                 </Col>
-                <Col xs={8}>
-                  <EscStat
-                    label="Reported for ITS"
-                    value={escalationDetails.issueRaisedFor.toString()}
-                  />
-                </Col>
-                {/* <Col xs={8}>
-                  <EscStat
-                    label="Reported for Contact"
-                    value={escalationDetails.issueRaisedForContact}
-                  />
-                </Col> */}
-                <Col xs={8}>
-                  <EscStat
-                    label="Mohallah"
-                    value={
-                      escalationDetails.file_details.sub_sector.sector
-                        ?.name as string
-                    }
-                    type="tag"
-                    tagColor={
-                      escalationDetails.file_details.sub_sector.sector
-                        ?.primary_color as string
-                    }
-                  />
-                </Col>
-                <Col xs={8}>
-                  <EscStat
-                    label="SubSector"
-                    value={
-                      escalationDetails.file_details.sub_sector.name as string
-                    }
-                  />
-                </Col>
+                {sectorDetails ? (
+                  <>
+                    <Col xs={8}>
+                      <EscStat
+                        label="Mohallah"
+                        value={sectorDetails.name as string}
+                        type="tag"
+                        tagColor={sectorDetails.primary_color as string}
+                      />
+                    </Col>
+                    <Col xs={8}>
+                      <EscStat
+                        label="Masool"
+                        value={`${sectorDetails.masool_name} (${sectorDetails.masool_contact})`}
+                      />
+                    </Col>
+                    <Col xs={8}>
+                      <EscStat
+                        label="Masoola"
+                        value={`${sectorDetails.masoola_name} (${sectorDetails.masoola_contact})`}
+                      />
+                    </Col>
+                  </>
+                ) : null}
+                {subSectorDetails ? (
+                  <>
+                    <Col xs={8}>
+                      <EscStat
+                        label="SubSector"
+                        value={`${subSectorDetails.name}`}
+                      />
+                    </Col>
+                    <Col xs={8}>
+                      <EscStat
+                        label="Musaid"
+                        value={`${subSectorDetails.musaid_name} (${subSectorDetails.musaid_contact})`}
+                      />
+                    </Col>
+                    <Col xs={8}>
+                      <EscStat
+                        label="Musaida"
+                        value={`${subSectorDetails.musaida_name} (${subSectorDetails.musaida_contact})`}
+                      />
+                    </Col>
+                  </>
+                ) : null}
               </Row>
               <Divider />
               <Row gutter={[16, 8]}>
@@ -322,21 +387,17 @@ const FileMemberDetailsPage: NextPage = () => {
                     value={selectStatusValue}
                     className="width-200"
                   >
-                    {Object.values(escalationStatus)
-                      .filter(
-                        (escStatus) => escStatus !== escalationStatus.CLOSED
-                      )
-                      .map((escStatus) => {
-                        return (
-                          <Select.Option
-                            label={escStatus}
-                            value={escStatus}
-                            key={escStatus}
-                          >
-                            {escStatus}
-                          </Select.Option>
-                        );
-                      })}
+                    {Object.values(escalationStatus).map((escStatus) => {
+                      return (
+                        <Select.Option
+                          label={escStatus}
+                          value={escStatus}
+                          key={escStatus}
+                        >
+                          {escStatus}
+                        </Select.Option>
+                      );
+                    })}
                   </Select>
                 </Col>
                 <Col xs={24}>
