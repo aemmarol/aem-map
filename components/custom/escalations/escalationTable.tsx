@@ -1,6 +1,12 @@
 import React, {FC} from "react";
 import {Table, Tag} from "antd";
-import {comment, escalationData, fileDetails, userRoles} from "../../../types";
+import {
+  comment,
+  escalationData,
+  fileDetails,
+  umoorData,
+  userRoles,
+} from "../../../types";
 import moment from "moment";
 import {useRouter} from "next/router";
 import useWindowDimensions from "../../../utils/windowDimensions";
@@ -50,11 +56,35 @@ export const EscalationTable: FC<EscalationTableType> = ({
       width: 200,
     },
     {
+      title: "Issue raised for",
+      dataIndex: "issueRaisedFor",
+      key: "issueRaisedFor",
+      render: (issueRaisedFor: any) =>
+        issueRaisedFor
+          ? `${issueRaisedFor.name} (${issueRaisedFor.contact})`
+          : "HOF",
+      width: 200,
+    },
+    {
       title: "Umoor",
       dataIndex: "type",
       key: "type",
-      render: (type: any) => type.label,
+      render: (type: umoorData) => type.label,
       width: 100,
+    },
+    {
+      title: "Umoor Coordinators",
+      dataIndex: "type",
+      key: "type",
+      render: (type: umoorData) =>
+        type.coordinators.length > 0
+          ? type.coordinators
+              .map(
+                (coordinator) => `${coordinator.name} (${coordinator.contact})`
+              )
+              .join("\n")
+          : "Unassigned",
+      width: 250,
     },
     {
       title: "Sector",

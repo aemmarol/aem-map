@@ -8,6 +8,7 @@ import {
   authUser,
   escalationData,
   escalationStatus,
+  umoorData,
   userRoles,
 } from "../../types";
 import {AddEscalationModal} from "../../components";
@@ -16,11 +17,12 @@ import {EscalationList} from "../../components/custom/escalations/escalationList
 import {getSectorList} from "../api/v1/db/sectorCrud";
 import {getUmoorList} from "../api/v1/db/umoorsCrud";
 import {
-  addSectorAndSubSectorDetails,
   Criteria,
   escalationDBFields,
   getEscalationListByCriteriaClientSide,
   groupEscalationListBy,
+  getEscalationList as getEscalationListFromDB,
+  addExtraDetails,
 } from "../api/v1/db/escalationsCrud";
 import {EscalationFilterType} from "../../components/custom/escalations/escalationFilter";
 import {filterOption} from "../../types/escalation";
@@ -52,6 +54,11 @@ const Dashboard: NextPage = () => {
   const [escalationList, setEscalationList] = useState<escalationData[]>([]);
   const [isReady, setIsReady] = useState(false);
 
+  const [escalationsByUmoor, setEscalationsByUmoor] = useState<any>();
+  const [escalationsBySector, setEscalationsBySector] = useState<any>();
+  const [escalationsBySubSector, setEscalationsBySubSector] = useState<any>();
+  const {toggleLoader} = useGlobalContext();
+
   useEffect(() => {
     if (typeof verifyUser() !== "string") {
       const user: authUser = verifyUser() as authUser;
@@ -75,9 +82,24 @@ const Dashboard: NextPage = () => {
   }, [selectedfilterItems, selectedView]);
 
   const initFilters = async () => {
+    setEscalationsByUmoor(
+      groupEscalationListBy(await getEscalationListFromDB(), "type.value")
+    );
+    setEscalationsBySector(
+      groupEscalationListBy(
+        await getEscalationListFromDB(),
+        "file_details.sub_sector.sector.name"
+      )
+    );
+    setEscalationsBySubSector(
+      groupEscalationListBy(
+        await getEscalationListFromDB(),
+        "file_details.sub_sector.name"
+      )
+    );
     const queryUmoor = router.query.umoor?.toString();
     const querySector = router.query.sector?.toString();
-    const umoors: any[] = await getUmoorList();
+    const umoors: umoorData[] = await getUmoorList();
     setUmoorList(umoors);
     setSelectedFilterItems({
       selectedRegions: querySector
@@ -90,14 +112,17 @@ const Dashboard: NextPage = () => {
       selectedUmoors: queryUmoor
         ? [
             {
-              label: umoors.find((item: any) => item.value == queryUmoor).label,
+              label:
+                umoors.find((item: umoorData) => item.value == queryUmoor)
+                  ?.label || "",
               value: queryUmoor,
             },
           ]
         : adminDetails.assignedUmoor
         ? adminDetails.assignedUmoor.map((umoor) => {
             return {
-              label: umoors.find((item: any) => item.value == umoor).label,
+              label:
+                umoors.find((item: any) => item.value == umoor)?.label || "",
               value: umoor,
             };
           })
@@ -110,6 +135,27 @@ const Dashboard: NextPage = () => {
   const getLabelForUmoor = (value: string) => {
     const umoor: any = umoorList.find((item: any) => item.value == value);
     return umoor ? umoor.label : null;
+  };
+  const getCountForUmoor = (value: string) => {
+    return escalationsByUmoor
+      ? escalationsByUmoor[value]
+        ? ` (${escalationsByUmoor[value].data.length})`
+        : " (0)"
+      : "";
+  };
+  const getCountForSector = (value: string) => {
+    return escalationsBySector
+      ? escalationsBySector[value]
+        ? ` (${escalationsBySector[value].data.length})`
+        : " (0)"
+      : "";
+  };
+  const getCountForSubSector = (value: string) => {
+    return escalationsBySubSector
+      ? escalationsBySubSector[value]
+        ? ` (${escalationsBySubSector[value].data.length})`
+        : " (0)"
+      : "";
   };
   const getStatCardList = () => {
     if (!escalationsStatsGroup) return null;
@@ -181,6 +227,7 @@ const Dashboard: NextPage = () => {
   };
   const getEscalationList = async () => {
     setIsReady(false);
+    toggleLoader(true);
     let criteria: Criteria[] = [];
     let groupName;
     switch (selectedView) {
@@ -192,10 +239,10 @@ const Dashboard: NextPage = () => {
           {
             title: "Selected Regions",
             options: adminDetails.assignedArea.map((area) => {
-              return {label: area, value: area};
+              return {label: area + getCountForSector(area), value: area};
             }),
             selectedOptions: adminDetails.assignedArea.map((area) => {
-              return {label: area, value: area};
+              return {label: area + getCountForSector(area), value: area};
             }),
             disabled: true,
             onChange: null,
@@ -217,10 +264,10 @@ const Dashboard: NextPage = () => {
           {
             title: "Selected Regions",
             options: adminDetails.assignedArea.map((area) => {
-              return {label: area, value: area};
+              return {label: area + getCountForSubSector(area), value: area};
             }),
             selectedOptions: adminDetails.assignedArea.map((area) => {
-              return {label: area, value: area};
+              return {label: area + getCountForSubSector(area), value: area};
             }),
             disabled: true,
             onChange: null,
@@ -243,14 +290,20 @@ const Dashboard: NextPage = () => {
             {
               title: "Selected Umoors",
               options: adminDetails.assignedUmoor.map((umoor) => {
-                return {label: getLabelForUmoor(umoor), value: umoor};
+                return {
+                  label: getLabelForUmoor(umoor) + getCountForUmoor(umoor),
+                  value: umoor,
+                };
               }),
               selectedOptions: selectedfilterItems.selectedUmoors,
               onChange: (selectedUmoors: string[]) =>
                 setSelectedFilterItems({
                   ...selectedfilterItems,
                   selectedUmoors: selectedUmoors.map((umoor) => {
-                    return {label: getLabelForUmoor(umoor), value: umoor};
+                    return {
+                      label: getLabelForUmoor(umoor) + getCountForUmoor(umoor),
+                      value: umoor,
+                    };
                   }),
                 }),
             },
@@ -271,28 +324,37 @@ const Dashboard: NextPage = () => {
           {
             title: "Selected Umoors",
             options: adminDetails.assignedUmoor.map((umoor) => {
-              return {label: getLabelForUmoor(umoor), value: umoor};
+              return {
+                label: getLabelForUmoor(umoor) + getCountForUmoor(umoor),
+                value: umoor,
+              };
             }),
             selectedOptions: selectedfilterItems.selectedUmoors,
             onChange: (selectedUmoors: string[]) =>
               setSelectedFilterItems({
                 ...selectedfilterItems,
                 selectedUmoors: selectedUmoors.map((umoor) => {
-                  return {label: getLabelForUmoor(umoor), value: umoor};
+                  return {
+                    label: getLabelForUmoor(umoor) + getCountForUmoor(umoor),
+                    value: umoor,
+                  };
                 }),
               }),
           },
           {
             title: "Selected Regions",
             options: adminDetails.assignedArea.map((area) => {
-              return {label: area, value: area};
+              return {label: area + getCountForSector(area), value: area};
             }),
             selectedOptions: selectedfilterItems.selectedRegions,
             onChange: (selectedRegions: string[]) =>
               setSelectedFilterItems({
                 ...selectedfilterItems,
                 selectedRegions: selectedRegions.map((region) => {
-                  return {label: region, value: region};
+                  return {
+                    label: region + getCountForSector(region),
+                    value: region,
+                  };
                 }),
               }),
           },
@@ -315,9 +377,13 @@ const Dashboard: NextPage = () => {
         ];
         break;
     }
-    const escList: escalationData[] = await addSectorAndSubSectorDetails(
-      await getEscalationListByCriteriaClientSide(criteria)
+
+    let escList: escalationData[] = await getEscalationListByCriteriaClientSide(
+      criteria
     );
+    escList = await addExtraDetails(escList);
+    // console.log(escList[0].type);
+
     setEscalationList(
       escList.sort((a, b) =>
         moment(b.created_at, "DD-MM-YYYY HH:mm:ss").diff(
@@ -328,16 +394,18 @@ const Dashboard: NextPage = () => {
     if (groupName) {
       setEscalationsStatsGroup(groupEscalationListBy(escList, groupName));
     }
-    console.log(escList, "ESCLIST");
+    // console.log(escList, "ESCLIST");
+    // getFilterProps();
     setIsReady(true);
+    toggleLoader(false);
   };
 
   const setUserDetails = async (user: authUser) => {
     if (user.userRole[0].includes(userRoles.Admin)) {
       const sectors = await getSectorList();
       user.assignedArea = sectors.map((sector) => sector.name);
-      const umoors = await getUmoorList();
-      user.assignedUmoor = umoors.map((umoor: any) => umoor.value);
+      const umoors: umoorData[] = await getUmoorList();
+      user.assignedUmoor = umoors.map((umoor: umoorData) => umoor.value);
     }
     setAdminDetails(user);
     setSelectedView(user.userRole[0]);

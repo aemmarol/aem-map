@@ -1,4 +1,5 @@
 import {defaultFields} from "..";
+import {authUser} from "../authentication";
 
 export interface databaseMumeneenFieldData extends defaultFields {
   name: string;
@@ -78,9 +79,10 @@ export interface escalationData extends defaultFields {
   status: escalationStatus;
   issue: string;
   comments: comment[];
-  type: string;
+  type?: umoorData;
   issueRaisedFor: {
     ITS: "";
+    name: "";
     contact: "";
   };
 }
@@ -90,4 +92,9 @@ export enum escalationStatus {
   IN_PROGRESS = "Resolution In Process",
   RESOLVED = "Resolved",
   CLOSED = "Closed",
+}
+export interface umoorData {
+  label: string;
+  value: string;
+  coordinators: authUser[];
 }

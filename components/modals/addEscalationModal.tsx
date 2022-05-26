@@ -223,7 +223,8 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       comments: [firstComment],
       escalation_id: "esc-" + dbSettings.escalation_auto_number,
       issueRaisedFor: {
-        ITS: values.escalationRaisedForITS.toString(),
+        ITS: values.escalationRaisedForITS.its.toString(),
+        name: values.escalationRaisedForITS.name.toString(),
         contact: values.escalationRaisedForContact,
       },
     };
@@ -375,7 +376,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
                 {fileDetails.membersList.map((memberData: any) => (
                   <Select.Option
                     label={`${memberData.id} (${memberData.full_name})`}
-                    value={memberData.id}
+                    value={{its: memberData.id, name: memberData.full_name}}
                     key={memberData.id}
                   >
                     {`${memberData.id} (${memberData.full_name})`}

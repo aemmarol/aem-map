@@ -14,6 +14,7 @@ import {
   subSectorData,
   escalationStatus,
   userRoles,
+  umoorData,
 } from "../../types";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {
@@ -36,7 +37,7 @@ const FileMemberDetailsPage: NextPage = () => {
     {} as escalationData
   );
   const [adminDetails, setAdminDetails] = useState<authUser>({} as authUser);
-  const [issueTypeOptions, setIssueTypeOptions] = useState<any[]>([]);
+  const [issueTypeOptions, setIssueTypeOptions] = useState<umoorData[]>([]);
   const [selectIssueValue, setselectIssueValue] = useState<string>("");
   const [selectStatusValue, setSelectStatusValue] = useState<string>("");
   const [issueComments, setIssueComments] = useState<comment[]>([]);
@@ -137,7 +138,7 @@ const FileMemberDetailsPage: NextPage = () => {
   //     );
   // };
   const getUmoorListfromDb = async () => {
-    const umoorList = await getUmoorList();
+    const umoorList: umoorData[] = await getUmoorList();
     setIssueTypeOptions(umoorList);
   };
 
@@ -187,7 +188,7 @@ const FileMemberDetailsPage: NextPage = () => {
     value: string,
     currentUserRole: string
   ) => {
-    const valueBasedOnField =
+    const valueBasedOnField: any =
       field === "type"
         ? find(issueTypeOptions, {value})
         : field === "status"

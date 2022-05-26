@@ -15,8 +15,9 @@ import {firestore} from "../../../../firebase/firebaseConfig";
 import {escalationData, escalationStatus} from "../../../../types";
 import {defaultDatabaseFields} from "../../../../utils";
 import moment from "moment";
-import {getSectorDataByName} from "./sectorCrud";
-import {getSubSectorDataByName} from "./subSectorCrud";
+import {getUmoorListWithCoordinators} from "./umoorsCrud";
+import {getSectorList} from "./sectorCrud";
+import {getSubSectorList} from "./subSectorCrud";
 
 const dataCollection = collection(firestore, escalationCollectionName);
 
@@ -94,7 +95,6 @@ export const groupEscalationListBy = (
         },
       };
       for (const escStatus of Object.values(escalationStatus)) {
-        console.log(escStatus, "ASDSADSAD");
         groups[groupName]["stats"][escStatus] = 0;
       }
     }
@@ -175,27 +175,38 @@ export const getEscalationListByCriteriaClientSide = async (
   return filteredArr;
 };
 
-export const addSectorAndSubSectorDetails = async (
-  escalations: escalationData[]
-) => {
-  escalations.forEach(async (escalation) => {
+export const addExtraDetails = async (escalations: escalationData[]) => {
+  const sectorList = await getSectorList();
+  const subSectorList = await getSubSectorList();
+  const umoorList = await getUmoorListWithCoordinators();
+  escalations.forEach((escalation) => {
     if (
       escalation.file_details.sub_sector &&
       escalation.file_details.sub_sector.name
     ) {
-      escalation.file_details.sub_sector = await getSubSectorDataByName(
-        escalation.file_details.sub_sector.name
-      );
+      escalation.file_details.sub_sector =
+        subSectorList.find(
+          (subsector) =>
+            subsector.name == escalation.file_details.sub_sector.name
+        ) || escalation.file_details.sub_sector;
     }
     if (
       escalation.file_details.sub_sector.sector &&
       escalation.file_details.sub_sector.sector.name
     ) {
-      escalation.file_details.sub_sector.sector = await getSectorDataByName(
-        escalation.file_details.sub_sector.sector.name
+      escalation.file_details.sub_sector.sector =
+        sectorList.find(
+          (sector) =>
+            sector.name == escalation.file_details.sub_sector.sector?.name
+        ) || escalation.file_details.sub_sector.sector;
+    }
+    if (escalation.type) {
+      escalation.type = umoorList.find(
+        (umoor) => umoor.value == escalation.type?.value
       );
     }
   });
+
   return escalations;
 };
 
