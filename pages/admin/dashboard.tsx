@@ -9,6 +9,7 @@ import {
   escalationData,
   escalationStatus,
   sectorData,
+  umoorData,
   userRoles,
 } from "../../types";
 import {logout, verifyUser} from "../api/v1/authentication";
@@ -27,7 +28,7 @@ interface AdminDashboardProps {
 const AdminDashboard: NextPage<AdminDashboardProps> = ({escalationsList}) => {
   const router = useRouter();
   const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
-  const [umoorList, setUmoorList] = useState<any[]>([]);
+  const [umoorList, setUmoorList] = useState<umoorData[]>([]);
   const [sectorList, setSectorList] = useState<sectorData[]>([]);
   const escalationsByUmoor = groupEscalationListBy(
     escalationsList,
@@ -54,7 +55,7 @@ const AdminDashboard: NextPage<AdminDashboardProps> = ({escalationsList}) => {
   }, []);
 
   const intiLists = async () => {
-    const umoors: any[] = await getUmoorList();
+    const umoors: umoorData[] = await getUmoorList();
     setUmoorList(umoors);
     const sectors = await getSectorList();
     setSectorList(sectors);

@@ -11,6 +11,7 @@ import {
   databaseMumeneenFieldData,
   sectorData,
   subSectorData,
+  umoorData,
   userRoles,
 } from "../../types";
 import {
@@ -285,7 +286,7 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
 
   const handleSyncUmoorsFromAirtable = async () => {
     toggleLoader(true);
-    const oldUmoorList = await getUmoorList();
+    const oldUmoorList: umoorData[] = await getUmoorList();
     await Promise.all(
       oldUmoorList.map(async (val) => {
         await deleteUmoor(val.value);
