@@ -7,6 +7,7 @@ import {useRouter} from "next/router";
 import {logout, verifyUser} from "../../pages/api/v1/authentication";
 import {authUser} from "../../types";
 import {getFileTableUserColumns} from "./columnsUtil";
+import useWindowDimensions from "../../utils/windowDimensions";
 
 interface TableProps {
   dataSource: any[];
@@ -16,6 +17,7 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
   const [columns, setcolumns] = useState<any[]>([]);
 
   const {toggleLoader} = useGlobalContext();
+  const {width} = useWindowDimensions();
   const router = useRouter();
 
   const notVerifierUserLogout = () => {
@@ -64,6 +66,7 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
         width: 150,
       },
     };
+
     fieldData
       .filter((val) => val.name !== "tanzeem_file_no")
       .forEach((val) => {
@@ -98,20 +101,24 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
     getFileTableColumns();
   }, []);
 
-  return (
-    <Table
-      dataSource={dataSource.map((val) => ({...val, key: val.id}))}
-      columns={columns}
-      className={styles.fileListTable}
-      pagination={false}
-      scroll={{x: "500px", y: "500px"}}
-      rowClassName="cursor-pointer"
-      onRow={(record) => ({
-        onClick: () =>
-          router.push(
-            `/mohallah/${record.sub_sector.sector.name}/${record.sub_sector.name}/${record.tanzeem_file_no}`
-          ),
-      })}
-    />
-  );
+  if (width && width >= 991) {
+    return (
+      <Table
+        dataSource={dataSource.map((val) => ({...val, key: val.id}))}
+        columns={columns}
+        className={styles.fileListTable}
+        pagination={false}
+        scroll={{x: "500px", y: "500px"}}
+        rowClassName="cursor-pointer"
+        onRow={(record) => ({
+          onClick: () =>
+            router.push(
+              `/mohallah/${record.sub_sector.sector.name}/${record.sub_sector.name}/${record.tanzeem_file_no}`
+            ),
+        })}
+      />
+    );
+  }
+
+  return <div>pool</div>;
 };
