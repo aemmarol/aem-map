@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from "react";
-import {message, Table} from "antd";
+import {Card, Col, message, Row, Table} from "antd";
 import styles from "../../styles/components/tables/fileListTable.module.scss";
 import {getMumeneenDataFields} from "../../pages/api/v1/db/databaseFields";
 import {useGlobalContext} from "../../context/GlobalContext";
@@ -7,6 +7,8 @@ import {useRouter} from "next/router";
 import {logout, verifyUser} from "../../pages/api/v1/authentication";
 import {authUser} from "../../types";
 import {getMumineenTableUserColumns} from "./columnsUtil";
+import useWindowDimensions from "../../utils/windowDimensions";
+import {EscStat} from "../custom/escalations/escalationStatus";
 
 interface TableProps {
   dataSource: any[];
@@ -16,6 +18,7 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
   const [columns, setcolumns] = useState<any[]>([]);
 
   const {toggleLoader} = useGlobalContext();
+  const {width} = useWindowDimensions();
   const router = useRouter();
 
   const notVerifierUserLogout = () => {
@@ -76,20 +79,49 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
     getFileTableColumns();
   }, []);
 
+  if (width && width >= 991) {
+    return (
+      <Table
+        dataSource={dataSource.map((val) => ({...val, key: val.id}))}
+        columns={columns}
+        className={styles.fileListTable}
+        pagination={false}
+        scroll={{x: "150px", y: "500px"}}
+      />
+    );
+  }
+
   return (
-    <Table
-      dataSource={dataSource.map((val) => ({...val, key: val.id}))}
-      columns={columns}
-      className={styles.fileListTable}
-      pagination={false}
-      scroll={{x: "150px", y: "500px"}}
-      // rowClassName="cursor-pointer"
-      // onRow={(record) => ({
-      //   onClick: () =>
-      //     router.push(
-      //       `/mohallah/${record.sub_sector.sector.name}/${record.sub_sector.name}/${record.tanzeem_file_no}`
-      //     ),
-      // })}
-    />
+    <div>
+      <h1>Members : </h1>
+      <Row gutter={[16, 16]}>
+        {dataSource.map((val) => (
+          <Col key={val.id} xs={24} md={12}>
+            <Card className="border-radius-10">
+              <Row gutter={[16, 16]}>
+                {columns.map((data) => (
+                  <Col
+                    key={data.dataIndex}
+                    xs={
+                      data.dataIndex === "email" ||
+                      data.dataIndex === "full_name" ||
+                      data.dataIndex === "mobile" ||
+                      data.dataIndex === "hof_name"
+                        ? 24
+                        : 12
+                    }
+                  >
+                    <EscStat
+                      label={data.title}
+                      value={val[data.dataIndex] ? val[data.dataIndex] : "-"}
+                    />
+                  </Col>
+                ))}
+              </Row>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </div>
   );
 };

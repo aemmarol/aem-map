@@ -8,7 +8,6 @@ export const InchargeDetailsCard: FC<{
   inchargeIts: string;
   inchargeContactNumber: string;
 }> = ({cardTitle, inchargeName, inchargeContactNumber}) => {
-  const openWhatsapp = () => {};
   return (
     <Card className={styles.masoolCard}>
       <div className={styles.masoolCardContent}>
@@ -18,7 +17,6 @@ export const InchargeDetailsCard: FC<{
           target="_blank"
           rel="noreferrer"
           href={"https://wa.me/" + inchargeContactNumber}
-          onClick={openWhatsapp}
           className={styles.masoolDetails}
         >
           {inchargeContactNumber}
