@@ -201,6 +201,9 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
     const escalationIssueType = find(issueTypeOptions, {
       value: values.escalationType,
     });
+    const escalationRaisedForDetails = JSON.parse(
+      values.escalationRaisedForITS
+    );
     const data: escalationData = {
       ...defaultDatabaseFields,
       created_by: {
@@ -223,8 +226,8 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       comments: [firstComment],
       escalation_id: "esc-" + dbSettings.escalation_auto_number,
       issueRaisedFor: {
-        ITS: values.escalationRaisedForITS.its.toString(),
-        name: values.escalationRaisedForITS.name.toString(),
+        ITS: escalationRaisedForDetails.its.toString(),
+        name: escalationRaisedForDetails.name.toString(),
         contact: values.escalationRaisedForContact,
       },
     };
@@ -373,15 +376,19 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
                     .includes(inputValue.toLowerCase())
                 }
               >
-                {fileDetails.membersList.map((memberData: any) => (
-                  <Select.Option
-                    label={`${memberData.id} (${memberData.full_name})`}
-                    value={{its: memberData.id, name: memberData.full_name}}
-                    key={memberData.id}
-                  >
-                    {`${memberData.id} (${memberData.full_name})`}
-                  </Select.Option>
-                ))}
+                {fileDetails.membersList &&
+                  fileDetails.membersList.map((memberData: any) => (
+                    <Select.Option
+                      label={`${memberData.id} (${memberData.full_name})`}
+                      value={JSON.stringify({
+                        its: memberData.id,
+                        name: memberData.full_name,
+                      })}
+                      key={memberData.id}
+                    >
+                      {`${memberData.id} (${memberData.full_name})`}
+                    </Select.Option>
+                  ))}
               </Select>
             </Form.Item>
             <Form.Item
