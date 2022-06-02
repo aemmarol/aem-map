@@ -50,9 +50,9 @@ export const EscalationList: FC<EscalationListType> = ({
 
   const sortEscalationList = (arr: Array<any>) => {
     if (sortValue !== "") {
-      let key = sortValue.split("-")[0];
-      let order = sortValue.split("-")[1] === "asc" ? "asc" : "desc";
-      let tempEscList = [...arr];
+      const key = sortValue.split("-")[0];
+      const order = sortValue.split("-")[1] === "asc" ? "asc" : "desc";
+      const tempEscList = [...arr];
       return orderBy(tempEscList, [key], [order === "asc" ? "asc" : "desc"]);
     }
     return [...arr];
