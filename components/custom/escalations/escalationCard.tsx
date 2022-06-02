@@ -1,15 +1,19 @@
 import {Card, Col, Row} from "antd";
 import moment from "moment";
+import {useRouter} from "next/router";
 import {FC} from "react";
 import styles from "../../../styles/pages/Escalation.module.scss";
-import {escalationData} from "../../../types";
+import {escalationData, userRoles} from "../../../types";
 import {getDateDiffDays, getEscalationStatusDetail} from "../../../utils";
 import {EscStat} from "./escalationStatus";
 
 export const EscalationCard: FC<{
   escalation: escalationData;
   hideDetails: boolean;
-}> = ({escalation, hideDetails}) => {
+  userRole: userRoles;
+}> = ({escalation, hideDetails, userRole}) => {
+  const router = useRouter();
+
   const columns = [
     {
       title: "Id",
@@ -72,8 +76,18 @@ export const EscalationCard: FC<{
     return columns;
   };
 
+  const handleOpenEscalation = (escId: string) => {
+    if (userRole === userRoles.Admin || userRole === userRoles.Umoor) {
+      router.push("/escalations/" + escId);
+    }
+  };
+
   return (
-    <Card className={styles.escalationCard} key={escalation.id}>
+    <Card
+      onClick={() => handleOpenEscalation(escalation.id as string)}
+      className={styles.escalationCard}
+      key={escalation.id}
+    >
       <Row gutter={[16, 16]}>
         {getTableColumns().map((val, idx) => {
           return (
