@@ -8,8 +8,9 @@ import {EscalationTable} from "./escalationTable";
 import styles from "../../../styles/components/custom/escalationList.module.scss";
 import {EscalationFilter, EscalationFilterType} from "./escalationFilter";
 
-import {Button, Col, Drawer, Input, Row} from "antd";
+import {Button, Col, Drawer, Input, Radio, Row, Space} from "antd";
 import {FilterOutlined, SearchOutlined} from "@ant-design/icons";
+import {orderBy} from "lodash";
 
 interface EscalationListType {
   escalationList: escalationData[];
@@ -26,6 +27,7 @@ export const EscalationList: FC<EscalationListType> = ({
   const [escalations, setEscalations] = useState<escalationData[]>([]);
   const [showFilterDrawer, setShowFilterDrawer] = useState<boolean>(false);
   const [filterString, setFilterString] = useState("");
+  const [sortValue, setSortValue] = useState("");
 
   useEffect(() => {
     setEscalations(
@@ -38,8 +40,23 @@ export const EscalationList: FC<EscalationListType> = ({
   }, [filterString]);
 
   useEffect(() => {
-    setEscalations(escalationList);
+    console.log(escalationList);
+    setEscalations(sortEscalationList(escalationList));
   }, [escalationList]);
+
+  useEffect(() => {
+    setEscalations(sortEscalationList(escalations));
+  }, [sortValue]);
+
+  const sortEscalationList = (arr: Array<any>) => {
+    if (sortValue !== "") {
+      const key = sortValue.split("-")[0];
+      const order = sortValue.split("-")[1] === "asc" ? "asc" : "desc";
+      const tempEscList = [...arr];
+      return orderBy(tempEscList, [key], [order === "asc" ? "asc" : "desc"]);
+    }
+    return [...arr];
+  };
 
   return (
     <>
@@ -79,6 +96,7 @@ export const EscalationList: FC<EscalationListType> = ({
                       }
                       key={idx}
                       escalation={val}
+                      userRole={userRole}
                     />
                   ))}
                   <Button
@@ -121,7 +139,20 @@ export const EscalationList: FC<EscalationListType> = ({
               </div>
             );
           })}
-          {/* <h2 className="mt-16">Sort By:</h2> */}
+          <h2 className="mt-16">Sort By:</h2>
+          <Radio.Group
+            onChange={(e) => setSortValue(e.target.value)}
+            value={sortValue}
+          >
+            <Space direction="vertical">
+              <Radio value="escalation_id-asc">Id Ascending</Radio>
+              <Radio value="escalation_id-desc">Id Descending</Radio>
+              <Radio value="status-asc">Status Ascending</Radio>
+              <Radio value="status-desc">Status Descending</Radio>
+              <Radio value="created_at-asc">Issue Date Ascending</Radio>
+              <Radio value="created_at-desc">Issue Date Descending</Radio>
+            </Space>
+          </Radio.Group>
         </Drawer>
       ) : null}
     </>
