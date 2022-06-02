@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from "react";
-import {message, Table} from "antd";
+import {Card, Col, message, Row, Table} from "antd";
 import styles from "../../styles/components/tables/fileListTable.module.scss";
 import {getFileDataFields} from "../../pages/api/v1/db/databaseFields";
 import {useGlobalContext} from "../../context/GlobalContext";
@@ -7,6 +7,8 @@ import {useRouter} from "next/router";
 import {logout, verifyUser} from "../../pages/api/v1/authentication";
 import {authUser} from "../../types";
 import {getFileTableUserColumns} from "./columnsUtil";
+import useWindowDimensions from "../../utils/windowDimensions";
+import {EscStat} from "../custom/escalations/escalationStatus";
 
 interface TableProps {
   dataSource: any[];
@@ -16,6 +18,7 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
   const [columns, setcolumns] = useState<any[]>([]);
 
   const {toggleLoader} = useGlobalContext();
+  const {width} = useWindowDimensions();
   const router = useRouter();
 
   const notVerifierUserLogout = () => {
@@ -64,6 +67,7 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
         width: 150,
       },
     };
+
     fieldData
       .filter((val) => val.name !== "tanzeem_file_no")
       .forEach((val) => {
@@ -98,20 +102,62 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
     getFileTableColumns();
   }, []);
 
+  const goToFile = (fileDetails: any) => {
+    router.push(
+      `/mohallah/${fileDetails.sub_sector.sector.name}/${fileDetails.sub_sector.name}/${fileDetails.tanzeem_file_no}`
+    );
+  };
+
+  if (width && width >= 991) {
+    return (
+      <Table
+        dataSource={dataSource.map((val) => ({...val, key: val.id}))}
+        columns={columns}
+        className={styles.fileListTable}
+        pagination={false}
+        scroll={{x: "500px", y: "500px"}}
+        rowClassName="cursor-pointer"
+        onRow={(record) => ({
+          onClick: () =>
+            router.push(
+              `/mohallah/${record.sub_sector.sector.name}/${record.sub_sector.name}/${record.tanzeem_file_no}`
+            ),
+        })}
+      />
+    );
+  }
+
   return (
-    <Table
-      dataSource={dataSource.map((val) => ({...val, key: val.id}))}
-      columns={columns}
-      className={styles.fileListTable}
-      pagination={false}
-      scroll={{x: "500px", y: "500px"}}
-      rowClassName="cursor-pointer"
-      onRow={(record) => ({
-        onClick: () =>
-          router.push(
-            `/mohallah/${record.sub_sector.sector.name}/${record.sub_sector.name}/${record.tanzeem_file_no}`
-          ),
-      })}
-    />
+    <div>
+      <h1>Files : </h1>
+      <Row gutter={[16, 16]}>
+        {dataSource.map((val) => (
+          <Col key={val.key} xs={24} md={12}>
+            <Card onClick={() => goToFile(val)} className="border-radius-10">
+              <Row gutter={[16, 16]}>
+                {columns.map((data) => (
+                  <Col
+                    key={data.dataIndex}
+                    xs={
+                      data.dataIndex === "address" ||
+                      data.dataIndex === "address_fmb" ||
+                      data.dataIndex === "building_fmb" ||
+                      data.dataIndex === "hof_name"
+                        ? 24
+                        : 12
+                    }
+                  >
+                    <EscStat
+                      label={data.title}
+                      value={val[data.dataIndex] ? val[data.dataIndex] : "-"}
+                    />
+                  </Col>
+                ))}
+              </Row>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </div>
   );
 };

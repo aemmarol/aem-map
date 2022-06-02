@@ -28,6 +28,7 @@ import {EscalationFilterType} from "../../components/custom/escalations/escalati
 import {filterOption} from "../../types/escalation";
 import moment from "moment";
 import {StatsCard} from "../../components/cards/statsCard";
+import useWindowDimensions from "../../utils/windowDimensions";
 
 interface selectedFilterItemsType {
   selectedUmoors: filterOption[];
@@ -37,6 +38,7 @@ interface selectedFilterItemsType {
 const Dashboard: NextPage = () => {
   const router = useRouter();
   const {changeSelectedSidebarKey} = useGlobalContext();
+  const {width} = useWindowDimensions();
 
   const [adminDetails, setAdminDetails] = useState<authUser>({} as authUser);
   const [showEscalationModal, setShowEscalationModal] =
@@ -52,7 +54,6 @@ const Dashboard: NextPage = () => {
     });
   const [escalationsStatsGroup, setEscalationsStatsGroup] = useState();
   const [escalationList, setEscalationList] = useState<escalationData[]>([]);
-  const [isReady, setIsReady] = useState(false);
 
   const [escalationsByUmoor, setEscalationsByUmoor] = useState<any>();
   const [escalationsBySector, setEscalationsBySector] = useState<any>();
@@ -172,9 +173,6 @@ const Dashboard: NextPage = () => {
               data: [],
               stats: {
                 total: 0,
-                // "Issue Reported": 0,
-                // "Resolution In Process": 0,
-                // Resolved: 0,
               },
             };
             for (const escStatus of Object.values(escalationStatus)) {
@@ -226,7 +224,6 @@ const Dashboard: NextPage = () => {
     }
   };
   const getEscalationList = async () => {
-    setIsReady(false);
     toggleLoader(true);
     let criteria: Criteria[] = [];
     let groupName;
@@ -396,7 +393,6 @@ const Dashboard: NextPage = () => {
     }
     // console.log(escList, "ESCLIST");
     // getFilterProps();
-    setIsReady(true);
     toggleLoader(false);
   };
 
@@ -434,17 +430,18 @@ const Dashboard: NextPage = () => {
           flexDirection: "column",
           justifyContent: "space-around",
           marginBottom: "1em",
-          width: "50%",
+          width: width && width > 991 ? "50%" : "100%",
           margin: "0 auto",
         }}
       >
         {getStatCardList()}
       </div>
-      <div className="d-flex mb-16">
+
+      <div className="mb-16">
         {adminDetails &&
         adminDetails.userRole &&
         adminDetails.userRole.length > 1 ? (
-          <div className="flex-align-center flex-1">
+          <div className="flex-align-center mb-16 flex-1">
             <h4 className="mr-10 mb-0 w-100">Select View : </h4>
             <Select
               onChange={(e) => setSelectedView(e)}
@@ -463,7 +460,7 @@ const Dashboard: NextPage = () => {
 
         <div className="d-flex w-full float-right">
           <Button
-            className="ml-auto"
+            className={width && width < 576 ? "" : "ml-auto"}
             onClick={showAddEscalationModal}
             type="primary"
             size="large"
@@ -473,7 +470,8 @@ const Dashboard: NextPage = () => {
         </div>
       </div>
 
-      {selectedView && isReady ? (
+      {/* {selectedView && isReady ? ( */}
+      {selectedView ? (
         <EscalationList
           escalationList={escalationList}
           filterProps={filterProps}

@@ -240,13 +240,13 @@ const FileMemberDetailsPage: NextPage = () => {
             <Card className="border-radius-10">
               <h2 className="mb-30">{escalationDetails.issue}</h2>
               <Row gutter={[8, 8]}>
-                <Col xs={16}>
+                <Col xs={24} sm={16}>
                   <EscStat
                     label="HOF Name"
                     value={escalationDetails.file_details.hof_name}
                   />
                 </Col>
-                <Col xs={8}>
+                <Col xs={24} sm={8}>
                   {adminDetails.userRole.includes(userRoles.Admin) ? (
                     <>
                       <p className={styles.escStatLabel}>Escalation type</p>
@@ -282,7 +282,7 @@ const FileMemberDetailsPage: NextPage = () => {
                     />
                   )}
                 </Col>
-                <Col xs={8}>
+                <Col xs={12} sm={8}>
                   <EscStat
                     label="File No"
                     value={
@@ -290,19 +290,19 @@ const FileMemberDetailsPage: NextPage = () => {
                     }
                   />
                 </Col>
-                <Col xs={8}>
+                <Col xs={12} sm={8}>
                   <EscStat
                     label="HOF ITS"
                     value={escalationDetails.file_details.hof_its}
                   />
                 </Col>
-                <Col xs={8}>
+                <Col xs={24} sm={8}>
                   <EscStat
                     label="HOF Contact number"
                     value={escalationDetails.file_details.hof_contact}
                   />
                 </Col>
-                <Col xs={24}>
+                <Col xs={24} sm={24}>
                   <EscStat
                     label="Address"
                     value={escalationDetails.file_details.address}
@@ -311,7 +311,7 @@ const FileMemberDetailsPage: NextPage = () => {
               </Row>
               <Divider />
               <Row gutter={[16, 16]}>
-                <Col xs={8}>
+                <Col xs={24} sm={8}>
                   <EscStat
                     label="Reported On"
                     value={moment(
@@ -320,13 +320,13 @@ const FileMemberDetailsPage: NextPage = () => {
                     ).format("DD-MM-YYYY")}
                   />
                 </Col>
-                <Col xs={8}>
+                <Col xs={24} sm={8}>
                   <EscStat
                     label="Reported by"
                     value={escalationDetails.created_by.name}
                   />
                 </Col>
-                <Col xs={8}>
+                <Col xs={24} sm={8}>
                   <EscStat
                     label="Reported by Contact"
                     value={escalationDetails.created_by.contact_number}
@@ -334,7 +334,7 @@ const FileMemberDetailsPage: NextPage = () => {
                 </Col>
                 {sectorDetails ? (
                   <>
-                    <Col xs={8}>
+                    <Col xs={24} sm={8}>
                       <EscStat
                         label="Mohallah"
                         value={sectorDetails.name as string}
@@ -342,13 +342,13 @@ const FileMemberDetailsPage: NextPage = () => {
                         tagColor={sectorDetails.primary_color as string}
                       />
                     </Col>
-                    <Col xs={8}>
+                    <Col xs={24} sm={8}>
                       <EscStat
                         label="Masool"
                         value={`${sectorDetails.masool_name} (${sectorDetails.masool_contact})`}
                       />
                     </Col>
-                    <Col xs={8}>
+                    <Col xs={24} sm={8}>
                       <EscStat
                         label="Masoola"
                         value={`${sectorDetails.masoola_name} (${sectorDetails.masoola_contact})`}
@@ -358,19 +358,19 @@ const FileMemberDetailsPage: NextPage = () => {
                 ) : null}
                 {subSectorDetails ? (
                   <>
-                    <Col xs={8}>
+                    <Col xs={12} sm={8}>
                       <EscStat
                         label="SubSector"
                         value={`${subSectorDetails.name}`}
                       />
                     </Col>
-                    <Col xs={8}>
+                    <Col xs={24} sm={8}>
                       <EscStat
                         label="Musaid"
                         value={`${subSectorDetails.musaid_name} (${subSectorDetails.musaid_contact})`}
                       />
                     </Col>
-                    <Col xs={8}>
+                    <Col xs={24} sm={8}>
                       <EscStat
                         label="Musaida"
                         value={`${subSectorDetails.musaida_name} (${subSectorDetails.musaida_contact})`}
@@ -381,7 +381,7 @@ const FileMemberDetailsPage: NextPage = () => {
               </Row>
               <Divider />
               <Row gutter={[16, 8]}>
-                <Col xs={12}>
+                <Col xs={24} sm={12}>
                   <p className={styles.escStatLabel}>Status</p>
                   <Select
                     onChange={handleSelectStatusChange}
@@ -401,7 +401,7 @@ const FileMemberDetailsPage: NextPage = () => {
                     })}
                   </Select>
                 </Col>
-                <Col xs={24}>
+                <Col xs={24} sm={24}>
                   <div className={styles.commentsHeader}>
                     <h3>Comments</h3>
                     <Button

@@ -17,3 +17,11 @@
 .filterContainer:last-child {
   border-bottom: none;
 }
+
+.filterIcon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px !important;
+  height: 50px !important;
+}
