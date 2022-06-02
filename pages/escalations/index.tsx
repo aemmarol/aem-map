@@ -54,7 +54,6 @@ const Dashboard: NextPage = () => {
     });
   const [escalationsStatsGroup, setEscalationsStatsGroup] = useState();
   const [escalationList, setEscalationList] = useState<escalationData[]>([]);
-  const [isReady, setIsReady] = useState(false);
 
   const [escalationsByUmoor, setEscalationsByUmoor] = useState<any>();
   const [escalationsBySector, setEscalationsBySector] = useState<any>();
@@ -225,7 +224,6 @@ const Dashboard: NextPage = () => {
     }
   };
   const getEscalationList = async () => {
-    setIsReady(false);
     toggleLoader(true);
     let criteria: Criteria[] = [];
     let groupName;
@@ -395,7 +393,6 @@ const Dashboard: NextPage = () => {
     }
     // console.log(escList, "ESCLIST");
     // getFilterProps();
-    setIsReady(true);
     toggleLoader(false);
   };
 
@@ -474,7 +471,7 @@ const Dashboard: NextPage = () => {
       </div>
 
       {/* {selectedView && isReady ? ( */}
-      {selectedView && isReady ? (
+      {selectedView ? (
         <EscalationList
           escalationList={escalationList}
           filterProps={filterProps}

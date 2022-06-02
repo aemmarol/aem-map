@@ -1,14 +1,14 @@
 import React, {FC, useEffect, useState} from "react";
 
 import {escalationData, userRoles} from "../../../types";
-import useWindowDimensions, {isMobile} from "../../../utils/windowDimensions";
+import useWindowDimensions from "../../../utils/windowDimensions";
 import {EscalationCard} from "./escalationCard";
 import {EscalationTable} from "./escalationTable";
 
 import styles from "../../../styles/components/custom/escalationList.module.scss";
 import {EscalationFilter, EscalationFilterType} from "./escalationFilter";
 
-import {Button, Card, Col, Divider, Drawer, Input, Row} from "antd";
+import {Button, Col, Drawer, Input, Row} from "antd";
 import {FilterOutlined, SearchOutlined} from "@ant-design/icons";
 
 interface EscalationListType {
@@ -36,6 +36,10 @@ export const EscalationList: FC<EscalationListType> = ({
         : escalationList
     );
   }, [filterString]);
+
+  useEffect(() => {
+    setEscalations(escalationList);
+  }, [escalationList]);
 
   return (
     <>

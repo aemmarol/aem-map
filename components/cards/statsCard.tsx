@@ -14,7 +14,7 @@ export const StatsCard: FC<statsCardType> = ({title, handleClick, stats}) => {
       <Row gutter={[8, 8]}>
         {Object.keys(stats).map((key, idx) => {
           return (
-            <Col xs={12}>
+            <Col key={`Stat_${idx}`} xs={12}>
               <EscStat key={idx} label={key} value={stats[key]} />
             </Col>
           );

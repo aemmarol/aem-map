@@ -75,9 +75,9 @@ export const EscalationCard: FC<{
   return (
     <Card className={styles.escalationCard} key={escalation.id}>
       <Row gutter={[16, 16]}>
-        {getTableColumns().map((val) => {
+        {getTableColumns().map((val, idx) => {
           return (
-            <Col xs={val.size}>
+            <Col key={`ESC-CARD_${idx}`} xs={val.size}>
               <EscStat
                 type={val.type}
                 tagColor={val.tagColor}
