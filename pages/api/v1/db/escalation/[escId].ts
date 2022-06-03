@@ -1,7 +1,7 @@
 import nextConnect from "next-connect";
 import {escalationCollectionName} from "../../../../../firebase/dbCollectionNames";
 import middleware from "../../../../../mongodb/database";
-import {UpdateResult} from "mongodb";
+import {UpdateResult, DeleteResult} from "mongodb";
 
 const handler = nextConnect();
 
@@ -20,6 +20,14 @@ handler.put(async (req: any, res: any) => {
   const doc: UpdateResult = await req.db
     .collection(escalationCollectionName)
     .updateOne({id: req.query.escId}, {$set: JSON.parse(req.body)});
+
+  res.json(doc.acknowledged);
+});
+
+handler.delete(async (req: any, res: any) => {
+  const doc: DeleteResult = await req.db
+    .collection(escalationCollectionName)
+    .remove({id: req.query.escId}, 1);
 
   res.json(doc.acknowledged);
 });

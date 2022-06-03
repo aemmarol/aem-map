@@ -267,6 +267,13 @@ export const updateEscalationData = async (
 };
 
 export const deleteFileData = async (id: string): Promise<boolean> => {
-  await deleteDoc(doc(firestore, escalationCollectionName, id));
-  return true;
+  if (USING() == DBs.firebase) {
+    await deleteDoc(doc(firestore, escalationCollectionName, id));
+    return true;
+  } else if (USING() == DBs.mongo) {
+    return await (
+      await fetch(API.escalation + `/${id}`, {method: "Delete"})
+    ).json();
+  }
+  return false;
 };
