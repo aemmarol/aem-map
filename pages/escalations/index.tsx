@@ -424,8 +424,8 @@ const Dashboard: NextPage = () => {
   };
 
   const getEscalationDownloadData: any = () => {
-    let tempArr: any = sortFilterEscalationList.map((data) => {
-      let tempEscData: any = {};
+    const tempArr: any = sortFilterEscalationList.map((data) => {
+      const tempEscData: any = {};
       getEscalationDownloadDataHeaders().forEach((val) => {
         switch (val.key) {
           case "file_details":
