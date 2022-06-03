@@ -19,10 +19,9 @@ import {getUmoorList} from "../api/v1/db/umoorsCrud";
 import {
   Criteria,
   escalationDBFields,
-  getEscalationListByCriteriaClientSide,
   groupEscalationListBy,
   getEscalationList as getEscalationListFromDB,
-  addExtraDetails,
+  getEscalationListByCriteria,
 } from "../api/v1/db/escalationsCrud";
 import {EscalationFilterType} from "../../components/custom/escalations/escalationFilter";
 import {filterOption} from "../../types/escalation";
@@ -101,6 +100,7 @@ const Dashboard: NextPage = () => {
     const queryUmoor = router.query.umoor?.toString();
     const querySector = router.query.sector?.toString();
     const umoors: umoorData[] = await getUmoorList();
+    console.log(adminDetails, "USER");
     setUmoorList(umoors);
     setSelectedFilterItems({
       selectedRegions: querySector
@@ -375,10 +375,8 @@ const Dashboard: NextPage = () => {
         break;
     }
 
-    let escList: escalationData[] = await getEscalationListByCriteriaClientSide(
-      criteria
-    );
-    escList = await addExtraDetails(escList);
+    let escList: escalationData[] = await getEscalationListByCriteria(criteria);
+    // escList = await addExtraDetails(escList);
     // console.log(escList[0].type);
 
     setEscalationList(

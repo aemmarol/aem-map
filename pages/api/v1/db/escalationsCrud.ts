@@ -18,8 +18,16 @@ import moment from "moment";
 import {getUmoorListWithCoordinators} from "./umoorsCrud";
 import {getSectorList} from "./sectorCrud";
 import {getSubSectorList} from "./subSectorCrud";
+import {API} from "../../../../utils/api";
+import {createQuery} from "../../../../mongodb/queryUtil";
 
 const dataCollection = collection(firestore, escalationCollectionName);
+
+enum DBs {
+  firebase,
+  mongo,
+}
+let USING = DBs.mongo;
 
 export enum escalationDBFields {
   subsectorName = "file_details.sub_sector.name",
@@ -40,42 +48,34 @@ export const getEscalationList = async () => {
     console.log("USING CACHE FOR ESCALATION LIST");
     return escalationList;
   }
-  const resultArr: any[] = [];
-  const q = query(
-    dataCollection,
-    where("version", "==", defaultDatabaseFields.version)
-  );
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((docs) => {
-    const file: any = {
-      id: docs.id.toString(),
-      ...docs.data(),
-    };
-    resultArr.push(file);
-  });
-  escalationList = resultArr;
-  return escalationList;
+  if (USING == DBs.firebase) {
+    const resultArr: any[] = [];
+    const q = query(
+      dataCollection,
+      where("version", "==", defaultDatabaseFields.version)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((docs) => {
+      const file: any = {
+        id: docs.id.toString(),
+        ...docs.data(),
+      };
+      resultArr.push(file);
+    });
+    console.log(JSON.stringify(resultArr), "FIREBASE");
+    escalationList = resultArr;
+    return escalationList;
+  } else if (USING == DBs.mongo) {
+    return await (await fetch(API.escalation, {})).json();
+  }
 };
 
-export const getEscalationListBySubSector = async (
-  sector: string
-): Promise<any> => {
-  const resultArr: any[] = [];
-  const q = query(
-    dataCollection,
-    where("version", "==", defaultDatabaseFields.version),
-    where("file_details.sub_sector.name", "==", sector)
-  );
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((docs) => {
-    const file: any = {
-      id: docs.id.toString(),
-      ...docs.data(),
-    };
-    resultArr.push(file);
-  });
-
-  return resultArr;
+const getFieldValue = (obj: any, field: string) => {
+  const fieldpath = field.split(".");
+  for (const key of fieldpath) {
+    obj = obj[key];
+  }
+  return obj;
 };
 
 export const groupEscalationListBy = (
@@ -116,46 +116,58 @@ export const groupEscalationListBy = (
 export const getEscalationData = async (
   id: string
 ): Promise<escalationData> => {
-  const docRef = doc(firestore, escalationCollectionName, id);
-  const docSnap = await getDoc(docRef);
-  escalationList = null;
-  if (docSnap.exists()) {
-    return {...docSnap.data(), id: docSnap.id} as escalationData;
+  if (USING == DBs.firebase) {
+    const docRef = doc(firestore, escalationCollectionName, id);
+    const docSnap = await getDoc(docRef);
+    escalationList = null;
+    if (docSnap.exists()) {
+      return {...docSnap.data(), id: docSnap.id} as escalationData;
+    }
+  } else if (USING == DBs.mongo) {
+    return await (await fetch(API.escalation + `/${id}`)).json();
   }
   return {} as escalationData;
 };
 
-const getFieldValue = (obj: any, field: string) => {
-  const fieldpath = field.split(".");
-  for (const key of fieldpath) {
-    obj = obj[key];
+export const getEscalationListByCriteria = async (
+  criteria: Criteria[]
+): Promise<any> => {
+  if (USING == DBs.firebase) {
+    return await getEscalationListByCriteriaClientSide(criteria);
+    // const resultArr: any[] = [];
+    // const q = query(
+    //   dataCollection,
+    //   where("version", "==", defaultDatabaseFields.version),
+    //   ...criteria.map((c: Criteria) => {
+    //     return where(c.field, c.operator, c.value);
+    //   })
+    //   // where("file_details.sub_sector.name", "==", sector)
+    // );
+    // const querySnapshot = await getDocs(q);
+    // querySnapshot.forEach((docs) => {
+    //   const file: any = {
+    //     id: docs.id.toString(),
+    //     ...docs.data(),
+    //   };
+    //   resultArr.push(file);
+    // });
+
+    // return resultArr;
+  } else if (USING == DBs.mongo) {
+    const query = createQuery(criteria);
+    const body = await (
+      await fetch(API.escalation, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({query}),
+      })
+    ).json();
+    return body;
   }
-  return obj;
 };
-
-// export const getEscalationListByCriteria = async (
-//   criteria: Criteria[]
-// ): Promise<any> => {
-//   const resultArr: any[] = [];
-//   const q = query(
-//     dataCollection,
-//     where("version", "==", defaultDatabaseFields.version),
-//     ...criteria.map((c: Criteria) => {
-//       return where(c.field, c.operator, c.value);
-//     })
-//     // where("file_details.sub_sector.name", "==", sector)
-//   );
-//   const querySnapshot = await getDocs(q);
-//   querySnapshot.forEach((docs) => {
-//     const file: any = {
-//       id: docs.id.toString(),
-//       ...docs.data(),
-//     };
-//     resultArr.push(file);
-//   });
-
-//   return resultArr;
-// };
 
 export const getEscalationListByCriteriaClientSide = async (
   criterias: Criteria[]
@@ -164,10 +176,10 @@ export const getEscalationListByCriteriaClientSide = async (
   criterias.forEach((criteria) => {
     if (criteria.operator == "==") {
       filteredArr = filteredArr.filter(
-        (val) => getFieldValue(val, criteria.field) == criteria.value
+        (val: any) => getFieldValue(val, criteria.field) == criteria.value
       );
     } else if (criteria.operator == "in") {
-      filteredArr = filteredArr.filter((val) =>
+      filteredArr = filteredArr.filter((val: any) =>
         criteria.value.includes(getFieldValue(val, criteria.field))
       );
     }
@@ -213,13 +225,21 @@ export const addExtraDetails = async (escalations: escalationData[]) => {
 export const addEscalationData = async (
   data: escalationData
 ): Promise<boolean> => {
-  try {
-    await addDoc(dataCollection, data);
-    escalationList = null;
-    return true;
-  } catch {
-    return false;
+  if (USING == DBs.firebase) {
+    try {
+      await addDoc(dataCollection, data);
+      escalationList = null;
+      return true;
+    } catch {
+      return false;
+    }
+  } else if (USING == DBs.mongo) {
+    const resp = await fetch(API.escalationAdd, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
   }
+  return false;
 };
 
 export const updateEscalationData = async (
