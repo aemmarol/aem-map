@@ -310,42 +310,7 @@ const FileMemberDetailsPage: NextPage = () => {
                 </Col>
               </Row>
               <Divider />
-              <Row gutter={[8, 8]}>
-                <Col xs={24} sm={24}>
-                  <EscStat
-                    label="Issue Raised For"
-                    value={
-                      escalationDetails.issueRaisedFor &&
-                      escalationDetails.issueRaisedFor.name
-                        ? escalationDetails.issueRaisedFor.name
-                        : "-"
-                    }
-                  />
-                </Col>
-                <Col xs={24} sm={8}>
-                  <EscStat
-                    label="Contact Number"
-                    value={
-                      escalationDetails.issueRaisedFor &&
-                      escalationDetails.issueRaisedFor.contact
-                        ? escalationDetails.issueRaisedFor.contact
-                        : "-"
-                    }
-                  />
-                </Col>
-                <Col xs={24} sm={8}>
-                  <EscStat
-                    label="ITS"
-                    value={
-                      escalationDetails.issueRaisedFor &&
-                      escalationDetails.issueRaisedFor.ITS
-                        ? escalationDetails.issueRaisedFor.ITS
-                        : "-"
-                    }
-                  />
-                </Col>
-              </Row>
-              <Divider />
+
               <Row gutter={[16, 16]}>
                 <Col xs={24} sm={8}>
                   <EscStat
