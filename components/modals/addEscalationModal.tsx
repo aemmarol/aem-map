@@ -396,7 +396,8 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
               label="Issue raised for (Enter contact)"
               rules={[
                 {
-                  required: false,
+                  required: true,
+                  message: "Please Enter a contact number",
                 },
                 {
                   pattern: new RegExp(/^(\+[\d]{1,5}|0)?[7-9]\d{9}$/),
