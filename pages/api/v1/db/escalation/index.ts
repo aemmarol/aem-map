@@ -7,12 +7,15 @@ const handler = nextConnect();
 handler.use(middleware);
 
 handler.get(async (req: any, res: any) => {
-  let doc = await req.db.collection(escalationCollectionName).find().toArray();
+  const doc = await req.db
+    .collection(escalationCollectionName)
+    .find()
+    .toArray();
   res.json(doc);
 });
 
 handler.post(async (req: any, res: any) => {
-  let doc = await req.db
+  const doc = await req.db
     .collection(escalationCollectionName)
     .find(req.body.query)
     .toArray();

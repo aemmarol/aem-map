@@ -27,7 +27,7 @@ enum DBs {
   firebase,
   mongo,
 }
-let USING = DBs.mongo;
+const USING = () => DBs.mongo;
 
 export enum escalationDBFields {
   subsectorName = "file_details.sub_sector.name",
@@ -48,7 +48,7 @@ export const getEscalationList = async () => {
     console.log("USING CACHE FOR ESCALATION LIST");
     return escalationList;
   }
-  if (USING == DBs.firebase) {
+  if (USING() == DBs.firebase) {
     const resultArr: any[] = [];
     const q = query(
       dataCollection,
@@ -65,7 +65,7 @@ export const getEscalationList = async () => {
     console.log(JSON.stringify(resultArr), "FIREBASE");
     escalationList = resultArr;
     return escalationList;
-  } else if (USING == DBs.mongo) {
+  } else if (USING() == DBs.mongo) {
     return await (await fetch(API.escalation, {})).json();
   }
 };
@@ -116,14 +116,14 @@ export const groupEscalationListBy = (
 export const getEscalationData = async (
   id: string
 ): Promise<escalationData> => {
-  if (USING == DBs.firebase) {
+  if (USING() == DBs.firebase) {
     const docRef = doc(firestore, escalationCollectionName, id);
     const docSnap = await getDoc(docRef);
     escalationList = null;
     if (docSnap.exists()) {
       return {...docSnap.data(), id: docSnap.id} as escalationData;
     }
-  } else if (USING == DBs.mongo) {
+  } else if (USING() == DBs.mongo) {
     return await (await fetch(API.escalation + `/${id}`)).json();
   }
   return {} as escalationData;
@@ -132,7 +132,7 @@ export const getEscalationData = async (
 export const getEscalationListByCriteria = async (
   criteria: Criteria[]
 ): Promise<any> => {
-  if (USING == DBs.firebase) {
+  if (USING() == DBs.firebase) {
     return await getEscalationListByCriteriaClientSide(criteria);
     // const resultArr: any[] = [];
     // const q = query(
@@ -153,7 +153,7 @@ export const getEscalationListByCriteria = async (
     // });
 
     // return resultArr;
-  } else if (USING == DBs.mongo) {
+  } else if (USING() == DBs.mongo) {
     const query = createQuery(criteria);
     const body = await (
       await fetch(API.escalation, {
@@ -225,7 +225,7 @@ export const addExtraDetails = async (escalations: escalationData[]) => {
 export const addEscalationData = async (
   data: escalationData
 ): Promise<boolean> => {
-  if (USING == DBs.firebase) {
+  if (USING() == DBs.firebase) {
     try {
       await addDoc(dataCollection, data);
       escalationList = null;
@@ -233,11 +233,12 @@ export const addEscalationData = async (
     } catch {
       return false;
     }
-  } else if (USING == DBs.mongo) {
+  } else if (USING() == DBs.mongo) {
     const resp = await fetch(API.escalationAdd, {
       method: "POST",
       body: JSON.stringify(data),
     });
+    return await resp.json();
   }
   return false;
 };
@@ -246,13 +247,23 @@ export const updateEscalationData = async (
   id: string,
   data: Partial<escalationData>
 ): Promise<boolean> => {
-  const dataCollection = doc(firestore, escalationCollectionName, id);
-  await updateDoc(dataCollection, {
-    ...data,
-    updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
-  });
-  escalationList = null;
-  return true;
+  if (USING() == DBs.firebase) {
+    const dataCollection = doc(firestore, escalationCollectionName, id);
+    await updateDoc(dataCollection, {
+      ...data,
+      updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
+    });
+    escalationList = null;
+    return true;
+  } else if (USING() == DBs.mongo) {
+    return await (
+      await fetch(API.escalation + `/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+      })
+    ).json();
+  }
+  return false;
 };
 
 export const deleteFileData = async (id: string): Promise<boolean> => {

@@ -381,7 +381,9 @@ const Dashboard: NextPage = () => {
         break;
     }
 
-    let escList: escalationData[] = await getEscalationListByCriteria(criteria);
+    const escList: escalationData[] = await getEscalationListByCriteria(
+      criteria
+    );
     // escList = await addExtraDetails(escList);
     // console.log(escList[0].type);
 
