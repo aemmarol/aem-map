@@ -310,7 +310,7 @@ const FileMemberDetailsPage: NextPage = () => {
                 </Col>
               </Row>
               <Divider />
-              
+
               <Row gutter={[16, 16]}>
                 <Col xs={24} sm={8}>
                   <EscStat
