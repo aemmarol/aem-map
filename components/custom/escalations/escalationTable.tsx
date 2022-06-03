@@ -156,11 +156,24 @@ export const EscalationTable: FC<EscalationTableType> = ({
       title: "Pending Since",
       dataIndex: "created_at",
       key: "created_at.daydiff",
-      render: (created_at: any) => {
-        return `${getDateDiffDays(created_at)} days`;
+      render: (created_at: any, val: any) => {
+        return `${
+          val.status === "Closed" || val.status === "Resolved"
+            ? 0
+            : getDateDiffDays(created_at)
+        } days`;
       },
-      sorter: (a: any, b: any) =>
-        getDateDiffDays(a.created_at) - getDateDiffDays(b.created_at),
+      sorter: (a: any, b: any) => {
+        const firstVal =
+          a.status === "Closed" || a.status === "Resolved"
+            ? 0
+            : getDateDiffDays(a.created_at);
+        const secondVal =
+          b.status === "Closed" || b.status === "Resolved"
+            ? 0
+            : getDateDiffDays(b.created_at);
+        return firstVal - secondVal;
+      },
       width: 150,
     },
     {

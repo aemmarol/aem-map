@@ -332,6 +332,33 @@ const FileMemberDetailsPage: NextPage = () => {
                     value={escalationDetails.created_by.contact_number}
                   />
                 </Col>
+                {escalationDetails.issueRaisedFor ? (
+                  <>
+                    <Col xs={24} sm={8}>
+                      <EscStat
+                        label="Reported for"
+                        value={escalationDetails.issueRaisedFor.name}
+                      />
+                    </Col>
+                    <Col xs={24} sm={8}>
+                      <EscStat
+                        label="Reported for ITS"
+                        value={escalationDetails.issueRaisedFor.ITS}
+                      />
+                    </Col>
+                    <Col xs={24} sm={8}>
+                      <EscStat
+                        label="Reported for Contact Number"
+                        value={escalationDetails.issueRaisedFor.contact}
+                      />
+                    </Col>
+                  </>
+                ) : (
+                  <Col xs={24} sm={8}>
+                    <EscStat label="Reported For" value={"HOF"} />
+                  </Col>
+                )}
+
                 {sectorDetails ? (
                   <>
                     <Col xs={24} sm={8}>

@@ -9,6 +9,7 @@ import {authUser} from "../../types";
 import {getMumineenTableUserColumns} from "./columnsUtil";
 import useWindowDimensions from "../../utils/windowDimensions";
 import {EscStat} from "../custom/escalations/escalationStatus";
+import sampleMemberList from "../../sample_data/mumeneenDataField.json";
 
 interface TableProps {
   dataSource: any[];
@@ -20,6 +21,7 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
   const {toggleLoader} = useGlobalContext();
   const {width} = useWindowDimensions();
   const router = useRouter();
+  const columnOrderList = sampleMemberList.map((val) => val.name);
 
   const notVerifierUserLogout = () => {
     message.info("user does not have access");
@@ -46,8 +48,24 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
         fixed: "left",
       },
     };
+
+    sampleMemberList.forEach((val) => {
+      dataColumnsMap[val.name] = {
+        title: val.label,
+        dataIndex: val.name,
+        width:
+          val.name === "address" ||
+          val.name === "address_fmb" ||
+          val.name === "building_fmb"
+            ? 250
+            : 150,
+        key: val.name,
+      };
+    });
+
     fieldData
       .filter((val) => val.name !== "tanzeem_file_no")
+      .filter((val) => !columnOrderList.includes(val.name))
       .forEach((val) => {
         dataColumnsMap[val.name] = {
           title: val.label,
