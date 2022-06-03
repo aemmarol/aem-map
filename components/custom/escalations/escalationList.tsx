@@ -16,12 +16,14 @@ interface EscalationListType {
   escalationList: escalationData[];
   filterProps: EscalationFilterType[];
   userRole: userRoles;
+  setSortFilterEscalationList: (data: any) => void;
 }
 
 export const EscalationList: FC<EscalationListType> = ({
   escalationList,
   filterProps,
   userRole,
+  setSortFilterEscalationList,
 }) => {
   const {height, width} = useWindowDimensions();
   const [escalations, setEscalations] = useState<escalationData[]>([]);
@@ -40,12 +42,13 @@ export const EscalationList: FC<EscalationListType> = ({
   }, [filterString]);
 
   useEffect(() => {
-    console.log(escalationList);
     setEscalations(sortEscalationList(escalationList));
+    setSortFilterEscalationList(sortEscalationList(escalationList));
   }, [escalationList]);
 
   useEffect(() => {
     setEscalations(sortEscalationList(escalations));
+    setSortFilterEscalationList(sortEscalationList(escalations));
   }, [sortValue]);
 
   const sortEscalationList = (arr: Array<any>) => {

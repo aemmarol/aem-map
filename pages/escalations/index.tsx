@@ -1,4 +1,4 @@
-import {Button, message, Select} from "antd";
+import {Button, message, Select, Tooltip} from "antd";
 import {NextPage} from "next";
 import {useRouter} from "next/router";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
@@ -29,6 +29,9 @@ import {filterOption} from "../../types/escalation";
 import moment from "moment";
 import {StatsCard} from "../../components/cards/statsCard";
 import useWindowDimensions from "../../utils/windowDimensions";
+import {DownloadOutlined} from "@ant-design/icons";
+import {CSVLink} from "react-csv";
+import {getDateDiffDays} from "../../utils";
 
 interface selectedFilterItemsType {
   selectedUmoors: filterOption[];
@@ -54,6 +57,9 @@ const Dashboard: NextPage = () => {
     });
   const [escalationsStatsGroup, setEscalationsStatsGroup] = useState();
   const [escalationList, setEscalationList] = useState<escalationData[]>([]);
+  const [sortFilterEscalationList, setSortFilterEscalationList] = useState<
+    any[]
+  >([]);
 
   const [escalationsByUmoor, setEscalationsByUmoor] = useState<any>();
   const [escalationsBySector, setEscalationsBySector] = useState<any>();
@@ -417,6 +423,96 @@ const Dashboard: NextPage = () => {
     setShowEscalationModal(true);
   };
 
+  const getEscalationDownloadData: any = () => {
+    const tempArr: any = sortFilterEscalationList.map((data) => {
+      const tempEscData: any = {};
+      getEscalationDownloadDataHeaders().forEach((val) => {
+        switch (val.key) {
+          case "file_details":
+            tempEscData[val.key] = data.file_details.tanzeem_file_no;
+            break;
+
+          case "sector":
+            tempEscData[val.key] = data.file_details.sub_sector.sector.name;
+            break;
+
+          case "pending_since":
+            tempEscData[val.key] = `${
+              data.status === "Closed" || data.status === "Resolved"
+                ? 0
+                : getDateDiffDays(data.created_at)
+            } days`;
+            break;
+
+          case "comments":
+            tempEscData[val.key] = data.comments[data.comments.length - 1].msg;
+            break;
+
+          case "type":
+            tempEscData[val.key] = data.type.label;
+            break;
+
+          default:
+            tempEscData[val.key] = data[val.key];
+            break;
+        }
+      });
+
+      return tempEscData;
+    });
+
+    return tempArr;
+  };
+
+  useEffect(() => {
+    console.log("data", getEscalationDownloadData());
+  }, [sortFilterEscalationList]);
+
+  const getEscalationDownloadDataHeaders = () => {
+    const columns = [
+      {
+        label: "Id",
+        key: "escalation_id",
+      },
+      {
+        label: "File No",
+        key: "file_details",
+      },
+
+      {
+        label: "Umoor",
+        key: "type",
+      },
+
+      {
+        label: "Sector",
+        key: "sector",
+      },
+
+      {
+        label: "Issue",
+        key: "issue",
+      },
+      {
+        label: "Issue Date",
+        key: "created_at",
+      },
+      {
+        label: "Pending Since",
+        key: "pending_since",
+      },
+      {
+        label: "Status",
+        key: "status",
+      },
+      {
+        label: "Latest Comment",
+        key: "comments",
+      },
+    ];
+    return columns;
+  };
+
   return (
     <Dashboardlayout
       showBackButton={
@@ -458,7 +554,7 @@ const Dashboard: NextPage = () => {
           </div>
         ) : null}
 
-        <div className="d-flex w-full float-right">
+        <div className="flex-align-center w-full">
           <Button
             className={width && width < 576 ? "" : "ml-auto"}
             onClick={showAddEscalationModal}
@@ -467,6 +563,17 @@ const Dashboard: NextPage = () => {
           >
             Raise Escalation
           </Button>
+          <Tooltip title="Download Escalationdata">
+            <CSVLink
+              // className={styles.downloadLink}
+              filename={"escalations.csv"}
+              data={getEscalationDownloadData() || []}
+              headers={getEscalationDownloadDataHeaders()}
+              className="ml-16"
+            >
+              <DownloadOutlined style={{fontSize: 25}} />
+            </CSVLink>
+          </Tooltip>
         </div>
       </div>
 
@@ -476,6 +583,9 @@ const Dashboard: NextPage = () => {
           escalationList={escalationList}
           filterProps={filterProps}
           userRole={selectedView}
+          setSortFilterEscalationList={(data: any) =>
+            setSortFilterEscalationList(data)
+          }
         />
       ) : null}
 
