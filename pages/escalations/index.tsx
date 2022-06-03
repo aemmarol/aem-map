@@ -1,9 +1,9 @@
-import {Button, message, Select} from "antd";
-import {NextPage} from "next";
-import {useRouter} from "next/router";
-import {Dashboardlayout} from "../../layouts/dashboardLayout";
-import {useEffect, useState} from "react";
-import {logout, verifyUser} from "../api/v1/authentication";
+import { Button, message, Select, Tooltip } from "antd";
+import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { Dashboardlayout } from "../../layouts/dashboardLayout";
+import { useEffect, useState } from "react";
+import { logout, verifyUser } from "../api/v1/authentication";
 import {
   authUser,
   escalationData,
@@ -11,11 +11,11 @@ import {
   umoorData,
   userRoles,
 } from "../../types";
-import {AddEscalationModal} from "../../components";
-import {useGlobalContext} from "../../context/GlobalContext";
-import {EscalationList} from "../../components/custom/escalations/escalationList";
-import {getSectorList} from "../api/v1/db/sectorCrud";
-import {getUmoorList} from "../api/v1/db/umoorsCrud";
+import { AddEscalationModal } from "../../components";
+import { useGlobalContext } from "../../context/GlobalContext";
+import { EscalationList } from "../../components/custom/escalations/escalationList";
+import { getSectorList } from "../api/v1/db/sectorCrud";
+import { getUmoorList } from "../api/v1/db/umoorsCrud";
 import {
   Criteria,
   escalationDBFields,
@@ -24,11 +24,14 @@ import {
   getEscalationList as getEscalationListFromDB,
   addExtraDetails,
 } from "../api/v1/db/escalationsCrud";
-import {EscalationFilterType} from "../../components/custom/escalations/escalationFilter";
-import {filterOption} from "../../types/escalation";
+import { EscalationFilterType } from "../../components/custom/escalations/escalationFilter";
+import { filterOption } from "../../types/escalation";
 import moment from "moment";
-import {StatsCard} from "../../components/cards/statsCard";
+import { StatsCard } from "../../components/cards/statsCard";
 import useWindowDimensions from "../../utils/windowDimensions";
+import { DownloadOutlined } from "@ant-design/icons";
+import { CSVLink } from "react-csv";
+import { getDateDiffDays } from "../../utils";
 
 interface selectedFilterItemsType {
   selectedUmoors: filterOption[];
@@ -37,8 +40,8 @@ interface selectedFilterItemsType {
 }
 const Dashboard: NextPage = () => {
   const router = useRouter();
-  const {changeSelectedSidebarKey} = useGlobalContext();
-  const {width} = useWindowDimensions();
+  const { changeSelectedSidebarKey } = useGlobalContext();
+  const { width } = useWindowDimensions();
 
   const [adminDetails, setAdminDetails] = useState<authUser>({} as authUser);
   const [showEscalationModal, setShowEscalationModal] =
@@ -54,11 +57,14 @@ const Dashboard: NextPage = () => {
     });
   const [escalationsStatsGroup, setEscalationsStatsGroup] = useState();
   const [escalationList, setEscalationList] = useState<escalationData[]>([]);
+  const [sortFilterEscalationList, setSortFilterEscalationList] = useState<
+    any[]
+  >([]);
 
   const [escalationsByUmoor, setEscalationsByUmoor] = useState<any>();
   const [escalationsBySector, setEscalationsBySector] = useState<any>();
   const [escalationsBySubSector, setEscalationsBySubSector] = useState<any>();
-  const {toggleLoader} = useGlobalContext();
+  const { toggleLoader } = useGlobalContext();
 
   useEffect(() => {
     if (typeof verifyUser() !== "string") {
@@ -104,30 +110,30 @@ const Dashboard: NextPage = () => {
     setUmoorList(umoors);
     setSelectedFilterItems({
       selectedRegions: querySector
-        ? [{label: querySector, value: querySector}]
+        ? [{ label: querySector, value: querySector }]
         : adminDetails.assignedArea
-        ? adminDetails.assignedArea.map((area) => {
-            return {label: area, value: area};
+          ? adminDetails.assignedArea.map((area) => {
+            return { label: area, value: area };
           })
-        : [],
+          : [],
       selectedUmoors: queryUmoor
         ? [
-            {
-              label:
-                umoors.find((item: umoorData) => item.value == queryUmoor)
-                  ?.label || "",
-              value: queryUmoor,
-            },
-          ]
+          {
+            label:
+              umoors.find((item: umoorData) => item.value == queryUmoor)
+                ?.label || "",
+            value: queryUmoor,
+          },
+        ]
         : adminDetails.assignedUmoor
-        ? adminDetails.assignedUmoor.map((umoor) => {
+          ? adminDetails.assignedUmoor.map((umoor) => {
             return {
               label:
                 umoors.find((item: any) => item.value == umoor)?.label || "",
               value: umoor,
             };
           })
-        : [],
+          : [],
       // : [],
       ready: true,
     });
@@ -236,10 +242,10 @@ const Dashboard: NextPage = () => {
           {
             title: "Selected Regions",
             options: adminDetails.assignedArea.map((area) => {
-              return {label: area + getCountForSector(area), value: area};
+              return { label: area + getCountForSector(area), value: area };
             }),
             selectedOptions: adminDetails.assignedArea.map((area) => {
-              return {label: area + getCountForSector(area), value: area};
+              return { label: area + getCountForSector(area), value: area };
             }),
             disabled: true,
             onChange: null,
@@ -261,10 +267,10 @@ const Dashboard: NextPage = () => {
           {
             title: "Selected Regions",
             options: adminDetails.assignedArea.map((area) => {
-              return {label: area + getCountForSubSector(area), value: area};
+              return { label: area + getCountForSubSector(area), value: area };
             }),
             selectedOptions: adminDetails.assignedArea.map((area) => {
-              return {label: area + getCountForSubSector(area), value: area};
+              return { label: area + getCountForSubSector(area), value: area };
             }),
             disabled: true,
             onChange: null,
@@ -341,7 +347,7 @@ const Dashboard: NextPage = () => {
           {
             title: "Selected Regions",
             options: adminDetails.assignedArea.map((area) => {
-              return {label: area + getCountForSector(area), value: area};
+              return { label: area + getCountForSector(area), value: area };
             }),
             selectedOptions: selectedfilterItems.selectedRegions,
             onChange: (selectedRegions: string[]) =>
@@ -417,6 +423,96 @@ const Dashboard: NextPage = () => {
     setShowEscalationModal(true);
   };
 
+  const getEscalationDownloadData: any = () => {
+    let tempArr: any =
+      sortFilterEscalationList.map((data) => {
+        let tempEscData: any = {};
+        getEscalationDownloadDataHeaders().forEach((val) => {
+          switch (val.key) {
+            case "file_details":
+              tempEscData[val.key] = data.file_details.tanzeem_file_no;
+              break;
+
+            case "sector":
+              tempEscData[val.key] = data.file_details.sub_sector.sector.name;
+              break;
+
+            case "pending_since":
+              tempEscData[val.key] = `${data.status === "Closed" || data.status === "Resolved"
+                ? 0
+                : getDateDiffDays(data.created_at)
+                } days`;
+              break;
+
+            case "comments":
+              tempEscData[val.key] = data.comments[data.comments.length - 1].msg;
+              break;
+
+            case "type":
+              tempEscData[val.key] = data.type.label;
+              break;
+
+            default:
+              tempEscData[val.key] = data[val.key];
+              break;
+          }
+        });
+
+        return tempEscData
+      });
+
+    return tempArr
+  };
+
+  useEffect(() => {
+    console.log("data", getEscalationDownloadData())
+  }, [sortFilterEscalationList]);
+
+  const getEscalationDownloadDataHeaders = () => {
+    const columns = [
+      {
+        label: "Id",
+        key: "escalation_id",
+      },
+      {
+        label: "File No",
+        key: "file_details",
+      },
+
+      {
+        label: "Umoor",
+        key: "type",
+      },
+
+      {
+        label: "Sector",
+        key: "sector",
+      },
+
+      {
+        label: "Issue",
+        key: "issue",
+      },
+      {
+        label: "Issue Date",
+        key: "created_at",
+      },
+      {
+        label: "Pending Since",
+        key: "pending_since",
+      },
+      {
+        label: "Status",
+        key: "status",
+      },
+      {
+        label: "Latest Comment",
+        key: "comments",
+      },
+    ];
+    return columns;
+  };
+
   return (
     <Dashboardlayout
       showBackButton={
@@ -439,8 +535,8 @@ const Dashboard: NextPage = () => {
 
       <div className="mb-16">
         {adminDetails &&
-        adminDetails.userRole &&
-        adminDetails.userRole.length > 1 ? (
+          adminDetails.userRole &&
+          adminDetails.userRole.length > 1 ? (
           <div className="flex-align-center mb-16 flex-1">
             <h4 className="mr-10 mb-0 w-100">Select View : </h4>
             <Select
@@ -458,7 +554,7 @@ const Dashboard: NextPage = () => {
           </div>
         ) : null}
 
-        <div className="d-flex w-full float-right">
+        <div className="flex-align-center w-full">
           <Button
             className={width && width < 576 ? "" : "ml-auto"}
             onClick={showAddEscalationModal}
@@ -467,6 +563,18 @@ const Dashboard: NextPage = () => {
           >
             Raise Escalation
           </Button>
+          <Tooltip title="Download Escalationdata">
+            <CSVLink
+              // className={styles.downloadLink}
+              filename={"escalations.csv"}
+              data={getEscalationDownloadData() || []}
+              headers={getEscalationDownloadDataHeaders()}
+              className="ml-16"
+            >
+              <DownloadOutlined style={{ fontSize: 25 }} />
+            </CSVLink>
+
+          </Tooltip>
         </div>
       </div>
 
@@ -476,6 +584,7 @@ const Dashboard: NextPage = () => {
           escalationList={escalationList}
           filterProps={filterProps}
           userRole={selectedView}
+          setSortFilterEscalationList={(data: any) => setSortFilterEscalationList(data)}
         />
       ) : null}
 
