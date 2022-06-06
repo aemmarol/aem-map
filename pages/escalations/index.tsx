@@ -464,10 +464,6 @@ const Dashboard: NextPage = () => {
     return tempArr;
   };
 
-  useEffect(() => {
-    console.log("data", getEscalationDownloadData());
-  }, [sortFilterEscalationList]);
-
   const getEscalationDownloadDataHeaders = () => {
     const columns = [
       {

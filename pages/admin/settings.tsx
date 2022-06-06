@@ -23,17 +23,13 @@ import {
 } from "../../components";
 import {getSectorList} from "../api/v1/db/sectorCrud";
 import {getSubSectorList} from "../api/v1/db/subSectorCrud";
-import {
-  addUser,
-  deleteUser,
-  getUserList,
-  logout,
-  verifyUser,
-} from "../api/v1/authentication";
+import {logout, verifyUser} from "../api/v1/authentication";
 import {useRouter} from "next/router";
 import {useGlobalContext} from "../../context/GlobalContext";
 import Airtable from "airtable";
 import {addUmoor, deleteUmoor, getUmoorList} from "../api/v1/db/umoorsCrud";
+import {API} from "../../utils/api";
+import {getauthToken} from "../../utils";
 
 // const escAirtableBase = new Airtable({
 //   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -235,10 +231,20 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
 
   const handleSyncUsersFromAirtable = async () => {
     toggleLoader(true);
-    const oldUserList = await getUserList();
+    const mongoOldUserList = await (
+      await fetch(API.userList, {
+        method: "GET",
+        headers: {...getauthToken()},
+      })
+    ).json();
+
     await Promise.all(
-      oldUserList.map(async (val) => {
-        await deleteUser(val.itsId.toString());
+      mongoOldUserList.map(async (val: authUser) => {
+        await fetch(API.user, {
+          method: "DELETE",
+          headers: {...getauthToken()},
+          body: JSON.stringify({id: val._id}),
+        });
       })
     );
 
@@ -278,7 +284,11 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
           assignedArea: val.assignedArea ? val.assignedArea : [],
           assignedUmoor: val.assignedUmoor ? val.assignedUmoor : [],
         };
-        await addUser(val.itsId.toString(), userdbdata);
+        await fetch(API.user, {
+          method: "POST",
+          headers: {...getauthToken()},
+          body: JSON.stringify(userdbdata),
+        });
       })
     );
     toggleLoader(false);

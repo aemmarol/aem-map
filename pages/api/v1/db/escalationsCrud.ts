@@ -155,6 +155,7 @@ export const getEscalationListByCriteria = async (
     // return resultArr;
   } else if (USING() == DBs.mongo) {
     const query = createQuery(criteria);
+    console.log("query ->", query);
     const body = await (
       await fetch(API.escalation, {
         method: "POST",

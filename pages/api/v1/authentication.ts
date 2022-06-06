@@ -3,24 +3,10 @@ import Joi from "joi";
 import {sign, verify} from "jsonwebtoken";
 import "../../../firebase/firebaseConfig";
 import {authenticationProps, authUser, loginResponseData} from "../../../types";
-import {firestore} from "../../../firebase/firebaseConfig";
-import {userCollectionName} from "../../../firebase/dbCollectionNames";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  where,
-} from "firebase/firestore";
-import {defaultDatabaseFields} from "../../../utils";
 import {isEmpty} from "lodash";
+import {API} from "../../../utils/api";
 
-const dataCollection = collection(firestore, userCollectionName);
-
-interface verifiedToken {
+export interface verifiedToken {
   iat: number;
   data: object;
   exp: number;
@@ -40,7 +26,7 @@ export const login = async (
   if (error) {
     throw new Error("invalid credentials!");
   } else {
-    const data = await getUser(itsId.toString());
+    const data = await (await fetch(API.user + itsId)).json();
 
     if (isEmpty(data)) {
       throw new Error("user not found!");
@@ -83,40 +69,4 @@ export const verifyUser = (): authUser | string => {
   } catch (error) {
     return "User not verified!";
   }
-};
-
-export const getUserList = async (): Promise<authUser[]> => {
-  const resultArr: authUser[] = [];
-  const q = query(
-    dataCollection,
-    where("version", "==", defaultDatabaseFields.version)
-  );
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((docs) => {
-    const file: any = {
-      ...docs.data(),
-    };
-    resultArr.push(file);
-  });
-
-  return resultArr;
-};
-
-export const getUser = async (id: string): Promise<authUser> => {
-  const docRef = doc(firestore, userCollectionName, id);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    return {...docSnap.data()} as authUser;
-  }
-  return {} as authUser;
-};
-
-export const addUser = async (id: string, data: authUser): Promise<boolean> => {
-  await setDoc(doc(firestore, userCollectionName, id), data);
-  return true;
-};
-
-export const deleteUser = async (id: string): Promise<boolean> => {
-  await deleteDoc(doc(firestore, userCollectionName, id));
-  return true;
 };

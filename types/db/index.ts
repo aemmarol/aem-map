@@ -72,7 +72,7 @@ export type fileDetails = {
 };
 
 export interface escalationData extends defaultFields {
-  id?: string;
+  _id?: string;
   escalation_id: string;
   created_by: adminDetails;
   file_details: fileDetails;
