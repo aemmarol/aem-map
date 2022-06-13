@@ -76,8 +76,8 @@ const SignInPage: NextPage = () => {
   const onFinish = (values: authenticationProps) => {
     toggleLoader(true);
     login(values)
-      .then((response) => {
-        console.log(response);
+      .then((response: any) => {
+        localStorage.setItem("user", response.data.accessToken as string);
         form.resetFields();
         onLoginSuccess();
       })

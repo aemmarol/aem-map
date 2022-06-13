@@ -5,7 +5,6 @@ import middleware from "./database";
 export default function getNoAuthHandler() {
   return nextConnect<NextApiRequest, NextApiResponse>({
     onError(error, req, res) {
-      console.log("req", req.headers);
       res
         .status(500)
         .json({error: `Sorry something Happened! ${error.message}`});

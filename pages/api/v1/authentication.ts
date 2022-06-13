@@ -26,7 +26,7 @@ export const login = async (
   if (error) {
     throw new Error("invalid credentials!");
   } else {
-    const data = await (await fetch(API.user + itsId)).json();
+    const data = await (await fetch(API.user + "/" + itsId)).json();
 
     if (isEmpty(data)) {
       throw new Error("user not found!");
@@ -48,8 +48,13 @@ export const login = async (
         {exp: Math.floor(Date.now() / 1000) + 60 * 60 * 6, data: userTokenData},
         process.env.NEXT_PUBLIC_ACCESS_TOKEN_SALT as string
       );
-      localStorage.setItem("user", accessToken);
-      return {success: true, msg: "user logged in successfully!"};
+      return {
+        success: true,
+        data: {
+          accessToken,
+        },
+        msg: "user logged in successfully!",
+      };
     }
   }
 };

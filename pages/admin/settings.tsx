@@ -238,15 +238,17 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
       })
     ).json();
 
-    await Promise.all(
-      mongoOldUserList.map(async (val: authUser) => {
-        await fetch(API.user, {
-          method: "DELETE",
-          headers: {...getauthToken()},
-          body: JSON.stringify({id: val._id}),
-        });
-      })
-    );
+    if (mongoOldUserList && mongoOldUserList.length > 0) {
+      await Promise.all(
+        mongoOldUserList.map(async (val: authUser) => {
+          await fetch(API.user, {
+            method: "DELETE",
+            headers: {...getauthToken()},
+            body: JSON.stringify({id: val._id}),
+          });
+        })
+      );
+    }
 
     const airtableUserList: any[] = [];
 
