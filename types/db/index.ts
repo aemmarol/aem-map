@@ -4,7 +4,7 @@ import {authUser} from "../authentication";
 export interface databaseMumeneenFieldData extends defaultFields {
   name: string;
   label?: string;
-  id?: string;
+  _id?: string;
 }
 
 export interface sectorData extends defaultFields {

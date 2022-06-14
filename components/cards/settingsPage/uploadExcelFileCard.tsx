@@ -2,11 +2,7 @@ import {Button, Card, message, Upload} from "antd";
 import {FC, useState} from "react";
 import {InboxOutlined} from "@ant-design/icons";
 import {} from "../../../firebase/dbCollectionNames";
-import {defaultDatabaseFields} from "../../../utils";
-import {
-  getFileDataFields,
-  getMumeneenDataFields,
-} from "../../../pages/api/v1/db/databaseFields";
+import {defaultDatabaseFields, getauthToken} from "../../../utils";
 import {
   getSubSectorDataByName,
   updateSubSectorFilesData,
@@ -16,6 +12,8 @@ import {addFileData} from "../../../pages/api/v1/db/fileCrud";
 import {addMemberData} from "../../../pages/api/v1/db/memberCrud";
 import {resetFileData} from "../../../pages/api/v1/db/setupDb";
 import {useGlobalContext} from "../../../context/GlobalContext";
+import {API} from "../../../utils/api";
+import {handleResponse} from "../../../utils/handleResponse";
 
 const Dragger = Upload.Dragger;
 
@@ -72,8 +70,21 @@ export const UploadExcelFileCard: FC = () => {
   };
 
   const getFileList = async (data: any[]) => {
-    const fileFieldList = await getFileDataFields();
-    const memberFieldList = await getMumeneenDataFields();
+    const fileFieldList = await await fetch(API.dbFields + "?collection=file", {
+      method: "GET",
+      headers: {...getauthToken()},
+    })
+      .then(handleResponse)
+      .catch((error) => message.error(error));
+    const memberFieldList = await await fetch(
+      API.dbFields + "?collection=mumeneen",
+      {
+        method: "GET",
+        headers: {...getauthToken()},
+      }
+    )
+      .then(handleResponse)
+      .catch((error) => message.error(error));
 
     const fileList = await Promise.all(
       data

@@ -1,13 +1,13 @@
 import {DeleteTwoTone} from "@ant-design/icons";
+import {message} from "antd";
 import {FC, useState} from "react";
 import {DashboardDataFieldTableCard} from "../..";
 import {fileDetailsFieldCollectionName} from "../../../firebase/dbCollectionNames";
-import {
-  deleteDataField,
-  getFileDataFields,
-} from "../../../pages/api/v1/db/databaseFields";
 import {databaseMumeneenFieldData} from "../../../types";
+import {getauthToken} from "../../../utils";
+import {API} from "../../../utils/api";
 import {fileDataFieldsColumns} from "../../../utils/columnData";
+import {handleResponse} from "../../../utils/handleResponse";
 
 interface CardProps {
   data: any[];
@@ -20,7 +20,16 @@ export const FileDataFieldTable: FC<CardProps> = ({data, updateData}) => {
 
   const handleFileFieldDelete = async (record: any) => {
     setisFileDataFieldTableLoading(true);
-    await deleteDataField(fileDetailsFieldCollectionName, record.id);
+    await fetch(
+      API.dbFields + "?collectionName=" + fileDetailsFieldCollectionName,
+      {
+        method: "DELETE",
+        headers: {...getauthToken()},
+        body: JSON.stringify({id: record._id}),
+      }
+    )
+      .then(handleResponse)
+      .catch((error) => message.error(error));
     const updatedData = await getFileDataFields();
     updateData(updatedData);
     setisFileDataFieldTableLoading(false);
@@ -31,6 +40,16 @@ export const FileDataFieldTable: FC<CardProps> = ({data, updateData}) => {
     const data = await getFileDataFields();
     updateData(data);
     setisFileDataFieldTableLoading(false);
+  };
+
+  const getFileDataFields = async () => {
+    const data = await await fetch(API.dbFields + "?collection=file", {
+      method: "GET",
+      headers: {...getauthToken()},
+    })
+      .then(handleResponse)
+      .catch((error) => message.error(error));
+    return data;
   };
 
   return (

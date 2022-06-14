@@ -1,7 +1,6 @@
 import {FC, useEffect, useState} from "react";
 import {Card, Col, message, Row, Table} from "antd";
 import styles from "../../styles/components/tables/fileListTable.module.scss";
-import {getFileDataFields} from "../../pages/api/v1/db/databaseFields";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {useRouter} from "next/router";
 import {logout, verifyUser} from "../../pages/api/v1/authentication";
@@ -9,6 +8,9 @@ import {authUser} from "../../types";
 import {getFileTableUserColumns} from "./columnsUtil";
 import useWindowDimensions from "../../utils/windowDimensions";
 import {EscStat} from "../custom/escalations/escalationStatus";
+import {API} from "../../utils/api";
+import {getauthToken} from "../../utils";
+import {handleResponse} from "../../utils/handleResponse";
 
 interface TableProps {
   dataSource: any[];
@@ -36,7 +38,13 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
       notVerifierUserLogout();
     }
 
-    const fieldData = await getFileDataFields();
+    const fieldData = await await fetch(API.dbFields + "?collection=file", {
+      method: "GET",
+      headers: {...getauthToken()},
+    })
+      .then(handleResponse)
+      .catch((error) => message.error(error));
+
     let dataColumns = [];
     const dataColumnsMap: any = {
       id: {

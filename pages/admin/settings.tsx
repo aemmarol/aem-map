@@ -2,10 +2,7 @@ import {Button, Card, Col, message, Row} from "antd";
 import {GetServerSideProps, NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import {useEffect, useState} from "react";
-import {
-  getFileDataFields,
-  getMumeneenDataFields,
-} from "../api/v1/db/databaseFields";
+
 import {
   authUser,
   databaseMumeneenFieldData,
@@ -38,8 +35,8 @@ const userTable = airtableBase("userList");
 const umoorTable = airtableBase("umoorList");
 
 interface AdminSettingsProps {
-  mumeneenDataFields: databaseMumeneenFieldData[];
-  fileDataFields: databaseMumeneenFieldData[];
+  mumeneenDataFields?: databaseMumeneenFieldData[];
+  fileDataFields?: databaseMumeneenFieldData[];
   sectorDetailsData: sectorData[];
   subSectorDetailsList: subSectorData[];
 }
@@ -65,8 +62,10 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   >([]);
 
   useEffect(() => {
-    setMumeneenFields(mumeneenDataFields.map((val) => ({...val, key: val.id})));
-    setFileFields(fileDataFields.map((val) => ({...val, key: val.id})));
+    setMumeneenFields([]);
+    // setMumeneenFields(mumeneenDataFields.map((val) => ({ ...val, key: val.id })));
+    // setMumeneenFields(mumeneenDataFields.map((val) => ({ ...val, key: val.id })));
+    setFileFields([]);
     setSectorDetails(sectorDetailsData.map((val) => ({...val, key: val.id})));
     setSubsectorDetails(
       subSectorDetailsList.map((val) => ({...val, key: val.id}))
@@ -85,6 +84,9 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
       const {userRole} = verifyUser() as authUser;
       if (!userRole.includes(userRoles.Admin)) {
         notVerifierUserLogout();
+      } else {
+        getMumeneenDataFields();
+        getFileDataFields();
       }
     } else {
       notVerifierUserLogout();
@@ -247,6 +249,30 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     toggleLoader(false);
   };
 
+  const getMumeneenDataFields = async () => {
+    await fetch(API.dbFields + "?collection=mumeneen", {
+      method: "GET",
+      headers: {...getauthToken()},
+    })
+      .then(handleResponse)
+      .then((response) => {
+        setMumeneenFields(response);
+      })
+      .catch((error) => message.error(error));
+  };
+
+  const getFileDataFields = async () => {
+    await fetch(API.dbFields + "?collection=file", {
+      method: "GET",
+      headers: {...getauthToken()},
+    })
+      .then(handleResponse)
+      .then((response) => {
+        setFileFields(response);
+      })
+      .catch((error) => message.error(error));
+  };
+
   return (
     <Dashboardlayout headerTitle="Admin Settings">
       <Row className="mb-30" gutter={[{xs: 8, lg: 12}, 16]}>
@@ -306,16 +332,11 @@ export default AdminSettings;
 export const getServerSideProps: GetServerSideProps<
   AdminSettingsProps
 > = async () => {
-  const mumeneenDataFields: databaseMumeneenFieldData[] =
-    await getMumeneenDataFields();
-  const fileDataFields: databaseMumeneenFieldData[] = await getFileDataFields();
   const sectorDetailsData: sectorData[] = await getSectorList();
   const subSectorDetailsList: subSectorData[] = await getSubSectorList();
 
   return {
     props: {
-      mumeneenDataFields,
-      fileDataFields,
       sectorDetailsData,
       subSectorDetailsList,
     },

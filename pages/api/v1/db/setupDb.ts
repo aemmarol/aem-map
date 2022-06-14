@@ -1,7 +1,5 @@
 import {sectorData, sectorDetailsForSubSector} from "../../../../types";
 import subsectorSampleData from "../../../../sample_data/subsector.json";
-import fileFields from "../../../../sample_data/fileField.json";
-import memberFields from "../../../../sample_data/mumeneenDataField.json";
 import {
   addSectorData,
   addSubSectorIds,
@@ -21,11 +19,7 @@ import {defaultDatabaseFields} from "../../../../utils";
 import {sectorDbData} from "../../../../sample_data/sector";
 import {deleteFileData, getFileDataList} from "./fileCrud";
 import {deleteMemberData, getMemberDataList} from "./memberCrud";
-import {addDataField} from "./databaseFields";
-import {
-  fileDetailsFieldCollectionName,
-  mumeneenDetailsFieldCollectionName,
-} from "../../../../firebase/dbCollectionNames";
+
 import {find} from "lodash";
 
 export const addSectors = async () => {
@@ -125,25 +119,6 @@ export const updateSubSectorsToDefault = async () => {
       await updateSubSectorData(val.id as string, {
         ...subSectorVal,
         name: val.name.toUpperCase(),
-      });
-    })
-  );
-};
-
-export const setDbFields = async () => {
-  await Promise.all(
-    fileFields.map(async (value) => {
-      await addDataField(fileDetailsFieldCollectionName, {
-        ...value,
-        ...defaultDatabaseFields,
-      });
-    })
-  );
-  await Promise.all(
-    memberFields.map(async (value) => {
-      await addDataField(mumeneenDetailsFieldCollectionName, {
-        ...value,
-        ...defaultDatabaseFields,
       });
     })
   );

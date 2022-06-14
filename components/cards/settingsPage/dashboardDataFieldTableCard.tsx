@@ -1,8 +1,15 @@
-import {Button, Card, Form, Input, Modal, Space, Table} from "antd";
+import {Button, Card, Form, Input, message, Modal, Space, Table} from "antd";
 import {FC, useState} from "react";
 import {databaseMumeneenFieldData} from "../../../types";
-import {addDataField} from "../../../pages/api/v1/db/databaseFields";
-import {defaultDatabaseFields} from "../../../utils";
+import {defaultDatabaseFields, getauthToken} from "../../../utils";
+import memberFields from "../../../sample_data/mumeneenDataField.json";
+import fileFields from "../../../sample_data/fileField.json";
+import {
+  fileDetailsFieldCollectionName,
+  mumeneenDetailsFieldCollectionName,
+} from "../../../firebase/dbCollectionNames";
+import {API} from "../../../utils/api";
+import {handleResponse} from "../../../utils/handleResponse";
 
 interface CardProps {
   data: any[];
@@ -36,15 +43,69 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
       ...defaultDatabaseFields,
     };
 
-    const result = await addDataField(collectionName, data);
-    if (result) {
-      form.resetFields();
-      setshowAddFieldForm(false);
-      setisLoading(false);
-      onAddSuccess();
-    } else {
-      setisLoading(false);
+    await fetch(API.dbFields + "?collectionName=" + collectionName, {
+      method: "POST",
+      headers: {...getauthToken()},
+      body: JSON.stringify(data),
+    })
+      .then(handleResponse)
+      .then(() => {
+        form.resetFields();
+        setshowAddFieldForm(false);
+        setisLoading(false);
+        onAddSuccess();
+      })
+      .catch((error) => {
+        message.error(error);
+        setisLoading(false);
+      });
+  };
+
+  const handleResetFields = async () => {
+    setisLoading(true);
+
+    if (data && data.length > 0) {
+      await Promise.all(
+        data.map(async (val: any) => {
+          await fetch(API.dbFields + "?collectionName=" + collectionName, {
+            method: "DELETE",
+            headers: {...getauthToken()},
+            body: JSON.stringify({id: val._id}),
+          }).then(handleResponse);
+        })
+      ).catch((error) => {
+        setisLoading(false);
+        message.error(error);
+      });
     }
+
+    const dataArr =
+      collectionName === mumeneenDetailsFieldCollectionName
+        ? memberFields
+        : collectionName === fileDetailsFieldCollectionName
+        ? fileFields
+        : [];
+
+    await Promise.all(
+      dataArr.map(async (value) => {
+        await fetch(API.dbFields + "?collectionName=" + collectionName, {
+          method: "POST",
+          headers: {...getauthToken()},
+          body: JSON.stringify({
+            ...value,
+            ...defaultDatabaseFields,
+          }),
+        }).then(handleResponse);
+      })
+    )
+      .then(() => {
+        setisLoading(false);
+        onAddSuccess();
+      })
+      .catch((error) => {
+        setisLoading(false);
+        message.error(error);
+      });
   };
 
   return (
@@ -55,7 +116,7 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
           <Button onClick={() => setshowAddFieldForm(true)} type="primary">
             Add field
           </Button>
-          <Button>Reset To Default </Button>
+          <Button onClick={handleResetFields}>Reset Fields </Button>
         </Space>
       }
       title={cardTitle}
