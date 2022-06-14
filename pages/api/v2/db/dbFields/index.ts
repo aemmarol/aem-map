@@ -10,27 +10,22 @@ import {databaseMumeneenFieldData, userRoles} from "../../../../../types";
 
 export default getAuthHandler()
   .get(async (req: NextApiRequestExtended, res) => {
-    const {userData} = req;
-    if (userData.userRole.includes(userRoles.Admin)) {
-      const {collection} = req.query;
-      const collectionName =
-        collection === "file"
-          ? fileDetailsFieldCollectionName
-          : collection === "mumeneen"
-          ? mumeneenDetailsFieldCollectionName
-          : "";
+    const {collection} = req.query;
+    const collectionName =
+      collection === "file"
+        ? fileDetailsFieldCollectionName
+        : collection === "mumeneen"
+        ? mumeneenDetailsFieldCollectionName
+        : "";
 
-      if (!collection || collectionName === "") {
-        res.status(400).json({msg: "invalid request!"});
-      } else {
-        const doc: databaseMumeneenFieldData[] = await req.db
-          .collection(collectionName)
-          .find()
-          .toArray();
-        res.json(doc);
-      }
+    if (!collection || collectionName === "") {
+      res.status(400).json({msg: "invalid request!"});
     } else {
-      res.status(401).json({msg: "user access denied!"});
+      const doc: databaseMumeneenFieldData[] = await req.db
+        .collection(collectionName)
+        .find()
+        .toArray();
+      res.json(doc);
     }
   })
   .post(async (req: NextApiRequestExtended, res) => {
