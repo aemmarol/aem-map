@@ -27,7 +27,7 @@ enum DBs {
   firebase,
   mongo,
 }
-const USING = () => DBs.mongo;
+const USING = () => DBs.firebase;
 
 export enum escalationDBFields {
   subsectorName = "file_details.sub_sector.name",

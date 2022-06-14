@@ -11,7 +11,6 @@ import {
   databaseMumeneenFieldData,
   sectorData,
   subSectorData,
-  umoorData,
   userRoles,
 } from "../../types";
 import {
@@ -27,13 +26,9 @@ import {logout, verifyUser} from "../api/v1/authentication";
 import {useRouter} from "next/router";
 import {useGlobalContext} from "../../context/GlobalContext";
 import Airtable from "airtable";
-import {addUmoor, deleteUmoor, getUmoorList} from "../api/v1/db/umoorsCrud";
 import {API} from "../../utils/api";
 import {getauthToken} from "../../utils";
-
-// const escAirtableBase = new Airtable({
-//   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
-// }).base("appHju317Ez55YdW0");
+import {handleResponse} from "../../utils/handleResponse";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -41,8 +36,6 @@ const airtableBase = new Airtable({
 
 const userTable = airtableBase("userList");
 const umoorTable = airtableBase("umoorList");
-
-// const escalationListTable = escAirtableBase("Escalation List");
 
 interface AdminSettingsProps {
   mumeneenDataFields: databaseMumeneenFieldData[];
@@ -70,7 +63,6 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   const [fileFields, setFileFields] = useState<
     databaseMumeneenFieldData[] | []
   >([]);
-  // const [issueTypeOptions, setIssueTypeOptions] = useState<any[]>([]);
 
   useEffect(() => {
     setMumeneenFields(mumeneenDataFields.map((val) => ({...val, key: val.id})));
@@ -89,7 +81,6 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   useEffect(() => {
     changeSelectedSidebarKey("3");
     toggleLoader(true);
-    // getUmoorList();
     if (typeof verifyUser() !== "string") {
       const {userRole} = verifyUser() as authUser;
       if (!userRole.includes(userRoles.Admin)) {
@@ -107,136 +98,17 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
     router.push("/");
   };
 
-  // const handleAirtableEscalationSync = async () => {
-  //   toggleLoader(true);
-  //   const inputEscalationListData: any[] = [];
-  //   escalationListTable
-  //     .select({
-  //       view: "Grid view",
-  //       maxRecords: 1000,
-  //     })
-  //     .eachPage(
-  //       function page(records, fetchNextPage) {
-  //         inputEscalationListData.push(...records);
-  //         fetchNextPage();
-  //       },
-  //       function done(err) {
-  //         if (err) {
-  //           console.error(err);
-  //           return;
-  //         }
-  //         addEscalationDataToDb(
-  //           inputEscalationListData.map((val) => val.fields)
-  //         );
-  //       }
-  //     );
-  // };
-
-  // const createCommentsArr = (
-  //   reporter: any,
-  //   createdDate: string,
-  //   inProcessComment: string,
-  //   doneComment: string
-  // ) => {
-  //   const commentArr: comment[] = [
-  //     {
-  //       msg: "Issue is added on " + moment(createdDate).format("DD-MM-YYYY"),
-  //       name: reporter.full_name,
-  //       contact_number: reporter.mobile,
-  //       userRole: "SED",
-  //       time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
-  //     },
-  //   ];
-  //   if (inProcessComment) {
-  //     commentArr.push({
-  //       msg: inProcessComment,
-  //       name: "SED Umoor",
-  //       contact_number: "",
-  //       userRole: "SED",
-  //       time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
-  //     });
-  //   }
-  //   if (doneComment) {
-  //     commentArr.push({
-  //       msg: doneComment,
-  //       name: "SED Umoor",
-  //       contact_number: "",
-  //       userRole: "SED",
-  //       time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
-  //     });
-  //   }
-  //   return commentArr;
-  // };
-
-  // const addEscalationDataToDb = async (data: any[]) => {
-  //   const newData = await Promise.all(
-  //     data.map(async (val, index) => {
-  //       const escFileDetails = await getFileDataByFileNumber(
-  //         val["File No."].toString()
-  //       );
-  //       const reporter = await getMemberDataById(
-  //         val["Reported by"] ? val["Reported by"] : "30408608"
-  //       );
-  //       const escType = find(issueTypeOptions, { label: val.type });
-  //       const newComments = createCommentsArr(
-  //         reporter,
-  //         val["Date of Submission"],
-  //         val["Resolution In Process Notes"],
-  //         val["Resolved Notes"]
-  //       );
-  //       const tempEscalation: escalationData = {
-  //         escalation_id: "esc-" + (index + 1),
-  //         created_by: {
-  //           name: reporter.full_name,
-  //           its_number: reporter.id,
-  //           contact_number: reporter.mobile,
-  //           userRole: "SED",
-  //         },
-  //         file_details: {
-  //           tanzeem_file_no: val["File No."],
-  //           address:
-  //             escFileDetails && escFileDetails.address
-  //               ? escFileDetails.address
-  //               : "",
-  //           sub_sector:
-  //             escFileDetails && escFileDetails.sub_sector
-  //               ? escFileDetails.sub_sector
-  //               : {},
-  //           hof_name: val["HOF NAME"],
-  //           hof_contact: val["HOF Contact Number"],
-  //           hof_its:
-  //             escFileDetails && escFileDetails.id ? escFileDetails.id : "",
-  //         },
-  //         status: val["Status"],
-  //         issue: val["Notes"],
-  //         comments: newComments,
-  //         type: escType,
-  //         created_at: moment(val["Date of Submission"]).format(
-  //           "DD-MM-YYYY HH:mm:ss"
-  //         ),
-  //         version: defaultDatabaseFields.version,
-  //         updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
-  //       };
-  //       return tempEscalation;
-  //     })
-  //   );
-
-  //   Promise.all(
-  //     newData.map(async (val) => {
-  //       await addEscalationData(val);
-  //     })
-  //   );
-  //   toggleLoader(false);
-  // };
-
   const handleSyncUsersFromAirtable = async () => {
     toggleLoader(true);
-    const mongoOldUserList = await (
-      await fetch(API.userList, {
-        method: "GET",
-        headers: {...getauthToken()},
-      })
-    ).json();
+    const mongoOldUserList = await await fetch(API.userList, {
+      method: "GET",
+      headers: {...getauthToken()},
+    })
+      .then(handleResponse)
+      .catch((error) => {
+        toggleLoader(false);
+        message.error(error);
+      });
 
     if (mongoOldUserList && mongoOldUserList.length > 0) {
       await Promise.all(
@@ -245,7 +117,12 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
             method: "DELETE",
             headers: {...getauthToken()},
             body: JSON.stringify({id: val._id}),
-          });
+          })
+            .then(handleResponse)
+            .catch((error) => {
+              toggleLoader(false);
+              message.error(error);
+            });
         })
       );
     }
@@ -290,7 +167,12 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
           method: "POST",
           headers: {...getauthToken()},
           body: JSON.stringify(userdbdata),
-        });
+        })
+          .then(handleResponse)
+          .catch((error) => {
+            toggleLoader(false);
+            message.error(error);
+          });
       })
     );
     toggleLoader(false);
@@ -298,12 +180,30 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
 
   const handleSyncUmoorsFromAirtable = async () => {
     toggleLoader(true);
-    const oldUmoorList: umoorData[] = await getUmoorList();
-    await Promise.all(
-      oldUmoorList.map(async (val) => {
-        await deleteUmoor(val.value);
-      })
-    );
+
+    const oldUmoorList = await await fetch(API.umoor, {
+      method: "GET",
+      headers: {...getauthToken()},
+    })
+      .then(handleResponse)
+      .catch((error) => {
+        toggleLoader(false);
+        message.error(error);
+      });
+
+    if (oldUmoorList && oldUmoorList.length > 0) {
+      await Promise.all(
+        oldUmoorList.map(async (val: any) => {
+          await fetch(API.umoor, {
+            method: "DELETE",
+            headers: {...getauthToken()},
+            body: JSON.stringify({id: val._id}),
+          })
+            .then(handleResponse)
+            .catch((error) => message.error(error));
+        })
+      );
+    }
 
     const airtableUmoorList: any[] = [];
 
@@ -335,7 +235,13 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
           value: val.value,
           label: val.label,
         };
-        await addUmoor(val.value, umoordbdata);
+        await fetch(API.umoor, {
+          method: "POST",
+          headers: {...getauthToken()},
+          body: JSON.stringify(umoordbdata),
+        })
+          .then(handleResponse)
+          .catch((error) => message.error(error));
       })
     );
     toggleLoader(false);

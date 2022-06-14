@@ -1,4 +1,4 @@
-import {Button, Card, Form, Input, Modal, Table} from "antd";
+import {Button, Card, Form, Input, Modal, Space, Table} from "antd";
 import {FC, useState} from "react";
 import {databaseMumeneenFieldData} from "../../../types";
 import {addDataField} from "../../../pages/api/v1/db/databaseFields";
@@ -51,9 +51,12 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
     <Card
       className="border-radius-10"
       extra={
-        <Button onClick={() => setshowAddFieldForm(true)} type="primary">
-          Add field
-        </Button>
+        <Space>
+          <Button onClick={() => setshowAddFieldForm(true)} type="primary">
+            Add field
+          </Button>
+          <Button>Reset To Default </Button>
+        </Space>
       }
       title={cardTitle}
     >
