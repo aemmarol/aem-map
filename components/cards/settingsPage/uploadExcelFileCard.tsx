@@ -2,18 +2,15 @@ import {Button, Card, message, Upload} from "antd";
 import {FC, useState} from "react";
 import {InboxOutlined} from "@ant-design/icons";
 import {} from "../../../firebase/dbCollectionNames";
-import {defaultDatabaseFields, getauthToken} from "../../../utils";
+import {defaultDatabaseFields} from "../../../utils";
 import {
   getSubSectorDataByName,
   updateSubSectorFilesData,
 } from "../../../pages/api/v1/db/subSectorCrud";
-
 import {addFileData} from "../../../pages/api/v1/db/fileCrud";
 import {addMemberData} from "../../../pages/api/v1/db/memberCrud";
 import {resetFileData} from "../../../pages/api/v1/db/setupDb";
 import {useGlobalContext} from "../../../context/GlobalContext";
-import {API} from "../../../utils/api";
-import {handleResponse} from "../../../utils/handleResponse";
 import {databaseMumeneenFieldData} from "../../../types";
 import {
   getFileDataFields,

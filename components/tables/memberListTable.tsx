@@ -9,9 +9,6 @@ import {getMumineenTableUserColumns} from "./columnsUtil";
 import useWindowDimensions from "../../utils/windowDimensions";
 import {EscStat} from "../custom/escalations/escalationStatus";
 import sampleMemberList from "../../sample_data/mumeneenDataField.json";
-import {API} from "../../utils/api";
-import {getauthToken} from "../../utils";
-import {handleResponse} from "../../utils/handleResponse";
 import {getMumeneenDataFields} from "../../pages/api/v2/services/dbFields";
 
 interface TableProps {

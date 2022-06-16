@@ -8,9 +8,6 @@ import {authUser, databaseMumeneenFieldData} from "../../types";
 import {getFileTableUserColumns} from "./columnsUtil";
 import useWindowDimensions from "../../utils/windowDimensions";
 import {EscStat} from "../custom/escalations/escalationStatus";
-import {API} from "../../utils/api";
-import {getauthToken} from "../../utils";
-import {handleResponse} from "../../utils/handleResponse";
 import {getFileDataFields} from "../../pages/api/v2/services/dbFields";
 
 interface TableProps {
