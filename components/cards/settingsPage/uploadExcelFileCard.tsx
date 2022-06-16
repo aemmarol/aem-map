@@ -14,6 +14,11 @@ import {resetFileData} from "../../../pages/api/v1/db/setupDb";
 import {useGlobalContext} from "../../../context/GlobalContext";
 import {API} from "../../../utils/api";
 import {handleResponse} from "../../../utils/handleResponse";
+import {databaseMumeneenFieldData} from "../../../types";
+import {
+  getFileDataFields,
+  getMumeneenDataFields,
+} from "../../../pages/api/v2/services/dbFields";
 
 const Dragger = Upload.Dragger;
 
@@ -70,21 +75,9 @@ export const UploadExcelFileCard: FC = () => {
   };
 
   const getFileList = async (data: any[]) => {
-    const fileFieldList = await await fetch(API.dbFields + "?collection=file", {
-      method: "GET",
-      headers: {...getauthToken()},
-    })
-      .then(handleResponse)
-      .catch((error) => message.error(error));
-    const memberFieldList = await await fetch(
-      API.dbFields + "?collection=mumeneen",
-      {
-        method: "GET",
-        headers: {...getauthToken()},
-      }
-    )
-      .then(handleResponse)
-      .catch((error) => message.error(error));
+    const fileFieldList = await getDbFileDataFields();
+
+    const memberFieldList = await getDbMumeneenDataFields();
 
     const fileList = await Promise.all(
       data
@@ -142,6 +135,22 @@ export const UploadExcelFileCard: FC = () => {
         })
     );
     return fileList;
+  };
+
+  const getDbFileDataFields = async () => {
+    let fieldsData: databaseMumeneenFieldData[] = [];
+    await getFileDataFields((data: databaseMumeneenFieldData[]) => {
+      fieldsData = data;
+    });
+    return fieldsData;
+  };
+
+  const getDbMumeneenDataFields = async () => {
+    let fieldsData: databaseMumeneenFieldData[] = [];
+    await getMumeneenDataFields((data: databaseMumeneenFieldData[]) => {
+      fieldsData = data;
+    });
+    return fieldsData;
   };
 
   const addDataToDb = async (data: any[]) => {

@@ -4,13 +4,14 @@ import styles from "../../styles/components/tables/fileListTable.module.scss";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {useRouter} from "next/router";
 import {logout, verifyUser} from "../../pages/api/v1/authentication";
-import {authUser} from "../../types";
+import {authUser, databaseMumeneenFieldData} from "../../types";
 import {getFileTableUserColumns} from "./columnsUtil";
 import useWindowDimensions from "../../utils/windowDimensions";
 import {EscStat} from "../custom/escalations/escalationStatus";
 import {API} from "../../utils/api";
 import {getauthToken} from "../../utils";
 import {handleResponse} from "../../utils/handleResponse";
+import {getFileDataFields} from "../../pages/api/v2/services/dbFields";
 
 interface TableProps {
   dataSource: any[];
@@ -38,12 +39,7 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
       notVerifierUserLogout();
     }
 
-    const fieldData = await await fetch(API.dbFields + "?collection=file", {
-      method: "GET",
-      headers: {...getauthToken()},
-    })
-      .then(handleResponse)
-      .catch((error) => message.error(error));
+    const fieldData = await getDbFileDataFields();
 
     let dataColumns = [];
     const dataColumnsMap: any = {
@@ -77,8 +73,8 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
     };
 
     fieldData
-      .filter((val) => val.name !== "tanzeem_file_no")
-      .forEach((val) => {
+      .filter((val: any) => val.name !== "tanzeem_file_no")
+      .forEach((val: any) => {
         dataColumnsMap[val.name] = {
           title: val.label,
           dataIndex: val.name,
@@ -114,6 +110,14 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
     router.push(
       `/mohallah/${fileDetails.sub_sector.sector.name}/${fileDetails.sub_sector.name}/${fileDetails.tanzeem_file_no}`
     );
+  };
+
+  const getDbFileDataFields = async () => {
+    let fieldsData: databaseMumeneenFieldData[] = [];
+    await getFileDataFields((data: databaseMumeneenFieldData[]) => {
+      fieldsData = data;
+    });
+    return fieldsData;
   };
 
   if (width && width >= 991) {

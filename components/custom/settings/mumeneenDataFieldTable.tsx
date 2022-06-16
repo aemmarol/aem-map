@@ -3,6 +3,7 @@ import {message} from "antd";
 import {FC, useState} from "react";
 import {DashboardDataFieldTableCard} from "../..";
 import {mumeneenDetailsFieldCollectionName} from "../../../firebase/dbCollectionNames";
+import {getMumeneenDataFields} from "../../../pages/api/v2/services/dbFields";
 import {databaseMumeneenFieldData} from "../../../types";
 import {getauthToken} from "../../../utils";
 import {API} from "../../../utils/api";
@@ -31,28 +32,20 @@ export const MumeneenDataFieldTable: FC<CardProps> = ({data, updateData}) => {
       .then(handleResponse)
       .catch((error) => message.error(error));
 
-    const updatedData = await getMumeneenDataFields();
+    getMumeneenDataFields((data: databaseMumeneenFieldData[]) => {
+      updateData(data);
+    });
 
-    updateData(updatedData);
     setisMumeneenDataFieldTableLoading(false);
   };
 
   const loadMumeneenDataFields = async () => {
     setisMumeneenDataFieldTableLoading(true);
-    const data = await getMumeneenDataFields();
-    updateData(data);
+    getMumeneenDataFields((data: databaseMumeneenFieldData[]) => {
+      updateData(data);
+    });
 
     setisMumeneenDataFieldTableLoading(false);
-  };
-
-  const getMumeneenDataFields = async () => {
-    const data = await await fetch(API.dbFields + "?collection=mumeneen", {
-      method: "GET",
-      headers: {...getauthToken()},
-    })
-      .then(handleResponse)
-      .catch((error) => message.error(error));
-    return data;
   };
 
   return (

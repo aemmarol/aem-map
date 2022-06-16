@@ -4,7 +4,7 @@ import styles from "../../styles/components/tables/fileListTable.module.scss";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {useRouter} from "next/router";
 import {logout, verifyUser} from "../../pages/api/v1/authentication";
-import {authUser} from "../../types";
+import {authUser, databaseMumeneenFieldData} from "../../types";
 import {getMumineenTableUserColumns} from "./columnsUtil";
 import useWindowDimensions from "../../utils/windowDimensions";
 import {EscStat} from "../custom/escalations/escalationStatus";
@@ -12,6 +12,7 @@ import sampleMemberList from "../../sample_data/mumeneenDataField.json";
 import {API} from "../../utils/api";
 import {getauthToken} from "../../utils";
 import {handleResponse} from "../../utils/handleResponse";
+import {getMumeneenDataFields} from "../../pages/api/v2/services/dbFields";
 
 interface TableProps {
   dataSource: any[];
@@ -30,6 +31,7 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
     logout();
     router.push("/");
   };
+
   const getFileTableColumns = async () => {
     toggleLoader(true);
     let userRole;
@@ -39,12 +41,7 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
     } else {
       notVerifierUserLogout();
     }
-    const fieldData = await await fetch(API.dbFields + "?collection=mumeneen", {
-      method: "GET",
-      headers: {...getauthToken()},
-    })
-      .then(handleResponse)
-      .catch((error) => message.error(error));
+    const fieldData = await getDbMumeneenDataFields();
     let dataColumns = [];
     const dataColumnsMap: any = {
       id: {
@@ -98,6 +95,14 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
     }
     setcolumns(dataColumns);
     toggleLoader(false);
+  };
+
+  const getDbMumeneenDataFields = async () => {
+    let fieldsData: databaseMumeneenFieldData[] = [];
+    await getMumeneenDataFields((data: databaseMumeneenFieldData[]) => {
+      fieldsData = data;
+    });
+    return fieldsData;
   };
 
   useEffect(() => {

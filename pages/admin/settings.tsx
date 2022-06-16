@@ -26,6 +26,10 @@ import Airtable from "airtable";
 import {API} from "../../utils/api";
 import {getauthToken} from "../../utils";
 import {handleResponse} from "../../utils/handleResponse";
+import {
+  getFileDataFields,
+  getMumeneenDataFields,
+} from "../api/v2/services/dbFields";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -85,8 +89,12 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
       if (!userRole.includes(userRoles.Admin)) {
         notVerifierUserLogout();
       } else {
-        getMumeneenDataFields();
-        getFileDataFields();
+        getMumeneenDataFields((data: databaseMumeneenFieldData[]) => {
+          setMumeneenFields(data);
+        });
+        getFileDataFields((data: databaseMumeneenFieldData[]) => {
+          setFileFields(data);
+        });
       }
     } else {
       notVerifierUserLogout();
@@ -247,30 +255,6 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
       })
     );
     toggleLoader(false);
-  };
-
-  const getMumeneenDataFields = async () => {
-    await fetch(API.dbFields + "?collection=mumeneen", {
-      method: "GET",
-      headers: {...getauthToken()},
-    })
-      .then(handleResponse)
-      .then((response) => {
-        setMumeneenFields(response);
-      })
-      .catch((error) => message.error(error));
-  };
-
-  const getFileDataFields = async () => {
-    await fetch(API.dbFields + "?collection=file", {
-      method: "GET",
-      headers: {...getauthToken()},
-    })
-      .then(handleResponse)
-      .then((response) => {
-        setFileFields(response);
-      })
-      .catch((error) => message.error(error));
   };
 
   return (
