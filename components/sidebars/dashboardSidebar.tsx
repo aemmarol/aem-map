@@ -84,9 +84,12 @@ export const DashboardSidebar: FC<{
             Mohallah
           </Menu.Item>
         )}
-        <Menu.Item onClick={redirectToEscalations} key="2">
-          Escalations
-        </Menu.Item>
+        {appUserRole.length === 1 && appUserRole[0] === "Admin" ? null : (
+          <Menu.Item onClick={redirectToEscalations} key="2">
+            Escalations
+          </Menu.Item>
+        )}
+
         {appUserRole.length === 1 && appUserRole[0] === "Admin" ? (
           <Menu.Item key="3" onClick={() => router.push("/admin/settings")}>
             Settings
