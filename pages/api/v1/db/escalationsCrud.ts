@@ -15,11 +15,11 @@ import {firestore} from "../../../../firebase/firebaseConfig";
 import {escalationData, escalationStatus} from "../../../../types";
 import {defaultDatabaseFields} from "../../../../utils";
 import moment from "moment";
-import {getUmoorListWithCoordinators} from "./umoorsCrud";
 import {getSectorList} from "./sectorCrud";
 import {getSubSectorList} from "./subSectorCrud";
 import {API} from "../../../../utils/api";
 import {createQuery} from "../../../../mongodb/queryUtil";
+import { getUmoorListWithCoordinators } from "../../v2/services/umoor";
 
 const dataCollection = collection(firestore, escalationCollectionName);
 

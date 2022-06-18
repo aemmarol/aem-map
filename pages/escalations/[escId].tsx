@@ -24,9 +24,9 @@ import {
 import moment from "moment";
 import styles from "../../styles/pages/Escalation.module.scss";
 import {AddEscalationCommentsModal} from "../../components";
-import {getUmoorList} from "../api/v1/db/umoorsCrud";
 import {getSubSectorDataByName} from "../api/v1/db/subSectorCrud";
 import {getSectorDataByName} from "../api/v2/services/sector";
+import { getUmoorList } from "../api/v2/services/umoor";
 
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();
@@ -93,50 +93,6 @@ const FileMemberDetailsPage: NextPage = () => {
     }
   };
 
-  // const getUmoorList = async () => {
-  //   const temp: any = [];
-  //   await umoorTable
-  //     .select({
-  //       view: "Grid view",
-  //     })
-  //     .eachPage(
-  //       function page(records, fetchNextPage) {
-  //         records.forEach(function (record) {
-  //           temp.push(record.fields);
-  //         });
-  //         fetchNextPage();
-  //       },
-  //       function done(err) {
-  //         if (err) {
-  //           console.error(err);
-  //           return;
-  //         }
-  //         setIssueTypeOptions(temp);
-  //       }
-  //     );
-  // }
-  // const getUmoorList = async () => {
-  //   const temp: any = [];
-  //   await umoorTable
-  //     .select({
-  //       view: "Grid view",
-  //     })
-  //     .eachPage(
-  //       function page(records, fetchNextPage) {
-  //         records.forEach(function (record) {
-  //           temp.push(record.fields);
-  //         });
-  //         fetchNextPage();
-  //       },
-  //       function done(err) {
-  //         if (err) {
-  //           console.error(err);
-  //           return;
-  //         }
-  //         setIssueTypeOptions(temp);
-  //       }
-  //     );
-  // };
   const getUmoorListfromDb = async () => {
     const umoorList: umoorData[] = await getUmoorList();
     setIssueTypeOptions(umoorList);

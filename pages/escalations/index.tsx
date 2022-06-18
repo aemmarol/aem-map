@@ -15,7 +15,6 @@ import {
 import {AddEscalationModal} from "../../components";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {EscalationList} from "../../components/custom/escalations/escalationList";
-import {getUmoorList} from "../api/v1/db/umoorsCrud";
 import {
   Criteria,
   escalationDBFields,
@@ -32,6 +31,7 @@ import {DownloadOutlined} from "@ant-design/icons";
 import {CSVLink} from "react-csv";
 import {getDateDiffDays} from "../../utils";
 import {getSectorList} from "../api/v2/services/sector";
+import { getUmoorList } from "../api/v2/services/umoor";
 
 interface selectedFilterItemsType {
   selectedUmoors: filterOption[];
@@ -385,9 +385,7 @@ const Dashboard: NextPage = () => {
     const escList: escalationData[] = await getEscalationListByCriteria(
       criteria
     );
-    // escList = await addExtraDetails(escList);
-    // console.log(escList[0].type);
-
+    
     setEscalationList(
       escList.sort((a, b) =>
         moment(b.created_at, "DD-MM-YYYY HH:mm:ss").diff(

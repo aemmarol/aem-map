@@ -38,7 +38,7 @@ import {
   getDbSettings,
   incrementEscalationAutoNumber,
 } from "../../pages/api/v1/settings";
-import {getUmoorList} from "../../pages/api/v1/db/umoorsCrud";
+import { getUmoorList } from "../../pages/api/v2/services/umoor";
 
 // const airtableBase = new Airtable({
 //   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,

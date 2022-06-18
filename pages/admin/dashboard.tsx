@@ -18,9 +18,9 @@ import {
   groupEscalationListBy,
 } from "../api/v1/db/escalationsCrud";
 
-import {getUmoorList} from "../api/v1/db/umoorsCrud";
 import {StatsCard} from "../../components/cards/statsCard";
 import {getSectorList} from "../api/v2/services/sector";
+import { getUmoorList } from "../api/v2/services/umoor";
 
 interface AdminDashboardProps {
   escalationsList: escalationData[];
