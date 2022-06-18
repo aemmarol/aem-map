@@ -1,9 +1,4 @@
-import {
-  arrayRemove,
-  arrayUnion,
-  doc,
-  updateDoc,
-} from "firebase/firestore";
+import {arrayRemove, arrayUnion, doc, updateDoc} from "firebase/firestore";
 import {firestore} from "../../../../firebase/firebaseConfig";
 import {sectorCollectionName} from "../../../../firebase/dbCollectionNames";
 import moment from "moment";
@@ -31,4 +26,3 @@ export const removeSubSectorIds = async (
   });
   return true;
 };
-
