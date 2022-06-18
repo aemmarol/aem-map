@@ -8,13 +8,13 @@ import {
   authUser,
   escalationData,
   escalationStatus,
+  sectorData,
   umoorData,
   userRoles,
 } from "../../types";
 import {AddEscalationModal} from "../../components";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {EscalationList} from "../../components/custom/escalations/escalationList";
-import {getSectorList} from "../api/v1/db/sectorCrud";
 import {getUmoorList} from "../api/v1/db/umoorsCrud";
 import {
   Criteria,
@@ -31,6 +31,7 @@ import useWindowDimensions from "../../utils/windowDimensions";
 import {DownloadOutlined} from "@ant-design/icons";
 import {CSVLink} from "react-csv";
 import {getDateDiffDays} from "../../utils";
+import { getSectorList } from "../api/v2/services/sector";
 
 interface selectedFilterItemsType {
   selectedUmoors: filterOption[];
@@ -404,8 +405,9 @@ const Dashboard: NextPage = () => {
 
   const setUserDetails = async (user: authUser) => {
     if (user.userRole[0].includes(userRoles.Admin)) {
-      const sectors = await getSectorList();
-      user.assignedArea = sectors.map((sector) => sector.name);
+      await getSectorList((data:sectorData[])=>{
+        user.assignedArea = data.map((sector) => sector.name);
+      });
       const umoors: umoorData[] = await getUmoorList();
       user.assignedUmoor = umoors.map((umoor: umoorData) => umoor.value);
     }

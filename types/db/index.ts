@@ -9,7 +9,7 @@ export interface databaseMumeneenFieldData extends defaultFields {
 
 export interface sectorData extends defaultFields {
   name: string;
-  id?: string;
+  _id?: string;
   sub_sector_id?: string[];
   primary_color: string;
   secondary_color: string;

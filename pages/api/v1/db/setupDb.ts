@@ -1,114 +1,14 @@
-import {sectorData, sectorDetailsForSubSector} from "../../../../types";
 import subsectorSampleData from "../../../../sample_data/subsector.json";
+
 import {
-  addSectorData,
-  addSubSectorIds,
-  deleteSectorData,
-  getSectorDataByName,
-  getSectorList,
-  updateSectorData,
-} from "./sectorCrud";
-import {
-  addSubSectorData,
-  deleteSubSectorData,
   getSubSectorList,
   resetSubSectorFilesData,
   updateSubSectorData,
 } from "./subSectorCrud";
-import {defaultDatabaseFields} from "../../../../utils";
-import {sectorDbData} from "../../../../sample_data/sector";
 import {deleteFileData, getFileDataList} from "./fileCrud";
 import {deleteMemberData, getMemberDataList} from "./memberCrud";
 
 import {find} from "lodash";
-
-export const addSectors = async () => {
-  const sectorList = await getSectorList();
-
-  await Promise.all(
-    sectorList.map(async (val) => {
-      await deleteSectorData(val.id as string);
-    })
-  );
-
-  await Promise.all(
-    sectorDbData.map(async (value) => {
-      const boundsArr = value.bounds?.map((val) => ({
-        lat: val[0],
-        lang: val[1],
-      }));
-      const successFlag = addSectorData({...value, bounds: boundsArr});
-      return successFlag;
-    })
-  );
-};
-
-export const updateSectorsToDefault = async () => {
-  const sectorList = await getSectorList();
-
-  await Promise.all(
-    sectorList.map(async (val) => {
-      const sectorVal = find(sectorDbData, {name: val.name});
-      if (sectorVal) {
-        const boundsArr = sectorVal.bounds?.map((val) => ({
-          lat: val[0],
-          lang: val[1],
-        }));
-        await updateSectorData(val.id as string, {
-          ...sectorVal,
-          bounds: boundsArr,
-        });
-      }
-    })
-  );
-};
-
-export const addSubSectors = async () => {
-  const subsectList = await getSubSectorList();
-
-  await Promise.all(
-    subsectList.map(async (val) => {
-      await deleteSubSectorData(val.id as string);
-    })
-  );
-
-  await Promise.all(
-    subsectorSampleData.map(async (value: any) => {
-      const sectorInfo: sectorData = await getSectorDataByName(
-        value.sector_name
-      );
-      const sectorDetails: sectorDetailsForSubSector = {
-        id: sectorInfo.id,
-        name: sectorInfo.name,
-        primary_color: sectorInfo.primary_color,
-        secondary_color: sectorInfo.secondary_color,
-      };
-
-      const successId = await addSubSectorData({
-        name: value.name.toUpperCase(),
-        musaid_contact: value.musaid_contact,
-        musaid_its: value.musaid_its,
-        musaid_name: value.musaid_name,
-        musaida_contact: value.musaida_contact,
-        musaida_its: value.musaida_its,
-        musaida_name: value.musaida_name,
-        latlng: value.latlng,
-        no_of_females: 0,
-        files: [],
-        no_of_males: 0,
-        sector: sectorDetails,
-        ...defaultDatabaseFields,
-      });
-
-      const successFlag = await addSubSectorIds(
-        sectorInfo.id as string,
-        successId
-      );
-
-      return successFlag;
-    })
-  );
-};
 
 export const updateSubSectorsToDefault = async () => {
   const subsectList = await getSubSectorList();

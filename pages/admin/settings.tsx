@@ -17,7 +17,6 @@ import {
   SectorDetailsComponent,
   SubSectorDetailsComponent,
 } from "../../components";
-import {getSectorList} from "../api/v1/db/sectorCrud";
 import {getSubSectorList} from "../api/v1/db/subSectorCrud";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {useRouter} from "next/router";
@@ -30,6 +29,7 @@ import {
   getFileDataFields,
   getMumeneenDataFields,
 } from "../api/v2/services/dbFields";
+import {getSectorList} from "../api/v2/services/sector";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -41,7 +41,7 @@ const umoorTable = airtableBase("umoorList");
 interface AdminSettingsProps {
   mumeneenDataFields?: databaseMumeneenFieldData[];
   fileDataFields?: databaseMumeneenFieldData[];
-  sectorDetailsData: sectorData[];
+  sectorDetailsData?: sectorData[];
   subSectorDetailsList: subSectorData[];
 }
 
@@ -66,11 +66,6 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   >([]);
 
   useEffect(() => {
-    setMumeneenFields([]);
-    // setMumeneenFields(mumeneenDataFields.map((val) => ({ ...val, key: val.id })));
-    // setMumeneenFields(mumeneenDataFields.map((val) => ({ ...val, key: val.id })));
-    setFileFields([]);
-    setSectorDetails(sectorDetailsData.map((val) => ({...val, key: val.id})));
     setSubsectorDetails(
       subSectorDetailsList.map((val) => ({...val, key: val.id}))
     );
@@ -94,6 +89,9 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
         });
         getFileDataFields((data: databaseMumeneenFieldData[]) => {
           setFileFields(data);
+        });
+        getSectorList((data: sectorData[]) => {
+          setSectorDetails(data);
         });
       }
     } else {
@@ -316,12 +314,10 @@ export default AdminSettings;
 export const getServerSideProps: GetServerSideProps<
   AdminSettingsProps
 > = async () => {
-  const sectorDetailsData: sectorData[] = await getSectorList();
   const subSectorDetailsList: subSectorData[] = await getSubSectorList();
 
   return {
     props: {
-      sectorDetailsData,
       subSectorDetailsList,
     },
   };

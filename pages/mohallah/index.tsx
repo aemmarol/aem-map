@@ -8,8 +8,8 @@ import {useEffect, useState} from "react";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {authUser, sectorData, subSectorData, userRoles} from "../../types";
 import {useGlobalContext} from "../../context/GlobalContext";
-import {getSectorList} from "../api/v1/db/sectorCrud";
 import {getSubSectorList} from "../api/v1/db/subSectorCrud";
+import { getSectorList } from "../api/v2/services/sector";
 
 const {TabPane} = Tabs;
 
@@ -40,9 +40,8 @@ const Dashboard: NextPage = () => {
 
   const getPageData = async () => {
     toggleLoader(true);
-    const secData = await getSectorList();
+    await getSectorList((data:sectorData[])=>setAdminPageSectorData(data));
     const subSecData = await getSubSectorList();
-    setAdminPageSectorData(secData);
     setAdminPageSubSectorData(subSecData);
     toggleLoader(false);
   };

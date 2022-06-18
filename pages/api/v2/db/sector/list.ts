@@ -11,6 +11,7 @@ export default getAuthHandler().get(
       const doc = await req.db
         .collection(sectorCollectionName)
         .find()
+        .sort({name: 1})
         .toArray();
       res.json(doc);
     } else {

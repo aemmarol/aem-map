@@ -9,15 +9,15 @@ import {
   Tag,
   Typography,
 } from "antd";
-import {FC, useState} from "react";
-import {TableCardWithForm} from "../..";
+import { FC, useState } from "react";
+import { TableCardWithForm } from "../..";
 import {
   getSectorDataByName,
   getSectorList,
   updateSectorData,
-} from "../../../pages/api/v1/db/sectorCrud";
-import {updateSectorsToDefault} from "../../../pages/api/v1/db/setupDb";
-import {sectorData} from "../../../types";
+  updateSectorListToDefault,
+} from "../../../pages/api/v2/services/sector";
+import { sectorData } from "../../../types";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -55,7 +55,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       {editing ? (
         <Form.Item
           name={dataIndex}
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           rules={[
             {
               required: true,
@@ -72,16 +72,16 @@ const EditableCell: React.FC<EditableCellProps> = ({
   );
 };
 
-export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
+export const SectorDetailsComponent: FC<CardProps> = ({ data, updateData }) => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState<string | undefined>("");
   const [isLoading, setisLoading] = useState<boolean>(false);
 
-  const isEditing = (record: sectorData) => record.id === editingKey;
+  const isEditing = (record: sectorData) => record._id === editingKey;
 
   const edit = (record: Partial<sectorData>) => {
-    form.setFieldsValue({...record});
-    setEditingKey(record.id);
+    form.setFieldsValue({ ...record });
+    setEditingKey(record._id);
   };
 
   const cancel = () => {
@@ -93,8 +93,9 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
       const row = (await form.validateFields()) as sectorData;
       if (key) {
         await updateSectorData(key, row);
-        const newData = await getSectorList();
-        updateData(newData);
+        await getSectorList((data: sectorData[]) => {
+          updateData(data);
+        });
         setEditingKey("");
       }
     } catch (errInfo) {
@@ -105,7 +106,7 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
   const sectorDataColumns: any[] = [
     {
       title: "id",
-      dataIndex: "id",
+      dataIndex: "_id",
       width: 100,
       editable: false,
       fixed: "left",
@@ -181,8 +182,8 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
         return editable ? (
           <span>
             <Typography.Link
-              onClick={() => save(record.id)}
-              style={{marginRight: 8}}
+              onClick={() => save(record._id)}
+              style={{ marginRight: 8 }}
             >
               Save
             </Typography.Link>
@@ -216,22 +217,12 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
     };
   });
 
-  // const handleAddSector = async (data: sectorData, callback: () => any) => {
-  //   const addDataSuccess = await addSectorData({
-  //     ...data,
-  //     sub_sector_id: [],
-  //     ...defaultDatabaseFields,
-  //   });
-  //   if (addDataSuccess) {
-  //     const newData = await getSectorList();
-  //     updateData(newData);
-  //     callback();
-  //   }
-  // };
-
   const resetSectorsToDefault = async () => {
     setisLoading(true);
-    await updateSectorsToDefault();
+    await updateSectorListToDefault();
+    await getSectorList((data: sectorData[]) => {
+      updateData(data);
+    });
     setisLoading(false);
   };
 
@@ -254,8 +245,12 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
       masoolData
         .map((val) => val.fields)
         .map(async (value: any) => {
-          const tempSector = await getSectorDataByName(value.assignedArea[0]);
-          await updateSectorData(tempSector.id as string, {
+          let sectorDetails: sectorData = {} as sectorData
+          await getSectorDataByName(value.assignedArea[0], (data: sectorData) => {
+            sectorDetails = data;
+          });
+
+          await updateSectorData(sectorDetails._id as string, {
             masool_contact: value.contact,
             masool_name: value.name,
             masool_its: value.itsId.toString(),
@@ -267,8 +262,11 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
       masoolaData
         .map((val) => val.fields)
         .map(async (value: any) => {
-          const tempSector = await getSectorDataByName(value.assignedArea[0]);
-          await updateSectorData(tempSector.id as string, {
+          let sectorDetails: sectorData = {} as sectorData
+          await getSectorDataByName(value.assignedArea[0], (data: sectorData) => {
+            sectorDetails = data;
+          });
+          await updateSectorData(sectorDetails._id as string, {
             masoola_contact: value.contact,
             masoola_name: value.name,
             masoola_its: value.itsId.toString(),
@@ -276,8 +274,9 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
         })
     );
 
-    const newData = await getSectorList();
-    updateData(newData);
+    await getSectorList((data: sectorData[]) => {
+      updateData(data);
+    });
 
     setisLoading(false);
   };
@@ -291,13 +290,14 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
           dataSource: data,
           columns: mergedColumns,
           pagination: false,
-          scroll: {x: "450px", y: "400px"},
+          scroll: { x: "450px", y: "400px" },
           components: {
             body: {
               cell: EditableCell,
             },
           },
           loading: isLoading,
+          rowKey: "_id",
         }}
         extraComponents={
           <div className="flex-align-center-justify-center">
@@ -307,7 +307,6 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
             <Button onClick={handleUpdateMasoolDetails} className="mr-10">
               Update Masool Details
             </Button>
-            <Button type="primary">Add Sector</Button>
           </div>
         }
       />

@@ -25,8 +25,8 @@ import moment from "moment";
 import styles from "../../styles/pages/Escalation.module.scss";
 import {AddEscalationCommentsModal} from "../../components";
 import {getUmoorList} from "../api/v1/db/umoorsCrud";
-import {getSectorDataByName} from "../api/v1/db/sectorCrud";
 import {getSubSectorDataByName} from "../api/v1/db/subSectorCrud";
+import { getSectorDataByName } from "../api/v2/services/sector";
 
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();
@@ -77,10 +77,10 @@ const FileMemberDetailsPage: NextPage = () => {
 
   const setSectorDetailsFromDB = async (escDetails: escalationData) => {
     if (escDetails.file_details.sub_sector.sector?.name) {
-      const sector = await getSectorDataByName(
-        escDetails.file_details.sub_sector.sector?.name
+       await getSectorDataByName(
+        escDetails.file_details.sub_sector.sector?.name,
+        (data:sectorData)=>setSectorDetails(data)
       );
-      setSectorDetails(sector);
     }
   };
 

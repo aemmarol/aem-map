@@ -1,31 +1,31 @@
-import {NextPage} from "next";
-import {useRouter} from "next/router";
-import {useEffect, useState} from "react";
-import {useGlobalContext} from "../../../../context/GlobalContext";
-import {Dashboardlayout} from "../../../../layouts/dashboardLayout";
+import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useGlobalContext } from "../../../../context/GlobalContext";
+import { Dashboardlayout } from "../../../../layouts/dashboardLayout";
 import {
   authUser,
   sectorData,
   subSectorData,
   userRoles,
 } from "../../../../types";
-import {getSubSectorDataByName} from "../../../api/v1/db/subSectorCrud";
-import {isEmpty} from "lodash";
-import {getFileData} from "../../../api/v1/db/fileCrud";
+import { getSubSectorDataByName } from "../../../api/v1/db/subSectorCrud";
+import { isEmpty } from "lodash";
+import { getFileData } from "../../../api/v1/db/fileCrud";
 import styles from "../../../../styles/FileList.module.scss";
-import {Col, message, Row} from "antd";
+import { Col, message, Row } from "antd";
 import {
   DistanceCard,
   InchargeDetailsCard,
   SubSectorFileListTable,
 } from "../../../../components";
-import {getSectorData} from "../../../api/v1/db/sectorCrud";
-import {logout, verifyUser} from "../../../api/v1/authentication";
+import { logout, verifyUser } from "../../../api/v1/authentication";
+import { getSectorData } from "../../../api/v2/services/sector";
 
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
-  const {subSectorName, mohallahName} = router.query;
-  const {toggleLoader, changeSelectedSidebarKey, center} = useGlobalContext();
+  const { subSectorName, mohallahName } = router.query;
+  const { toggleLoader, changeSelectedSidebarKey, center } = useGlobalContext();
 
   const [mohallahDetails, setMohallahDetails] = useState<sectorData>(
     {} as sectorData
@@ -43,10 +43,10 @@ const SingleMohallah: NextPage = () => {
       subSectorName as string
     );
     if (!isEmpty(subsectorDetails)) {
-      const sectorInfo = await getSectorData(
-        subsectorDetails.sector.id as string
+      await getSectorData(
+        subsectorDetails.sector.id as string,
+        (data: sectorData) => setMohallahDetails(data)
       );
-      setMohallahDetails(sectorInfo);
       toggleLoader(false);
       setMohallahSubSectorsDetails(subsectorDetails);
     } else {
@@ -92,7 +92,7 @@ const SingleMohallah: NextPage = () => {
 
       if (typeof verifyUser() !== "string") {
         const user = verifyUser() as authUser;
-        const {userRole, assignedArea} = user;
+        const { userRole, assignedArea } = user;
         setUserDetails(user);
         if (
           userRole.includes(userRoles.Admin) ||
@@ -139,7 +139,7 @@ const SingleMohallah: NextPage = () => {
       <div className={styles.mainWrapper}>
         <Row
           className="mb-16 d-flex"
-          gutter={[{xs: 8, sm: 16, md: 24, lg: 32}, 16]}
+          gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}
         >
           <Col xs={24} sm={12} lg={8} xl={6}>
             <InchargeDetailsCard
@@ -160,17 +160,14 @@ const SingleMohallah: NextPage = () => {
           <Col xs={24} sm={12} lg={8} xl={6} className={styles.infoCol}>
             <DistanceCard
               backgroundColor={mohallahDetails.primary_color}
-              directionLink={`https://www.google.com/maps/dir/${
-                center.latlng[0]
-              },${center.latlng[1]}/${
-                mohallahSubSectorsDetails.latlng
+              directionLink={`https://www.google.com/maps/dir/${center.latlng[0]
+                },${center.latlng[1]}/${mohallahSubSectorsDetails.latlng
                   ? mohallahSubSectorsDetails.latlng[0]
                   : ""
-              },${
-                mohallahSubSectorsDetails.latlng
+                },${mohallahSubSectorsDetails.latlng
                   ? mohallahSubSectorsDetails?.latlng[1]
                   : ""
-              }/`}
+                }/`}
               fromLocation={center.name}
             />
             {/* <Card style={{backgroundColor: mohallahDetails.primary_color}}>
