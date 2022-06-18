@@ -27,7 +27,7 @@ export const updateSectorListToDefault = async () => {
   getSectorList(async (response: sectorData[]) => {
     await Promise.all(
       response.map(async (value) => {
-        let data = find(sectorDbData, {name: value.name});
+        const data = find(sectorDbData, {name: value.name});
         const boundsArr = data?.bounds?.map((val) => ({
           lat: val[0],
           lang: val[1],

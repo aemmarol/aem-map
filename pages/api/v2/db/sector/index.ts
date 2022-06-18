@@ -40,7 +40,7 @@ export default getAuthHandler()
   .put(async (req: NextApiRequestExtended, res) => {
     const {userData} = req;
 
-    let updateData = JSON.parse(req.body);
+    const updateData = JSON.parse(req.body);
     const project_id = updateData.id;
     delete updateData.id;
 

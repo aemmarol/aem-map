@@ -15,11 +15,8 @@ import {firestore} from "../../../../firebase/firebaseConfig";
 import {escalationData, escalationStatus} from "../../../../types";
 import {defaultDatabaseFields} from "../../../../utils";
 import moment from "moment";
-import {getSectorList} from "./sectorCrud";
-import {getSubSectorList} from "./subSectorCrud";
 import {API} from "../../../../utils/api";
 import {createQuery} from "../../../../mongodb/queryUtil";
-import {getUmoorListWithCoordinators} from "../../v2/services/umoor";
 
 const dataCollection = collection(firestore, escalationCollectionName);
 
@@ -188,40 +185,40 @@ export const getEscalationListByCriteriaClientSide = async (
   return filteredArr;
 };
 
-export const addExtraDetails = async (escalations: escalationData[]) => {
-  const sectorList = await getSectorList();
-  const subSectorList = await getSubSectorList();
-  const umoorList = await getUmoorListWithCoordinators();
-  escalations.forEach((escalation) => {
-    if (
-      escalation.file_details.sub_sector &&
-      escalation.file_details.sub_sector.name
-    ) {
-      escalation.file_details.sub_sector =
-        subSectorList.find(
-          (subsector) =>
-            subsector.name == escalation.file_details.sub_sector.name
-        ) || escalation.file_details.sub_sector;
-    }
-    if (
-      escalation.file_details.sub_sector.sector &&
-      escalation.file_details.sub_sector.sector.name
-    ) {
-      escalation.file_details.sub_sector.sector =
-        sectorList.find(
-          (sector) =>
-            sector.name == escalation.file_details.sub_sector.sector?.name
-        ) || escalation.file_details.sub_sector.sector;
-    }
-    if (escalation.type) {
-      escalation.type = umoorList.find(
-        (umoor) => umoor.value == escalation.type?.value
-      );
-    }
-  });
+// export const addExtraDetails = async (escalations: escalationData[]) => {
+//   const sectorList = await getSectorList();
+//   const subSectorList = await getSubSectorList();
+//   const umoorList = await getUmoorListWithCoordinators();
+//   escalations.forEach((escalation) => {
+//     if (
+//       escalation.file_details.sub_sector &&
+//       escalation.file_details.sub_sector.name
+//     ) {
+//       escalation.file_details.sub_sector =
+//         subSectorList.find(
+//           (subsector) =>
+//             subsector.name == escalation.file_details.sub_sector.name
+//         ) || escalation.file_details.sub_sector;
+//     }
+//     if (
+//       escalation.file_details.sub_sector.sector &&
+//       escalation.file_details.sub_sector.sector.name
+//     ) {
+//       escalation.file_details.sub_sector.sector =
+//         sectorList.find(
+//           (sector) =>
+//             sector.name == escalation.file_details.sub_sector.sector?.name
+//         ) || escalation.file_details.sub_sector.sector;
+//     }
+//     if (escalation.type) {
+//       escalation.type = umoorList.find(
+//         (umoor) => umoor.value == escalation.type?.value
+//       );
+//     }
+//   });
 
-  return escalations;
-};
+//   return escalations;
+// };
 
 export const addEscalationData = async (
   data: escalationData
