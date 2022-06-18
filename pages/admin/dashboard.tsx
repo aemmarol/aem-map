@@ -20,7 +20,7 @@ import {
 
 import {StatsCard} from "../../components/cards/statsCard";
 import {getSectorList} from "../api/v2/services/sector";
-import { getUmoorList } from "../api/v2/services/umoor";
+import {getUmoorList} from "../api/v2/services/umoor";
 
 interface AdminDashboardProps {
   escalationsList: escalationData[];

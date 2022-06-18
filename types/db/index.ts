@@ -95,7 +95,7 @@ export enum escalationStatus {
   CLOSED = "Closed",
 }
 export interface umoorData {
-  _id?:string;
+  _id?: string;
   label: string;
   value: string;
   coordinators?: authUser[];

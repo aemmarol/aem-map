@@ -26,7 +26,7 @@ import styles from "../../styles/pages/Escalation.module.scss";
 import {AddEscalationCommentsModal} from "../../components";
 import {getSubSectorDataByName} from "../api/v1/db/subSectorCrud";
 import {getSectorDataByName} from "../api/v2/services/sector";
-import { getUmoorList } from "../api/v2/services/umoor";
+import {getUmoorList} from "../api/v2/services/umoor";
 
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();

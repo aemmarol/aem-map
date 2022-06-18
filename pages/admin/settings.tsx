@@ -30,7 +30,7 @@ import {
   getMumeneenDataFields,
 } from "../api/v2/services/dbFields";
 import {getSectorList} from "../api/v2/services/sector";
-import { getUmoorList } from "../api/v2/services/umoor";
+import {getUmoorList} from "../api/v2/services/umoor";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -190,8 +190,8 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   const handleSyncUmoorsFromAirtable = async () => {
     toggleLoader(true);
 
-    const oldUmoorList = await getUmoorList()
-      
+    const oldUmoorList = await getUmoorList();
+
     if (oldUmoorList && oldUmoorList.length > 0) {
       await Promise.all(
         oldUmoorList.map(async (val: any) => {

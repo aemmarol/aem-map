@@ -31,7 +31,7 @@ import {DownloadOutlined} from "@ant-design/icons";
 import {CSVLink} from "react-csv";
 import {getDateDiffDays} from "../../utils";
 import {getSectorList} from "../api/v2/services/sector";
-import { getUmoorList } from "../api/v2/services/umoor";
+import {getUmoorList} from "../api/v2/services/umoor";
 
 interface selectedFilterItemsType {
   selectedUmoors: filterOption[];
@@ -385,7 +385,7 @@ const Dashboard: NextPage = () => {
     const escList: escalationData[] = await getEscalationListByCriteria(
       criteria
     );
-    
+
     setEscalationList(
       escList.sort((a, b) =>
         moment(b.created_at, "DD-MM-YYYY HH:mm:ss").diff(

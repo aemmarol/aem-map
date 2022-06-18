@@ -19,7 +19,7 @@ import {getSectorList} from "./sectorCrud";
 import {getSubSectorList} from "./subSectorCrud";
 import {API} from "../../../../utils/api";
 import {createQuery} from "../../../../mongodb/queryUtil";
-import { getUmoorListWithCoordinators } from "../../v2/services/umoor";
+import {getUmoorListWithCoordinators} from "../../v2/services/umoor";
 
 const dataCollection = collection(firestore, escalationCollectionName);
 
