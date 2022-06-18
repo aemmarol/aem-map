@@ -10,7 +10,6 @@ import {
   userRoles,
 } from "../../../../types";
 import {isEmpty} from "lodash";
-import {getFileData} from "../../../api/v1/db/fileCrud";
 import styles from "../../../../styles/FileList.module.scss";
 import {Col, message, Row} from "antd";
 import {
@@ -21,6 +20,7 @@ import {
 import {logout, verifyUser} from "../../../api/v1/authentication";
 import {getSectorData} from "../../../api/v2/services/sector";
 import {getSubSectorDataByName} from "../../../api/v2/services/subsector";
+import {getFileData} from "../../../api/v2/services/file";
 
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
@@ -68,7 +68,11 @@ const SingleMohallah: NextPage = () => {
     } else {
       const fileList = await Promise.all(
         mohallahSubSectorsDetails.files.map(async (value) => {
-          return await getFileData(value);
+          let fileData: any = {};
+          await getFileData(value, (data: any) => {
+            fileData = data;
+          });
+          return fileData;
         })
       );
       setFileDetails(

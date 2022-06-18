@@ -10,18 +10,8 @@ import {
   Select,
   Statistic,
 } from "antd";
-import {find, isEmpty} from "lodash";
-import {FC, useEffect, useState} from "react";
-import {
-  getFileDataList,
-  getFileDataByFileNumber,
-  getFileDataListBySector,
-  getFileDataListBySubsector,
-} from "../../pages/api/v1/db/fileCrud";
-import {
-  getMemberDataById,
-  getMemberListByHofId,
-} from "../../pages/api/v1/db/memberCrud";
+import { find, isEmpty } from "lodash";
+import { FC, useEffect, useState } from "react";
 // import Airtable from "airtable";
 import {
   authUser,
@@ -31,14 +21,16 @@ import {
   fileDetails,
   userRoles,
 } from "../../types";
-import {defaultDatabaseFields} from "../../utils";
+import { defaultDatabaseFields } from "../../utils";
 import moment from "moment";
-import {addEscalationData} from "../../pages/api/v1/db/escalationsCrud";
+import { addEscalationData } from "../../pages/api/v1/db/escalationsCrud";
 import {
   getDbSettings,
   incrementEscalationAutoNumber,
 } from "../../pages/api/v1/settings";
-import {getUmoorList} from "../../pages/api/v2/services/umoor";
+import { getUmoorList } from "../../pages/api/v2/services/umoor";
+import { getFileDataByFileNumber, getFileDataList, getFileDataListBySector, getFileDataListBySubsector } from "../../pages/api/v2/services/file";
+import { getMemberDataById, getMemberListByHofId } from "../../pages/api/v2/services/member";
 
 // const airtableBase = new Airtable({
 //   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -84,12 +76,14 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   };
 
   const getRoleBasedFileNumbers = async () => {
-    let fileList;
+    let fileList: any = [];
     if (
       adminDetails.userRole.includes(userRoles.Masool) ||
       adminDetails.userRole.includes(userRoles.Masoola)
     ) {
-      fileList = await getFileDataListBySector(adminDetails.assignedArea[0]);
+      await getFileDataListBySector(adminDetails.assignedArea[0], (data: any) => {
+        fileList = data
+      });
       // setAllowedFileNumbers(
       //   fileList.map((val: any) => val.tanzeem_file_no.toString())
       // );
@@ -97,13 +91,17 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       adminDetails.userRole.includes(userRoles.Musaid) ||
       adminDetails.userRole.includes(userRoles.Musaida)
     ) {
-      fileList = await getFileDataListBySubsector(adminDetails.assignedArea[0]);
+      await getFileDataListBySubsector(adminDetails.assignedArea[0], (data: any) => {
+        fileList = data
+      });
       // setAllowedFileNumbers(fileList.map((val: any) => val.tanzeem_file_no));
     } else if (
       adminDetails.userRole.includes(userRoles.Admin) ||
       adminDetails.userRole.includes(userRoles.Umoor)
     ) {
-      fileList = await getFileDataList();
+      await getFileDataList((data: any) => {
+        fileList = data
+      });
     }
     if (fileList) {
       setAllowedFileNumbers(
@@ -159,10 +157,20 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
 
   const onFileSelect = async (values: any) => {
     // console.log(values);
-    const data = await getFileDataByFileNumber(values);
+    const data: any = {};
+
+    await getFileDataByFileNumber(values, (data: any) => {
+      data = data;
+    });
     if (!!data) {
-      const hof_data = await getMemberDataById(data.id);
-      const membersList = await getMemberListByHofId(hof_data.id);
+      let hof_data: any = {}
+      await getMemberDataById(data.id, (data: any) => {
+        hof_data = data
+      });
+      let membersList: any = []
+      await getMemberListByHofId(hof_data.id, (data: any) => {
+        membersList = data
+      });
       console.log(membersList);
       console.log(hof_data, data);
       setFileDetails({
@@ -190,12 +198,12 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       userRole: adminDetails.userRole.includes(userRoles.Masool)
         ? "Masool"
         : adminDetails.userRole.includes(userRoles.Masoola)
-        ? "Masoola"
-        : adminDetails.userRole.includes(userRoles.Musaid)
-        ? "Musaid"
-        : adminDetails.userRole.includes(userRoles.Musaida)
-        ? "Musaida"
-        : adminDetails.userRole[0],
+          ? "Masoola"
+          : adminDetails.userRole.includes(userRoles.Musaid)
+            ? "Musaid"
+            : adminDetails.userRole.includes(userRoles.Musaida)
+              ? "Musaida"
+              : adminDetails.userRole[0],
       time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
     };
     const escalationIssueType = find(issueTypeOptions, {
@@ -320,21 +328,21 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
           <Row className="mb-30" gutter={[12, 16]}>
             <Col xs={24}>
               <Statistic
-                valueStyle={{fontSize: 16}}
+                valueStyle={{ fontSize: 16 }}
                 title="HOF Name"
                 value={fileDetails.hofName}
               />
             </Col>
             <Col xs={12}>
               <Statistic
-                valueStyle={{fontSize: 16}}
+                valueStyle={{ fontSize: 16 }}
                 title="HOF Contact"
                 value={fileDetails.hofContact}
               />
             </Col>
             <Col xs={12}>
               <Statistic
-                valueStyle={{fontSize: 16}}
+                valueStyle={{ fontSize: 16 }}
                 title="Sub Sector"
                 value={fileDetails.subSector}
               />
@@ -347,7 +355,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
             layout="vertical"
             form={escalationForm}
             initialValues={{
-              escalations: [{escalationType: "", escalationComments: ""}],
+              escalations: [{ escalationType: "", escalationComments: "" }],
             }}
           >
             <Form.Item

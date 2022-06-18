@@ -5,12 +5,12 @@ import {useRouter} from "next/router";
 import {useEffect, useState} from "react";
 import {useGlobalContext} from "../../../../context/GlobalContext";
 import {Dashboardlayout} from "../../../../layouts/dashboardLayout";
-import {getFileDataByFileNumber} from "../../../api/v1/db/fileCrud";
-import {getMemberListByHofId} from "../../../api/v1/db/memberCrud";
 import styles from "../../../../styles/FileList.module.scss";
 import {MemberListTable, MemberProfileCard} from "../../../../components";
 import {logout, verifyUser} from "../../../api/v1/authentication";
 import {authUser, userRoles} from "../../../../types";
+import {getFileDataByFileNumber} from "../../../api/v2/services/file";
+import {getMemberListByHofId} from "../../../api/v2/services/member";
 
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();
@@ -23,13 +23,17 @@ const FileMemberDetailsPage: NextPage = () => {
 
   const getFileDetails = async (fileNumber: any) => {
     toggleLoader(true);
-    const filedata = await getFileDataByFileNumber(fileNumber);
+    let filedata: any = {};
+    await getFileDataByFileNumber(fileNumber, (data: any) => {
+      filedata = data;
+    });
     if (!isEmpty(filedata)) {
       setFileDetails(filedata);
-      const memberDataList = await getMemberListByHofId(filedata.id);
-      setMemberList(memberDataList);
+      await getMemberListByHofId(filedata._id, (data: any) => {
+        setMemberList(data);
+      });
       setFileProfile([
-        {label: "HOF Id", value: filedata.id},
+        {label: "HOF Id", value: filedata._id},
         {label: "HOF Name", value: filedata.hof_name},
         {label: "File Number", value: fileNumber},
         {

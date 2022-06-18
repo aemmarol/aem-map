@@ -1,4 +1,3 @@
-import {InsertOneResult} from "mongodb";
 import {memberCollectionName} from "../../../../../firebase/dbCollectionNames";
 import getAuthHandler, {
   NextApiRequestExtended,
@@ -6,54 +5,21 @@ import getAuthHandler, {
 import {userRoles} from "../../../../../types";
 
 export default getAuthHandler()
-  //   .get(async (req: NextApiRequestExtended, res) => {
-  //     const {userData} = req;
-  //     const {fieldName, value} = req.query;
-  //     if (userData.userRole.includes(userRoles.Admin)) {
-  //       if (!fieldName || !value) {
-  //         res.status(400).json({msg: "invalid request!"});
-  //       } else {
-  //         const key: string = fieldName as string;
-  //         const qValue: string = value as string;
-  //         const queryObj =
-  //           key === "_id" ? {[key]: new ObjectId(qValue)} : {[key]: qValue};
-  //         const doc = await req.db
-  //           .collection(sectorCollectionName)
-  //           .findOne(queryObj);
-  //         res.json(doc);
-  //       }
-  //     } else {
-  //       res.status(401).json({msg: "user access denied!"});
-  //     }
-  //   })
-  .post(async (req: NextApiRequestExtended, res) => {
-    const {userData} = req;
-    if (userData.userRole.includes(userRoles.Admin)) {
-      const doc: InsertOneResult = await req.db
-        .collection(memberCollectionName)
-        .insertOne(JSON.parse(req.body));
-      res.json(doc);
-    } else {
-      res.status(401).json({msg: "user access denied!"});
-    }
-  });
-//   .put(async (req: NextApiRequestExtended, res) => {
-//     const {userData} = req;
+    .get(async (req: NextApiRequestExtended, res) => {
+      const {userData} = req;
+      const { itsId} = req.query;
+      if (userData.userRole.includes(userRoles.Admin)) {
+        if (!itsId) {
+          res.status(400).json({msg: "invalid request!"});
+        } else {
+          const qValue: string = itsId as string;
+          const doc = await req.db
+            .collection(memberCollectionName)
+            .findOne({_id: qValue});
+          res.json(doc);
+        }
+      } else {
+        res.status(401).json({msg: "user access denied!"});
+      }
+    })
 
-//     const updateData = JSON.parse(req.body);
-//     const project_id = updateData.id;
-//     delete updateData.id;
-
-//     if (userData.userRole.includes(userRoles.Admin)) {
-//       if (!project_id) {
-//         res.status(400).json({msg: "invalid request!"});
-//       } else {
-//         const doc: UpdateResult = await req.db
-//           .collection(sectorCollectionName)
-//           .updateOne({_id: new ObjectId(project_id)}, {$set: updateData});
-//         res.json(doc);
-//       }
-//     } else {
-//       res.status(401).json({msg: "user access denied!"});
-//     }
-//   });

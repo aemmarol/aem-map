@@ -43,8 +43,8 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
     const dataColumnsMap: any = {
       id: {
         title: "ITS",
-        dataIndex: "id",
-        key: "id",
+        dataIndex: "_id",
+        key: "_id",
         width: 150,
         fixed: "left",
       },
