@@ -3,9 +3,9 @@ import {useRouter} from "next/router";
 import {FC, useEffect, useState} from "react";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {verifyUser} from "../../pages/api/v1/authentication";
-import {getSubSectorDataByName} from "../../pages/api/v1/db/subSectorCrud";
+import {getSubSectorDataByName} from "../../pages/api/v2/services/subsector";
 import styles from "../../styles/components/sidebars/dashboardSidebar.module.scss";
-import {authUser, userRoles} from "../../types";
+import {authUser, subSectorData, userRoles} from "../../types";
 
 export const DashboardSidebar: FC<{
   visible: boolean;
@@ -37,10 +37,9 @@ export const DashboardSidebar: FC<{
         userRole.includes(userRoles.Musaid) ||
         userRole.includes(userRoles.Musaida)
       ) {
-        const subsectorDetails = await getSubSectorDataByName(assignedArea[0]);
-        router.push(
-          "/mohallah/" + subsectorDetails.sector.name + "/" + assignedArea[0]
-        );
+        await getSubSectorDataByName(assignedArea[0], (data: subSectorData) => {
+          router.push("/mohallah/" + data.sector.name + "/" + assignedArea[0]);
+        });
       }
     }
   };

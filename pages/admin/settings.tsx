@@ -17,7 +17,6 @@ import {
   SectorDetailsComponent,
   SubSectorDetailsComponent,
 } from "../../components";
-import {getSubSectorList} from "../api/v1/db/subSectorCrud";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {useRouter} from "next/router";
 import {useGlobalContext} from "../../context/GlobalContext";
@@ -31,6 +30,7 @@ import {
 } from "../api/v2/services/dbFields";
 import {getSectorList} from "../api/v2/services/sector";
 import {getUmoorList} from "../api/v2/services/umoor";
+import {getSubSectorList} from "../api/v2/services/subsector";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -39,19 +39,7 @@ const airtableBase = new Airtable({
 const userTable = airtableBase("userList");
 const umoorTable = airtableBase("umoorList");
 
-interface AdminSettingsProps {
-  mumeneenDataFields?: databaseMumeneenFieldData[];
-  fileDataFields?: databaseMumeneenFieldData[];
-  sectorDetailsData?: sectorData[];
-  subSectorDetailsList: subSectorData[];
-}
-
-const AdminSettings: NextPage<AdminSettingsProps> = ({
-  mumeneenDataFields,
-  fileDataFields,
-  sectorDetailsData,
-  subSectorDetailsList,
-}) => {
+const AdminSettings: NextPage = () => {
   const router = useRouter();
   const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
 
@@ -65,17 +53,6 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
   const [fileFields, setFileFields] = useState<
     databaseMumeneenFieldData[] | []
   >([]);
-
-  useEffect(() => {
-    setSubsectorDetails(
-      subSectorDetailsList.map((val) => ({...val, key: val.id}))
-    );
-  }, [
-    mumeneenDataFields,
-    fileDataFields,
-    sectorDetailsData,
-    subSectorDetailsList,
-  ]);
 
   useEffect(() => {
     changeSelectedSidebarKey("3");
@@ -93,6 +70,9 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
         });
         getSectorList((data: sectorData[]) => {
           setSectorDetails(data);
+        });
+        getSubSectorList((data: subSectorData[]) => {
+          setSubsectorDetails(data);
         });
       }
     } else {
@@ -303,15 +283,3 @@ const AdminSettings: NextPage<AdminSettingsProps> = ({
 };
 
 export default AdminSettings;
-
-export const getServerSideProps: GetServerSideProps<
-  AdminSettingsProps
-> = async () => {
-  const subSectorDetailsList: subSectorData[] = await getSubSectorList();
-
-  return {
-    props: {
-      subSectorDetailsList,
-    },
-  };
-};

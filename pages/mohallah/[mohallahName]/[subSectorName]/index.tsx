@@ -9,7 +9,6 @@ import {
   subSectorData,
   userRoles,
 } from "../../../../types";
-import {getSubSectorDataByName} from "../../../api/v1/db/subSectorCrud";
 import {isEmpty} from "lodash";
 import {getFileData} from "../../../api/v1/db/fileCrud";
 import styles from "../../../../styles/FileList.module.scss";
@@ -21,6 +20,7 @@ import {
 } from "../../../../components";
 import {logout, verifyUser} from "../../../api/v1/authentication";
 import {getSectorData} from "../../../api/v2/services/sector";
+import {getSubSectorDataByName} from "../../../api/v2/services/subsector";
 
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
@@ -39,20 +39,21 @@ const SingleMohallah: NextPage = () => {
 
   const getSubSectorDetails = async () => {
     toggleLoader(true);
-    const subsectorDetails = await getSubSectorDataByName(
-      subSectorName as string
+    await getSubSectorDataByName(
+      subSectorName as string,
+      async (data: subSectorData) => {
+        if (!isEmpty(data)) {
+          await getSectorData(data.sector._id as string, (data: sectorData) =>
+            setMohallahDetails(data)
+          );
+          toggleLoader(false);
+          setMohallahSubSectorsDetails(data);
+        } else {
+          toggleLoader(false);
+          router.push("/");
+        }
+      }
     );
-    if (!isEmpty(subsectorDetails)) {
-      await getSectorData(
-        subsectorDetails.sector.id as string,
-        (data: sectorData) => setMohallahDetails(data)
-      );
-      toggleLoader(false);
-      setMohallahSubSectorsDetails(subsectorDetails);
-    } else {
-      toggleLoader(false);
-      router.push("/");
-    }
   };
 
   const getFileDetails = async () => {

@@ -1,38 +1,23 @@
-import subsectorSampleData from "../../../../sample_data/subsector.json";
-
+import {deleteFileData, getFileDataList} from "./fileCrud";
+import {deleteMemberData, getMemberDataList} from "./memberCrud";
 import {
   getSubSectorList,
   resetSubSectorFilesData,
-  updateSubSectorData,
-} from "./subSectorCrud";
-import {deleteFileData, getFileDataList} from "./fileCrud";
-import {deleteMemberData, getMemberDataList} from "./memberCrud";
-
-import {find} from "lodash";
-
-export const updateSubSectorsToDefault = async () => {
-  const subsectList = await getSubSectorList();
-
-  await Promise.all(
-    subsectList.map(async (val) => {
-      const subSectorVal = find(subsectorSampleData, {name: val.name});
-      await updateSubSectorData(val.id as string, {
-        ...subSectorVal,
-        name: val.name.toUpperCase(),
-      });
-    })
-  );
-};
+} from "../../v2/services/subsector";
+import {subSectorData} from "../../../../types";
 
 export const resetFileData = async () => {
-  const subSectors = await getSubSectorList();
+  let subSectors: subSectorData[] = [];
+  await getSubSectorList((data: any) => {
+    subSectors = data;
+  });
 
   const files = await getFileDataList();
   const members = await getMemberDataList();
 
   await Promise.all(
     subSectors.map(async (value) => {
-      await resetSubSectorFilesData(value.id as string);
+      await resetSubSectorFilesData(value._id as string);
     })
   );
 

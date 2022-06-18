@@ -3,19 +3,20 @@ import {FC, useState} from "react";
 import {InboxOutlined} from "@ant-design/icons";
 import {} from "../../../firebase/dbCollectionNames";
 import {defaultDatabaseFields} from "../../../utils";
-import {
-  getSubSectorDataByName,
-  updateSubSectorFilesData,
-} from "../../../pages/api/v1/db/subSectorCrud";
+
 import {addFileData} from "../../../pages/api/v1/db/fileCrud";
 import {addMemberData} from "../../../pages/api/v1/db/memberCrud";
 import {resetFileData} from "../../../pages/api/v1/db/setupDb";
 import {useGlobalContext} from "../../../context/GlobalContext";
-import {databaseMumeneenFieldData} from "../../../types";
+import {databaseMumeneenFieldData, subSectorData} from "../../../types";
 import {
   getFileDataFields,
   getMumeneenDataFields,
 } from "../../../pages/api/v2/services/dbFields";
+import {
+  getSubSectorDataByName,
+  updateSubSectorFilesData,
+} from "../../../pages/api/v2/services/subsector";
 
 const Dragger = Upload.Dragger;
 
@@ -80,9 +81,15 @@ export const UploadExcelFileCard: FC = () => {
       data
         .filter((val) => val.hof_fm_type === "HOF")
         .map(async (userDetails) => {
-          const subsector = await getSubSectorDataByName(
-            userDetails.sub_sector
+          let subsector: subSectorData = {} as subSectorData;
+
+          await getSubSectorDataByName(
+            userDetails.sub_sector,
+            (data: subSectorData) => {
+              subsector = data;
+            }
           );
+
           const fileFieldsData: any = {};
 
           fileFieldList.forEach((val: any) => {
@@ -110,7 +117,7 @@ export const UploadExcelFileCard: FC = () => {
               hof_name: userDetails.full_name,
               sub_sector: {
                 name: subsector.name,
-                id: subsector.id,
+                id: subsector._id,
                 sector: subsector.sector,
               },
               member_ids: membersList.map((val) => val.its_id),
@@ -164,11 +171,14 @@ export const UploadExcelFileCard: FC = () => {
           const memberList = file.memberData;
 
           const addFileSuccess = await addFileData(fileId, file[fileId]);
+          const data = {
+            files: fileId,
+            no_of_males: file[fileId].no_of_males,
+            no_of_females: file[fileId].no_of_females,
+          };
           const updateSubSector = await updateSubSectorFilesData(
-            file[fileId].sub_sector.id,
-            fileId,
-            file[fileId].no_of_males,
-            file[fileId].no_of_females
+            file[fileId].sub_sector._id,
+            data
           );
           const addMemberSuccess = await Promise.all(
             memberList.map(async (member) => {

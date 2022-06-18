@@ -5,11 +5,11 @@ import {useEffect, useState} from "react";
 import {useGlobalContext} from "../../../context/GlobalContext";
 import {Dashboardlayout} from "../../../layouts/dashboardLayout";
 import {authUser, sectorData, subSectorData, userRoles} from "../../../types";
-import {getSubSectorData} from "../../api/v1/db/subSectorCrud";
 import {InchargeDetailsCard, SubSectorCard} from "../../../components";
 import {isEmpty} from "lodash";
 import {logout, verifyUser} from "../../api/v1/authentication";
 import {getSectorDataByName} from "../../api/v2/services/sector";
+import {getSubSectorData} from "../../api/v2/services/subsector";
 
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
@@ -51,7 +51,11 @@ const SingleMohallah: NextPage = () => {
     } else {
       const subSectorDetails = await Promise.all(
         mohallahDetails.sub_sector_id.map(async (value) => {
-          return await getSubSectorData(value);
+          let subSecData: subSectorData = {} as subSectorData;
+          await getSubSectorData(value, (data: subSectorData) => {
+            subSecData = data;
+          });
+          return subSecData;
         })
       );
       setMohallahSubSectorsDetails(subSectorDetails);
@@ -144,7 +148,7 @@ const SingleMohallah: NextPage = () => {
           <Row gutter={[{xs: 8, sm: 16, md: 24, lg: 32}, 16]}>
             {mohallahSubSectorsDetails.map((mohallahSubSectorsDetail) => (
               <Col
-                key={mohallahSubSectorsDetail.id}
+                key={mohallahSubSectorsDetail._id}
                 xs={24}
                 sm={12}
                 lg={8}

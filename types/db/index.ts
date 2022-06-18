@@ -25,14 +25,14 @@ export interface sectorData extends defaultFields {
 
 export interface sectorDetailsForSubSector {
   name: string;
-  id?: string;
+  _id?: string;
   primary_color: string;
   secondary_color: string;
 }
 
 export interface subSectorData extends defaultFields {
   name: string;
-  id?: string;
+  _id?: string;
   sector: Partial<sectorDetailsForSubSector>;
   musaid_name: string;
   musaid_its: string;
