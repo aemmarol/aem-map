@@ -11,7 +11,7 @@ export default getAuthHandler()
     if (userData.userRole.includes(userRoles.Admin)) {
       const doc: InsertOneResult = await req.db
         .collection(userCollectionName)
-        .insert(JSON.parse(req.body));
+        .insertOne(JSON.parse(req.body));
       res.json(doc);
     } else {
       res.status(401).json({msg: "user access denied!"});

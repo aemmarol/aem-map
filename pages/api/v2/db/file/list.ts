@@ -1,5 +1,5 @@
-import {InsertOneResult, ObjectId, DeleteResult} from "mongodb";
-import {umoorListCollectionName} from "../../../../../firebase/dbCollectionNames";
+import {DeleteResult} from "mongodb";
+import {fileCollectionName} from "../../../../../firebase/dbCollectionNames";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
@@ -10,20 +10,10 @@ export default getAuthHandler()
     const {userData} = req;
     if (userData.userRole.includes(userRoles.Admin)) {
       const doc = await req.db
-        .collection(umoorListCollectionName)
+        .collection(fileCollectionName)
         .find()
+        .sort({tanzeem_file_no: 1})
         .toArray();
-      res.json(doc);
-    } else {
-      res.status(401).json({msg: "user access denied!"});
-    }
-  })
-  .post(async (req: NextApiRequestExtended, res) => {
-    const {userData} = req;
-    if (userData.userRole.includes(userRoles.Admin)) {
-      const doc: InsertOneResult = await req.db
-        .collection(umoorListCollectionName)
-        .insertOne(JSON.parse(req.body));
       res.json(doc);
     } else {
       res.status(401).json({msg: "user access denied!"});
@@ -32,10 +22,9 @@ export default getAuthHandler()
   .delete(async (req: NextApiRequestExtended, res) => {
     const {userData} = req;
     if (userData.userRole.includes(userRoles.Admin)) {
-      const {id} = JSON.parse(req.body);
       const doc: DeleteResult = await req.db
-        .collection(umoorListCollectionName)
-        .remove({_id: new ObjectId(id)});
+        .collection(fileCollectionName)
+        .remove({});
       res.json(doc);
     } else {
       res.status(401).json({msg: "user access denied!"});

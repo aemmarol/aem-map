@@ -1,4 +1,4 @@
-import {InsertOneResult, ObjectId, UpdateResult} from "mongodb";
+import {ObjectId, UpdateResult} from "mongodb";
 import {sectorCollectionName} from "../../../../../firebase/dbCollectionNames";
 import getAuthHandler, {
   NextApiRequestExtended,

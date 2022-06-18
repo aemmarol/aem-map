@@ -2,11 +2,7 @@ import {Button, Card, message, Upload} from "antd";
 import {FC, useState} from "react";
 import {InboxOutlined} from "@ant-design/icons";
 import {} from "../../../firebase/dbCollectionNames";
-import {defaultDatabaseFields} from "../../../utils";
-
-import {addFileData} from "../../../pages/api/v1/db/fileCrud";
-import {addMemberData} from "../../../pages/api/v1/db/memberCrud";
-import {resetFileData} from "../../../pages/api/v1/db/setupDb";
+import {defaultDatabaseFields, getauthToken} from "../../../utils";
 import {useGlobalContext} from "../../../context/GlobalContext";
 import {databaseMumeneenFieldData, subSectorData} from "../../../types";
 import {
@@ -17,6 +13,9 @@ import {
   getSubSectorDataByName,
   updateSubSectorFilesData,
 } from "../../../pages/api/v2/services/subsector";
+import {resetFileData} from "../../../pages/api/v2/services/dbUpload";
+import {API} from "../../../utils/api";
+import {handleResponse} from "../../../utils/handleResponse";
 
 const Dragger = Upload.Dragger;
 
@@ -84,7 +83,7 @@ export const UploadExcelFileCard: FC = () => {
           let subsector: subSectorData = {} as subSectorData;
 
           await getSubSectorDataByName(
-            userDetails.sub_sector,
+            userDetails.sub_sector.toUpperCase(),
             (data: subSectorData) => {
               subsector = data;
             }
@@ -117,7 +116,7 @@ export const UploadExcelFileCard: FC = () => {
               hof_name: userDetails.full_name,
               sub_sector: {
                 name: subsector.name,
-                id: subsector._id,
+                _id: subsector._id,
                 sector: subsector.sector,
               },
               member_ids: membersList.map((val) => val.its_id),
@@ -170,24 +169,40 @@ export const UploadExcelFileCard: FC = () => {
           const fileId: any = Object.keys(file)[0];
           const memberList = file.memberData;
 
-          const addFileSuccess = await addFileData(fileId, file[fileId]);
+          await fetch(API.file, {
+            method: "POST",
+            headers: {...getauthToken()},
+            body: JSON.stringify({...file[fileId], _id: fileId}),
+          })
+            .then(handleResponse)
+            .catch((error) => message.error(error));
+
           const data = {
             files: fileId,
             no_of_males: file[fileId].no_of_males,
             no_of_females: file[fileId].no_of_females,
           };
-          const updateSubSector = await updateSubSectorFilesData(
+
+          await updateSubSectorFilesData(
             file[fileId].sub_sector._id,
             data
-          );
-          const addMemberSuccess = await Promise.all(
-            memberList.map(async (member) => {
-              const memberId: any = Object.keys(member)[0];
-              return await addMemberData(memberId, member[memberId]);
-            })
-          );
+          ).catch((error) => message.error(error));
 
-          return {addFileSuccess, updateSubSector, addMemberSuccess};
+          const addMemberData = memberList.map((member) => {
+            const memberId: any = Object.keys(member)[0];
+            return {
+              _id: memberId,
+              ...member[memberId],
+            };
+          });
+
+          await fetch(API.memberList, {
+            method: "POST",
+            headers: {...getauthToken()},
+            body: JSON.stringify(addMemberData),
+          })
+            .then(handleResponse)
+            .catch((error) => message.error(error));
         })
       );
       setProgressValue(100);

@@ -1,5 +1,5 @@
 import {ObjectId, UpdateResult} from "mongodb";
-import {sectorCollectionName} from "../../../../../firebase/dbCollectionNames";
+import {subsectorCollectionName} from "../../../../../firebase/dbCollectionNames";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
@@ -22,12 +22,14 @@ export default getAuthHandler().put(
         res.status(400).json({msg: "invalid request!"});
       } else {
         const doc: UpdateResult = await req.db
-          .collection(sectorCollectionName)
+          .collection(subsectorCollectionName)
           .updateOne(
             {_id: new ObjectId(project_id)},
-            {$set: {updated_at: updateData.updated_at}},
-            {$push: fileObj},
-            {$inc: statsObj}
+            {
+              $set: {updated_at: updateData.updated_at},
+              $push: fileObj,
+              $inc: statsObj,
+            }
           );
         res.json(doc);
       }

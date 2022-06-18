@@ -37,7 +37,7 @@ export default getAuthHandler()
       } else {
         const doc: InsertOneResult = await req.db
           .collection(collectionName)
-          .insert(JSON.parse(req.body));
+          .insertOne(JSON.parse(req.body));
         res.json(doc);
       }
     } else {

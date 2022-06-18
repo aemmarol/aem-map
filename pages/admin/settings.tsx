@@ -1,5 +1,5 @@
 import {Button, Card, Col, message, Row} from "antd";
-import {GetServerSideProps, NextPage} from "next";
+import {NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import {useEffect, useState} from "react";
 

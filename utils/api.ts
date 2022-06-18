@@ -4,6 +4,7 @@ const prefix =
 export const API = {
   dbFields: prefix + "/dbFields",
   user: prefix + "/user",
+  userList: prefix + "/user/list",
   umoor: prefix + "/umoor",
   sector: prefix + "/sector",
   sectorList: prefix + "/sector/list",
@@ -11,7 +12,10 @@ export const API = {
   subSector: prefix + "/subsector",
   subSectorList: prefix + "/subsector/list",
   subSectorFile: prefix + "/subsector/file",
-  userList: prefix + "/user/list",
   escalation: prefix + "/escalation",
+  file: prefix + "/file",
+  fileList: prefix + "/file/list",
+  member: prefix + "/member",
+  memberList: prefix + "/member/list",
   escalationAdd: prefix + "/escalation/new",
 };

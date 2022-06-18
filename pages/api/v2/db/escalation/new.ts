@@ -10,8 +10,7 @@ handler.use(middleware);
 handler.post(async (req: any, res: any) => {
   const doc: InsertOneResult = await req.db
     .collection(escalationCollectionName)
-    .insert(JSON.parse(req.body));
-  console.log(doc);
+    .insertOne(JSON.parse(req.body));
   res.json(doc.acknowledged);
 });
 
