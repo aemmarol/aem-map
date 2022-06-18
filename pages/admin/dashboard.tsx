@@ -20,7 +20,7 @@ import {
 
 import {getUmoorList} from "../api/v1/db/umoorsCrud";
 import {StatsCard} from "../../components/cards/statsCard";
-import { getSectorList } from "../api/v2/services/sector";
+import {getSectorList} from "../api/v2/services/sector";
 
 interface AdminDashboardProps {
   escalationsList: escalationData[];
@@ -57,7 +57,7 @@ const AdminDashboard: NextPage<AdminDashboardProps> = ({escalationsList}) => {
   const intiLists = async () => {
     const umoors: umoorData[] = await getUmoorList();
     setUmoorList(umoors);
-    await getSectorList((data:sectorData[])=>setSectorList(data));
+    await getSectorList((data: sectorData[]) => setSectorList(data));
   };
 
   const notVerifierUserLogout = () => {

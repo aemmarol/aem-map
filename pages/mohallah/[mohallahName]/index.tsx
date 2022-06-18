@@ -1,20 +1,20 @@
-import { Col, message, Row } from "antd";
-import { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useGlobalContext } from "../../../context/GlobalContext";
-import { Dashboardlayout } from "../../../layouts/dashboardLayout";
-import { authUser, sectorData, subSectorData, userRoles } from "../../../types";
-import { getSubSectorData } from "../../api/v1/db/subSectorCrud";
-import { InchargeDetailsCard, SubSectorCard } from "../../../components";
-import { isEmpty } from "lodash";
-import { logout, verifyUser } from "../../api/v1/authentication";
-import { getSectorDataByName } from "../../api/v2/services/sector";
+import {Col, message, Row} from "antd";
+import {NextPage} from "next";
+import {useRouter} from "next/router";
+import {useEffect, useState} from "react";
+import {useGlobalContext} from "../../../context/GlobalContext";
+import {Dashboardlayout} from "../../../layouts/dashboardLayout";
+import {authUser, sectorData, subSectorData, userRoles} from "../../../types";
+import {getSubSectorData} from "../../api/v1/db/subSectorCrud";
+import {InchargeDetailsCard, SubSectorCard} from "../../../components";
+import {isEmpty} from "lodash";
+import {logout, verifyUser} from "../../api/v1/authentication";
+import {getSectorDataByName} from "../../api/v2/services/sector";
 
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
-  const { mohallahName } = router.query;
-  const { toggleLoader, changeSelectedSidebarKey, center } = useGlobalContext();
+  const {mohallahName} = router.query;
+  const {toggleLoader, changeSelectedSidebarKey, center} = useGlobalContext();
 
   const [mohallahDetails, setMohallahDetails] = useState<sectorData>(
     {} as sectorData
@@ -74,7 +74,7 @@ const SingleMohallah: NextPage = () => {
       changeSelectedSidebarKey("1");
       if (typeof verifyUser() !== "string") {
         const user = verifyUser() as authUser;
-        const { userRole, assignedArea } = user;
+        const {userRole, assignedArea} = user;
         setUserDetails(user);
         if (
           userRole.includes(userRoles.Admin) ||
@@ -113,7 +113,7 @@ const SingleMohallah: NextPage = () => {
     >
       <div>
         {!isEmpty(mohallahDetails) ? (
-          <Row className="mb-16" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}>
+          <Row className="mb-16" gutter={[{xs: 8, sm: 16, md: 24, lg: 32}, 16]}>
             <Col xs={24} sm={12} lg={8} xl={6}>
               <InchargeDetailsCard
                 cardTitle="Masool"
@@ -141,7 +141,7 @@ const SingleMohallah: NextPage = () => {
         ) : null}
 
         {mohallahSubSectorsDetails.length > 0 ? (
-          <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, 16]}>
+          <Row gutter={[{xs: 8, sm: 16, md: 24, lg: 32}, 16]}>
             {mohallahSubSectorsDetails.map((mohallahSubSectorsDetail) => (
               <Col
                 key={mohallahSubSectorsDetail.id}
@@ -156,14 +156,17 @@ const SingleMohallah: NextPage = () => {
                   }
                   musaidName={mohallahSubSectorsDetail.musaid_name}
                   musaidaName={mohallahSubSectorsDetail.musaida_name}
-                  directionLink={`https://www.google.com/maps/dir/${center.latlng[0]
-                    },${center.latlng[1]}/${mohallahSubSectorsDetail.latlng
+                  directionLink={`https://www.google.com/maps/dir/${
+                    center.latlng[0]
+                  },${center.latlng[1]}/${
+                    mohallahSubSectorsDetail.latlng
                       ? mohallahSubSectorsDetail.latlng[0]
                       : ""
-                    },${mohallahSubSectorsDetail.latlng
+                  },${
+                    mohallahSubSectorsDetail.latlng
                       ? mohallahSubSectorsDetail?.latlng[1]
                       : ""
-                    }/`}
+                  }/`}
                   cardHeading={mohallahSubSectorsDetail.name}
                   backgroundColor={mohallahDetails.primary_color}
                   number_of_females={

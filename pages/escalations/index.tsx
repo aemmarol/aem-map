@@ -31,7 +31,7 @@ import useWindowDimensions from "../../utils/windowDimensions";
 import {DownloadOutlined} from "@ant-design/icons";
 import {CSVLink} from "react-csv";
 import {getDateDiffDays} from "../../utils";
-import { getSectorList } from "../api/v2/services/sector";
+import {getSectorList} from "../api/v2/services/sector";
 
 interface selectedFilterItemsType {
   selectedUmoors: filterOption[];
@@ -405,7 +405,7 @@ const Dashboard: NextPage = () => {
 
   const setUserDetails = async (user: authUser) => {
     if (user.userRole[0].includes(userRoles.Admin)) {
-      await getSectorList((data:sectorData[])=>{
+      await getSectorList((data: sectorData[]) => {
         user.assignedArea = data.map((sector) => sector.name);
       });
       const umoors: umoorData[] = await getUmoorList();

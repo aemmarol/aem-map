@@ -1,13 +1,13 @@
 import {Form, Input, Select} from "antd";
 import {FC, useEffect, useState} from "react";
-import { getSectorList } from "../../pages/api/v2/services/sector";
+import {getSectorList} from "../../pages/api/v2/services/sector";
 import {sectorData} from "../../types";
 
 export const SubSectorFormFields: FC = () => {
   const [sectorDetails, setsectorDetails] = useState<sectorData[]>([]);
 
   const getSectorDetails = async () => {
-    await getSectorList((data:sectorData[])=>setsectorDetails(data));
+    await getSectorList((data: sectorData[]) => setsectorDetails(data));
   };
 
   useEffect(() => {
