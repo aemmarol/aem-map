@@ -12,10 +12,11 @@ export const API = {
   subSector: prefix + "/subsector",
   subSectorList: prefix + "/subsector/list",
   subSectorFile: prefix + "/subsector/file",
-  escalation: prefix + "/escalation",
   file: prefix + "/file",
   fileList: prefix + "/file/list",
   member: prefix + "/member",
   memberList: prefix + "/member/list",
+  escalation: prefix + "/escalation",
   escalationAdd: prefix + "/escalation/new",
+  settings: prefix + "/settings",
 };

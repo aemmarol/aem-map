@@ -1,5 +1,4 @@
 import {
-  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -220,26 +219,7 @@ export const getEscalationListByCriteriaClientSide = async (
 //   return escalations;
 // };
 
-export const addEscalationData = async (
-  data: escalationData
-): Promise<boolean> => {
-  if (USING() == DBs.firebase) {
-    try {
-      await addDoc(dataCollection, data);
-      escalationList = null;
-      return true;
-    } catch {
-      return false;
-    }
-  } else if (USING() == DBs.mongo) {
-    const resp = await fetch(API.escalationAdd, {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-    return await resp.json();
-  }
-  return false;
-};
+
 
 export const updateEscalationData = async (
   id: string,
