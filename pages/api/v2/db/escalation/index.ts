@@ -1,19 +1,19 @@
-import { InsertOneResult } from "mongodb";
+import {InsertOneResult} from "mongodb";
 import nextConnect from "next-connect";
-import { escalationCollectionName } from "../../../../../firebase/dbCollectionNames";
+import {escalationCollectionName} from "../../../../../firebase/dbCollectionNames";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
 import middleware from "../../../../../mongodb/database";
-import { userRoles } from "../../../../../types";
+import {userRoles} from "../../../../../types";
 
 const handler = nextConnect();
 
 handler.use(middleware);
 
-export default getAuthHandler().get(
-  async (req: NextApiRequestExtended, res) => {
-    const { userData } = req;
+export default getAuthHandler()
+  .get(async (req: NextApiRequestExtended, res) => {
+    const {userData} = req;
     if (userData.userRole.includes(userRoles.Admin)) {
       const doc = await req.db
         .collection(escalationCollectionName)
@@ -21,15 +21,15 @@ export default getAuthHandler().get(
         .toArray();
       res.json(doc);
     } else {
-      res.status(401).json({ msg: "user access denied!" });
+      res.status(401).json({msg: "user access denied!"});
     }
-  }
-).post(async (req: NextApiRequestExtended, res) => {
-  const doc: InsertOneResult = await req.db
-    .collection(escalationCollectionName)
-    .insertOne(JSON.parse(req.body));
-  res.json(doc);
-});
+  })
+  .post(async (req: NextApiRequestExtended, res) => {
+    const doc: InsertOneResult = await req.db
+      .collection(escalationCollectionName)
+      .insertOne(JSON.parse(req.body));
+    res.json(doc);
+  });
 
 // handler.get(async (req: any, res: any) => {
 // const doc = await req.db

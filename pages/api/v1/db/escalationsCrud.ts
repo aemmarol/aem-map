@@ -219,8 +219,6 @@ export const getEscalationListByCriteriaClientSide = async (
 //   return escalations;
 // };
 
-
-
 export const updateEscalationData = async (
   id: string,
   data: Partial<escalationData>

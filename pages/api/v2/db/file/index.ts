@@ -35,4 +35,3 @@ export default getAuthHandler()
       res.status(401).json({msg: "user access denied!"});
     }
   });
-

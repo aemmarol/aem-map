@@ -10,8 +10,8 @@ import {
   Select,
   Statistic,
 } from "antd";
-import { find, isEmpty } from "lodash";
-import { FC, useEffect, useState } from "react";
+import {find, isEmpty} from "lodash";
+import {FC, useEffect, useState} from "react";
 // import Airtable from "airtable";
 import {
   authUser,
@@ -21,10 +21,10 @@ import {
   fileDetails,
   userRoles,
 } from "../../types";
-import { defaultDatabaseFields, getauthToken } from "../../utils";
+import {defaultDatabaseFields, getauthToken} from "../../utils";
 import moment from "moment";
 
-import { getUmoorList } from "../../pages/api/v2/services/umoor";
+import {getUmoorList} from "../../pages/api/v2/services/umoor";
 import {
   getFileDataByFileNumber,
   getFileDataList,
@@ -35,9 +35,9 @@ import {
   getMemberDataById,
   getMemberListByHofId,
 } from "../../pages/api/v2/services/member";
-import { getSettings } from "../../pages/api/v2/services/settings";
-import { addEscalationData } from "../../pages/api/v2/services/escalation";
-import { API } from "../../utils/api";
+import {getSettings} from "../../pages/api/v2/services/settings";
+import {addEscalationData} from "../../pages/api/v2/services/escalation";
+import {API} from "../../utils/api";
 
 // const airtableBase = new Airtable({
 //   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -117,12 +117,14 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
     }
     if (fileList) {
       setAllowedFileNumbers(
-        fileList.filter((val: any) => val.tanzeem_file_no).map((val: fileDetails) => {
-          return {
-            value: val.tanzeem_file_no,
-            label: `${val.tanzeem_file_no} (${val.hof_name})`,
-          };
-        })
+        fileList
+          .filter((val: any) => val.tanzeem_file_no)
+          .map((val: fileDetails) => {
+            return {
+              value: val.tanzeem_file_no,
+              label: `${val.tanzeem_file_no} (${val.hof_name})`,
+            };
+          })
       );
     }
   };
@@ -198,7 +200,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
 
   const handleEscalationFormSubmit = async (values: any) => {
     // console.log(values);
-    let dbSettings:any = await getSettings();
+    let dbSettings: any = await getSettings();
     const firstComment: comment = {
       msg: "Issue is added on " + moment(new Date()).format("DD-MM-YYYY"),
       name: adminDetails.name,
@@ -206,12 +208,12 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       userRole: adminDetails.userRole.includes(userRoles.Masool)
         ? "Masool"
         : adminDetails.userRole.includes(userRoles.Masoola)
-          ? "Masoola"
-          : adminDetails.userRole.includes(userRoles.Musaid)
-            ? "Musaid"
-            : adminDetails.userRole.includes(userRoles.Musaida)
-              ? "Musaida"
-              : adminDetails.userRole[0],
+        ? "Masoola"
+        : adminDetails.userRole.includes(userRoles.Musaid)
+        ? "Musaid"
+        : adminDetails.userRole.includes(userRoles.Musaida)
+        ? "Musaida"
+        : adminDetails.userRole[0],
       time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
     };
     const escalationIssueType = find(issueTypeOptions, {
@@ -247,19 +249,17 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
         contact: values.escalationRaisedForContact,
       },
     };
-     await addEscalationData(data).then(
-       async ()=>{
-        await fetch(API.settings, {
-          method: "PUT",
-          headers: {...getauthToken()},
-        })
-        message.success("Escalation added!");
-        escalationForm.resetFields();
-        fileForm.resetFields();
-        submitCallback();
-        handleClose();
-       }
-     );
+    await addEscalationData(data).then(async () => {
+      await fetch(API.settings, {
+        method: "PUT",
+        headers: {...getauthToken()},
+      });
+      message.success("Escalation added!");
+      escalationForm.resetFields();
+      fileForm.resetFields();
+      submitCallback();
+      handleClose();
+    });
 
     // if (result) {
     //   await incrementEscalationAutoNumber(
@@ -272,12 +272,10 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
     //   handleClose();
     // }
 
-
     // console.log("data",data)
     // escalationForm.resetFields();
     // fileForm.resetFields();
     // handleClose();
-
   };
 
   return (
@@ -301,7 +299,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
             {
               required: true,
               message: "Please enter file number!",
-            }
+            },
           ]}
         >
           <Select
@@ -335,21 +333,21 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
           <Row className="mb-30" gutter={[12, 16]}>
             <Col xs={24}>
               <Statistic
-                valueStyle={{ fontSize: 16 }}
+                valueStyle={{fontSize: 16}}
                 title="HOF Name"
                 value={fileDetails.hofName}
               />
             </Col>
             <Col xs={12}>
               <Statistic
-                valueStyle={{ fontSize: 16 }}
+                valueStyle={{fontSize: 16}}
                 title="HOF Contact"
                 value={fileDetails.hofContact}
               />
             </Col>
             <Col xs={12}>
               <Statistic
-                valueStyle={{ fontSize: 16 }}
+                valueStyle={{fontSize: 16}}
                 title="Sub Sector"
                 value={fileDetails.subSector}
               />
@@ -362,7 +360,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
             layout="vertical"
             form={escalationForm}
             initialValues={{
-              escalations: [{ escalationType: "", escalationComments: "" }],
+              escalations: [{escalationType: "", escalationComments: ""}],
             }}
           >
             <Form.Item
