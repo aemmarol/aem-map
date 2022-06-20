@@ -8,12 +8,15 @@ import {defaultDatabaseFields, getauthToken} from "../../../../utils";
 import {API} from "../../../../utils/api";
 import {handleResponse} from "../../../../utils/handleResponse";
 import subsectorSampleData from "../../../../sample_data/subsector.json";
-import {getSectorDataByName, getSectorList, updateSectorData} from "./sector";
+import {getSectorList, updateSectorData} from "./sector";
 import moment from "moment";
 import {find} from "lodash";
 
 export const addSubSectorList = async () => {
+  let sectorList: sectorData[] = [];
+
   await getSectorList(async (data: sectorData[]) => {
+    sectorList = data;
     await Promise.all(
       data.map(async (sector: any) => {
         await updateSectorData(sector._id, {sub_sector_id: []});
@@ -23,16 +26,17 @@ export const addSubSectorList = async () => {
 
   await Promise.all(
     subsectorSampleData.map(async (value: any) => {
-      let sectorDetails: sectorDetailsForSubSector =
-        {} as sectorDetailsForSubSector;
-      await getSectorDataByName(value.sector_name, (data: sectorData) => {
-        sectorDetails = {
-          _id: data._id,
-          name: data.name,
-          primary_color: data.primary_color,
-          secondary_color: data.secondary_color,
-        };
-      });
+      const sector: sectorData = find(sectorList, {
+        name: value.sector_name,
+      }) as sectorData;
+
+      const sectorDetails: sectorDetailsForSubSector = {
+        _id: sector._id,
+        name: sector.name,
+        primary_color: sector.primary_color,
+        secondary_color: sector.secondary_color,
+      };
+
       await fetch(API.subSector, {
         method: "POST",
         headers: {...getauthToken()},
@@ -58,14 +62,13 @@ export const addSubSectorList = async () => {
             method: "PUT",
             headers: {...getauthToken()},
             body: JSON.stringify({
-              sub_sector_id: response.insertedIds[0],
+              sub_sector_id: response.insertedId,
               id: sectorDetails._id,
             }),
           });
-          console.log(response.insertedIds[0]);
         });
     })
-  ).catch((error) => message.error(error));
+  );
 };
 
 export const updateSubSectorListToDefault = async () => {

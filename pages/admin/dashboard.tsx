@@ -38,6 +38,7 @@ const AdminDashboard: NextPage<AdminDashboardProps> = ({escalationsList}) => {
     escalationsList,
     "file_details.sub_sector.sector.name"
   );
+
   useEffect(() => {
     intiLists();
 
@@ -69,6 +70,7 @@ const AdminDashboard: NextPage<AdminDashboardProps> = ({escalationsList}) => {
   const showEscalations = (field: string, value: string) => {
     router.push(`/escalations?${field}=${value}`);
   };
+
   return (
     <Dashboardlayout headerTitle="Admin Dashboard">
       {umoorList.length > 0 ? (
