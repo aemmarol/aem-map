@@ -1,9 +1,9 @@
-import { Col, Divider, Empty, message, Row } from "antd";
-import { NextPage } from "next";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { useGlobalContext } from "../../context/GlobalContext";
-import { Dashboardlayout } from "../../layouts/dashboardLayout";
+import {Col, Divider, Empty, message, Row} from "antd";
+import {NextPage} from "next";
+import {useRouter} from "next/router";
+import React, {useEffect, useState} from "react";
+import {useGlobalContext} from "../../context/GlobalContext";
+import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import {
   authUser,
   escalationStatus,
@@ -11,27 +11,27 @@ import {
   umoorData,
   userRoles,
 } from "../../types";
-import { logout, verifyUser } from "../api/v1/authentication";
+import {logout, verifyUser} from "../api/v1/authentication";
 
-import { StatsCard } from "../../components/cards/statsCard";
-import { getSectorList } from "../api/v2/services/sector";
-import { getUmoorList } from "../api/v2/services/umoor";
+import {StatsCard} from "../../components/cards/statsCard";
+import {getSectorList} from "../api/v2/services/sector";
+import {getUmoorList} from "../api/v2/services/umoor";
 import {
   getDashboardSectorStats,
   getDashboardUmoorStats,
 } from "../api/v2/services/dashboard";
-import { findIndex } from "lodash";
+import {findIndex} from "lodash";
 
 const AdminDashboard: NextPage = () => {
   const router = useRouter();
-  const { toggleLoader, changeSelectedSidebarKey } = useGlobalContext();
+  const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
   const [umoorList, setUmoorList] = useState<umoorData[]>([]);
   const [sectorList, setSectorList] = useState<sectorData[]>([]);
 
   useEffect(() => {
     changeSelectedSidebarKey("0");
     if (typeof verifyUser() !== "string") {
-      const { userRole } = verifyUser() as authUser;
+      const {userRole} = verifyUser() as authUser;
       if (!userRole.includes(userRoles.Admin)) {
         notVerifierUserLogout();
       } else {
@@ -64,7 +64,7 @@ const AdminDashboard: NextPage = () => {
     await getDashboardUmoorStats("all", async (response: any) => {
       await Promise.all(
         response.map((val: any) => {
-          let index = findIndex(umoors, { value: val._id });
+          let index = findIndex(umoors, {value: val._id});
           umoors[index].total = val.count;
         })
       );
@@ -74,7 +74,7 @@ const AdminDashboard: NextPage = () => {
         await getDashboardUmoorStats(key, async (response: any) => {
           await Promise.all(
             response.map((val: any) => {
-              let index = findIndex(umoors, { value: val._id });
+              let index = findIndex(umoors, {value: val._id});
 
               umoors[index][key] = val.count;
             })
@@ -87,11 +87,11 @@ const AdminDashboard: NextPage = () => {
 
   const getSectorTileData = async () => {
     await getSectorList(async (sectors: sectorData[]) => {
-      let finalSectorList: any = sectors.map((val) => ({ name: val.name }));
+      let finalSectorList: any = sectors.map((val) => ({name: val.name}));
       await getDashboardSectorStats("all", async (response: any) => {
         await Promise.all(
           response.map((val: any) => {
-            let index = findIndex(finalSectorList, { name: val._id });
+            let index = findIndex(finalSectorList, {name: val._id});
             finalSectorList[index].total = val.count;
           })
         );
@@ -101,7 +101,7 @@ const AdminDashboard: NextPage = () => {
           await getDashboardSectorStats(key, async (response: any) => {
             await Promise.all(
               response.map((val: any) => {
-                let index = findIndex(finalSectorList, { name: val._id });
+                let index = findIndex(finalSectorList, {name: val._id});
                 finalSectorList[index][key] = val.count;
               })
             );
@@ -118,7 +118,7 @@ const AdminDashboard: NextPage = () => {
       {umoorList.length > 0 ? (
         <Row gutter={[16, 16]}>
           {umoorList.map((umoor: any, idx) => {
-            let stats: any = { total: umoor.total ? umoor.total : 0 };
+            let stats: any = {total: umoor.total ? umoor.total : 0};
             Object.values(escalationStatus).map((value) => {
               stats[value] = umoor[value] ? umoor[value] : 0;
             });
@@ -142,7 +142,7 @@ const AdminDashboard: NextPage = () => {
       <h1>Regions</h1>
       <Row gutter={[16, 16]}>
         {sectorList.map((sector: any, idx) => {
-          let stats: any = { total: sector.total ? sector.total : 0 };
+          let stats: any = {total: sector.total ? sector.total : 0};
           Object.values(escalationStatus).map((value) => {
             stats[value] = sector[value] ? sector[value] : 0;
           });
