@@ -18,5 +18,6 @@ export const API = {
   memberList: prefix + "/member/list",
   escalation: prefix + "/escalation",
   escalationList: prefix + "/escalation/list",
+  escalationCount: prefix + "/escalation/count",
   settings: prefix + "/settings",
 };

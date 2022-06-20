@@ -438,7 +438,8 @@ const Dashboard: NextPage = () => {
 
           case "pending_since":
             tempEscData[val.key] = `${
-              data.status === "Closed" || data.status === "Resolved"
+              data.status === escalationStatus.CLOSED ||
+              data.status === escalationStatus.RESOLVED
                 ? 0
                 : getDateDiffDays(data.created_at)
             } days`;

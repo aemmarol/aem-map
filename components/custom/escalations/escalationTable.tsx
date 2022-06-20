@@ -158,18 +158,21 @@ export const EscalationTable: FC<EscalationTableType> = ({
       key: "created_at.daydiff",
       render: (created_at: any, val: any) => {
         return `${
-          val.status === "Closed" || val.status === "Resolved"
+          val.status === escalationStatus.CLOSED ||
+          val.status === escalationStatus.RESOLVED
             ? 0
             : getDateDiffDays(created_at)
         } days`;
       },
       sorter: (a: any, b: any) => {
         const firstVal =
-          a.status === "Closed" || a.status === "Resolved"
+          a.status === escalationStatus.CLOSED ||
+          a.status === escalationStatus.RESOLVED
             ? 0
             : getDateDiffDays(a.created_at);
         const secondVal =
-          b.status === "Closed" || b.status === "Resolved"
+          b.status === escalationStatus.CLOSED ||
+          b.status === escalationStatus.RESOLVED
             ? 0
             : getDateDiffDays(b.created_at);
         return firstVal - secondVal;
