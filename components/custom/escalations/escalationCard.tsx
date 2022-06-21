@@ -84,9 +84,9 @@ export const EscalationCard: FC<{
 
   return (
     <Card
-      onClick={() => handleOpenEscalation(escalation.id as string)}
+      onClick={() => handleOpenEscalation(escalation._id as string)}
       className={styles.escalationCard}
-      key={escalation.id}
+      key={escalation._id}
     >
       <Row gutter={[16, 16]}>
         {getTableColumns().map((val, idx) => {

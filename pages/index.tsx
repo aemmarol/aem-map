@@ -5,11 +5,11 @@ import styles from "../styles/SignInPage.module.scss";
 import {Signinlayout} from "../layouts/signInLayout";
 import {SigninCard} from "../components";
 import {login, verifyUser} from "../pages/api/v1/authentication";
-import {authenticationProps, authUser} from "../types";
+import {authenticationProps, authUser, subSectorData} from "../types";
 import {useEffect} from "react";
 import {useRouter} from "next/router";
-import {getSubSectorDataByName} from "./api/v1/db/subSectorCrud";
 import {useGlobalContext} from "../context/GlobalContext";
+import {getSubSectorDataByName} from "./api/v2/services/subsector";
 
 const SignInPage: NextPage = () => {
   const [form] = Form.useForm();
@@ -42,27 +42,17 @@ const SignInPage: NextPage = () => {
         break;
       case "Musaid":
         changeSelectedSidebarKey("1");
-        const musaidAssignedAreaDetails = await getSubSectorDataByName(
-          assignedArea[0]
-        );
-        router.push(
-          "/mohallah/" +
-            musaidAssignedAreaDetails.sector.name +
-            "/" +
-            assignedArea[0]
-        );
+        await getSubSectorDataByName(assignedArea[0], (data: subSectorData) => {
+          router.push("/mohallah/" + data.sector.name + "/" + assignedArea[0]);
+        });
+
         break;
       case "Musaida":
         changeSelectedSidebarKey("1");
-        const musaidaAssignedAreaDetails = await getSubSectorDataByName(
-          assignedArea[0]
-        );
-        router.push(
-          "/mohallah/" +
-            musaidaAssignedAreaDetails.sector.name +
-            "/" +
-            assignedArea[0]
-        );
+        await getSubSectorDataByName(assignedArea[0], (data: subSectorData) => {
+          router.push("/mohallah/" + data.sector.name + "/" + assignedArea[0]);
+        });
+
         break;
       case "Umoor":
         changeSelectedSidebarKey("2");
@@ -76,8 +66,8 @@ const SignInPage: NextPage = () => {
   const onFinish = (values: authenticationProps) => {
     toggleLoader(true);
     login(values)
-      .then((response) => {
-        console.log(response);
+      .then((response: any) => {
+        localStorage.setItem("user", response.data.accessToken as string);
         form.resetFields();
         onLoginSuccess();
       })

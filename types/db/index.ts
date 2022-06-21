@@ -4,12 +4,12 @@ import {authUser} from "../authentication";
 export interface databaseMumeneenFieldData extends defaultFields {
   name: string;
   label?: string;
-  id?: string;
+  _id?: string;
 }
 
 export interface sectorData extends defaultFields {
   name: string;
-  id?: string;
+  _id?: string;
   sub_sector_id?: string[];
   primary_color: string;
   secondary_color: string;
@@ -25,14 +25,14 @@ export interface sectorData extends defaultFields {
 
 export interface sectorDetailsForSubSector {
   name: string;
-  id?: string;
+  _id?: string;
   primary_color: string;
   secondary_color: string;
 }
 
 export interface subSectorData extends defaultFields {
   name: string;
-  id?: string;
+  _id?: string;
   sector: Partial<sectorDetailsForSubSector>;
   musaid_name: string;
   musaid_its: string;
@@ -72,7 +72,7 @@ export type fileDetails = {
 };
 
 export interface escalationData extends defaultFields {
-  id?: string;
+  _id?: string;
   escalation_id: string;
   created_by: adminDetails;
   file_details: fileDetails;
@@ -94,7 +94,8 @@ export enum escalationStatus {
   CLOSED = "Closed",
 }
 export interface umoorData {
+  _id?: string;
   label: string;
   value: string;
-  coordinators: authUser[];
+  coordinators?: authUser[];
 }

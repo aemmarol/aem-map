@@ -23,7 +23,7 @@ export const MohallahListComponent: FC<MohallahListProps> = ({secData}) => {
     <div>
       <Row gutter={[16, 16]}>
         {secData.map((val) => (
-          <Col key={val.id} xs={24} sm={12} md={8} lg={6} xl={4}>
+          <Col key={val._id} xs={24} sm={12} md={8} lg={6} xl={4}>
             <Card
               onClick={() => redirectToMohallahPage(val.name as string)}
               style={{backgroundColor: val.primary_color}}

@@ -1,15 +1,15 @@
 import {FC, useEffect, useState} from "react";
 import {Card, Col, message, Row, Table} from "antd";
 import styles from "../../styles/components/tables/fileListTable.module.scss";
-import {getMumeneenDataFields} from "../../pages/api/v1/db/databaseFields";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {useRouter} from "next/router";
 import {logout, verifyUser} from "../../pages/api/v1/authentication";
-import {authUser} from "../../types";
+import {authUser, databaseMumeneenFieldData} from "../../types";
 import {getMumineenTableUserColumns} from "./columnsUtil";
 import useWindowDimensions from "../../utils/windowDimensions";
 import {EscStat} from "../custom/escalations/escalationStatus";
 import sampleMemberList from "../../sample_data/mumeneenDataField.json";
+import {getMumeneenDataFields} from "../../pages/api/v2/services/dbFields";
 
 interface TableProps {
   dataSource: any[];
@@ -28,6 +28,7 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
     logout();
     router.push("/");
   };
+
   const getFileTableColumns = async () => {
     toggleLoader(true);
     let userRole;
@@ -37,18 +38,17 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
     } else {
       notVerifierUserLogout();
     }
-    const fieldData = await getMumeneenDataFields();
+    const fieldData = await getDbMumeneenDataFields();
     let dataColumns = [];
     const dataColumnsMap: any = {
-      id: {
+      _id: {
         title: "ITS",
-        dataIndex: "id",
-        key: "id",
+        dataIndex: "_id",
+        key: "_id",
         width: 150,
         fixed: "left",
       },
     };
-
     sampleMemberList.forEach((val) => {
       dataColumnsMap[val.name] = {
         title: val.label,
@@ -64,9 +64,9 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
     });
 
     fieldData
-      .filter((val) => val.name !== "tanzeem_file_no")
-      .filter((val) => !columnOrderList.includes(val.name))
-      .forEach((val) => {
+      .filter((val: any) => val.name !== "tanzeem_file_no")
+      .filter((val: any) => !columnOrderList.includes(val.name))
+      .forEach((val: any) => {
         dataColumnsMap[val.name] = {
           title: val.label,
           dataIndex: val.name,
@@ -91,6 +91,14 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
     }
     setcolumns(dataColumns);
     toggleLoader(false);
+  };
+
+  const getDbMumeneenDataFields = async () => {
+    let fieldsData: databaseMumeneenFieldData[] = [];
+    await getMumeneenDataFields((data: databaseMumeneenFieldData[]) => {
+      fieldsData = data;
+    });
+    return fieldsData;
   };
 
   useEffect(() => {

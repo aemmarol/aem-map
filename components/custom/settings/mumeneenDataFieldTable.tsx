@@ -1,13 +1,14 @@
 import {DeleteTwoTone} from "@ant-design/icons";
+import {message} from "antd";
 import {FC, useState} from "react";
 import {DashboardDataFieldTableCard} from "../..";
-import {mumeneenDetailsFieldCollectionName} from "../../../firebase/dbCollectionNames";
-import {
-  deleteDataField,
-  getMumeneenDataFields,
-} from "../../../pages/api/v1/db/databaseFields";
+import {mumeneenDetailsFieldCollectionName} from "../../../mongodb/dbCollectionNames";
+import {getMumeneenDataFields} from "../../../pages/api/v2/services/dbFields";
 import {databaseMumeneenFieldData} from "../../../types";
+import {getauthToken} from "../../../utils";
+import {API} from "../../../utils/api";
 import {mumeneenDataFieldsColumns} from "../../../utils/columnData";
+import {handleResponse} from "../../../utils/handleResponse";
 
 interface CardProps {
   data: any[];
@@ -20,17 +21,29 @@ export const MumeneenDataFieldTable: FC<CardProps> = ({data, updateData}) => {
 
   const handleMumeneenFieldDelete = async (record: any) => {
     setisMumeneenDataFieldTableLoading(true);
-    await deleteDataField(mumeneenDetailsFieldCollectionName, record.id);
-    const updatedData = await getMumeneenDataFields();
+    await fetch(
+      API.dbFields + "?collectionName=" + mumeneenDetailsFieldCollectionName,
+      {
+        method: "DELETE",
+        headers: {...getauthToken()},
+        body: JSON.stringify({id: record._id}),
+      }
+    )
+      .then(handleResponse)
+      .catch((error) => message.error(error));
 
-    updateData(updatedData);
+    getMumeneenDataFields((data: databaseMumeneenFieldData[]) => {
+      updateData(data);
+    });
+
     setisMumeneenDataFieldTableLoading(false);
   };
 
   const loadMumeneenDataFields = async () => {
     setisMumeneenDataFieldTableLoading(true);
-    const data = await getMumeneenDataFields();
-    updateData(data);
+    getMumeneenDataFields((data: databaseMumeneenFieldData[]) => {
+      updateData(data);
+    });
 
     setisMumeneenDataFieldTableLoading(false);
   };
