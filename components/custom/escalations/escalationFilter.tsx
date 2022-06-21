@@ -1,32 +1,29 @@
-import React, {FC, useEffect, useState} from "react";
-import {filterOption} from "../../../types/escalation";
+import React, {FC} from "react";
 import {Checkbox} from "antd";
-export interface EscalationFilterType {
-  title: string;
-  options: filterOption[];
-  selectedOptions: filterOption[];
-  disabled?: boolean;
-  onChange: any;
-}
+import { EscalationFilterType } from "../../../types/escalation";
+import { useEscalationContext } from "../../../context/EscalationContext";
+
 
 export const EscalationFilter: FC<EscalationFilterType> = ({
   title,
   options,
-  selectedOptions,
-  disabled = false,
-  onChange,
+  disabled,
+  filterKey,
 }) => {
-  const [selectedValue, setSelectedValue] = useState(selectedOptions);
-  useEffect(() => {
-    setSelectedValue(selectedOptions);
-  }, [selectedOptions]);
+  const {selectedfilterItems, setSelectedFilterItems} = useEscalationContext()
+  const handleChange = (value: any) => {
+    const tempProps={...selectedfilterItems};
+    tempProps[filterKey]=value;
+    setSelectedFilterItems(tempProps)
+  };
+
   return (
     <div>
       <h4>{title}:</h4>
       <Checkbox.Group
         options={options}
-        defaultValue={selectedValue.map((option) => option.value)}
-        onChange={onChange}
+        value={selectedfilterItems[filterKey]}
+        onChange={handleChange}
         disabled={disabled}
         style={{display: "flex", flexDirection: "column", marginLeft: "1em"}}
       />

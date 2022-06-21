@@ -34,7 +34,7 @@ export const EscalationTable: FC<EscalationTableType> = ({
       render: (text: any, val: any) => (
         <Tag
           className="cursor-pointer"
-          onClick={() => handleOpenEscalation(val.id as string)}
+          onClick={() => handleOpenEscalation(val._id as string)}
         >
           {text}
         </Tag>
@@ -222,7 +222,7 @@ export const EscalationTable: FC<EscalationTableType> = ({
 
   return (
     <Table
-      dataSource={escalationList.map((val) => ({...val, key: val.id}))}
+      dataSource={escalationList.map((val) => ({...val, key: val._id}))}
       columns={getTableColumns() as any}
       pagination={false}
       scroll={{x: "100px", y: height ? height - 278 + "px" : "500px" + "px"}}

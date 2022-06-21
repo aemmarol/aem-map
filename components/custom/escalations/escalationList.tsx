@@ -1,54 +1,53 @@
-import React, {FC, useEffect, useState} from "react";
+import React, { FC, useEffect, useState } from "react";
 
-import {escalationData, userRoles} from "../../../types";
+import { escalationData, userRoles } from "../../../types";
 import useWindowDimensions from "../../../utils/windowDimensions";
-import {EscalationCard} from "./escalationCard";
-import {EscalationTable} from "./escalationTable";
+import { EscalationCard } from "./escalationCard";
+import { EscalationTable } from "./escalationTable";
 
 import styles from "../../../styles/components/custom/escalationList.module.scss";
-import {EscalationFilter, EscalationFilterType} from "./escalationFilter";
+import { EscalationFilter } from "./escalationFilter";
 
-import {Button, Col, Drawer, Input, Radio, Row, Space} from "antd";
-import {FilterOutlined, SearchOutlined} from "@ant-design/icons";
-import {orderBy} from "lodash";
+import { Button, Col, Divider, Drawer, Input, Radio, Row, Space } from "antd";
+import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
+import { orderBy } from "lodash";
+import { useEscalationContext } from "../../../context/EscalationContext";
 
 interface EscalationListType {
-  escalationList: escalationData[];
-  filterProps: EscalationFilterType[];
   userRole: userRoles;
-  setSortFilterEscalationList: (data: any) => void;
 }
 
 export const EscalationList: FC<EscalationListType> = ({
-  escalationList,
-  filterProps,
   userRole,
-  setSortFilterEscalationList,
 }) => {
-  const {height, width} = useWindowDimensions();
+  const { height, width } = useWindowDimensions();
+  const { escalationFilterProps,escalationList } = useEscalationContext();
+
   const [escalations, setEscalations] = useState<escalationData[]>([]);
   const [showFilterDrawer, setShowFilterDrawer] = useState<boolean>(false);
   const [filterString, setFilterString] = useState("");
   const [sortValue, setSortValue] = useState("");
 
+  const hasFilterProps = () => {
+    return escalationFilterProps.length > 0;
+  };
+
   useEffect(() => {
     setEscalations(
       !!filterString
         ? escalationList.filter((esc) => {
-            return JSON.stringify(esc).toLowerCase().includes(filterString);
-          })
+          return JSON.stringify(esc).toLowerCase().includes(filterString);
+        })
         : escalationList
     );
   }, [filterString]);
 
   useEffect(() => {
     setEscalations(sortEscalationList(escalationList));
-    setSortFilterEscalationList(sortEscalationList(escalationList));
   }, [escalationList]);
 
   useEffect(() => {
     setEscalations(sortEscalationList(escalations));
-    setSortFilterEscalationList(sortEscalationList(escalations));
   }, [sortValue]);
 
   const sortEscalationList = (arr: Array<any>) => {
@@ -67,26 +66,33 @@ export const EscalationList: FC<EscalationListType> = ({
         <Input
           suffix={<SearchOutlined />}
           placeholder="Search item"
-          style={{marginBottom: "1em"}}
+          style={{ marginBottom: "1em" }}
           onChange={(event) => setFilterString(event.target.value)}
         ></Input>
       </Row>
       <Row gutter={[16, 16]}>
-        <Col
-          style={{maxHeight: height ? height - 225 + "px" : "500px"}}
-          className={styles.filtersContainer}
-          xs={0}
-          md={5}
-        >
-          {filterProps.map((filterProp, idx) => {
-            return (
-              <div key={idx} className={styles.filterContainer}>
-                <EscalationFilter {...filterProp}></EscalationFilter>
-              </div>
-            );
-          })}
-        </Col>
-        <Col xs={24} md={19}>
+        {hasFilterProps() ? (
+          <Col
+            style={{ maxHeight: height ? height - 225 + "px" : "500px" }}
+            className={styles.filtersContainer}
+            xs={0}
+            md={5}
+          >
+            {escalationFilterProps.map((filterProp, idx) => {
+              return (
+                <div key={idx}>
+                  <EscalationFilter  {...filterProp} />
+                  {
+                    idx !== escalationFilterProps.length - 1 ?
+                      <Divider /> : null
+                  }
+                </div>
+              )
+            })}
+          </Col>
+        ) : null}
+
+        <Col xs={24} md={hasFilterProps() ? 19 : 24}>
           <div className="flex-column">
             {escalations.length > 0 ? (
               width && width < 768 ? (
@@ -106,7 +112,7 @@ export const EscalationList: FC<EscalationListType> = ({
                     onClick={() => setShowFilterDrawer(true)}
                     className={styles.filterIcon}
                     type="primary"
-                    icon={<FilterOutlined style={{fontSize: 25}} />}
+                    icon={<FilterOutlined style={{ fontSize: 25 }} />}
                     size="large"
                   />
                 </>
@@ -135,11 +141,9 @@ export const EscalationList: FC<EscalationListType> = ({
           height={600}
         >
           <h2>Filters:</h2>
-          {filterProps.map((filterProp, idx) => {
+          {escalationFilterProps.map((filterProp, idx) => {
             return (
-              <div key={idx} className={styles.filterContainer}>
-                <EscalationFilter {...filterProp}></EscalationFilter>
-              </div>
+              <EscalationFilter key={idx} {...filterProp} />
             );
           })}
           <h2 className="mt-16">Sort By:</h2>

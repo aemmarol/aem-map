@@ -1,8 +1,8 @@
 import {DeleteResult} from "mongodb";
-import {fileCollectionName} from "../../../../../firebase/dbCollectionNames";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
+import { fileCollectionName } from "../../../../../mongodb/dbCollectionNames";
 import {userRoles} from "../../../../../types";
 
 export default getAuthHandler()

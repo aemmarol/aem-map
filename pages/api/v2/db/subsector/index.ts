@@ -1,8 +1,8 @@
 import {InsertOneResult, ObjectId, UpdateResult} from "mongodb";
-import {subsectorCollectionName} from "../../../../../firebase/dbCollectionNames";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
+import { subsectorCollectionName } from "../../../../../mongodb/dbCollectionNames";
 import {userRoles} from "../../../../../types";
 
 export default getAuthHandler()

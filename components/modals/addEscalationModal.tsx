@@ -12,9 +12,7 @@ import {
 } from "antd";
 import {find, isEmpty} from "lodash";
 import {FC, useEffect, useState} from "react";
-// import Airtable from "airtable";
 import {
-  authUser,
   comment,
   escalationData,
   escalationStatus,
@@ -38,28 +36,20 @@ import {
 import {getSettings} from "../../pages/api/v2/services/settings";
 import {addEscalationData} from "../../pages/api/v2/services/escalation";
 import {API} from "../../utils/api";
-
-// const airtableBase = new Airtable({
-//   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
-// }).base("app7V1cg4ibiooxcn");
-
-// const umoorTable = airtableBase("umoorList");
+import {useEscalationContext} from "../../context/EscalationContext";
 
 type AddEscalationModalProps = {
   showModal: boolean;
   handleClose: () => any;
-  adminDetails: authUser;
-  submitCallback: () => any;
 };
 
 export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   showModal,
   handleClose,
-  adminDetails,
-  submitCallback,
 }) => {
   const [fileForm] = Form.useForm();
   const [escalationForm] = Form.useForm();
+  const {adminDetails} = useEscalationContext();
 
   const [allowedFileNumbers, setAllowedFileNumbers] = useState<any[]>([]);
   const [issueTypeOptions, setIssueTypeOptions] = useState<any[]>([]);
@@ -93,9 +83,6 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
           fileList = data;
         }
       );
-      // setAllowedFileNumbers(
-      //   fileList.map((val: any) => val.tanzeem_file_no.toString())
-      // );
     } else if (
       adminDetails.userRole.includes(userRoles.Musaid) ||
       adminDetails.userRole.includes(userRoles.Musaida)
@@ -106,7 +93,6 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
           fileList = data;
         }
       );
-      // setAllowedFileNumbers(fileList.map((val: any) => val.tanzeem_file_no));
     } else if (
       adminDetails.userRole.includes(userRoles.Admin) ||
       adminDetails.userRole.includes(userRoles.Umoor)
@@ -129,46 +115,6 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
     }
   };
 
-  // const onFileSearch = async (values: any) => {
-  //   if (adminDetails?.userRole.includes(userRoles.Admin)) {
-  //     const data = await getFileDataByFileNumber(values.fileNumber);
-  //     if (!!data) {
-  //       const hof_data = await getMemberDataById(data.id);
-  //       // const hof_me
-  //       console.log(hof_data, data);
-  //       setFileDetails({
-  //         id: hof_data.id,
-  //         hofName: hof_data.full_name,
-  //         hofContact: hof_data.mobile,
-  //         subSector: data.sub_sector.name,
-  //         fileData: data,
-  //       });
-  //       setshowFileNotFoundError(false);
-  //     } else {
-  //       setshowFileNotFoundError(true);
-  //       setFileDetails({});
-  //     }
-  //   } else {
-  //     if (
-  //       !values.fileNumber ||
-  //       !allowedFileNumbers.map((val) => val.value).includes(values.fileNumber)
-  //     ) {
-  //       setshowFileNotFoundError(true);
-  //       setFileDetails({});
-  //     } else {
-  //       const data = await getFileDataByFileNumber(values.fileNumber);
-  //       const hof_data = await getMemberDataById(data.id);
-  //       setFileDetails({
-  //         hofName: hof_data.full_name,
-  //         hofContact: hof_data.mobile,
-  //         subSector: data.sub_sector.name,
-  //         fileData: data,
-  //       });
-  //       setshowFileNotFoundError(false);
-  //     }
-  //   }
-  // };
-
   const onFileSelect = async (values: any) => {
     await getFileDataByFileNumber(values, async (data: any) => {
       if (!isEmpty(data)) {
@@ -180,8 +126,6 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
         await getMemberListByHofId(hof_data._id, (newdata: any) => {
           membersList = newdata;
         });
-        console.log(membersList);
-        console.log(hof_data, data);
         setFileDetails({
           _id: hof_data._id,
           hofName: hof_data.full_name,
@@ -199,8 +143,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   };
 
   const handleEscalationFormSubmit = async (values: any) => {
-    // console.log(values);
-    let dbSettings: any = await getSettings();
+    const dbSettings: any = await getSettings();
     const firstComment: comment = {
       msg: "Issue is added on " + moment(new Date()).format("DD-MM-YYYY"),
       name: adminDetails.name,
@@ -257,25 +200,8 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       message.success("Escalation added!");
       escalationForm.resetFields();
       fileForm.resetFields();
-      submitCallback();
       handleClose();
     });
-
-    // if (result) {
-    //   await incrementEscalationAutoNumber(
-    //     dbSettings.escalation_auto_number + 1
-    //   );
-    //   message.success("Escalation added!");
-    //   escalationForm.resetFields();
-    //   fileForm.resetFields();
-    //   submitCallback();
-    //   handleClose();
-    // }
-
-    // console.log("data",data)
-    // escalationForm.resetFields();
-    // fileForm.resetFields();
-    // handleClose();
   };
 
   return (
@@ -372,12 +298,6 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
                   message:
                     "Enter ITS of person for which issue is being raised.",
                 },
-                // {min: 8, message: "ITS ID cannot be less than 8 characters"},
-                // {max: 8, message: "ITS ID cannot be greater than 8 characters"},
-                // {
-                //   pattern: new RegExp(/^[0-9]+$/),
-                //   message: "ITS ID should be a number",
-                // },
               ]}
             >
               <Select

@@ -1,7 +1,6 @@
 import {Button, Card, message, Upload} from "antd";
 import {FC, useState} from "react";
 import {InboxOutlined} from "@ant-design/icons";
-import {} from "../../../firebase/dbCollectionNames";
 import {defaultDatabaseFields, getauthToken} from "../../../utils";
 import {useGlobalContext} from "../../../context/GlobalContext";
 import {databaseMumeneenFieldData, subSectorData} from "../../../types";

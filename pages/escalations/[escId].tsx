@@ -17,16 +17,14 @@ import {
   umoorData,
 } from "../../types";
 import {logout, verifyUser} from "../api/v1/authentication";
-import {
-  getEscalationData,
-  updateEscalationData,
-} from "../api/v1/db/escalationsCrud";
+
 import moment from "moment";
 import styles from "../../styles/pages/Escalation.module.scss";
 import {AddEscalationCommentsModal} from "../../components";
 import {getSectorDataByName} from "../api/v2/services/sector";
 import {getUmoorList} from "../api/v2/services/umoor";
 import {getSubSectorDataByName} from "../api/v2/services/subsector";
+import { getEscalationData, updateEscalationData } from "../api/v2/services/escalation";
 
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();
@@ -102,17 +100,18 @@ const FileMemberDetailsPage: NextPage = () => {
 
   const getEscatationDetails = async (id: string) => {
     toggleLoader(true);
-    const escData = await getEscalationData(id);
-    if (!isEmpty(escData)) {
-      setEscalationDetails(escData);
-      setselectIssueValue(getIssueType(escData.type, "value"));
-      setSelectStatusValue(escData.status);
-      setIssueComments(escData.comments);
-      toggleLoader(false);
-    } else {
-      toggleLoader(false);
-      router.push("/");
-    }
+    await getEscalationData(id,(data:escalationData)=>{
+      if (!isEmpty(data)) {
+        setEscalationDetails(data);
+        setselectIssueValue(getIssueType(data.type, "value"));
+        setSelectStatusValue(data.status);
+        setIssueComments(data.comments);
+        toggleLoader(false);
+      } else {
+        toggleLoader(false);
+        router.push("/");
+      }
+    });
   };
 
   const notVerifierUserLogout = () => {
@@ -173,10 +172,12 @@ const FileMemberDetailsPage: NextPage = () => {
     };
     currentCommentsArr.push(newComment);
 
-    const data: Partial<escalationData> = {
-      comments: currentCommentsArr,
+    const data: any = {
+      comments: newComment,
       [field]: valueBasedOnField,
+      updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss")
     };
+
 
     await updateEscalationData(escId as string, data);
   };
@@ -425,7 +426,7 @@ const FileMemberDetailsPage: NextPage = () => {
           handleClose={() => setShowAddCommentsModal(false)}
           showModal={showAddCommentsModal}
           currentComments={escalationDetails.comments}
-          escalationId={escalationDetails.id as string}
+          escalationId={escalationDetails._id as string}
           adminDetails={adminDetails}
           submitCallback={() => getEscatationDetails(escId as string)}
         />

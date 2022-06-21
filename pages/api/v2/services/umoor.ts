@@ -21,12 +21,10 @@ export const getUmoorListWithCoordinators = async (): Promise<umoorData[]> => {
   umoorList.forEach((umoor) => {
     umoor.coordinators = [];
     usersList.forEach((user) => {
-      // console.log(user.assignedUmoor, umoor.value);
       if (user.assignedUmoor && user.assignedUmoor.includes(umoor.value)) {
         umoor.coordinators?.push(user);
       }
     });
-    // console.log(umoor, umoor.label);
   });
   return umoorList;
 };

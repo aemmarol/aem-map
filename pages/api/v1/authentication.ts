@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import Joi from "joi";
 import {sign, verify} from "jsonwebtoken";
-import "../../../firebase/firebaseConfig";
 import {authenticationProps, authUser, loginResponseData} from "../../../types";
 import {isEmpty} from "lodash";
 import {API} from "../../../utils/api";

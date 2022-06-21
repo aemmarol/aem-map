@@ -1,8 +1,8 @@
 import {InsertOneResult, ObjectId, DeleteResult} from "mongodb";
-import {umoorListCollectionName} from "../../../../../firebase/dbCollectionNames";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
+import { umoorListCollectionName } from "../../../../../mongodb/dbCollectionNames";
 import {userRoles} from "../../../../../types";
 
 export default getAuthHandler()
@@ -12,6 +12,7 @@ export default getAuthHandler()
       const doc = await req.db
         .collection(umoorListCollectionName)
         .find()
+        .sort({value: 1})
         .toArray();
       res.json(doc);
     } else {

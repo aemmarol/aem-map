@@ -1,7 +1,7 @@
-import {sectorCollectionName} from "../../../../../firebase/dbCollectionNames";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
+import { sectorCollectionName } from "../../../../../mongodb/dbCollectionNames";
 import {userRoles} from "../../../../../types";
 
 export default getAuthHandler().get(

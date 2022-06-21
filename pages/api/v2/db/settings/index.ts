@@ -1,8 +1,8 @@
 import {UpdateResult} from "mongodb";
-import {settingsCollectionName} from "../../../../../firebase/dbCollectionNames";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
+import { settingsCollectionName } from "../../../../../mongodb/dbCollectionNames";
 
 export default getAuthHandler()
   .get(async (req: NextApiRequestExtended, res) => {

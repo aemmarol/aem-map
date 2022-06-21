@@ -1,11 +1,9 @@
 import {DeleteResult, InsertOneResult, ObjectId} from "mongodb";
-import {
-  fileDetailsFieldCollectionName,
-  mumeneenDetailsFieldCollectionName,
-} from "../../../../../firebase/dbCollectionNames";
+
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
+import { fileDetailsFieldCollectionName, mumeneenDetailsFieldCollectionName } from "../../../../../mongodb/dbCollectionNames";
 import {databaseMumeneenFieldData, userRoles} from "../../../../../types";
 
 export default getAuthHandler()
