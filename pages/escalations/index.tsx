@@ -68,6 +68,8 @@ const EscalationDashboard: NextPage = () => {
     }
     return () => {
       setEscalationFilterProps({});
+      setStatCardList([]);
+      setSelectedView(null);
     };
   }, []);
 
@@ -111,6 +113,7 @@ const EscalationDashboard: NextPage = () => {
     switch (selectedView) {
       case userRoles.Masool:
       case userRoles.Masoola:
+        setEscalationFilterProps([]);
         setSelectedFilterItems({
           [filterTypes.Sector]: adminDetails.assignedArea,
           [filterTypes.Umoor]: umoorList.map((val) => val.value),
@@ -119,6 +122,7 @@ const EscalationDashboard: NextPage = () => {
           adminDetails.assignedArea.map(async (val) => {
             const statObj: any = {
               title: val,
+              total: 0,
             };
             Object.values(escalationStatus).map((val) => {
               statObj[val] = 0;
@@ -129,7 +133,7 @@ const EscalationDashboard: NextPage = () => {
               filterTypes.Sector,
               val,
               (data: any) => {
-                statObj.total = data[0].count;
+                statObj.total = data[0] ? data[0].count : 0;
               }
             );
             await Promise.all(
@@ -156,16 +160,110 @@ const EscalationDashboard: NextPage = () => {
         break;
       case userRoles.Musaid:
       case userRoles.Musaida:
+        setEscalationFilterProps([]);
+        setSelectedFilterItems({
+          [filterTypes.SubSector]: adminDetails.assignedArea,
+        });
+        const musaidArr = await Promise.all(
+          adminDetails.assignedArea.map(async (val) => {
+            const statObj: any = {
+              title: val,
+              total: 0,
+            };
+            Object.values(escalationStatus).map((val) => {
+              statObj[val] = 0;
+            });
+            await getEscalationStatsByFilter(
+              filterTypes.SubSector,
+              "all",
+              filterTypes.SubSector,
+              val,
+              (data: any) => {
+                statObj.total = data[0] ? data[0].count : 0;
+              }
+            );
+            await Promise.all(
+              Object.values(escalationStatus).map(async (key) => {
+                await getEscalationStatsByFilter(
+                  filterTypes.SubSector,
+                  key,
+                  filterTypes.SubSector,
+                  val,
+                  async (response: any) => {
+                    await Promise.all(
+                      response.map((newVal: any) => {
+                        statObj[key] = newVal.count;
+                      })
+                    );
+                  }
+                );
+              })
+            );
+            return statObj;
+          })
+        );
+        setStatCardList(musaidArr);
+
         break;
       case userRoles.Umoor:
-        setEscalationFilterProps([
-          {
-            title: "Selected Umoors",
-            filterKey: filterTypes.Umoor,
-            options: [],
-            disabled: false,
-          },
-        ]);
+        setSelectedFilterItems({
+          [filterTypes.Sector]: sectorList,
+          [filterTypes.Umoor]: adminDetails.assignedUmoor,
+        });
+        let umoorOptionsArr: any = [];
+        const umoorStatarr = await Promise.all(
+          adminDetails.assignedUmoor.map(async (val) => {
+            const statObj: any = {
+              title: find(umoorList, {value: val})?.label,
+              total: 0,
+            };
+            Object.values(escalationStatus).map((val) => {
+              statObj[val] = 0;
+            });
+            await getEscalationStatsByFilter(
+              filterTypes.Umoor,
+              "all",
+              filterTypes.Umoor,
+              val,
+              (data: any) => {
+                statObj.total = data[0] ? data[0].count : 0;
+                umoorOptionsArr.push({
+                  label: statObj.title + " (" + data[0].count + ")",
+                  value: val,
+                });
+              }
+            );
+            await Promise.all(
+              Object.values(escalationStatus).map(async (key) => {
+                await getEscalationStatsByFilter(
+                  filterTypes.Umoor,
+                  key,
+                  filterTypes.Umoor,
+                  val,
+                  async (response: any) => {
+                    await Promise.all(
+                      response.map((newVal: any) => {
+                        statObj[key] = newVal.count;
+                      })
+                    );
+                  }
+                );
+              })
+            );
+            return statObj;
+          })
+        );
+        setStatCardList(umoorStatarr);
+        if (umoorOptionsArr.length > 1) {
+          setEscalationFilterProps([
+            {
+              title: "Selected Umoors",
+              filterKey: filterTypes.Umoor,
+              options: umoorOptionsArr,
+              disabled: false,
+            },
+          ]);
+        }
         break;
       case userRoles.Admin:
         await getUmoorStats("all", async (umoordata: any) => {

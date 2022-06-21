@@ -46,16 +46,23 @@ export const getEscalationListFromDb = async (
   filters: selectedFilterItemsType,
   onSuccess?: any
 ) => {
-  const findFilter: any = {
+  let findFilter: any = {
     ["file_details.sub_sector.sector.name"]: {$in: filters[filterTypes.Sector]},
     ["type.value"]: {$in: filters[filterTypes.Umoor]},
   };
-  if (!filters[filterTypes.Sector]) {
-    findFilter["file_details.sub_sector.sector.name"] = {$in: []};
+  if (!filters[filterTypes.SubSector]) {
+    if (!filters[filterTypes.Sector]) {
+      findFilter["file_details.sub_sector.sector.name"] = {$in: []};
+    }
+    if (!filters[filterTypes.Umoor]) {
+      findFilter["type.value"] = {$in: []};
+    }
+  } else {
+    findFilter = {
+      ["file_details.sub_sector.name"]: {$in: filters[filterTypes.SubSector]},
+    };
   }
-  if (!filters[filterTypes.Umoor]) {
-    findFilter["type.value"] = {$in: []};
-  }
+
   await fetch(API.escalationList, {
     method: "POST",
     headers: {...getauthToken()},
@@ -144,5 +151,5 @@ export const getEscalationStatsByFilter = async (
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => console.log(error));
 };

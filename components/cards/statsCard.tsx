@@ -8,7 +8,6 @@ interface statsCardType {
   stats: any;
 }
 export const StatsCard: FC<statsCardType> = ({title, handleClick, stats}) => {
-  console.log("stats", stats);
   return (
     <Card title={title} onClick={handleClick} className={styles.statCard}>
       <Row gutter={[8, 8]}>

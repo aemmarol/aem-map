@@ -3,11 +3,9 @@ import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
 import {subsectorCollectionName} from "../../../../../mongodb/dbCollectionNames";
-import {userRoles} from "../../../../../types";
 
 export default getAuthHandler().put(
   async (req: NextApiRequestExtended, res) => {
-    const {userData} = req;
     const updateData = JSON.parse(req.body);
     const fileObj = {files: updateData.files};
     const statsObj = {
@@ -17,24 +15,20 @@ export default getAuthHandler().put(
     const project_id = updateData.id;
     delete updateData.id;
 
-    if (userData.userRole.includes(userRoles.Admin)) {
-      if (!project_id) {
-        res.status(400).json({msg: "invalid request!"});
-      } else {
-        const doc: UpdateResult = await req.db
-          .collection(subsectorCollectionName)
-          .updateOne(
-            {_id: new ObjectId(project_id)},
-            {
-              $set: {updated_at: updateData.updated_at},
-              $push: fileObj,
-              $inc: statsObj,
-            }
-          );
-        res.json(doc);
-      }
+    if (!project_id) {
+      res.status(400).json({msg: "invalid request!"});
     } else {
-      res.status(401).json({msg: "user access denied!"});
+      const doc: UpdateResult = await req.db
+        .collection(subsectorCollectionName)
+        .updateOne(
+          {_id: new ObjectId(project_id)},
+          {
+            $set: {updated_at: updateData.updated_at},
+            $push: fileObj,
+            $inc: statsObj,
+          }
+        );
+      res.json(doc);
     }
   }
 );

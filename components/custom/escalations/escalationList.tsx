@@ -50,7 +50,6 @@ export const EscalationList: FC<EscalationListType> = ({userRole}) => {
 
   const sortEscalationList = (arr: Array<any>) => {
     if (sortValue !== "") {
-      console.log(sortValue);
       const key = sortValue.split("-")[0];
       const order = sortValue.split("-")[1] === "asc" ? "asc" : "desc";
       const tempEscList = [...arr];

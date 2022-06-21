@@ -60,6 +60,7 @@ export const login = async (
 
 export const logout = () => {
   localStorage.removeItem("user");
+  localStorage.removeItem("escFilter");
 };
 
 export const verifyUser = (): authUser | string => {

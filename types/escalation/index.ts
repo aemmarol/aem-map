@@ -6,8 +6,9 @@ export interface EscStatType {
 }
 
 export interface selectedFilterItemsType {
-  [filterTypes.Sector]: string[];
-  [filterTypes.Umoor]: string[];
+  [filterTypes.Sector]?: string[];
+  [filterTypes.Umoor]?: string[];
+  [filterTypes.SubSector]?: string[];
 }
 
 export interface EscalationFilterType {
