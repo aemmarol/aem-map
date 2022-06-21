@@ -4,7 +4,7 @@ import styles from "../../styles/components/tables/fileListTable.module.scss";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {useRouter} from "next/router";
 import {logout, verifyUser} from "../../pages/api/v1/authentication";
-import {authUser, databaseMumeneenFieldData, userRoles} from "../../types";
+import {authUser, databaseMumeneenFieldData} from "../../types";
 import {getFileTableUserColumns} from "./columnsUtil";
 import useWindowDimensions from "../../utils/windowDimensions";
 import {EscStat} from "../custom/escalations/escalationStatus";

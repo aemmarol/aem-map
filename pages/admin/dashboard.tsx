@@ -109,7 +109,7 @@ const AdminDashboard: NextPage = () => {
       await getSectorStats("all", async (response: any) => {
         await Promise.all(
           response.map((val: any) => {
-            let index = findIndex(finalSectorList, {name: val._id});
+            const index = findIndex(finalSectorList, {name: val._id});
             finalSectorList[index].total = val.count;
           })
         );

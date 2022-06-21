@@ -6,7 +6,6 @@ import {useEffect, useState} from "react";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {
   authUser,
-  escalationData,
   escalationStatus,
   sectorData,
   umoorData,
@@ -17,9 +16,7 @@ import {useGlobalContext} from "../../context/GlobalContext";
 import {EscalationList} from "../../components/custom/escalations/escalationList";
 
 import {
-  filterOption,
   filterTypes,
-  selectedFilterItemsType,
 } from "../../types/escalation";
 import {StatsCard} from "../../components/cards/statsCard";
 import useWindowDimensions from "../../utils/windowDimensions";
@@ -210,7 +207,7 @@ const EscalationDashboard: NextPage = () => {
           [filterTypes.Sector]: sectorList,
           [filterTypes.Umoor]: adminDetails.assignedUmoor,
         });
-        let umoorOptionsArr: any = [];
+        const umoorOptionsArr: any = [];
         const umoorStatarr = await Promise.all(
           adminDetails.assignedUmoor.map(async (val) => {
             const statObj: any = {
@@ -332,7 +329,7 @@ const EscalationDashboard: NextPage = () => {
             break;
 
           case "sector":
-            let sectorName: string = data.file_details.sub_sector.sector
+            const sectorName: string = data.file_details.sub_sector.sector
               .name as string;
             tempEscData[val.key] = sectorName;
             break;

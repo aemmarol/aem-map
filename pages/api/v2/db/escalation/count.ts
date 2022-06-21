@@ -41,7 +41,6 @@ export default getAuthHandler()
     }
   })
   .post(async (req: NextApiRequestExtended, res) => {
-    const {userData} = req;
     const {status, type, filterName, filterValue} = req.query;
     const filterBy: string =
       filterName === filterTypes.Sector
