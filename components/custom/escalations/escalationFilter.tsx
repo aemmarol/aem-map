@@ -1,8 +1,7 @@
 import React, {FC} from "react";
 import {Checkbox} from "antd";
-import { EscalationFilterType } from "../../../types/escalation";
-import { useEscalationContext } from "../../../context/EscalationContext";
-
+import {EscalationFilterType} from "../../../types/escalation";
+import {useEscalationContext} from "../../../context/EscalationContext";
 
 export const EscalationFilter: FC<EscalationFilterType> = ({
   title,
@@ -10,11 +9,11 @@ export const EscalationFilter: FC<EscalationFilterType> = ({
   disabled,
   filterKey,
 }) => {
-  const {selectedfilterItems, setSelectedFilterItems} = useEscalationContext()
+  const {selectedfilterItems, setSelectedFilterItems} = useEscalationContext();
   const handleChange = (value: any) => {
-    const tempProps={...selectedfilterItems};
-    tempProps[filterKey]=value;
-    setSelectedFilterItems(tempProps)
+    const tempProps = {...selectedfilterItems};
+    tempProps[filterKey] = value;
+    setSelectedFilterItems(tempProps);
   };
 
   return (

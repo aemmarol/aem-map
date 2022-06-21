@@ -2,7 +2,7 @@ import {UpdateResult} from "mongodb";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
-import { settingsCollectionName } from "../../../../../mongodb/dbCollectionNames";
+import {settingsCollectionName} from "../../../../../mongodb/dbCollectionNames";
 
 export default getAuthHandler()
   .get(async (req: NextApiRequestExtended, res) => {

@@ -2,7 +2,7 @@ import {ObjectId, UpdateResult} from "mongodb";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
-import { subsectorCollectionName } from "../../../../../mongodb/dbCollectionNames";
+import {subsectorCollectionName} from "../../../../../mongodb/dbCollectionNames";
 import {userRoles} from "../../../../../types";
 
 export default getAuthHandler().put(

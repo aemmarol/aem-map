@@ -1,5 +1,5 @@
 import {NextApiRequestExtended} from "../../../../../mongodb/authHandler";
-import { userCollectionName } from "../../../../../mongodb/dbCollectionNames";
+import {userCollectionName} from "../../../../../mongodb/dbCollectionNames";
 import getNoAuthHandler from "../../../../../mongodb/noAuthHandler";
 
 export default getNoAuthHandler().get(

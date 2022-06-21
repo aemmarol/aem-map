@@ -12,7 +12,7 @@ export interface selectedFilterItemsType {
 
 export interface EscalationFilterType {
   title?: string;
-  filterKey: filterTypes.Sector|filterTypes.Umoor;
+  filterKey: filterTypes.Sector | filterTypes.Umoor;
   options?: filterOption[];
   disabled: boolean;
 }

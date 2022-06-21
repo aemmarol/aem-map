@@ -1,9 +1,9 @@
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
-import { escalationCollectionName } from "../../../../../mongodb/dbCollectionNames";
-import { userRoles} from "../../../../../types";
-import { filterTypes } from "../../../../../types/escalation";
+import {escalationCollectionName} from "../../../../../mongodb/dbCollectionNames";
+import {userRoles} from "../../../../../types";
+import {filterTypes} from "../../../../../types/escalation";
 
 // get is used for admin dashboard
 // post is used for filter and rest pages
@@ -32,7 +32,7 @@ export default getAuthHandler()
               count: {$sum: 1},
             },
           },
-          { $sort : { _id: 1 } }
+          {$sort: {_id: 1}},
         ])
         .toArray();
       res.json(doc);

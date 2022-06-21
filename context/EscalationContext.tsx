@@ -1,6 +1,10 @@
-import React, { ReactNode, useContext, useState } from "react";
-import { authUser, escalationData, userRoles } from "../types";
-import { EscalationFilterType, filterTypes, selectedFilterItemsType } from "../types/escalation";
+import React, {ReactNode, useContext, useState} from "react";
+import {authUser, escalationData, userRoles} from "../types";
+import {
+  EscalationFilterType,
+  filterTypes,
+  selectedFilterItemsType,
+} from "../types/escalation";
 
 type Props = {
   children: ReactNode;
@@ -21,22 +25,22 @@ interface AppContextInterface {
 
 const EscalationContext = React.createContext<AppContextInterface>({
   adminDetails: {} as authUser,
-  setAdminDetails: () => { },
+  setAdminDetails: () => {},
   selectedView: null,
-  setSelectedView: () => { },
+  setSelectedView: () => {},
   escalationList: [] as escalationData[],
-  setEscalationList: () => { },
+  setEscalationList: () => {},
   escalationFilterProps: [] as EscalationFilterType[],
-  setEscalationFilterProps: () => { },
+  setEscalationFilterProps: () => {},
   selectedfilterItems: {} as selectedFilterItemsType,
-  setSelectedFilterItems: () => { },
+  setSelectedFilterItems: () => {},
 });
 
 export const useEscalationContext = () => {
   return useContext(EscalationContext);
 };
 
-export const EscalationProvider = ({ children }: Props) => {
+export const EscalationProvider = ({children}: Props) => {
   const [adminDetails, setadmindetails] = useState<authUser>({} as authUser);
   const [selectedView, setselectedview] = useState<userRoles | null>(null);
   const [escalationList, setescalationlist] = useState<escalationData[]>([]);
@@ -62,7 +66,7 @@ export const EscalationProvider = ({ children }: Props) => {
   };
 
   const setSelectedFilterItems = (data: selectedFilterItemsType) => {
-    localStorage.setItem("escFilter",JSON.stringify(data))
+    localStorage.setItem("escFilter", JSON.stringify(data));
     setselectedfilteritems(data);
   };
 
@@ -78,7 +82,7 @@ export const EscalationProvider = ({ children }: Props) => {
         escalationFilterProps,
         setEscalationFilterProps,
         selectedfilterItems,
-        setSelectedFilterItems
+        setSelectedFilterItems,
       }}
     >
       {children}

@@ -1,27 +1,25 @@
-import React, { FC, useEffect, useState } from "react";
+import React, {FC, useEffect, useState} from "react";
 
-import { escalationData, userRoles } from "../../../types";
+import {escalationData, userRoles} from "../../../types";
 import useWindowDimensions from "../../../utils/windowDimensions";
-import { EscalationCard } from "./escalationCard";
-import { EscalationTable } from "./escalationTable";
+import {EscalationCard} from "./escalationCard";
+import {EscalationTable} from "./escalationTable";
 
 import styles from "../../../styles/components/custom/escalationList.module.scss";
-import { EscalationFilter } from "./escalationFilter";
+import {EscalationFilter} from "./escalationFilter";
 
-import { Button, Col, Divider, Drawer, Input, Radio, Row, Space } from "antd";
-import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
-import { orderBy } from "lodash";
-import { useEscalationContext } from "../../../context/EscalationContext";
+import {Button, Col, Divider, Drawer, Input, Radio, Row, Space} from "antd";
+import {FilterOutlined, SearchOutlined} from "@ant-design/icons";
+import {orderBy} from "lodash";
+import {useEscalationContext} from "../../../context/EscalationContext";
 
 interface EscalationListType {
   userRole: userRoles;
 }
 
-export const EscalationList: FC<EscalationListType> = ({
-  userRole,
-}) => {
-  const { height, width } = useWindowDimensions();
-  const { escalationFilterProps,escalationList } = useEscalationContext();
+export const EscalationList: FC<EscalationListType> = ({userRole}) => {
+  const {height, width} = useWindowDimensions();
+  const {escalationFilterProps, escalationList} = useEscalationContext();
 
   const [escalations, setEscalations] = useState<escalationData[]>([]);
   const [showFilterDrawer, setShowFilterDrawer] = useState<boolean>(false);
@@ -36,8 +34,8 @@ export const EscalationList: FC<EscalationListType> = ({
     setEscalations(
       !!filterString
         ? escalationList.filter((esc) => {
-          return JSON.stringify(esc).toLowerCase().includes(filterString);
-        })
+            return JSON.stringify(esc).toLowerCase().includes(filterString);
+          })
         : escalationList
     );
   }, [filterString]);
@@ -66,14 +64,14 @@ export const EscalationList: FC<EscalationListType> = ({
         <Input
           suffix={<SearchOutlined />}
           placeholder="Search item"
-          style={{ marginBottom: "1em" }}
+          style={{marginBottom: "1em"}}
           onChange={(event) => setFilterString(event.target.value)}
         ></Input>
       </Row>
       <Row gutter={[16, 16]}>
         {hasFilterProps() ? (
           <Col
-            style={{ maxHeight: height ? height - 225 + "px" : "500px" }}
+            style={{maxHeight: height ? height - 225 + "px" : "500px"}}
             className={styles.filtersContainer}
             xs={0}
             md={5}
@@ -81,13 +79,12 @@ export const EscalationList: FC<EscalationListType> = ({
             {escalationFilterProps.map((filterProp, idx) => {
               return (
                 <div key={idx}>
-                  <EscalationFilter  {...filterProp} />
-                  {
-                    idx !== escalationFilterProps.length - 1 ?
-                      <Divider /> : null
-                  }
+                  <EscalationFilter {...filterProp} />
+                  {idx !== escalationFilterProps.length - 1 ? (
+                    <Divider />
+                  ) : null}
                 </div>
-              )
+              );
             })}
           </Col>
         ) : null}
@@ -112,7 +109,7 @@ export const EscalationList: FC<EscalationListType> = ({
                     onClick={() => setShowFilterDrawer(true)}
                     className={styles.filterIcon}
                     type="primary"
-                    icon={<FilterOutlined style={{ fontSize: 25 }} />}
+                    icon={<FilterOutlined style={{fontSize: 25}} />}
                     size="large"
                   />
                 </>
@@ -142,9 +139,7 @@ export const EscalationList: FC<EscalationListType> = ({
         >
           <h2>Filters:</h2>
           {escalationFilterProps.map((filterProp, idx) => {
-            return (
-              <EscalationFilter key={idx} {...filterProp} />
-            );
+            return <EscalationFilter key={idx} {...filterProp} />;
           })}
           <h2 className="mt-16">Sort By:</h2>
           <Radio.Group

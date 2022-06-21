@@ -7,7 +7,10 @@ import fileFields from "../../../sample_data/fileField.json";
 
 import {API} from "../../../utils/api";
 import {handleResponse} from "../../../utils/handleResponse";
-import { fileDetailsFieldCollectionName, mumeneenDetailsFieldCollectionName } from "../../../mongodb/dbCollectionNames";
+import {
+  fileDetailsFieldCollectionName,
+  mumeneenDetailsFieldCollectionName,
+} from "../../../mongodb/dbCollectionNames";
 
 interface CardProps {
   data: any[];

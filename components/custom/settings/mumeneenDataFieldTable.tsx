@@ -2,7 +2,7 @@ import {DeleteTwoTone} from "@ant-design/icons";
 import {message} from "antd";
 import {FC, useState} from "react";
 import {DashboardDataFieldTableCard} from "../..";
-import { mumeneenDetailsFieldCollectionName } from "../../../mongodb/dbCollectionNames";
+import {mumeneenDetailsFieldCollectionName} from "../../../mongodb/dbCollectionNames";
 import {getMumeneenDataFields} from "../../../pages/api/v2/services/dbFields";
 import {databaseMumeneenFieldData} from "../../../types";
 import {getauthToken} from "../../../utils";

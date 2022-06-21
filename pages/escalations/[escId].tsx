@@ -24,7 +24,10 @@ import {AddEscalationCommentsModal} from "../../components";
 import {getSectorDataByName} from "../api/v2/services/sector";
 import {getUmoorList} from "../api/v2/services/umoor";
 import {getSubSectorDataByName} from "../api/v2/services/subsector";
-import { getEscalationData, updateEscalationData } from "../api/v2/services/escalation";
+import {
+  getEscalationData,
+  updateEscalationData,
+} from "../api/v2/services/escalation";
 
 const FileMemberDetailsPage: NextPage = () => {
   const router = useRouter();
@@ -100,7 +103,7 @@ const FileMemberDetailsPage: NextPage = () => {
 
   const getEscatationDetails = async (id: string) => {
     toggleLoader(true);
-    await getEscalationData(id,(data:escalationData)=>{
+    await getEscalationData(id, (data: escalationData) => {
       if (!isEmpty(data)) {
         setEscalationDetails(data);
         setselectIssueValue(getIssueType(data.type, "value"));
@@ -175,9 +178,8 @@ const FileMemberDetailsPage: NextPage = () => {
     const data: any = {
       comments: newComment,
       [field]: valueBasedOnField,
-      updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss")
+      updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
     };
-
 
     await updateEscalationData(escId as string, data);
   };

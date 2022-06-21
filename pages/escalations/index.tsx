@@ -1,9 +1,9 @@
-import { Button, message, Select, Tooltip } from "antd";
-import { NextPage } from "next";
-import { useRouter } from "next/router";
-import { Dashboardlayout } from "../../layouts/dashboardLayout";
-import { useEffect, useState } from "react";
-import { logout, verifyUser } from "../api/v1/authentication";
+import {Button, message, Select, Tooltip} from "antd";
+import {NextPage} from "next";
+import {useRouter} from "next/router";
+import {Dashboardlayout} from "../../layouts/dashboardLayout";
+import {useEffect, useState} from "react";
+import {logout, verifyUser} from "../api/v1/authentication";
 import {
   authUser,
   escalationData,
@@ -12,26 +12,33 @@ import {
   umoorData,
   userRoles,
 } from "../../types";
-import { AddEscalationModal } from "../../components";
-import { useGlobalContext } from "../../context/GlobalContext";
-import { EscalationList } from "../../components/custom/escalations/escalationList";
+import {AddEscalationModal} from "../../components";
+import {useGlobalContext} from "../../context/GlobalContext";
+import {EscalationList} from "../../components/custom/escalations/escalationList";
 
-import { filterOption, filterTypes, selectedFilterItemsType } from "../../types/escalation";
-import { StatsCard } from "../../components/cards/statsCard";
+import {
+  filterOption,
+  filterTypes,
+  selectedFilterItemsType,
+} from "../../types/escalation";
+import {StatsCard} from "../../components/cards/statsCard";
 import useWindowDimensions from "../../utils/windowDimensions";
-import { DownloadOutlined } from "@ant-design/icons";
-import { CSVLink } from "react-csv";
-import { getDateDiffDays } from "../../utils";
-import { getSectorList } from "../api/v2/services/sector";
-import { getUmoorList } from "../api/v2/services/umoor";
-import { useEscalationContext } from "../../context/EscalationContext";
-import { find, isEmpty } from "lodash";
-import { getEscalationListFromDb, getSectorStats, getUmoorStats } from "../api/v2/services/escalation";
-
+import {DownloadOutlined} from "@ant-design/icons";
+import {CSVLink} from "react-csv";
+import {getDateDiffDays} from "../../utils";
+import {getSectorList} from "../api/v2/services/sector";
+import {getUmoorList} from "../api/v2/services/umoor";
+import {useEscalationContext} from "../../context/EscalationContext";
+import {find, isEmpty} from "lodash";
+import {
+  getEscalationListFromDb,
+  getSectorStats,
+  getUmoorStats,
+} from "../api/v2/services/escalation";
 
 const EscalationDashboard: NextPage = () => {
   const router = useRouter();
-  const { changeSelectedSidebarKey, toggleLoader } = useGlobalContext();
+  const {changeSelectedSidebarKey, toggleLoader} = useGlobalContext();
   const {
     setAdminDetails,
     adminDetails,
@@ -40,9 +47,9 @@ const EscalationDashboard: NextPage = () => {
     setEscalationFilterProps,
     selectedfilterItems,
     setEscalationList,
-    setSelectedFilterItems
+    setSelectedFilterItems,
   } = useEscalationContext();
-  const { width } = useWindowDimensions();
+  const {width} = useWindowDimensions();
 
   const [showEscalationModal, setShowEscalationModal] =
     useState<boolean>(false);
@@ -56,8 +63,8 @@ const EscalationDashboard: NextPage = () => {
       notVerifierUserLogout();
     }
     return () => {
-      setEscalationFilterProps({})
-    }
+      setEscalationFilterProps({});
+    };
   }, []);
 
   useEffect(() => {
@@ -70,7 +77,7 @@ const EscalationDashboard: NextPage = () => {
     if (!isEmpty(selectedfilterItems)) {
       callEscalationListApi();
     }
-  }, [selectedfilterItems])
+  }, [selectedfilterItems]);
 
   const setUserDetails = async (user: authUser) => {
     if (user.userRole.includes(userRoles.Admin)) {
@@ -87,7 +94,7 @@ const EscalationDashboard: NextPage = () => {
     }
     const filters = JSON.parse(localStorage.getItem("escFilter") as string);
     if (filters) {
-      setSelectedFilterItems(filters)
+      setSelectedFilterItems(filters);
     }
   };
 
@@ -109,12 +116,11 @@ const EscalationDashboard: NextPage = () => {
         ]);
         break;
       case userRoles.Admin:
-
         const queryUmoor = router.query.umoor?.toString();
         const querySector = router.query.sector?.toString();
         await getUmoorStats("all", async (umoordata: any) => {
           const umoorCount = umoordata;
-          const umoorList = await getUmoorList()
+          const umoorList = await getUmoorList();
           await getSectorStats("all", async (sectorData: any) => {
             const sectorCount = sectorData;
             setEscalationFilterProps([
@@ -123,7 +129,11 @@ const EscalationDashboard: NextPage = () => {
                 filterKey: filterTypes.Umoor,
                 options: umoorCount.map((umoor: any) => {
                   return {
-                    label: find(umoorList, { value: umoor._id })?.label + " (" + umoor.count + ")",
+                    label:
+                      find(umoorList, {value: umoor._id})?.label +
+                      " (" +
+                      umoor.count +
+                      ")",
                     value: umoor._id,
                   };
                 }),
@@ -132,27 +142,29 @@ const EscalationDashboard: NextPage = () => {
               {
                 title: "Selected Regions",
                 options: sectorCount.map((area: any) => {
-                  return { label: area._id + " (" + area.count + ")", value: area._id };
+                  return {
+                    label: area._id + " (" + area.count + ")",
+                    value: area._id,
+                  };
                 }),
                 disabled: false,
                 filterKey: filterTypes.Sector,
               },
             ]);
-          })
-        })
+          });
+        });
 
         break;
     }
   };
 
   const callEscalationListApi = async () => {
-    toggleLoader(true)
+    toggleLoader(true);
     await getEscalationListFromDb(selectedfilterItems, (data: any) => {
-      setEscalationList(data)
-    })
-    toggleLoader(false)
-  }
-
+      setEscalationList(data);
+    });
+    toggleLoader(false);
+  };
 
   // const getStatCardList = () => {
   //   if (!escalationsStatsGroup) return null;
@@ -339,8 +351,8 @@ const EscalationDashboard: NextPage = () => {
 
       <div className="mb-16">
         {adminDetails &&
-          adminDetails.userRole &&
-          adminDetails.userRole.length > 1 ? (
+        adminDetails.userRole &&
+        adminDetails.userRole.length > 1 ? (
           <div className="flex-align-center mb-16 flex-1">
             <h4 className="mr-10 mb-0 w-100">Select View : </h4>
             <Select
@@ -382,11 +394,7 @@ const EscalationDashboard: NextPage = () => {
       </div>
 
       {/* {selectedView && isReady ? ( */}
-      {selectedView ? (
-        <EscalationList
-          userRole={selectedView}
-        />
-      ) : null}
+      {selectedView ? <EscalationList userRole={selectedView} /> : null}
 
       {showEscalationModal ? (
         <AddEscalationModal

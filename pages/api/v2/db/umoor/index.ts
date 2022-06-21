@@ -2,7 +2,7 @@ import {InsertOneResult, ObjectId, DeleteResult} from "mongodb";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
-import { umoorListCollectionName } from "../../../../../mongodb/dbCollectionNames";
+import {umoorListCollectionName} from "../../../../../mongodb/dbCollectionNames";
 import {userRoles} from "../../../../../types";
 
 export default getAuthHandler()
