@@ -15,9 +15,7 @@ import {AddEscalationModal} from "../../components";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {EscalationList} from "../../components/custom/escalations/escalationList";
 
-import {
-  filterTypes,
-} from "../../types/escalation";
+import {filterTypes} from "../../types/escalation";
 import {StatsCard} from "../../components/cards/statsCard";
 import useWindowDimensions from "../../utils/windowDimensions";
 import {DownloadOutlined} from "@ant-design/icons";
