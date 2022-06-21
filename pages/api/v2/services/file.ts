@@ -21,7 +21,7 @@ export const getFileDataListBySubsector = async (
   subsector: string,
   onSuccess?: any
 ) => {
-  await fetch(API.fileList + "?queryName=subsector&queryValue" + subsector, {
+  await fetch(API.fileList + "?queryName=subsector&queryValue=" + subsector, {
     method: "GET",
     headers: {...getauthToken()},
   })
@@ -38,7 +38,7 @@ export const getFileDataListBySector = async (
   sector: string,
   onSuccess?: any
 ) => {
-  await fetch(API.fileList + "?queryName=sector&queryValue" + sector, {
+  await fetch(API.fileList + "?queryName=sector&queryValue=" + sector, {
     method: "GET",
     headers: {...getauthToken()},
   })

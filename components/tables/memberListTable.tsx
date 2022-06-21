@@ -41,7 +41,7 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
     const fieldData = await getDbMumeneenDataFields();
     let dataColumns = [];
     const dataColumnsMap: any = {
-      id: {
+      _id: {
         title: "ITS",
         dataIndex: "_id",
         key: "_id",
@@ -49,7 +49,6 @@ export const MemberListTable: FC<TableProps> = ({dataSource}) => {
         fixed: "left",
       },
     };
-
     sampleMemberList.forEach((val) => {
       dataColumnsMap[val.name] = {
         title: val.label,

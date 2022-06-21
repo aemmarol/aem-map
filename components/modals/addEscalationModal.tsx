@@ -80,6 +80,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       await getFileDataListBySector(
         adminDetails.assignedArea[0],
         (data: any) => {
+          console.log("fileList", data, adminDetails.assignedArea[0]);
           fileList = data;
         }
       );

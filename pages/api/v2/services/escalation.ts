@@ -107,3 +107,42 @@ export const getSectorStats = async (status: string, onSuccess?: any) => {
     })
     .catch((error) => message.error(error));
 };
+
+export const getEscalationStatsByFilter = async (
+  type: string,
+  status: string,
+  filterName: string,
+  filterValue: string,
+  onSuccess?: any
+) => {
+  const url =
+    status === "all"
+      ? API.escalationCount +
+        "?type=" +
+        type +
+        "&filterName=" +
+        filterName +
+        "&filterValue=" +
+        filterValue
+      : API.escalationCount +
+        "?type=" +
+        type +
+        "&status=" +
+        status +
+        "&filterValue=" +
+        filterValue +
+        "&filterName=" +
+        filterName;
+
+  await fetch(url, {
+    method: "POST",
+    headers: {...getauthToken()},
+  })
+    .then(handleResponse)
+    .then((response) => {
+      if (onSuccess) {
+        onSuccess(response);
+      }
+    })
+    .catch((error) => message.error(error));
+};

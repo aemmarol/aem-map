@@ -62,21 +62,17 @@ export default getAuthHandler()
         : type === filterTypes.SubSector
         ? "$file_details.sub_sector.name"
         : "";
-    if (userData.userRole.includes(userRoles.Admin)) {
-      const doc = await req.db
-        .collection(escalationCollectionName)
-        .aggregate([
-          {$match: matchObj},
-          {
-            $group: {
-              _id: groupby,
-              count: {$sum: 1},
-            },
+    const doc = await req.db
+      .collection(escalationCollectionName)
+      .aggregate([
+        {$match: matchObj},
+        {
+          $group: {
+            _id: groupby,
+            count: {$sum: 1},
           },
-        ])
-        .toArray();
-      res.json(doc);
-    } else {
-      res.status(401).json({msg: "user access denied!"});
-    }
+        },
+      ])
+      .toArray();
+    res.json(doc);
   });

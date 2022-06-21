@@ -10,7 +10,6 @@ export const handleResponse = (response: any) => {
         } else {
           // auto logout if 401 response returned from api
           localStorage.removeItem("user");
-          window.location.reload();
           message.info("Session timeout!!");
         }
       }

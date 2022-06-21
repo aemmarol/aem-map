@@ -32,6 +32,7 @@ import {useEscalationContext} from "../../context/EscalationContext";
 import {find, isEmpty} from "lodash";
 import {
   getEscalationListFromDb,
+  getEscalationStatsByFilter,
   getSectorStats,
   getUmoorStats,
 } from "../api/v2/services/escalation";
@@ -48,11 +49,14 @@ const EscalationDashboard: NextPage = () => {
     selectedfilterItems,
     setEscalationList,
     setSelectedFilterItems,
+    escalationList,
   } = useEscalationContext();
   const {width} = useWindowDimensions();
 
   const [showEscalationModal, setShowEscalationModal] =
     useState<boolean>(false);
+
+  const [statCardList, setStatCardList] = useState<any>([]);
 
   useEffect(() => {
     if (typeof verifyUser() !== "string") {
@@ -99,12 +103,60 @@ const EscalationDashboard: NextPage = () => {
   };
 
   const setupFiltersAndData = async () => {
+    const umoorList = await getUmoorList();
+    let sectorList: any[] = [];
+    await getSectorList((data: sectorData[]) => {
+      sectorList = data.map((val) => val.name);
+    });
     switch (selectedView) {
       case userRoles.Masool:
       case userRoles.Masoola:
+        setSelectedFilterItems({
+          [filterTypes.Sector]: adminDetails.assignedArea,
+          [filterTypes.Umoor]: umoorList.map((val) => val.value),
+        });
+        const statarr = await Promise.all(
+          adminDetails.assignedArea.map(async (val) => {
+            const statObj: any = {
+              title: val,
+            };
+            Object.values(escalationStatus).map((val) => {
+              statObj[val] = 0;
+            });
+            await getEscalationStatsByFilter(
+              filterTypes.Sector,
+              "all",
+              filterTypes.Sector,
+              val,
+              (data: any) => {
+                statObj.total = data[0].count;
+              }
+            );
+            await Promise.all(
+              Object.values(escalationStatus).map(async (key) => {
+                await getEscalationStatsByFilter(
+                  filterTypes.Sector,
+                  key,
+                  filterTypes.Sector,
+                  val,
+                  async (response: any) => {
+                    await Promise.all(
+                      response.map((newVal: any) => {
+                        statObj[key] = newVal.count;
+                      })
+                    );
+                  }
+                );
+              })
+            );
+            return statObj;
+          })
+        );
+        setStatCardList(statarr);
+        break;
       case userRoles.Musaid:
       case userRoles.Musaida:
-        setEscalationFilterProps([]);
+        break;
       case userRoles.Umoor:
         setEscalationFilterProps([
           {
@@ -116,11 +168,8 @@ const EscalationDashboard: NextPage = () => {
         ]);
         break;
       case userRoles.Admin:
-        const queryUmoor = router.query.umoor?.toString();
-        const querySector = router.query.sector?.toString();
         await getUmoorStats("all", async (umoordata: any) => {
           const umoorCount = umoordata;
-          const umoorList = await getUmoorList();
           await getSectorStats("all", async (sectorData: any) => {
             const sectorCount = sectorData;
             setEscalationFilterProps([
@@ -153,7 +202,6 @@ const EscalationDashboard: NextPage = () => {
             ]);
           });
         });
-
         break;
     }
   };
@@ -166,72 +214,6 @@ const EscalationDashboard: NextPage = () => {
     toggleLoader(false);
   };
 
-  // const getStatCardList = () => {
-  //   if (!escalationsStatsGroup) return null;
-  //   switch (selectedView) {
-  //     case userRoles.Masool:
-  //     case userRoles.Masoola:
-  //     case userRoles.Musaid:
-  //     case userRoles.Musaida:
-  //       return adminDetails.assignedArea.map((area, idx) => {
-  //         let escalationGroup: any = escalationsStatsGroup[area];
-  //         if (!escalationGroup) {
-  //           escalationGroup = {
-  //             groupName: area,
-  //             data: [],
-  //             stats: {
-  //               total: 0,
-  //             },
-  //           };
-  //           for (const escStatus of Object.values(escalationStatus)) {
-  //             escalationGroup["stats"][escStatus] = 0;
-  //           }
-  //         }
-
-  //         return (
-  //           <div key={"stat_" + area + "_" + idx} className="mb-16">
-  //             <StatsCard
-  //               title={area}
-  //               handleClick={null}
-  //               stats={escalationGroup.stats}
-  //               horizontal={true}
-  //             ></StatsCard>
-  //           </div>
-  //         );
-  //       });
-  //     case userRoles.Umoor:
-  //       return adminDetails.assignedUmoor.map((umoor, idx) => {
-  //         let escalationGroup: any = escalationsStatsGroup[umoor];
-  //         if (!escalationGroup) {
-  //           escalationGroup = {
-  //             groupName: umoor,
-  //             data: [],
-  //             stats: {
-  //               total: 0,
-  //               // "Issue Reported": 0,
-  //               // "Resolution In Process": 0,
-  //               // Resolved: 0,
-  //             },
-  //           };
-  //           for (const escStatus of Object.values(escalationStatus)) {
-  //             escalationGroup["stats"][escStatus] = 0;
-  //           }
-  //         }
-
-  //         return (
-  //           <div key={"stat_" + umoor + "_" + idx} className="mb-16">
-  //             <StatsCard
-  //               title={getLabelForUmoor(umoor)}
-  //               handleClick={null}
-  //               stats={escalationGroup.stats}
-  //               horizontal={true}
-  //             ></StatsCard>
-  //           </div>
-  //         );
-  //       });
-  //   }
-  // };
-
   const notVerifierUserLogout = () => {
     message.info("user does not have access");
     logout();
@@ -242,92 +224,94 @@ const EscalationDashboard: NextPage = () => {
     setShowEscalationModal(true);
   };
 
-  // const getEscalationDownloadData: any = () => {
-  //   const tempArr: escalationData[] = escalationList.map((data:escalationData) => {
-  //     const tempEscData: any = {};
-  //     getEscalationDownloadDataHeaders().forEach((val:any) => {
-  //       switch (val.key) {
-  //         case "file_details":
-  //           tempEscData[val.key] = data.file_details.tanzeem_file_no;
-  //           break;
+  const getEscalationDownloadData: any = () => {
+    const tempArr: any = escalationList.map((data: any) => {
+      const tempEscData: any = {};
+      getEscalationDownloadDataHeaders().forEach((val: any) => {
+        switch (val.key) {
+          case "file_details":
+            tempEscData[val.key] = data.file_details.tanzeem_file_no;
+            break;
 
-  //         case "sector":
-  //           let sectorName:string = data.file_details.sub_sector.sector.name as string
-  //           tempEscData[val.key] = sectorName;
-  //           break;
+          case "sector":
+            let sectorName: string = data.file_details.sub_sector.sector
+              .name as string;
+            tempEscData[val.key] = sectorName;
+            break;
 
-  //         case "pending_since":
-  //           tempEscData[val.key] = `${data.status === escalationStatus.CLOSED ||
-  //             data.status === escalationStatus.RESOLVED
-  //             ? 0
-  //             : getDateDiffDays(data.created_at)
-  //             } days`;
-  //           break;
+          case "pending_since":
+            tempEscData[val.key] = `${
+              data.status === escalationStatus.CLOSED ||
+              data.status === escalationStatus.RESOLVED
+                ? 0
+                : getDateDiffDays(data.created_at)
+            } days`;
+            break;
 
-  //         case "comments":
-  //           tempEscData[val.key] = data.comments[data.comments.length - 1].msg;
-  //           break;
+          case "comments":
+            tempEscData[val.key] = data.comments[data.comments.length - 1].msg;
+            break;
 
-  //         case "type":
-  //           tempEscData[val.key] = data.type.label;
-  //           break;
+          case "type":
+            tempEscData[val.key] = data.type.label;
+            break;
 
-  //         default:
-  //           tempEscData[val.key] = data[val.key];
-  //           break;
-  //       }
-  //     });
+          default:
+            tempEscData[val.key] = data[val.key];
+            break;
+        }
+      });
 
-  //     return tempEscData;
-  //   });
+      return tempEscData;
+    });
 
-  //   return tempArr;
-  // };
+    return tempArr;
+  };
 
-  // const getEscalationDownloadDataHeaders = () => {
-  //   const columns = [
-  //     {
-  //       label: "Id",
-  //       key: "escalation_id",
-  //     },
-  //     {
-  //       label: "File No",
-  //       key: "file_details",
-  //     },
+  const getEscalationDownloadDataHeaders = () => {
+    const columns = [
+      {
+        label: "Id",
+        key: "escalation_id",
+      },
+      {
+        label: "File No",
+        key: "file_details",
+      },
 
-  //     {
-  //       label: "Umoor",
-  //       key: "type",
-  //     },
+      {
+        label: "Umoor",
+        key: "type",
+      },
 
-  //     {
-  //       label: "Sector",
-  //       key: "sector",
-  //     },
+      {
+        label: "Sector",
+        key: "sector",
+      },
 
-  //     {
-  //       label: "Issue",
-  //       key: "issue",
-  //     },
-  //     {
-  //       label: "Issue Date",
-  //       key: "created_at",
-  //     },
-  //     {
-  //       label: "Pending Since",
-  //       key: "pending_since",
-  //     },
-  //     {
-  //       label: "Status",
-  //       key: "status",
-  //     },
-  //     {
-  //       label: "Latest Comment",
-  //       key: "comments",
-  //     },
-  //   ];
-  //   return columns;
-  // };
+      {
+        label: "Issue",
+        key: "issue",
+      },
+      {
+        label: "Issue Date",
+        key: "created_at",
+      },
+      {
+        label: "Pending Since",
+        key: "pending_since",
+      },
+      {
+        label: "Status",
+        key: "status",
+      },
+      {
+        label: "Latest Comment",
+        key: "comments",
+      },
+    ];
+    return columns;
+  };
 
   return (
     <Dashboardlayout
@@ -336,7 +320,7 @@ const EscalationDashboard: NextPage = () => {
       }
       headerTitle="Escalations"
     >
-      {/* <div
+      <div
         className="d-flex"
         style={{
           flexDirection: "column",
@@ -346,8 +330,20 @@ const EscalationDashboard: NextPage = () => {
           margin: "0 auto",
         }}
       >
-        {getStatCardList()}
-      </div> */}
+        {statCardList.map((val: any, idx: any) => {
+          const statsObj = {...val};
+          delete statsObj.title;
+          return (
+            <div key={"stat_" + val.title + "_" + idx} className="mb-16">
+              <StatsCard
+                title={val.title}
+                handleClick={null}
+                stats={statsObj}
+              />
+            </div>
+          );
+        })}
+      </div>
 
       <div className="mb-16">
         {adminDetails &&
@@ -379,7 +375,7 @@ const EscalationDashboard: NextPage = () => {
           >
             Raise Escalation
           </Button>
-          {/* <Tooltip title="Download Escalationdata">
+          <Tooltip title="Download Escalationdata">
             <CSVLink
               // className={styles.downloadLink}
               filename={"escalations.csv"}
@@ -387,13 +383,12 @@ const EscalationDashboard: NextPage = () => {
               headers={getEscalationDownloadDataHeaders()}
               className="ml-16"
             >
-              <DownloadOutlined style={{ fontSize: 25 }} />
+              <DownloadOutlined style={{fontSize: 25}} />
             </CSVLink>
-          </Tooltip> */}
+          </Tooltip>
         </div>
       </div>
 
-      {/* {selectedView && isReady ? ( */}
       {selectedView ? <EscalationList userRole={selectedView} /> : null}
 
       {showEscalationModal ? (

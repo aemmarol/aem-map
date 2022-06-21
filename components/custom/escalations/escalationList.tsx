@@ -50,6 +50,7 @@ export const EscalationList: FC<EscalationListType> = ({userRole}) => {
 
   const sortEscalationList = (arr: Array<any>) => {
     if (sortValue !== "") {
+      console.log(sortValue);
       const key = sortValue.split("-")[0];
       const order = sortValue.split("-")[1] === "asc" ? "asc" : "desc";
       const tempEscList = [...arr];
@@ -137,10 +138,11 @@ export const EscalationList: FC<EscalationListType> = ({userRole}) => {
           visible={showFilterDrawer}
           height={600}
         >
-          <h2>Filters:</h2>
-          {escalationFilterProps.map((filterProp, idx) => {
-            return <EscalationFilter key={idx} {...filterProp} />;
-          })}
+          {hasFilterProps() && <h2>Filters:</h2>}
+          {hasFilterProps() &&
+            escalationFilterProps.map((filterProp, idx) => {
+              return <EscalationFilter key={idx} {...filterProp} />;
+            })}
           <h2 className="mt-16">Sort By:</h2>
           <Radio.Group
             onChange={(e) => setSortValue(e.target.value)}

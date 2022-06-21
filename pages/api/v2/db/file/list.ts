@@ -8,7 +8,7 @@ import {userRoles} from "../../../../../types";
 export default getAuthHandler()
   .get(async (req: NextApiRequestExtended, res) => {
     const {queryName, queryValue} = req.query;
-    if (!queryName || !queryValue) {
+    if (queryName && queryValue) {
       const queryObj =
         queryName === "sector"
           ? {"sub_sector.sector.name": queryValue}

@@ -7,7 +7,11 @@ import {userRoles} from "../../../../../types";
 export default getAuthHandler().get(
   async (req: NextApiRequestExtended, res) => {
     const {userData} = req;
-    if (userData.userRole.includes(userRoles.Admin)) {
+    if (
+      userData.userRole.includes(userRoles.Admin) ||
+      userData.userRole.includes(userRoles.Masool) ||
+      userData.userRole.includes(userRoles.Masoola)
+    ) {
       const doc = await req.db
         .collection(subsectorCollectionName)
         .find()

@@ -4,7 +4,7 @@ import styles from "../../styles/components/tables/fileListTable.module.scss";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {useRouter} from "next/router";
 import {logout, verifyUser} from "../../pages/api/v1/authentication";
-import {authUser, databaseMumeneenFieldData} from "../../types";
+import {authUser, databaseMumeneenFieldData, userRoles} from "../../types";
 import {getFileTableUserColumns} from "./columnsUtil";
 import useWindowDimensions from "../../utils/windowDimensions";
 import {EscStat} from "../custom/escalations/escalationStatus";
@@ -26,9 +26,10 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
     logout();
     router.push("/");
   };
+
   const getFileTableColumns = async () => {
     toggleLoader(true);
-    let userRole;
+    let userRole: any = "";
     if (typeof verifyUser() !== "string") {
       const user = verifyUser() as authUser;
       userRole = user.userRole[0];
@@ -38,12 +39,12 @@ export const SubSectorFileListTable: FC<TableProps> = ({dataSource}) => {
 
     const fieldData = await getDbFileDataFields();
 
-    let dataColumns = [];
+    let dataColumns: any = [];
     const dataColumnsMap: any = {
-      id: {
+      _id: {
         title: "HOF ITS",
-        dataIndex: "id",
-        key: "id",
+        dataIndex: "_id",
+        key: "_id",
         width: 150,
         fixed: "left",
       },
