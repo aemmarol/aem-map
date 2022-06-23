@@ -15,19 +15,19 @@ export const resetFileData = async () => {
     subSectors.map(async (value) => {
       await resetSubSectorFilesData(value._id as string);
     })
-  ).catch((error) => message.error(error));
+  ).catch((error) => message.error(error.message));
 
   await fetch(API.fileList, {
     method: "DELETE",
     headers: {...getauthToken()},
   })
     .then(handleResponse)
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 
   await fetch(API.memberList, {
     method: "DELETE",
     headers: {...getauthToken()},
   })
     .then(handleResponse)
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };

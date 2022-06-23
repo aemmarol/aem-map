@@ -14,7 +14,7 @@ export const getMemberListByHofId = async (hofId: string, onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getMemberDataById = async (itsId: string, onSuccess?: any) => {
@@ -28,5 +28,5 @@ export const getMemberDataById = async (itsId: string, onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };

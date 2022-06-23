@@ -81,7 +81,7 @@ export const updateSubSectorListToDefault = async () => {
         }
         updateSubSectorData(value._id as string, {...data});
       })
-    ).catch((error) => message.error(error));
+    ).catch((error) => message.error(error.message));
   });
 };
 
@@ -96,7 +96,7 @@ export const getSubSectorList = async (onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getSubSectorData = async (id: string, onSuccess?: any) => {
@@ -110,7 +110,7 @@ export const getSubSectorData = async (id: string, onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getSubSectorDataByName = async (name: string, onSuccess?: any) => {
@@ -124,7 +124,7 @@ export const getSubSectorDataByName = async (name: string, onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const updateSubSectorData = async (
@@ -141,7 +141,7 @@ export const updateSubSectorData = async (
     }),
   })
     .then(handleResponse)
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const updateSubSectorFilesData = async (
@@ -158,7 +158,7 @@ export const updateSubSectorFilesData = async (
     }),
   })
     .then(handleResponse)
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const resetSubSectorFilesData = async (id: string) => {
@@ -169,5 +169,5 @@ export const resetSubSectorFilesData = async (id: string) => {
     updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
   })
     .then((response) => response)
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };

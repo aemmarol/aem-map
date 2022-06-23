@@ -11,7 +11,7 @@ export const getUmoorList = async (): Promise<umoorData[]> => {
     headers: {...getauthToken()},
   })
     .then(handleResponse)
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getUmoorListWithCoordinators = async (): Promise<umoorData[]> => {

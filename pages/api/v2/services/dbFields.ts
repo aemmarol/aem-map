@@ -14,7 +14,7 @@ export const getMumeneenDataFields = async (onSuccess: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getFileDataFields = async (onSuccess?: any) => {
@@ -28,5 +28,5 @@ export const getFileDataFields = async (onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };

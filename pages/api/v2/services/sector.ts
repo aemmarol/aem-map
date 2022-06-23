@@ -20,7 +20,7 @@ export const addSectorList = async () => {
         body: JSON.stringify({...value, bounds: boundsArr, sub_sector_id: []}),
       }).then(handleResponse);
     })
-  ).catch((error) => message.error(error));
+  ).catch((error) => message.error(error.message));
 };
 
 export const updateSectorListToDefault = async () => {
@@ -34,7 +34,7 @@ export const updateSectorListToDefault = async () => {
         }));
         updateSectorData(value._id as string, {...data, bounds: boundsArr});
       })
-    ).catch((error) => message.error(error));
+    ).catch((error) => message.error(error.message));
   });
 };
 
@@ -49,7 +49,7 @@ export const getSectorList = async (onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getSectorData = async (id: string, onSuccess?: any) => {
@@ -63,7 +63,7 @@ export const getSectorData = async (id: string, onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getSectorDataByName = async (name: string, onSuccess?: any) => {
@@ -77,7 +77,7 @@ export const getSectorDataByName = async (name: string, onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const updateSectorData = async (
@@ -94,5 +94,5 @@ export const updateSectorData = async (
     }),
   })
     .then(handleResponse)
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };

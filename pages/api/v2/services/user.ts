@@ -10,5 +10,5 @@ export const getUserList = async (): Promise<authUser[]> => {
     headers: {...getauthToken()},
   })
     .then(handleResponse)
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };

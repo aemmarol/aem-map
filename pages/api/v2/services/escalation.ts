@@ -15,7 +15,7 @@ export const addEscalationData = async (data: escalationData) => {
     headers: {...getauthToken()},
   })
     .then(handleResponse)
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getEscalationData = async (id: string, onSuccess?: any) => {
@@ -29,7 +29,7 @@ export const getEscalationData = async (id: string, onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const updateEscalationData = async (id: string, data: any) => {
@@ -39,7 +39,7 @@ export const updateEscalationData = async (id: string, data: any) => {
     body: JSON.stringify(data),
   })
     .then(handleResponse)
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getEscalationListFromDb = async (
@@ -74,7 +74,7 @@ export const getEscalationListFromDb = async (
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getUmoorStats = async (status: string, onSuccess?: any) => {
@@ -93,7 +93,7 @@ export const getUmoorStats = async (status: string, onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getSectorStats = async (status: string, onSuccess?: any) => {
@@ -112,7 +112,7 @@ export const getSectorStats = async (status: string, onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getEscalationStatsByFilter = async (

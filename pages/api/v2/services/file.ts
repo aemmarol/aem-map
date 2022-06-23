@@ -14,7 +14,7 @@ export const getFileDataList = async (onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getFileDataListBySubsector = async (
@@ -31,7 +31,7 @@ export const getFileDataListBySubsector = async (
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getFileDataListBySector = async (
@@ -48,7 +48,7 @@ export const getFileDataListBySector = async (
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getFileData = async (id: string, onSuccess?: any) => {
@@ -62,7 +62,7 @@ export const getFileData = async (id: string, onSuccess?: any) => {
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
 
 export const getFileDataByFileNumber = async (
@@ -79,5 +79,5 @@ export const getFileDataByFileNumber = async (
         onSuccess(response);
       }
     })
-    .catch((error) => message.error(error));
+    .catch((error) => message.error(error.message));
 };
