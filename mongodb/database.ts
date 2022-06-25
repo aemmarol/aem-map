@@ -9,8 +9,6 @@ const connectionString =
   process.env.NEXT_PUBLIC_MONGODB_HOST +
   "/?retryWrites=true&w=majority";
 
-console.log("con", connectionString);
-
 const client = new MongoClient(connectionString);
 
 async function database(req: any, res: any, next: any) {
