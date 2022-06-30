@@ -4,7 +4,8 @@ import {API} from "../../../../utils/api";
 import {handleResponse} from "../../../../utils/handleResponse";
 
 export const getMemberListByHofId = async (hofId: string, onSuccess?: any) => {
-  await fetch(API.memberList + "?hofId=" + hofId.toString(), {
+  const id: string = hofId as string;
+  await fetch(API.memberList + "?hofId=" + id, {
     method: "GET",
     headers: {...getauthToken()},
   })

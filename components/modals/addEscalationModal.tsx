@@ -34,18 +34,24 @@ import {
   getMemberListByHofId,
 } from "../../pages/api/v2/services/member";
 import {getSettings} from "../../pages/api/v2/services/settings";
-import {addEscalationData} from "../../pages/api/v2/services/escalation";
+import {
+  addEscalationData,
+  getEscalationData,
+} from "../../pages/api/v2/services/escalation";
 import {API} from "../../utils/api";
 import {useEscalationContext} from "../../context/EscalationContext";
+import {sendNewEscalationEmail} from "../../pages/api/v2/services/email";
 
 type AddEscalationModalProps = {
   showModal: boolean;
   handleClose: () => any;
+  successCallBack: () => any;
 };
 
 export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   showModal,
   handleClose,
+  successCallBack,
 }) => {
   const [fileForm] = Form.useForm();
   const [escalationForm] = Form.useForm();
@@ -192,14 +198,23 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
         contact: values.escalationRaisedForContact,
       },
     };
-    await addEscalationData(data).then(async () => {
+    await addEscalationData(data).then(async (response) => {
       await fetch(API.settings, {
         method: "PUT",
         headers: {...getauthToken()},
       });
+
+      await getEscalationData(
+        response.insertedId,
+        async (escalationData: escalationData) => {
+          await sendNewEscalationEmail(escalationData);
+        }
+      );
+
       message.success("Escalation added!");
       escalationForm.resetFields();
       fileForm.resetFields();
+      await successCallBack();
       handleClose();
     });
   };

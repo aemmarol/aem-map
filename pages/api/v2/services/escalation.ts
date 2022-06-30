@@ -9,7 +9,7 @@ import {API} from "../../../../utils/api";
 import {handleResponse} from "../../../../utils/handleResponse";
 
 export const addEscalationData = async (data: escalationData) => {
-  await fetch(API.escalation, {
+  return await fetch(API.escalation, {
     method: "POST",
     body: JSON.stringify(data),
     headers: {...getauthToken()},

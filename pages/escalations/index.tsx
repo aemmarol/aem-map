@@ -488,6 +488,7 @@ const EscalationDashboard: NextPage = () => {
         <AddEscalationModal
           handleClose={() => setShowEscalationModal(false)}
           showModal={showEscalationModal}
+          successCallBack={callEscalationListApi}
         />
       ) : null}
     </Dashboardlayout>

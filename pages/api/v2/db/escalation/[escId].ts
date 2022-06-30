@@ -7,17 +7,12 @@ import {userRoles} from "../../../../../types";
 
 export default getAuthHandler()
   .get(async (req: NextApiRequestExtended, res) => {
-    const {userData} = req;
     const {escId} = req.query;
-    if (userData.userRole.includes(userRoles.Admin)) {
-      const qValue: string = escId as string;
-      const doc = await req.db
-        .collection(escalationCollectionName)
-        .findOne({_id: new ObjectId(qValue)});
-      res.json(doc);
-    } else {
-      res.status(401).json({msg: "user access denied!"});
-    }
+    const qValue: string = escId as string;
+    const doc = await req.db
+      .collection(escalationCollectionName)
+      .findOne({_id: new ObjectId(qValue)});
+    res.json(doc);
   })
   .put(async (req: NextApiRequestExtended, res) => {
     const {userData} = req;

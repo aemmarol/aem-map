@@ -20,4 +20,7 @@ export const API = {
   escalationList: prefix + "/escalation/list",
   escalationCount: prefix + "/escalation/count",
   settings: prefix + "/settings",
+  newEscalationEmail:
+    (process.env.NEXT_PUBLIC_ROOT_API_URL || "http://localhost:3000") +
+    "/api/v2/email/newEscalation",
 };
