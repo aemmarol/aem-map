@@ -58,7 +58,7 @@ const Dashboard: NextPage = () => {
   };
   const Map = dynamic(
     () => import("../../components/maps/map2"), // replace '@components/map' with your component's location
-    {ssr: true} // This line is important. It's what prevents server-side render
+    {ssr: false} // This line is important. It's what prevents server-side render
   );
 
   return (

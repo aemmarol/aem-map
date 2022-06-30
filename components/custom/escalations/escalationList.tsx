@@ -34,7 +34,10 @@ export const EscalationList: FC<EscalationListType> = ({userRole}) => {
     setEscalations(
       !!filterString
         ? escalationList.filter((esc) => {
-            return JSON.stringify(esc).toLowerCase().includes(filterString);
+            return Object.values(esc)
+              .toString()
+              .toLowerCase()
+              .includes(filterString);
           })
         : escalationList
     );
@@ -65,7 +68,9 @@ export const EscalationList: FC<EscalationListType> = ({userRole}) => {
           suffix={<SearchOutlined />}
           placeholder="Search item"
           style={{marginBottom: "1em"}}
-          onChange={(event) => setFilterString(event.target.value)}
+          onChange={(event) =>
+            setFilterString(event.target.value?.toLowerCase())
+          }
         ></Input>
       </Row>
       <Row gutter={[16, 16]}>
