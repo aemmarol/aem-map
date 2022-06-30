@@ -7,10 +7,10 @@ import {userRoles} from "../../../../../types";
 
 export default getAuthHandler()
   .get(async (req: NextApiRequestExtended, res) => {
-    const {hofId} = req.query;
+    const hofId: string = req.query.hofId as string;
     const doc = await req.db
       .collection(memberCollectionName)
-      .find({hof_id: hofId.toString()})
+      .find({hof_id: hofId})
       .toArray();
     res.json(doc);
   })

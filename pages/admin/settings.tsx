@@ -148,6 +148,7 @@ const AdminSettings: NextPage = () => {
           name: val.name,
           contact: val.contact,
           password: val.password,
+          email: val.email ? val.email : "",
           userRole: val.userRole ? val.userRole : [],
           assignedArea: val.assignedArea ? val.assignedArea : [],
           assignedUmoor: val.assignedUmoor ? val.assignedUmoor : [],

@@ -30,8 +30,15 @@ export const login = async (
     if (isEmpty(data)) {
       throw new Error("user not found!");
     } else {
-      const {name, itsId, assignedArea, userRole, assignedUmoor, contact} =
-        data;
+      const {
+        name,
+        itsId,
+        assignedArea,
+        userRole,
+        assignedUmoor,
+        contact,
+        email,
+      } = data;
       if (data.password !== password) {
         throw new Error("invalid credentials!!");
       }
@@ -42,6 +49,7 @@ export const login = async (
         userRole,
         assignedUmoor,
         contact,
+        email,
       };
       const accessToken: string = sign(
         {exp: Math.floor(Date.now() / 1000) + 60 * 60 * 6, data: userTokenData},
