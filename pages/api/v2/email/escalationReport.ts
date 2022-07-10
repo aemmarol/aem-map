@@ -175,7 +175,9 @@ export default getNoAuthHandler().post(
     const mailHTMLConetent =
       "<!DOCTYPE html><html><body><h2>{{params.heading}}</h2><br /><h3>Below is the summary for {{params.umoor}}</h3><br /><p>Total :- {{params.total}}</p><p>Issue Reported :- {{params.reported}}</p><p>Resolution In Process :- {{params.inprocess}}</p><p>Resolved :- {{params.resolved}}</p><p>Closed :- {{params.closed}}</p><br /><p style='font-size: 16px;'>Click <a href='{{params.link}}'>here </a> to view details.</p></body></html>";
 
-    const mailSubject = "Weekly Report for AEM Escalations Dated: "+ moment(new Date()).format("DD/MM/YYYY");
+    const mailSubject =
+      "Weekly Report for AEM Escalations Dated: " +
+      moment(new Date()).format("DD/MM/YYYY");
 
     const mailApiKey: string = process.env
       .NEXT_PUBLIC_SENDMAIL_API_KEY as string;
