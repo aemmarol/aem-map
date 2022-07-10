@@ -8,6 +8,7 @@ import {
 import getNoAuthHandler from "../../../../mongodb/noAuthHandler";
 import {authUser, escalationStatus, userRoles} from "../../../../types";
 import {handleResponse} from "../../../../utils/handleResponse";
+import moment from "moment";
 
 export default getNoAuthHandler().post(
   async (req: NextApiRequestExtended, res) => {
@@ -68,8 +69,7 @@ export default getNoAuthHandler().post(
     const userAdminList = dbUserList
       .filter((val: authUser) => val.userRole.includes(userRoles.Admin))
       .map((user: any) => ({
-        email: "ddedhawala@gmail.com",
-        // email: user.email,
+        email: user.email,
         name: user.name,
       }));
 
@@ -77,8 +77,7 @@ export default getNoAuthHandler().post(
     const umoorList = dbUserList
       .filter((val: authUser) => val.userRole.includes(userRoles.Umoor))
       .map((user: any) => ({
-        // email: user.email,
-        email: "ddedhawala@gmail.com",
+        email: user.email,
         name: user.name,
         assignedUmoor: user.assignedUmoor,
       }));
@@ -176,7 +175,9 @@ export default getNoAuthHandler().post(
     const mailHTMLConetent =
       "<!DOCTYPE html><html><body><h2>{{params.heading}}</h2><br /><h3>Below is the summary for {{params.umoor}}</h3><br /><p>Total :- {{params.total}}</p><p>Issue Reported :- {{params.reported}}</p><p>Resolution In Process :- {{params.inprocess}}</p><p>Resolved :- {{params.resolved}}</p><p>Closed :- {{params.closed}}</p><br /><p style='font-size: 16px;'>Click <a href='{{params.link}}'>here </a> to view details.</p></body></html>";
 
-    const mailSubject = "Weekly Report for AEM Escalations.";
+    const mailSubject =
+      "Weekly Report for AEM Escalations Dated: " +
+      moment(new Date()).format("DD/MM/YYYY");
 
     const mailApiKey: string = process.env
       .NEXT_PUBLIC_SENDMAIL_API_KEY as string;
