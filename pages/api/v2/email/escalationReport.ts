@@ -68,8 +68,7 @@ export default getNoAuthHandler().post(
     const userAdminList = dbUserList
       .filter((val: authUser) => val.userRole.includes(userRoles.Admin))
       .map((user: any) => ({
-        email: "ddedhawala@gmail.com",
-        // email: user.email,
+        email: user.email,
         name: user.name,
       }));
 
@@ -77,8 +76,7 @@ export default getNoAuthHandler().post(
     const umoorList = dbUserList
       .filter((val: authUser) => val.userRole.includes(userRoles.Umoor))
       .map((user: any) => ({
-        // email: user.email,
-        email: "ddedhawala@gmail.com",
+        email: user.email,
         name: user.name,
         assignedUmoor: user.assignedUmoor,
       }));
