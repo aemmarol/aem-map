@@ -34,8 +34,7 @@ export const EscalationList: FC<EscalationListType> = ({userRole}) => {
     setEscalations(
       !!filterString
         ? escalationList.filter((esc) => {
-            return Object.values(esc)
-              .toString()
+            return JSON.stringify(Object.values(esc))
               .toLowerCase()
               .includes(filterString);
           })

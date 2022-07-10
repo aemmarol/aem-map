@@ -93,13 +93,24 @@ export default getNoAuthHandler().post(
     });
 
     const getUmoorStats = (umoor: string) => {
-      const statsTotalCountArr = find(statusWiseCount, {
-        status: "Total",
-      })?.count;
-      const umoorTotalCount = find(statsTotalCountArr, {_id: umoor}).count;
+      const statsTotalCountArr =
+        (find(statusWiseCount, {
+          status: "Total",
+        }) &&
+          find(statusWiseCount, {
+            status: "Total",
+          })?.count) ||
+        0;
+      const umoorTotalCount =
+        (find(statsTotalCountArr, {_id: umoor}) &&
+          find(statsTotalCountArr, {_id: umoor}).count) ||
+        0;
 
       const umoorStatusWiseCount = statusArr.map((status: escalationStatus) => {
-        const statusCountArr = find(statusWiseCount, {status})?.count;
+        const statusCountArr =
+          (find(statusWiseCount, {status}) &&
+            find(statusWiseCount, {status})?.count) ||
+          0;
         return {
           status,
           count: find(statusCountArr, {_id: umoor})
@@ -141,13 +152,27 @@ export default getNoAuthHandler().post(
       params: {
         heading: "This is the report of AEM Escalations for Admin",
         umoor: "Admin",
-        total: find(adminStats, {status: "Total"})?.count,
-        reported: find(adminStats, {status: escalationStatus.ISSUE_REPORTED})
-          ?.count,
-        inprocess: find(adminStats, {status: escalationStatus.IN_PROGRESS})
-          ?.count,
-        resolved: find(adminStats, {status: escalationStatus.RESOLVED})?.count,
-        closed: find(adminStats, {status: escalationStatus.CLOSED})?.count,
+        total:
+          (find(adminStats, {status: "Total"}) &&
+            find(adminStats, {status: "Total"})?.count) ||
+          0,
+        reported:
+          (find(adminStats, {status: escalationStatus.ISSUE_REPORTED}) &&
+            find(adminStats, {status: escalationStatus.ISSUE_REPORTED})
+              ?.count) ||
+          0,
+        inprocess:
+          (find(adminStats, {status: escalationStatus.IN_PROGRESS}) &&
+            find(adminStats, {status: escalationStatus.IN_PROGRESS})?.count) ||
+          0,
+        resolved:
+          (find(adminStats, {status: escalationStatus.RESOLVED}) &&
+            find(adminStats, {status: escalationStatus.RESOLVED})?.count) ||
+          0,
+        closed:
+          (find(adminStats, {status: escalationStatus.CLOSED}) &&
+            find(adminStats, {status: escalationStatus.CLOSED})?.count) ||
+          0,
         link: process.env.NEXT_PUBLIC_ROOT_API_URL + "/admin/dashboard",
       },
     };
