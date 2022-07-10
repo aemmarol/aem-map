@@ -62,6 +62,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   const [showFileNotFoundError, setshowFileNotFoundError] =
     useState<boolean>(false);
   const [fileDetails, setFileDetails] = useState<any>({});
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     getRoleBasedFileNumbers();
@@ -198,6 +199,9 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
         contact: values.escalationRaisedForContact,
       },
     };
+
+    setIsSubmitting(true);
+
     await addEscalationData(data).then(async (response) => {
       await fetch(API.settings, {
         method: "PUT",
@@ -215,6 +219,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       escalationForm.resetFields();
       fileForm.resetFields();
       await successCallBack();
+      setIsSubmitting(false);
       handleClose();
     });
   };
@@ -401,7 +406,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button disabled={isSubmitting} type="primary" htmlType="submit">
                 Submit
               </Button>
             </Form.Item>

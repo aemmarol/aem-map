@@ -47,7 +47,9 @@ export const getEscalationListFromDb = async (
   onSuccess?: any
 ) => {
   let findFilter: any = {
-    ["file_details.sub_sector.sector.name"]: {$in: filters[filterTypes.Sector]},
+    ["file_details.sub_sector.sector.name"]: {
+      $in: filters[filterTypes.Sector],
+    },
     ["type.value"]: {$in: filters[filterTypes.Umoor]},
   };
   if (!filters[filterTypes.SubSector]) {
@@ -59,7 +61,9 @@ export const getEscalationListFromDb = async (
     }
   } else {
     findFilter = {
-      ["file_details.sub_sector.name"]: {$in: filters[filterTypes.SubSector]},
+      ["file_details.sub_sector.name"]: {
+        $in: filters[filterTypes.SubSector],
+      },
     };
   }
 

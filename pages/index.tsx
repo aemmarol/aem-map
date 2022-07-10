@@ -101,9 +101,18 @@ const SignInPage: NextPage = () => {
           <Form.Item
             name="itsId"
             rules={[
-              {required: true, message: "Please input your ITS ID!"},
-              {min: 8, message: "ITS ID cannot be less than 8 characters"},
-              {max: 8, message: "ITS ID cannot be greater than 8 characters"},
+              {
+                required: true,
+                message: "Please input your ITS ID!",
+              },
+              {
+                min: 8,
+                message: "ITS ID cannot be less than 8 characters",
+              },
+              {
+                max: 8,
+                message: "ITS ID cannot be greater than 8 characters",
+              },
               {
                 pattern: new RegExp(/^[0-9]+$/),
                 message: "ITS ID should be a number",
@@ -119,7 +128,12 @@ const SignInPage: NextPage = () => {
           </Form.Item>
           <Form.Item
             name="password"
-            rules={[{required: true, message: "Please input your Password!"}]}
+            rules={[
+              {
+                required: true,
+                message: "Please input your Password!",
+              },
+            ]}
           >
             <Input
               prefix={<LockOutlined className={styles.formIcon} />}

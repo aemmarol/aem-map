@@ -105,7 +105,11 @@ export const UploadExcelFileCard: FC = () => {
                   ? val[value.name]
                   : null;
               });
-              return {...memberData, its_id: val.its_id, hof_id: val.hof_id};
+              return {
+                ...memberData,
+                its_id: val.its_id,
+                hof_id: val.hof_id,
+              };
             });
 
           return {
@@ -127,7 +131,10 @@ export const UploadExcelFileCard: FC = () => {
               ).length,
             },
             memberData: membersList.map((value) => {
-              const tempObj = {...value, ...defaultDatabaseFields};
+              const tempObj = {
+                ...value,
+                ...defaultDatabaseFields,
+              };
               delete tempObj.its_id;
               return {
                 [value.its_id]: tempObj,

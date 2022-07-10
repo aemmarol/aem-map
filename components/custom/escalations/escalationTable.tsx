@@ -225,7 +225,10 @@ export const EscalationTable: FC<EscalationTableType> = ({
       dataSource={escalationList.map((val) => ({...val, key: val._id}))}
       columns={getTableColumns() as any}
       pagination={false}
-      scroll={{x: "100px", y: height ? height - 278 + "px" : "500px" + "px"}}
+      scroll={{
+        x: "100px",
+        y: height ? height - 278 + "px" : "500px" + "px",
+      }}
     />
   );
 };

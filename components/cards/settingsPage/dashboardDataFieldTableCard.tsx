@@ -145,14 +145,24 @@ export const DashboardDataFieldTableCard: FC<CardProps> = ({
             <Form.Item
               label="Field Name"
               name="name"
-              rules={[{required: true, message: "Please input field name!"}]}
+              rules={[
+                {
+                  required: true,
+                  message: "Please input field name!",
+                },
+              ]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               label="Field Label"
               name="label"
-              rules={[{required: true, message: "Please input field label!"}]}
+              rules={[
+                {
+                  required: true,
+                  message: "Please input field label!",
+                },
+              ]}
             >
               <Input />
             </Form.Item>

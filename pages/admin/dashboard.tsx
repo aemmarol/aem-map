@@ -105,11 +105,15 @@ const AdminDashboard: NextPage = () => {
 
   const getSectorTileData = async () => {
     await getSectorList(async (sectors: sectorData[]) => {
-      const finalSectorList: any = sectors.map((val) => ({name: val.name}));
+      const finalSectorList: any = sectors.map((val) => ({
+        name: val.name,
+      }));
       await getSectorStats("all", async (response: any) => {
         await Promise.all(
           response.map((val: any) => {
-            const index = findIndex(finalSectorList, {name: val._id});
+            const index = findIndex(finalSectorList, {
+              name: val._id,
+            });
             finalSectorList[index].total = val.count;
           })
         );
@@ -119,7 +123,9 @@ const AdminDashboard: NextPage = () => {
           await getSectorStats(key, async (response: any) => {
             await Promise.all(
               response.map((val: any) => {
-                const index = findIndex(finalSectorList, {name: val._id});
+                const index = findIndex(finalSectorList, {
+                  name: val._id,
+                });
                 finalSectorList[index][key] = val.count;
               })
             );
@@ -136,7 +142,9 @@ const AdminDashboard: NextPage = () => {
       {umoorList.length > 0 ? (
         <Row gutter={[16, 16]}>
           {umoorList.map((umoor: any, idx) => {
-            const stats: any = {total: umoor.total ? umoor.total : 0};
+            const stats: any = {
+              total: umoor.total ? umoor.total : 0,
+            };
             Object.values(escalationStatus).map((value) => {
               stats[value] = umoor[value] ? umoor[value] : 0;
             });
