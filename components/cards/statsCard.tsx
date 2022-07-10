@@ -6,7 +6,6 @@ interface statsCardType {
   title: string;
   handleClick: any;
   stats: any;
-  horizontal?: boolean;
 }
 export const StatsCard: FC<statsCardType> = ({title, handleClick, stats}) => {
   return (

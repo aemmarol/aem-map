@@ -3,7 +3,7 @@ import {FC} from "react";
 
 import {authUser, comment} from "../../types";
 import moment from "moment";
-import {updateEscalationData} from "../../pages/api/v1/db/escalationsCrud";
+import {updateEscalationData} from "../../pages/api/v2/services/escalation";
 
 type AddEscalationCommentsModalProps = {
   showModal: boolean;
@@ -36,15 +36,14 @@ export const AddEscalationCommentsModal: FC<
       time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
     };
     tempComments.push(newComment);
-    const result = await updateEscalationData(escalationId, {
-      comments: tempComments,
+    await updateEscalationData(escalationId, {
+      comments: newComment,
+      updated_at: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
     });
-    if (result) {
-      message.success("Comment added!");
-      form.resetFields();
-      submitCallback();
-      handleClose();
-    }
+    message.success("Comment added!");
+    form.resetFields();
+    submitCallback();
+    handleClose();
   };
 
   return (

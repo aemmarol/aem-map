@@ -13,60 +13,56 @@ import {
 import {find, isEmpty} from "lodash";
 import {FC, useEffect, useState} from "react";
 import {
-  getFileDataList,
-  getFileDataByFileNumber,
-  getFileDataListBySector,
-  getFileDataListBySubsector,
-} from "../../pages/api/v1/db/fileCrud";
-import {
-  getMemberDataById,
-  getMemberListByHofId,
-} from "../../pages/api/v1/db/memberCrud";
-// import Airtable from "airtable";
-import {
-  authUser,
   comment,
   escalationData,
   escalationStatus,
   fileDetails,
   userRoles,
 } from "../../types";
-import {defaultDatabaseFields} from "../../utils";
+import {defaultDatabaseFields, getauthToken} from "../../utils";
 import moment from "moment";
-import {addEscalationData} from "../../pages/api/v1/db/escalationsCrud";
+
+import {getUmoorList} from "../../pages/api/v2/services/umoor";
 import {
-  getDbSettings,
-  incrementEscalationAutoNumber,
-} from "../../pages/api/v1/settings";
-import {getUmoorList} from "../../pages/api/v1/db/umoorsCrud";
-
-// const airtableBase = new Airtable({
-//   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
-// }).base("app7V1cg4ibiooxcn");
-
-// const umoorTable = airtableBase("umoorList");
+  getFileDataByFileNumber,
+  getFileDataList,
+  getFileDataListBySector,
+  getFileDataListBySubsector,
+} from "../../pages/api/v2/services/file";
+import {
+  getMemberDataById,
+  getMemberListByHofId,
+} from "../../pages/api/v2/services/member";
+import {getSettings} from "../../pages/api/v2/services/settings";
+import {
+  addEscalationData,
+  getEscalationData,
+} from "../../pages/api/v2/services/escalation";
+import {API} from "../../utils/api";
+import {useEscalationContext} from "../../context/EscalationContext";
+import {sendNewEscalationEmail} from "../../pages/api/v2/services/email";
 
 type AddEscalationModalProps = {
   showModal: boolean;
   handleClose: () => any;
-  adminDetails: authUser;
-  submitCallback: () => any;
+  successCallBack: () => any;
 };
 
 export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   showModal,
   handleClose,
-  adminDetails,
-  submitCallback,
+  successCallBack,
 }) => {
   const [fileForm] = Form.useForm();
   const [escalationForm] = Form.useForm();
+  const {adminDetails} = useEscalationContext();
 
   const [allowedFileNumbers, setAllowedFileNumbers] = useState<any[]>([]);
   const [issueTypeOptions, setIssueTypeOptions] = useState<any[]>([]);
   const [showFileNotFoundError, setshowFileNotFoundError] =
     useState<boolean>(false);
   const [fileDetails, setFileDetails] = useState<any>({});
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     getRoleBasedFileNumbers();
@@ -74,7 +70,6 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   }, []);
 
   const setUmoorList = async () => {
-    // const temp: any = [];
     getUmoorListfromDb();
   };
 
@@ -84,105 +79,78 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
   };
 
   const getRoleBasedFileNumbers = async () => {
-    let fileList;
+    let fileList: any = [];
     if (
       adminDetails.userRole.includes(userRoles.Masool) ||
       adminDetails.userRole.includes(userRoles.Masoola)
     ) {
-      fileList = await getFileDataListBySector(adminDetails.assignedArea[0]);
-      // setAllowedFileNumbers(
-      //   fileList.map((val: any) => val.tanzeem_file_no.toString())
-      // );
+      await getFileDataListBySector(
+        adminDetails.assignedArea[0],
+        (data: any) => {
+          fileList = data;
+        }
+      );
     } else if (
       adminDetails.userRole.includes(userRoles.Musaid) ||
       adminDetails.userRole.includes(userRoles.Musaida)
     ) {
-      fileList = await getFileDataListBySubsector(adminDetails.assignedArea[0]);
-      // setAllowedFileNumbers(fileList.map((val: any) => val.tanzeem_file_no));
+      await getFileDataListBySubsector(
+        adminDetails.assignedArea[0],
+        (data: any) => {
+          fileList = data;
+        }
+      );
     } else if (
       adminDetails.userRole.includes(userRoles.Admin) ||
       adminDetails.userRole.includes(userRoles.Umoor)
     ) {
-      fileList = await getFileDataList();
+      await getFileDataList((data: any) => {
+        fileList = data;
+      });
     }
     if (fileList) {
       setAllowedFileNumbers(
-        fileList.map((val: fileDetails) => {
-          return {
-            value: val.tanzeem_file_no,
-            label: `${val.tanzeem_file_no} (${val.hof_name})`,
-          };
-        })
+        fileList
+          .filter((val: any) => val.tanzeem_file_no)
+          .map((val: fileDetails) => {
+            return {
+              value: val.tanzeem_file_no,
+              label: `${val.tanzeem_file_no} (${val.hof_name})`,
+            };
+          })
       );
     }
   };
 
-  // const onFileSearch = async (values: any) => {
-  //   if (adminDetails?.userRole.includes(userRoles.Admin)) {
-  //     const data = await getFileDataByFileNumber(values.fileNumber);
-  //     if (!!data) {
-  //       const hof_data = await getMemberDataById(data.id);
-  //       // const hof_me
-  //       console.log(hof_data, data);
-  //       setFileDetails({
-  //         id: hof_data.id,
-  //         hofName: hof_data.full_name,
-  //         hofContact: hof_data.mobile,
-  //         subSector: data.sub_sector.name,
-  //         fileData: data,
-  //       });
-  //       setshowFileNotFoundError(false);
-  //     } else {
-  //       setshowFileNotFoundError(true);
-  //       setFileDetails({});
-  //     }
-  //   } else {
-  //     if (
-  //       !values.fileNumber ||
-  //       !allowedFileNumbers.map((val) => val.value).includes(values.fileNumber)
-  //     ) {
-  //       setshowFileNotFoundError(true);
-  //       setFileDetails({});
-  //     } else {
-  //       const data = await getFileDataByFileNumber(values.fileNumber);
-  //       const hof_data = await getMemberDataById(data.id);
-  //       setFileDetails({
-  //         hofName: hof_data.full_name,
-  //         hofContact: hof_data.mobile,
-  //         subSector: data.sub_sector.name,
-  //         fileData: data,
-  //       });
-  //       setshowFileNotFoundError(false);
-  //     }
-  //   }
-  // };
-
   const onFileSelect = async (values: any) => {
-    // console.log(values);
-    const data = await getFileDataByFileNumber(values);
-    if (!!data) {
-      const hof_data = await getMemberDataById(data.id);
-      const membersList = await getMemberListByHofId(hof_data.id);
-      console.log(membersList);
-      console.log(hof_data, data);
-      setFileDetails({
-        id: hof_data.id,
-        hofName: hof_data.full_name,
-        hofContact: hof_data.mobile,
-        subSector: data.sub_sector.name,
-        fileData: data,
-        membersList,
-      });
-      setshowFileNotFoundError(false);
-    } else {
-      setshowFileNotFoundError(true);
-      setFileDetails({});
-    }
+    await getFileDataByFileNumber(values, async (data: any) => {
+      if (!isEmpty(data)) {
+        let hof_data: any = {};
+        await getMemberDataById(data._id, (newdata: any) => {
+          hof_data = newdata;
+        });
+        let membersList: any = [];
+        await getMemberListByHofId(hof_data._id, (newdata: any) => {
+          membersList = newdata;
+        });
+        setFileDetails({
+          _id: hof_data._id,
+          hofName: hof_data.full_name,
+          hofContact: hof_data.mobile,
+          subSector: data.sub_sector.name,
+          fileData: data,
+          membersList,
+        });
+        setshowFileNotFoundError(false);
+      } else {
+        setshowFileNotFoundError(true);
+        setFileDetails({});
+      }
+    });
   };
 
   const handleEscalationFormSubmit = async (values: any) => {
-    // console.log(values);
-    const dbSettings = await getDbSettings();
+    const dbSettings: any = await getSettings();
     const firstComment: comment = {
       msg: "Issue is added on " + moment(new Date()).format("DD-MM-YYYY"),
       name: adminDetails.name,
@@ -216,7 +184,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
         tanzeem_file_no: fileDetails.fileData.tanzeem_file_no,
         address: fileDetails.fileData.address,
         sub_sector: fileDetails.fileData.sub_sector,
-        hof_its: fileDetails.fileData.id,
+        hof_its: fileDetails.fileData._id,
         hof_name: fileDetails.hofName,
         hof_contact: fileDetails.hofContact,
       },
@@ -231,17 +199,29 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
         contact: values.escalationRaisedForContact,
       },
     };
-    const result = await addEscalationData(data);
-    if (result) {
-      await incrementEscalationAutoNumber(
-        dbSettings.escalation_auto_number + 1
+
+    setIsSubmitting(true);
+
+    await addEscalationData(data).then(async (response) => {
+      await fetch(API.settings, {
+        method: "PUT",
+        headers: {...getauthToken()},
+      });
+
+      await getEscalationData(
+        response.insertedId,
+        async (escalationData: escalationData) => {
+          await sendNewEscalationEmail(escalationData);
+        }
       );
+
       message.success("Escalation added!");
       escalationForm.resetFields();
       fileForm.resetFields();
-      submitCallback();
+      await successCallBack();
+      setIsSubmitting(false);
       handleClose();
-    }
+    });
   };
 
   return (
@@ -266,23 +246,8 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
               required: true,
               message: "Please enter file number!",
             },
-            // {
-            //   max: 8,
-            //   message: "Please enter valid file number!",
-            // },
-            // () => ({
-            //   validator(_, value) {
-            //     if (!value || !isNaN(value)) {
-            //       return Promise.resolve();
-            //     }
-            //     return Promise.reject(
-            //       new Error("Please enter valid file number!")
-            //     );
-            //   },
-            // }),
           ]}
         >
-          {/* <Input /> */}
           <Select
             showSearch={true}
             filterOption={(inputValue, option: any) =>
@@ -304,12 +269,6 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
             ))}
           </Select>
         </Form.Item>
-
-        {/* <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Find
-          </Button>
-        </Form.Item> */}
       </Form>
       {showFileNotFoundError ? (
         <Result status="error" title="File not found" />
@@ -359,12 +318,6 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
                   message:
                     "Enter ITS of person for which issue is being raised.",
                 },
-                // {min: 8, message: "ITS ID cannot be less than 8 characters"},
-                // {max: 8, message: "ITS ID cannot be greater than 8 characters"},
-                // {
-                //   pattern: new RegExp(/^[0-9]+$/),
-                //   message: "ITS ID should be a number",
-                // },
               ]}
             >
               <Select
@@ -379,14 +332,14 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
                 {fileDetails.membersList &&
                   fileDetails.membersList.map((memberData: any) => (
                     <Select.Option
-                      label={`${memberData.id} (${memberData.full_name})`}
+                      label={`${memberData._id} (${memberData.full_name})`}
                       value={JSON.stringify({
-                        its: memberData.id,
+                        its: memberData._id,
                         name: memberData.full_name,
                       })}
-                      key={memberData.id}
+                      key={memberData._id}
                     >
-                      {`${memberData.id} (${memberData.full_name})`}
+                      {`${memberData._id} (${memberData.full_name})`}
                     </Select.Option>
                   ))}
               </Select>
@@ -453,7 +406,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button disabled={isSubmitting} type="primary" htmlType="submit">
                 Submit
               </Button>
             </Form.Item>

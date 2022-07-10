@@ -9,9 +9,7 @@ import {
   subSectorData,
   userRoles,
 } from "../../../../types";
-import {getSubSectorDataByName} from "../../../api/v1/db/subSectorCrud";
 import {isEmpty} from "lodash";
-import {getFileData} from "../../../api/v1/db/fileCrud";
 import styles from "../../../../styles/FileList.module.scss";
 import {Col, message, Row} from "antd";
 import {
@@ -19,8 +17,10 @@ import {
   InchargeDetailsCard,
   SubSectorFileListTable,
 } from "../../../../components";
-import {getSectorData} from "../../../api/v1/db/sectorCrud";
 import {logout, verifyUser} from "../../../api/v1/authentication";
+import {getSectorData} from "../../../api/v2/services/sector";
+import {getSubSectorDataByName} from "../../../api/v2/services/subsector";
+import {getFileData} from "../../../api/v2/services/file";
 
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
@@ -39,20 +39,21 @@ const SingleMohallah: NextPage = () => {
 
   const getSubSectorDetails = async () => {
     toggleLoader(true);
-    const subsectorDetails = await getSubSectorDataByName(
-      subSectorName as string
+    await getSubSectorDataByName(
+      subSectorName as string,
+      async (data: subSectorData) => {
+        if (!isEmpty(data)) {
+          await getSectorData(data.sector._id as string, (data: sectorData) =>
+            setMohallahDetails(data)
+          );
+          toggleLoader(false);
+          setMohallahSubSectorsDetails(data);
+        } else {
+          toggleLoader(false);
+          router.push("/");
+        }
+      }
     );
-    if (!isEmpty(subsectorDetails)) {
-      const sectorInfo = await getSectorData(
-        subsectorDetails.sector.id as string
-      );
-      setMohallahDetails(sectorInfo);
-      toggleLoader(false);
-      setMohallahSubSectorsDetails(subsectorDetails);
-    } else {
-      toggleLoader(false);
-      router.push("/");
-    }
   };
 
   const getFileDetails = async () => {
@@ -67,7 +68,11 @@ const SingleMohallah: NextPage = () => {
     } else {
       const fileList = await Promise.all(
         mohallahSubSectorsDetails.files.map(async (value) => {
-          return await getFileData(value);
+          let fileData: any = {};
+          await getFileData(value, (data: any) => {
+            fileData = data;
+          });
+          return fileData;
         })
       );
       setFileDetails(

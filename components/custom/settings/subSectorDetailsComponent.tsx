@@ -11,12 +11,13 @@ import {
 } from "antd";
 import {FC, useState} from "react";
 import {TableCardWithForm} from "../..";
-import {updateSubSectorsToDefault} from "../../../pages/api/v1/db/setupDb";
+
 import {
   getSubSectorDataByName,
   getSubSectorList,
   updateSubSectorData,
-} from "../../../pages/api/v1/db/subSectorCrud";
+  updateSubSectorListToDefault,
+} from "../../../pages/api/v2/services/subsector";
 import {subSectorData} from "../../../types";
 
 const airtableBase = new Airtable({
@@ -80,11 +81,11 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
   const [editingKey, setEditingKey] = useState<string | undefined>("");
   const [isLoading, setisLoading] = useState<boolean>(false);
 
-  const isEditing = (record: subSectorData) => record.id === editingKey;
+  const isEditing = (record: subSectorData) => record._id === editingKey;
 
   const edit = (record: Partial<subSectorData>) => {
     form.setFieldsValue({...record});
-    setEditingKey(record.id);
+    setEditingKey(record._id);
   };
 
   const cancel = () => {
@@ -96,8 +97,9 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
       const row = (await form.validateFields()) as subSectorData;
       if (key) {
         await updateSubSectorData(key, row);
-        const newData = await getSubSectorList();
-        updateData(newData);
+        getSubSectorList((data: subSectorData[]) => {
+          updateData(data);
+        });
         setEditingKey("");
       }
     } catch (errInfo) {
@@ -108,7 +110,7 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
   const sectorDataColumns: any[] = [
     {
       title: "id",
-      dataIndex: "id",
+      dataIndex: "_id",
       width: 100,
       editable: false,
       fixed: "left",
@@ -125,7 +127,7 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
       width: 150,
       editable: false,
       render: (_: any, record: subSectorData) => (
-        <Tag color={record.sector.primary_color}>{record.sector.name}</Tag>
+        <Tag color={record?.sector?.primary_color}>{record?.sector?.name}</Tag>
       ),
     },
 
@@ -179,7 +181,7 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
         return editable ? (
           <span>
             <Typography.Link
-              onClick={() => save(record.id)}
+              onClick={() => save(record._id)}
               style={{marginRight: 8}}
             >
               Save
@@ -214,32 +216,12 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
     };
   });
 
-  // const handleAddSector = async (data: any, callback: () => any) => {
-  //   const sectorDetails = data.sector.split("|");
-  //   const addDataSuccess = await addSubSectorData({
-  //     ...data,
-  //     ...defaultDatabaseFields,
-  //     sector: {
-  //       id: sectorDetails[0],
-  //       name: sectorDetails[1],
-  //       primary_color: sectorDetails[2],
-  //       secondary_color: sectorDetails[3],
-  //     },
-  //     number_of_males: 0,
-  //     number_of_females: 0,
-  //     files: [],
-  //   });
-  //   if (addDataSuccess) {
-  //     await addSubSectorIds(sectorDetails[0] as string, addDataSuccess);
-  //     const newData = await getSubSectorList();
-  //     updateData(newData);
-  //     callback();
-  //   }
-  // };
-
   const resetSubSectorsToDefault = async () => {
     setisLoading(true);
-    await updateSubSectorsToDefault();
+    await updateSubSectorListToDefault();
+    await getSubSectorList((data: subSectorData[]) => {
+      updateData(data);
+    });
     setisLoading(false);
   };
 
@@ -262,14 +244,16 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
       musaidData
         .map((val) => val.fields)
         .map(async (value: any) => {
-          const tempSector = await getSubSectorDataByName(
-            value.assignedArea[0]
+          await getSubSectorDataByName(
+            value.assignedArea[0],
+            async (data: subSectorData) => {
+              await updateSubSectorData(data._id as string, {
+                musaid_contact: value.contact,
+                musaid_name: value.name,
+                musaid_its: value.itsId.toString(),
+              });
+            }
           );
-          await updateSubSectorData(tempSector.id as string, {
-            musaid_contact: value.contact,
-            musaid_name: value.name,
-            musaid_its: value.itsId.toString(),
-          });
         })
     );
 
@@ -277,19 +261,22 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
       musaidaData
         .map((val) => val.fields)
         .map(async (value: any) => {
-          const tempSector = await getSubSectorDataByName(
-            value.assignedArea[0]
+          await getSubSectorDataByName(
+            value.assignedArea[0],
+            async (data: subSectorData) => {
+              await updateSubSectorData(data._id as string, {
+                musaida_contact: value.contact,
+                musaida_name: value.name,
+                musaida_its: value.itsId.toString(),
+              });
+            }
           );
-          await updateSubSectorData(tempSector.id as string, {
-            musaida_contact: value.contact,
-            musaida_name: value.name,
-            musaida_its: value.itsId.toString(),
-          });
         })
     );
 
-    const newData = await getSubSectorList();
-    updateData(newData);
+    await getSubSectorList((data: subSectorData[]) => {
+      updateData(data);
+    });
 
     setisLoading(false);
   };
@@ -300,7 +287,10 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
         cardTitle="Sub Sector Info"
         TableComponent={Table}
         tableComponentProps={{
-          dataSource: data.map((val, index) => ({...val, key: index})),
+          dataSource: data.map((val, index) => ({
+            ...val,
+            key: index,
+          })),
           columns: mergedColumns,
           pagination: false,
           scroll: {x: "450px", y: "400px"},
@@ -319,7 +309,6 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
             <Button onClick={handleUpdateMusaidDetails} className="mr-10">
               Update Musaid Details
             </Button>
-            <Button type="primary">Add Sub Sector</Button>
           </div>
         }
       />

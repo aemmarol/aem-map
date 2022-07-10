@@ -8,14 +8,7 @@
   border-right: 1px solid #ddd;
   background: white;
   overflow-y: auto;
-}
-
-.filterContainer {
-  border-bottom: 1px solid #ddd;
-}
-
-.filterContainer:last-child {
-  border-bottom: none;
+  padding: 24px 0;
 }
 
 .filterIcon {

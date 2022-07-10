@@ -8,8 +8,8 @@ import {useEffect, useState} from "react";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {authUser, sectorData, subSectorData, userRoles} from "../../types";
 import {useGlobalContext} from "../../context/GlobalContext";
-import {getSectorList} from "../api/v1/db/sectorCrud";
-import {getSubSectorList} from "../api/v1/db/subSectorCrud";
+import {getSectorList} from "../api/v2/services/sector";
+import {getSubSectorList} from "../api/v2/services/subsector";
 
 const {TabPane} = Tabs;
 
@@ -40,10 +40,10 @@ const Dashboard: NextPage = () => {
 
   const getPageData = async () => {
     toggleLoader(true);
-    const secData = await getSectorList();
-    const subSecData = await getSubSectorList();
-    setAdminPageSectorData(secData);
-    setAdminPageSubSectorData(subSecData);
+    await getSectorList((data: sectorData[]) => setAdminPageSectorData(data));
+    await getSubSectorList((data: subSectorData[]) =>
+      setAdminPageSubSectorData(data)
+    );
     toggleLoader(false);
   };
 
@@ -58,7 +58,7 @@ const Dashboard: NextPage = () => {
   };
   const Map = dynamic(
     () => import("../../components/maps/map2"), // replace '@components/map' with your component's location
-    {ssr: true} // This line is important. It's what prevents server-side render
+    {ssr: false} // This line is important. It's what prevents server-side render
   );
 
   return (

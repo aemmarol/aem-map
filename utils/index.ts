@@ -12,24 +12,7 @@ export const getDateDiffDays = (date: string) => {
   const now = moment(new Date());
   return now.diff(issueDate, "days");
 };
-// export const escalationIssueStatusList = [
-//   {
-//     value: escalationStatus.ISSUE_REPORTED,
-//     color: "blue",
-//   },
-//   {
-//     value: escalationStatus.IN_PROGRESS,
-//     color: "orange",
-//   },
-//   {
-//     value: escalationStatus.ISSUE_REPORTED,
-//     color: "green",
-//   },
-//   {
-//     value: "Closed",
-//     color: "magenta",
-//   },
-// ];
+
 export const getEscalationStatusDetail = (escStatus: escalationStatus) => {
   const escDetail = {
     text: escStatus,
@@ -57,4 +40,9 @@ export const getEscalationStatusDetail = (escStatus: escalationStatus) => {
       break;
   }
   return escDetail;
+};
+
+export const getauthToken = () => {
+  const accessToken = localStorage.getItem("user") as string;
+  return {authorization: accessToken};
 };

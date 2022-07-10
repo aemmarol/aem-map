@@ -11,9 +11,11 @@ export interface loginResponseData {
 }
 
 export interface authUser {
+  _id?: string;
   itsId: string;
   name: string;
   contact: string;
+  email?: string;
   password?: string;
   userRole: Array<userRoles>;
   assignedArea: Array<string>;

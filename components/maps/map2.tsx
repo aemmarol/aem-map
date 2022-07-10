@@ -1,4 +1,5 @@
 import React, {FC, useEffect, useState} from "react";
+// import {FC} from "react";
 import {
   LayersControl,
   LayerGroup,
@@ -28,6 +29,7 @@ interface Map2Props {
 }
 
 const Map2: FC<Map2Props> = ({secData, subSecData}) => {
+  // const Map2: FC<Map2Props> = () => {
   // const sectorsList = sectors; //tobe replaced with dataservice call
   const [mapSectorData, setMapSectorData] = useState<any[]>([]);
 
@@ -57,7 +59,7 @@ const Map2: FC<Map2Props> = ({secData, subSecData}) => {
     className: "dummy",
   });
 
-  return !!center.latlng ? (
+  return !center.latlng ? null : (
     <div style={{position: "relative"}}>
       <div
         style={{
@@ -94,10 +96,10 @@ const Map2: FC<Map2Props> = ({secData, subSecData}) => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {/* <Marker icon={customMarkerIcon} position={position}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker> */}
+            <Popup>
+              A pretty CSS3 popup. <br /> Easily customizable.
+            </Popup>
+          </Marker> */}
           <Marker
             key={center.name}
             icon={centerMarkerIcon}
@@ -113,8 +115,8 @@ const Map2: FC<Map2Props> = ({secData, subSecData}) => {
             // }}
           >
             {/* <Popup minWidth={200} maxWidth={200} maxHeight={1000}>
-                  <SubSectorPopupCard subsector={subsector} />
-                </Popup> */}
+                    <SubSectorPopupCard subsector={subsector} />
+                  </Popup> */}
           </Marker>
           <LayersControl.Overlay name="Sub-sectors" checked={false}>
             <LayerGroup>
@@ -171,12 +173,13 @@ const Map2: FC<Map2Props> = ({secData, subSecData}) => {
             );
           })}
           {/* <LayersControl.Overlay name="Sectors">
-            <LayerGroup>
-            </LayerGroup>
-          </LayersControl.Overlay> */}
+              <LayerGroup>
+              </LayerGroup>
+            </LayersControl.Overlay> */}
         </LayersControl>
       </MapContainer>
     </div>
-  ) : null;
+  );
+  null;
 };
 export default Map2;
