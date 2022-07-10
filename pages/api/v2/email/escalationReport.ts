@@ -225,19 +225,17 @@ export default getNoAuthHandler().post(
       messageVersions: mailMessageVersions,
     };
 
-    res.json({mailMessageVersions});
-
-    // await fetch("https://api.sendinblue.com/v3/smtp/email", {
-    //   method: "POST",
-    //   headers: apiHeaders,
-    //   body: JSON.stringify(mailBody),
-    // })
-    //   .then(handleResponse)
-    //   .then((response) => {
-    //     res.json(response);
-    //   })
-    //   .catch((error) => {
-    //     res.status(400).json(error);
-    //   });
+    await fetch("https://api.sendinblue.com/v3/smtp/email", {
+      method: "POST",
+      headers: apiHeaders,
+      body: JSON.stringify(mailBody),
+    })
+      .then(handleResponse)
+      .then((response) => {
+        res.json(response);
+      })
+      .catch((error) => {
+        res.status(400).json(error);
+      });
   }
 );
