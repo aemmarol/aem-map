@@ -13,9 +13,9 @@ export interface NextApiRequestExtended extends NextApiRequest {
 export default function getAuthHandler() {
   return nextConnect<NextApiRequest, NextApiResponse>({
     onError(error, req, res) {
-      res
-        .status(500)
-        .json({error: `Sorry something Happened! ${error.message}`});
+      res.status(500).json({
+        error: `Sorry something Happened! ${error.message}`,
+      });
     },
     onNoMatch(req, res) {
       res.status(404).json({error: `Method ${req.method} Not Allowed`});

@@ -52,7 +52,10 @@ export const login = async (
         email,
       };
       const accessToken: string = sign(
-        {exp: Math.floor(Date.now() / 1000) + 60 * 60 * 6, data: userTokenData},
+        {
+          exp: Math.floor(Date.now() / 1000) + 60 * 60 * 6,
+          data: userTokenData,
+        },
         process.env.NEXT_PUBLIC_ACCESS_TOKEN_SALT as string
       );
       return {

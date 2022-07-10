@@ -24,7 +24,11 @@ export const EscalationFilter: FC<EscalationFilterType> = ({
         value={selectedfilterItems[filterKey]}
         onChange={handleChange}
         disabled={disabled}
-        style={{display: "flex", flexDirection: "column", marginLeft: "1em"}}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          marginLeft: "1em",
+        }}
       />
     </div>
   );

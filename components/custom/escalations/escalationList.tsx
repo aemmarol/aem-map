@@ -76,7 +76,9 @@ export const EscalationList: FC<EscalationListType> = ({userRole}) => {
       <Row gutter={[16, 16]}>
         {hasFilterProps() ? (
           <Col
-            style={{maxHeight: height ? height - 225 + "px" : "500px"}}
+            style={{
+              maxHeight: height ? height - 225 + "px" : "500px",
+            }}
             className={styles.filtersContainer}
             xs={0}
             md={5}

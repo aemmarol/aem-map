@@ -287,7 +287,10 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
         cardTitle="Sub Sector Info"
         TableComponent={Table}
         tableComponentProps={{
-          dataSource: data.map((val, index) => ({...val, key: index})),
+          dataSource: data.map((val, index) => ({
+            ...val,
+            key: index,
+          })),
           columns: mergedColumns,
           pagination: false,
           scroll: {x: "450px", y: "400px"},

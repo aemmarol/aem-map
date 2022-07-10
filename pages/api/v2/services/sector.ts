@@ -17,7 +17,11 @@ export const addSectorList = async () => {
       await fetch(API.sector, {
         method: "POST",
         headers: {...getauthToken()},
-        body: JSON.stringify({...value, bounds: boundsArr, sub_sector_id: []}),
+        body: JSON.stringify({
+          ...value,
+          bounds: boundsArr,
+          sub_sector_id: [],
+        }),
       }).then(handleResponse);
     })
   ).catch((error) => message.error(error.message));
@@ -32,7 +36,10 @@ export const updateSectorListToDefault = async () => {
           lat: val[0],
           lang: val[1],
         }));
-        updateSectorData(value._id as string, {...data, bounds: boundsArr});
+        updateSectorData(value._id as string, {
+          ...data,
+          bounds: boundsArr,
+        });
       })
     ).catch((error) => message.error(error.message));
   });
