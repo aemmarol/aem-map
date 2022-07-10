@@ -1,13 +1,13 @@
-import {find, groupBy} from "lodash";
-import {NextApiRequestExtended} from "../../../../mongodb/authHandler";
+import { find, groupBy } from "lodash";
+import { NextApiRequestExtended } from "../../../../mongodb/authHandler";
 import {
   escalationCollectionName,
   umoorListCollectionName,
   userCollectionName,
 } from "../../../../mongodb/dbCollectionNames";
 import getNoAuthHandler from "../../../../mongodb/noAuthHandler";
-import {authUser, escalationStatus, userRoles} from "../../../../types";
-import {handleResponse} from "../../../../utils/handleResponse";
+import { authUser, escalationStatus, userRoles } from "../../../../types";
+import { handleResponse } from "../../../../utils/handleResponse";
 import moment from "moment";
 
 export default getNoAuthHandler().post(
@@ -25,14 +25,14 @@ export default getNoAuthHandler().post(
     const totalCount = await req.db
       .collection(escalationCollectionName)
       .aggregate([
-        {$match: {}},
+        { $match: {} },
         {
           $group: {
             _id: "$type.value",
-            count: {$sum: 1},
+            count: { $sum: 1 },
           },
         },
-        {$sort: {_id: 1}},
+        { $sort: { _id: 1 } },
       ])
       .toArray();
 
@@ -43,14 +43,14 @@ export default getNoAuthHandler().post(
         const countArr = await req.db
           .collection(escalationCollectionName)
           .aggregate([
-            {$match: {status: val}},
+            { $match: { status: val } },
             {
               $group: {
                 _id: "$type.value",
-                count: {$sum: 1},
+                count: { $sum: 1 },
               },
             },
-            {$sort: {_id: 1}},
+            { $sort: { _id: 1 } },
           ])
           .toArray();
 
@@ -95,15 +95,17 @@ export default getNoAuthHandler().post(
     const getUmoorStats = (umoor: string) => {
       const statsTotalCountArr = find(statusWiseCount, {
         status: "Total",
-      })?.count;
-      const umoorTotalCount = find(statsTotalCountArr, {_id: umoor}).count;
+      }) && find(statusWiseCount, {
+        status: "Total",
+      })?.count || 0;
+      const umoorTotalCount = find(statsTotalCountArr, { _id: umoor }) && find(statsTotalCountArr, { _id: umoor }).count || 0;
 
       const umoorStatusWiseCount = statusArr.map((status: escalationStatus) => {
-        const statusCountArr = find(statusWiseCount, {status})?.count;
+        const statusCountArr = find(statusWiseCount, { status }) && find(statusWiseCount, { status })?.count || 0;
         return {
           status,
-          count: find(statusCountArr, {_id: umoor})
-            ? find(statusCountArr, {_id: umoor}).count
+          count: find(statusCountArr, { _id: umoor })
+            ? find(statusCountArr, { _id: umoor }).count
             : 0,
         };
       });
@@ -119,7 +121,7 @@ export default getNoAuthHandler().post(
         resolved: find(umoorStatusWiseCount, {
           status: escalationStatus.RESOLVED,
         })?.count,
-        closed: find(umoorStatusWiseCount, {status: escalationStatus.CLOSED})
+        closed: find(umoorStatusWiseCount, { status: escalationStatus.CLOSED })
           ?.count,
       };
     };
@@ -141,13 +143,13 @@ export default getNoAuthHandler().post(
       params: {
         heading: "This is the report of AEM Escalations for Admin",
         umoor: "Admin",
-        total: find(adminStats, {status: "Total"})?.count,
-        reported: find(adminStats, {status: escalationStatus.ISSUE_REPORTED})
-          ?.count,
-        inprocess: find(adminStats, {status: escalationStatus.IN_PROGRESS})
-          ?.count,
-        resolved: find(adminStats, {status: escalationStatus.RESOLVED})?.count,
-        closed: find(adminStats, {status: escalationStatus.CLOSED})?.count,
+        total: find(adminStats, { status: "Total" }) && find(adminStats, { status: "Total" })?.count || 0,
+        reported: find(adminStats, { status: escalationStatus.ISSUE_REPORTED }) && find(adminStats, { status: escalationStatus.ISSUE_REPORTED })
+          ?.count || 0,
+        inprocess: find(adminStats, { status: escalationStatus.IN_PROGRESS }) && find(adminStats, { status: escalationStatus.IN_PROGRESS })
+          ?.count || 0,
+        resolved: find(adminStats, { status: escalationStatus.RESOLVED }) && find(adminStats, { status: escalationStatus.RESOLVED })?.count || 0,
+        closed: find(adminStats, { status: escalationStatus.CLOSED }) && find(adminStats, { status: escalationStatus.CLOSED })?.count || 0,
         link: process.env.NEXT_PUBLIC_ROOT_API_URL + "/admin/dashboard",
       },
     };
@@ -156,10 +158,10 @@ export default getNoAuthHandler().post(
       return {
         to: umoorWiseUser[umoorValue.value]
           ? umoorWiseUser[umoorValue.value].map((data: any) => ({
-              email: data.email,
-              name: data.name,
-            }))
-          : [{email: "ddedhawala@gmail.com", name: "Admin"}],
+            email: data.email,
+            name: data.name,
+          }))
+          : [{ email: "ddedhawala@gmail.com", name: "Admin" }],
         params: {
           ...getUmoorStats(umoorValue.value),
           heading:
@@ -200,17 +202,19 @@ export default getNoAuthHandler().post(
       messageVersions: mailMessageVersions,
     };
 
-    await fetch("https://api.sendinblue.com/v3/smtp/email", {
-      method: "POST",
-      headers: apiHeaders,
-      body: JSON.stringify(mailBody),
-    })
-      .then(handleResponse)
-      .then((response) => {
-        res.json(response);
-      })
-      .catch((error) => {
-        res.status(400).json(error);
-      });
+    res.json({ mailMessageVersions })
+
+    // await fetch("https://api.sendinblue.com/v3/smtp/email", {
+    //   method: "POST",
+    //   headers: apiHeaders,
+    //   body: JSON.stringify(mailBody),
+    // })
+    //   .then(handleResponse)
+    //   .then((response) => {
+    //     res.json(response);
+    //   })
+    //   .catch((error) => {
+    //     res.status(400).json(error);
+    //   });
   }
 );
