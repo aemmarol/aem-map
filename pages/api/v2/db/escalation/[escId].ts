@@ -56,7 +56,7 @@ export default getAuthHandler()
       const checkArr = ["updated_at", "comments", "status"];
       const keys = Object.keys(updateData);
       if (keys.every((val) => checkArr.includes(val))) {
-        // await updateEsc()
+        await updateEsc();
       } else {
         res.status(401).json({msg: "user access denied!"});
       }
