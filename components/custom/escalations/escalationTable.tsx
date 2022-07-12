@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {Table, Tag} from "antd";
 import {
   comment,
@@ -12,6 +12,7 @@ import moment from "moment";
 import {useRouter} from "next/router";
 import useWindowDimensions from "../../../utils/windowDimensions";
 import {getDateDiffDays, getEscalationStatusDetail} from "../../../utils";
+import {getUmoorListWithCoordinators} from "../../../pages/api/v2/services/umoor";
 
 interface EscalationTableType {
   escalationList: escalationData[];
@@ -78,20 +79,26 @@ export const EscalationTable: FC<EscalationTableType> = ({
       sorter: (a: any, b: any) => a.type.label.localeCompare(b.type.label),
       width: 100,
     },
-    // {
-    //   title: "Umoor Coordinators",
-    //   dataIndex: "type",
-    //   key: "type.coordinator",
-    //   render: (type: umoorData) =>
-    //     type.coordinators.length > 0
-    //       ? type.coordinators
-    //           .map(
-    //             (coordinator) => `${coordinator.name} (${coordinator.contact})`
-    //           )
-    //           .join("\n")
-    //       : "Unassigned",
-    //   width: 250,
-    // },
+    {
+      title: "Umoor Coordinators",
+      dataIndex: "type",
+      key: "type.coordinator",
+      render: (type: umoorData) => {
+        const umoorWithCoordinators = umoorListWithCoordinators.find(
+          (umoor) => umoor.value == type.value
+        );
+        return umoorWithCoordinators?.coordinators &&
+          umoorWithCoordinators.coordinators.length > 0
+          ? umoorWithCoordinators.coordinators
+              .map(
+                (coordinator) => `${coordinator.name} (${coordinator.contact})`
+              )
+              .join("\n")
+          : "Unassigned";
+      },
+      width: 250,
+      hidden: userRole == userRoles.Admin || userRole == userRoles.Umoor,
+    },
     {
       title: "Sector",
       dataIndex: "file_details",
@@ -205,7 +212,11 @@ export const EscalationTable: FC<EscalationTableType> = ({
       render: (comments: comment[]) => comments[comments.length - 1].msg,
       width: 275,
     },
-  ];
+  ].filter((item) => !item.hidden);
+
+  const [umoorListWithCoordinators, setUmoorListWithCoordinators] = useState<
+    umoorData[]
+  >([]);
 
   const getTableColumns = () => {
     if (hideDetails) {
@@ -219,6 +230,14 @@ export const EscalationTable: FC<EscalationTableType> = ({
       router.push("/escalations/" + escId);
     }
   };
+
+  const initUmoorList = async () => {
+    const umoorList: umoorData[] = await getUmoorListWithCoordinators();
+    setUmoorListWithCoordinators(umoorList);
+  };
+  useEffect(() => {
+    initUmoorList();
+  });
 
   return (
     <Table

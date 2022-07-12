@@ -1,4 +1,4 @@
-import {Button, message, Select, Tooltip} from "antd";
+import {message, Select} from "antd";
 import {NextPage} from "next";
 import {useRouter} from "next/router";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
@@ -11,16 +11,12 @@ import {
   umoorData,
   userRoles,
 } from "../../types";
-import {AddEscalationModal} from "../../components";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {EscalationList} from "../../components/custom/escalations/escalationList";
 
 import {filterTypes} from "../../types/escalation";
 import {StatsCard} from "../../components/cards/statsCard";
 import useWindowDimensions from "../../utils/windowDimensions";
-import {DownloadOutlined} from "@ant-design/icons";
-import {CSVLink} from "react-csv";
-import {getDateDiffDays} from "../../utils";
 import {getSectorList} from "../api/v2/services/sector";
 import {getUmoorList} from "../api/v2/services/umoor";
 import {useEscalationContext} from "../../context/EscalationContext";
@@ -44,12 +40,11 @@ const EscalationDashboard: NextPage = () => {
     selectedfilterItems,
     setEscalationList,
     setSelectedFilterItems,
-    escalationList,
   } = useEscalationContext();
   const {width} = useWindowDimensions();
 
-  const [showEscalationModal, setShowEscalationModal] =
-    useState<boolean>(false);
+  // const [showEscalationModal, setShowEscalationModal] =
+  //   useState<boolean>(false);
 
   const [statCardList, setStatCardList] = useState<any>([]);
 
@@ -313,100 +308,7 @@ const EscalationDashboard: NextPage = () => {
     router.push("/");
   };
 
-  const showAddEscalationModal = () => {
-    setShowEscalationModal(true);
-  };
-
-  const getEscalationDownloadData: any = () => {
-    const tempArr: any = escalationList.map((data: any) => {
-      const tempEscData: any = {};
-      getEscalationDownloadDataHeaders().forEach((val: any) => {
-        switch (val.key) {
-          case "file_details":
-            tempEscData[val.key] = data.file_details.tanzeem_file_no;
-            break;
-
-          case "sector":
-            const sectorName: string = data.file_details.sub_sector.sector
-              .name as string;
-            tempEscData[val.key] = sectorName;
-            break;
-
-          case "pending_since":
-            tempEscData[val.key] = `${
-              data.status === escalationStatus.CLOSED ||
-              data.status === escalationStatus.RESOLVED
-                ? 0
-                : getDateDiffDays(data.created_at)
-            } days`;
-            break;
-
-          case "comments":
-            tempEscData[val.key] = data.comments[data.comments.length - 1].msg;
-            break;
-
-          case "type":
-            tempEscData[val.key] = data.type.label;
-            break;
-
-          default:
-            tempEscData[val.key] = data[val.key];
-            break;
-        }
-      });
-
-      return tempEscData;
-    });
-
-    return tempArr;
-  };
-
-  const getEscalationDownloadDataHeaders = () => {
-    const columns = [
-      {
-        label: "Id",
-        key: "escalation_id",
-      },
-      {
-        label: "File No",
-        key: "file_details",
-      },
-
-      {
-        label: "Umoor",
-        key: "type",
-      },
-
-      {
-        label: "Sector",
-        key: "sector",
-      },
-
-      {
-        label: "Issue",
-        key: "issue",
-      },
-      {
-        label: "Issue Date",
-        key: "created_at",
-      },
-      {
-        label: "Pending Since",
-        key: "pending_since",
-      },
-      {
-        label: "Status",
-        key: "status",
-      },
-      {
-        label: "Latest Comment",
-        key: "comments",
-      },
-    ];
-    return columns;
-  };
-
-  return (
+  return width ? (
     <Dashboardlayout
       showBackButton={
         adminDetails.userRole && adminDetails.userRole.includes(userRoles.Admin)
@@ -459,7 +361,7 @@ const EscalationDashboard: NextPage = () => {
           </div>
         ) : null}
 
-        <div className="flex-align-center w-full">
+        {/* <div className="flex-align-center w-full">
           <Button
             className={width && width < 576 ? "" : "ml-auto"}
             onClick={showAddEscalationModal}
@@ -468,7 +370,7 @@ const EscalationDashboard: NextPage = () => {
           >
             Raise Escalation
           </Button>
-          <Tooltip title="Download Escalationdata">
+          {/* <Tooltip title="Download Escalationdata">
             <CSVLink
               // className={styles.downloadLink}
               filename={"escalations.csv"}
@@ -479,20 +381,20 @@ const EscalationDashboard: NextPage = () => {
               <DownloadOutlined style={{fontSize: 25}} />
             </CSVLink>
           </Tooltip>
-        </div>
+        </div> */}
       </div>
 
       {selectedView ? <EscalationList userRole={selectedView} /> : null}
 
-      {showEscalationModal ? (
+      {/* {showEscalationModal ? (
         <AddEscalationModal
           handleClose={() => setShowEscalationModal(false)}
           showModal={showEscalationModal}
-          successCallBack={callEscalationListApi}
+          successCallBack={setupFiltersAndData}
         />
-      ) : null}
+      ) : null} */}
     </Dashboardlayout>
-  );
+  ) : null;
 };
 
 export default EscalationDashboard;

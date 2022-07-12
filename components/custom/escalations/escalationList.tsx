@@ -8,10 +8,25 @@ import {EscalationTable} from "./escalationTable";
 import styles from "../../../styles/components/custom/escalationList.module.scss";
 import {EscalationFilter} from "./escalationFilter";
 
-import {Button, Col, Divider, Drawer, Input, Radio, Row, Space} from "antd";
-import {FilterOutlined, SearchOutlined} from "@ant-design/icons";
+import {
+  Button,
+  Col,
+  Divider,
+  Drawer,
+  Input,
+  Radio,
+  Row,
+  Space,
+  Tooltip,
+} from "antd";
+import {
+  DownloadOutlined,
+  FilterOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import {orderBy} from "lodash";
 import {useEscalationContext} from "../../../context/EscalationContext";
+import {CSVLink} from "react-csv";
 
 interface EscalationListType {
   userRole: userRoles;
@@ -19,7 +34,12 @@ interface EscalationListType {
 
 export const EscalationList: FC<EscalationListType> = ({userRole}) => {
   const {height, width} = useWindowDimensions();
-  const {escalationFilterProps, escalationList} = useEscalationContext();
+  const {
+    escalationFilterProps,
+    escalationList,
+    getEscalationDownloadData,
+    getEscalationDownloadDataHeaders,
+  } = useEscalationContext();
 
   const [escalations, setEscalations] = useState<escalationData[]>([]);
   const [showFilterDrawer, setShowFilterDrawer] = useState<boolean>(false);
@@ -62,15 +82,32 @@ export const EscalationList: FC<EscalationListType> = ({userRole}) => {
 
   return (
     <>
-      <Row>
-        <Input
-          suffix={<SearchOutlined />}
-          placeholder="Search item"
-          style={{marginBottom: "1em"}}
-          onChange={(event) =>
-            setFilterString(event.target.value?.toLowerCase())
-          }
-        ></Input>
+      <Row gutter={[16, 16]}>
+        <Col xs={23}>
+          <Input
+            suffix={<SearchOutlined />}
+            placeholder="Search item"
+            style={{marginBottom: "1em"}}
+            onChange={(event) =>
+              setFilterString(event.target.value?.toLowerCase())
+            }
+          ></Input>
+        </Col>
+        <Col xs={1}>
+          <Tooltip title="Download Escalationdata">
+            <CSVLink
+              // className={styles.downloadLink}
+              filename={"escalations.csv"}
+              data={getEscalationDownloadData() || []}
+              headers={getEscalationDownloadDataHeaders()}
+              className="ml-16"
+            >
+              <DownloadOutlined style={{fontSize: 25}} />
+            </CSVLink>
+          </Tooltip>
+          {/* <div className="float-right">
+        </div> */}
+        </Col>
       </Row>
       <Row gutter={[16, 16]}>
         {hasFilterProps() ? (
