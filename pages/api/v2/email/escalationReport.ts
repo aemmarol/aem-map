@@ -197,8 +197,34 @@ export default getNoAuthHandler().post(
 
     mailMessageVersions.push(adminMessageVersion);
 
-    const mailHTMLConetent =
-      "<!DOCTYPE html><html><body><h2>{{params.heading}}</h2><br /><h3>Below is the summary for {{params.umoor}}</h3><br /><p>Total :- {{params.total}}</p><p>Issue Reported :- {{params.reported}}</p><p>Resolution In Process :- {{params.inprocess}}</p><p>Resolved :- {{params.resolved}}</p><p>Closed :- {{params.closed}}</p><br /><p style='font-size: 16px;'>Click <a href='{{params.link}}'>here </a> to view details.</p></body></html>";
+    const mailHTMLConetent = `<!DOCTYPE html>
+        <html>
+          <body>
+            <h2>{{params.heading}}</h2>
+            <br />
+            <h3>Below is the summary for {{params.umoor}}</h3>
+            <br />
+            <table border=1 cellspacing=1 cellpadding=10>
+            <tr>
+            <th style='text-align:left'> Total</th>
+            <td style='text-align:right'> {{params.total}}</td>
+            </tr>
+            <tr>
+            <th style='text-align:left'> Issue Reported</th>
+            <td style='text-align:right'> {{params.reported}}</td>
+            </tr>
+            <tr>
+            <th style='text-align:left'> Resolution In Process</th>
+            <td style='text-align:right'> {{params.inprocess}}</td>
+            </tr>
+            <tr>
+            <th style='text-align:left'> Resolved</th>
+            <td style='text-align:right'> {{params.resolved}}</td>
+            </tr>
+            </table>
+            <p style='font-size: 16px;'>Click <a href='{{params.link}}'>here </a> to view details.</p>
+          </body>
+        </html>`;
 
     const mailSubject =
       "Weekly Report for AEM Escalations Dated: " +
