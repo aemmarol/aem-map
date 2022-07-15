@@ -36,10 +36,14 @@ export const EscalationCard: FC<{
     {
       title: "Issue Raised For",
       dataIndex:
-        escalation.issueRaisedFor.name +
-        " (" +
-        escalation.issueRaisedFor.contact +
-        " )",
+        escalation.issueRaisedFor &&
+        escalation.issueRaisedFor.name &&
+        escalation.issueRaisedFor.contact
+          ? escalation.issueRaisedFor.name +
+            " (" +
+            escalation.issueRaisedFor.contact +
+            " )"
+          : "-",
       size: 24,
     },
     {
