@@ -34,8 +34,35 @@ export const EscalationCard: FC<{
       size: 24,
     },
     {
+      title: "Issue Raised For",
+      dataIndex:
+        escalation.issueRaisedFor.name +
+        " (" +
+        escalation.issueRaisedFor.contact +
+        " )",
+      size: 24,
+    },
+    {
       title: "Umoor",
       dataIndex: escalation.type?.label,
+      size: 24,
+    },
+    {
+      title: "Umoor Co-ordinators",
+      dataIndex:
+        escalation.type &&
+        escalation.type.coordinators &&
+        escalation.type.coordinators.length > 0 ? (
+          <p className="mb-0">
+            {escalation.type?.coordinators.map((coordinator: any, idx: any) => (
+              <p key={idx + coordinator.name}>
+                {coordinator.name + " (" + coordinator.contact + ")"}
+              </p>
+            ))}
+          </p>
+        ) : (
+          "Unassigned"
+        ),
       size: 24,
     },
     {

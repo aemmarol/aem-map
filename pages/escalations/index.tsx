@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import {logout, verifyUser} from "../api/v1/authentication";
 import {
   authUser,
+  escalationData,
   escalationStatus,
   sectorData,
   umoorData,
@@ -22,7 +23,7 @@ import {DownloadOutlined} from "@ant-design/icons";
 import {CSVLink} from "react-csv";
 import {getDateDiffDays} from "../../utils";
 import {getSectorList} from "../api/v2/services/sector";
-import {getUmoorList} from "../api/v2/services/umoor";
+import {getUmoorListWithCoordinators} from "../api/v2/services/umoor";
 import {useEscalationContext} from "../../context/EscalationContext";
 import {find, isEmpty} from "lodash";
 import {
@@ -52,6 +53,7 @@ const EscalationDashboard: NextPage = () => {
     useState<boolean>(false);
 
   const [statCardList, setStatCardList] = useState<any>([]);
+  const [umoorList, setUmoorList] = useState<umoorData[]>([]);
 
   useEffect(() => {
     if (typeof verifyUser() !== "string") {
@@ -85,7 +87,8 @@ const EscalationDashboard: NextPage = () => {
       await getSectorList((data: sectorData[]) => {
         user.assignedArea = data.map((sector) => sector.name);
       });
-      const umoors: umoorData[] = await getUmoorList();
+      const umoors: umoorData[] = await getUmoorListWithCoordinators();
+      setUmoorList(umoors);
       user.assignedUmoor = umoors.map((umoor: umoorData) => umoor.value);
       setAdminDetails(user);
       setSelectedView(userRoles.Admin);
@@ -100,7 +103,6 @@ const EscalationDashboard: NextPage = () => {
   };
 
   const setupFiltersAndData = async () => {
-    const umoorList = await getUmoorList();
     let sectorList: any[] = [];
     await getSectorList((data: sectorData[]) => {
       sectorList = data.map((val) => val.name);
@@ -302,7 +304,12 @@ const EscalationDashboard: NextPage = () => {
   const callEscalationListApi = async () => {
     toggleLoader(true);
     await getEscalationListFromDb(selectedfilterItems, (data: any) => {
-      setEscalationList(data);
+      setEscalationList(
+        data.map((escData: escalationData) => ({
+          ...escData,
+          type: find(umoorList, {value: escData.type?.value}),
+        }))
+      );
     });
     toggleLoader(false);
   };
@@ -346,7 +353,9 @@ const EscalationDashboard: NextPage = () => {
             break;
 
           case "type":
-            tempEscData[val.key] = data.type.label;
+            if (data.type) {
+              tempEscData[val.key] = data.type.label;
+            }
             break;
 
           default:
@@ -404,6 +413,11 @@ const EscalationDashboard: NextPage = () => {
       },
     ];
     return columns;
+  };
+
+  const successCallBack = async () => {
+    await setupFiltersAndData();
+    await callEscalationListApi();
   };
 
   return (
@@ -488,7 +502,7 @@ const EscalationDashboard: NextPage = () => {
         <AddEscalationModal
           handleClose={() => setShowEscalationModal(false)}
           showModal={showEscalationModal}
-          successCallBack={callEscalationListApi}
+          successCallBack={successCallBack}
         />
       ) : null}
     </Dashboardlayout>

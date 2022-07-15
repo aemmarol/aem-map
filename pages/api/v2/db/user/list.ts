@@ -5,7 +5,13 @@ import {userCollectionName} from "../../../../../mongodb/dbCollectionNames";
 
 export default getAuthHandler().get(
   async (req: NextApiRequestExtended, res) => {
-    const doc = await req.db.collection(userCollectionName).find().toArray();
+    const findQuery = req.query.role
+      ? {userRole: {$all: [req.query.role]}}
+      : {};
+    const doc = await req.db
+      .collection(userCollectionName)
+      .find(findQuery)
+      .toArray();
     res.json(doc);
   }
 );

@@ -206,11 +206,11 @@ export default getNoAuthHandler().post(
             <br />
             <table border=1 cellspacing=1 cellpadding=10>
             <tr>
-            <th style='text-align:left'> Total</th>
+            <th style='text-align:left'> Total Issues Reported</th>
             <td style='text-align:right'> {{params.total}}</td>
             </tr>
             <tr>
-            <th style='text-align:left'> Issue Reported</th>
+            <th style='text-align:left'> Issues Pending action</th>
             <td style='text-align:right'> {{params.reported}}</td>
             </tr>
             <tr>
