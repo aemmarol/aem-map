@@ -53,45 +53,44 @@ export const EscalationTable: FC<EscalationTableType> = ({
       sorter: (a: any, b: any) =>
         a.file_details.tanzeem_file_no - b.file_details.tanzeem_file_no,
     },
-    // {
-    //   title: "HOF",
-    //   dataIndex: "file_details",
-    //   key: "file_details",
-    //   render: (file_details: fileDetails) => file_details.hof_name,
-    //   width: 200,
-    // },
-    // {
-    //   title: "Issue raised for",
-    //   dataIndex: "issueRaisedFor",
-    //   key: "issueRaisedFor",
-    //   render: (issueRaisedFor: any) =>
-    //     issueRaisedFor
-    //       ? `${issueRaisedFor.name} (${issueRaisedFor.contact})`
-    //       : "HOF",
-    //   width: 200,
-    // },
+    {
+      title: "Issue Raised For",
+      dataIndex: "issueRaisedFor",
+      key: "issueRaisedFor",
+      render: (issueRaisedFor: any) =>
+        issueRaisedFor
+          ? `${issueRaisedFor.name} (${issueRaisedFor.contact})`
+          : "HOF",
+      width: 200,
+    },
     {
       title: "Umoor",
       dataIndex: "type",
       key: "type",
-      render: (type: umoorData) => type.label,
+      render: (type: umoorData) => {
+        return type.label;
+      },
       sorter: (a: any, b: any) => a.type.label.localeCompare(b.type.label),
       width: 100,
     },
-    // {
-    //   title: "Umoor Coordinators",
-    //   dataIndex: "type",
-    //   key: "type.coordinator",
-    //   render: (type: umoorData) =>
-    //     type.coordinators.length > 0
-    //       ? type.coordinators
-    //           .map(
-    //             (coordinator) => `${coordinator.name} (${coordinator.contact})`
-    //           )
-    //           .join("\n")
-    //       : "Unassigned",
-    //   width: 250,
-    // },
+    {
+      title: "Umoor Coordinators",
+      dataIndex: "type",
+      key: "type.coordinator",
+      render: (type: any) =>
+        type.coordinators.length > 0 ? (
+          <div>
+            {type.coordinators.map((coordinator: any, idx: any) => (
+              <p key={idx + coordinator.name}>
+                {coordinator.name + " (" + coordinator.contact + ")"}
+              </p>
+            ))}
+          </div>
+        ) : (
+          "Unassigned"
+        ),
+      width: 250,
+    },
     {
       title: "Sector",
       dataIndex: "file_details",
@@ -103,43 +102,21 @@ export const EscalationTable: FC<EscalationTableType> = ({
         ),
       width: 125,
     },
-    // {
-    //   title: "Masool",
-    //   dataIndex: "file_details",
-    //   key: "file_details.sub_sector.sector.masool_name",
-    //   render: (file_details: any) =>
-    //     `${file_details.sub_sector.sector.masool_name} (${file_details.sub_sector.sector.masool_contact})`,
-    //   width: 225,
-    // },
-    // {
-    //   title: "Masoola",
-    //   dataIndex: "file_details",
-    //   key: "file_details.sub_sector.sector.masoola_name",
-    //   render: (file_details: any) =>
-    //     `${file_details.sub_sector.sector.masoola_name} (${file_details.sub_sector.sector.masoola_contact})`,
-    //   width: 225,
-    // },
-    // {
-    //   title: "Musaid",
-    //   dataIndex: "file_details",
-    //   key: "file_details.sub_sector.musaid_name",
-    //   render: (file_details: any) =>
-    //     `${file_details.sub_sector.musaid_name} (${file_details.sub_sector.musaid_contact})`,
-    //   width: 225,
-    // },
-    // {
-    //   title: "Musaida",
-    //   dataIndex: "file_details",
-    //   key: "file_details.sub_sector.musaida_name",
-    //   render: (file_details: any) =>
-    //     `${file_details.sub_sector.musaida_name} (${file_details.sub_sector.musaida_contact})`,
-    //   width: 225,
-    // },
+    {
+      title: "Sub Sector",
+      dataIndex: "file_details",
+      key: "file_details.sub_sector.name",
+      render: (file_details: any) => file_details.sub_sector.name,
+      sorter: (a: any, b: any) =>
+        a.file_details.sub_sector.name.localeCompare(
+          b.file_details.sub_sector.name
+        ),
+      width: 125,
+    },
     {
       title: "Issue",
       dataIndex: "issue",
       key: "issue",
-      // render: (text: string) => <EscStat value={text} />,
       width: 250,
     },
     {
