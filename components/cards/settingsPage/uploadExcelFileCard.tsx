@@ -28,6 +28,7 @@ export const UploadExcelFileCard: FC = () => {
     name: "file",
     multiple: false,
     maxCount: 1,
+    action: "/api/noop",
     accept:
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
     onChange(info: any) {
