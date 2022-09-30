@@ -22,7 +22,7 @@ export default getAuthHandler().put(
         .updateOne(
           {_id: new ObjectId(project_id)},
           {
-            $set: {updated_at: updateData.updated_at,files:updateData.files},
+            $set: {updated_at: updateData.updated_at, files: updateData.files},
             $inc: statsObj,
           }
         );

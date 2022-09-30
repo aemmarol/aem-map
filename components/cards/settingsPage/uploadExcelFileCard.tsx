@@ -1,9 +1,9 @@
-import { Button, Card, message, Upload } from "antd";
-import { FC, useState } from "react";
-import { InboxOutlined } from "@ant-design/icons";
-import { defaultDatabaseFields, getauthToken } from "../../../utils";
-import { useGlobalContext } from "../../../context/GlobalContext";
-import { databaseMumeneenFieldData, subSectorData } from "../../../types";
+import {Button, Card, message, Upload} from "antd";
+import {FC, useState} from "react";
+import {InboxOutlined} from "@ant-design/icons";
+import {defaultDatabaseFields, getauthToken} from "../../../utils";
+import {useGlobalContext} from "../../../context/GlobalContext";
+import {databaseMumeneenFieldData, subSectorData} from "../../../types";
 import {
   getFileDataFields,
   getMumeneenDataFields,
@@ -13,16 +13,16 @@ import {
   getSubSectorList,
   updateSubSectorFilesData,
 } from "../../../pages/api/v2/services/subsector";
-import { resetFileData } from "../../../pages/api/v2/services/dbUpload";
-import { API } from "../../../utils/api";
-import { handleResponse } from "../../../utils/handleResponse";
-import { filter } from "lodash";
+import {resetFileData} from "../../../pages/api/v2/services/dbUpload";
+import {API} from "../../../utils/api";
+import {handleResponse} from "../../../utils/handleResponse";
+import {filter} from "lodash";
 
 const Dragger = Upload.Dragger;
 
 export const UploadExcelFileCard: FC = () => {
   const [excelFile, setexcelFile] = useState(null);
-  const { toggleProgressLoader, setProgressValue } = useGlobalContext();
+  const {toggleProgressLoader, setProgressValue} = useGlobalContext();
 
   const draggerProps = {
     name: "file",
@@ -31,7 +31,7 @@ export const UploadExcelFileCard: FC = () => {
     accept:
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
     onChange(info: any) {
-      const { status } = info.file;
+      const {status} = info.file;
       if (status !== "uploading") {
         setexcelFile(info.file);
       }
@@ -167,7 +167,7 @@ export const UploadExcelFileCard: FC = () => {
   const getMemberDataList = (fileData: any) => {
     const finalMemberList: any[] = [];
     fileData.map((file: any) => {
-      const { memberData } = file;
+      const {memberData} = file;
       memberData.map((member: any) => {
         const memberId: any = Object.keys(member)[0];
         finalMemberList.push({
@@ -175,10 +175,10 @@ export const UploadExcelFileCard: FC = () => {
           ...member[memberId],
         });
       });
-    })
+    });
 
-    return finalMemberList
-  }
+    return finalMemberList;
+  };
 
   const getFileDataList = (fileData: any) => {
     const finalFileList: any[] = [];
@@ -186,35 +186,37 @@ export const UploadExcelFileCard: FC = () => {
       const fileId: any = Object.keys(file)[0];
       finalFileList.push({
         ...file[fileId],
-        _id: fileId
-      })
+        _id: fileId,
+      });
+    });
 
-    })
-
-    return finalFileList
-  }
+    return finalFileList;
+  };
 
   const getSubSectorUpdateData = async (fileList: any) => {
     const finalData: any = [];
     await getSubSectorList((data: subSectorData[]) => {
-      data.map((subSector => {
-        const files = filter(fileList, ["sub_sector.name", subSector.name])
-        const no_of_males = files.map(val => val.no_of_males).reduce((sum, current) => sum + current, 0)
-        const no_of_females = files.map(val => val.no_of_females).reduce((sum, current) => sum + current, 0)
+      data.map((subSector) => {
+        const files = filter(fileList, ["sub_sector.name", subSector.name]);
+        const no_of_males = files
+          .map((val) => val.no_of_males)
+          .reduce((sum, current) => sum + current, 0);
+        const no_of_females = files
+          .map((val) => val.no_of_females)
+          .reduce((sum, current) => sum + current, 0);
         finalData.push({
           id: subSector._id,
           data: {
-            files: files.map(val => val._id),
+            files: files.map((val) => val._id),
             no_of_males,
-            no_of_females
-          }
-        })
-      }))
+            no_of_females,
+          },
+        });
+      });
     });
 
-
-    return finalData
-  }
+    return finalData;
+  };
 
   const addDataToDb = async (data: any[]) => {
     if (verifyData(data)) {
@@ -224,12 +226,12 @@ export const UploadExcelFileCard: FC = () => {
       setProgressValue(40);
       const fileData = await getFileList(data);
       setProgressValue(50);
-      const dbUloadFileData = getFileDataList(fileData)
-      const dbUloadMemberData = getMemberDataList(fileData)
+      const dbUloadFileData = getFileDataList(fileData);
+      const dbUloadMemberData = getMemberDataList(fileData);
 
       await fetch(API.fileList, {
         method: "POST",
-        headers: { ...getauthToken() },
+        headers: {...getauthToken()},
         body: JSON.stringify(dbUloadFileData),
       })
         .then(handleResponse)
@@ -238,7 +240,7 @@ export const UploadExcelFileCard: FC = () => {
 
       await fetch(API.memberList, {
         method: "POST",
-        headers: { ...getauthToken() },
+        headers: {...getauthToken()},
         body: JSON.stringify(dbUloadMemberData),
       })
         .then(handleResponse)
@@ -248,13 +250,11 @@ export const UploadExcelFileCard: FC = () => {
       const dBsubSectorData = await getSubSectorUpdateData(dbUloadFileData);
       setProgressValue(80);
 
-
       await Promise.all(
         dBsubSectorData.map(async (subSector: any) => {
-          await updateSubSectorFilesData(
-            subSector.id,
-            subSector.data
-          ).catch((error) => message.error(error));
+          await updateSubSectorFilesData(subSector.id, subSector.data).catch(
+            (error) => message.error(error)
+          );
         })
       );
       setProgressValue(100);
