@@ -23,7 +23,7 @@ export default getAuthHandler()
       const {id} = JSON.parse(req.body);
       const doc: DeleteResult = await req.db
         .collection(userCollectionName)
-        .remove({_id: new ObjectId(id)});
+        .deleteOne({_id: new ObjectId(id)});
       res.json(doc);
     } else {
       res.status(401).json({msg: "user access denied!"});

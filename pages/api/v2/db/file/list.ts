@@ -1,4 +1,4 @@
-import {DeleteResult} from "mongodb";
+import {DeleteResult, InsertManyResult} from "mongodb";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
@@ -6,6 +6,17 @@ import {fileCollectionName} from "../../../../../mongodb/dbCollectionNames";
 import {userRoles} from "../../../../../types";
 
 export default getAuthHandler()
+  .post(async (req: NextApiRequestExtended, res) => {
+    const {userData} = req;
+    if (userData.userRole.includes(userRoles.Admin)) {
+      const doc: InsertManyResult = await req.db
+        .collection(fileCollectionName)
+        .insertMany(JSON.parse(req.body));
+      res.json(doc);
+    } else {
+      res.status(401).json({msg: "user access denied!"});
+    }
+  })
   .get(async (req: NextApiRequestExtended, res) => {
     const {queryName, queryValue} = req.query;
     if (queryName && queryValue) {
@@ -35,7 +46,7 @@ export default getAuthHandler()
     if (userData.userRole.includes(userRoles.Admin)) {
       const doc: DeleteResult = await req.db
         .collection(fileCollectionName)
-        .remove({});
+        .deleteMany({});
       res.json(doc);
     } else {
       res.status(401).json({msg: "user access denied!"});

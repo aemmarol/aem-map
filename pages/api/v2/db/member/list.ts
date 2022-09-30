@@ -10,7 +10,7 @@ export default getAuthHandler()
     const hofId: string = req.query.hofId as string;
     const doc = await req.db
       .collection(memberCollectionName)
-      .find({hof_id: hofId})
+      .find({hof_id: Number(hofId)})
       .toArray();
     res.json(doc);
   })
@@ -30,9 +30,17 @@ export default getAuthHandler()
     if (userData.userRole.includes(userRoles.Admin)) {
       const doc: DeleteResult = await req.db
         .collection(memberCollectionName)
-        .remove({});
+        .deleteMany({});
       res.json(doc);
     } else {
       res.status(401).json({msg: "user access denied!"});
     }
   });
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "4mb",
+    },
+  },
+};

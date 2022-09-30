@@ -55,7 +55,7 @@ export default getAuthHandler()
         const {id} = JSON.parse(req.body);
         const doc: DeleteResult = await req.db
           .collection(collectionName)
-          .remove({_id: new ObjectId(id)});
+          .deleteOne({_id: new ObjectId(id)});
         res.json(doc);
       }
     } else {
