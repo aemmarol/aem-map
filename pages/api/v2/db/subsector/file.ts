@@ -7,7 +7,6 @@ import {subsectorCollectionName} from "../../../../../mongodb/dbCollectionNames"
 export default getAuthHandler().put(
   async (req: NextApiRequestExtended, res) => {
     const updateData = JSON.parse(req.body);
-    const fileObj = {files: updateData.files};
     const statsObj = {
       no_of_females: updateData.no_of_females,
       no_of_males: updateData.no_of_males,
@@ -23,8 +22,7 @@ export default getAuthHandler().put(
         .updateOne(
           {_id: new ObjectId(project_id)},
           {
-            $set: {updated_at: updateData.updated_at},
-            $push: fileObj,
+            $set: {updated_at: updateData.updated_at,files:updateData.files},
             $inc: statsObj,
           }
         );
