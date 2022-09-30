@@ -1,9 +1,9 @@
-import {Button, Card, message, Upload} from "antd";
-import {FC, useState} from "react";
-import {InboxOutlined} from "@ant-design/icons";
-import {defaultDatabaseFields, getauthToken} from "../../../utils";
-import {useGlobalContext} from "../../../context/GlobalContext";
-import {databaseMumeneenFieldData, subSectorData} from "../../../types";
+import { Button, Card, message, Upload } from "antd";
+import { FC, useState } from "react";
+import { InboxOutlined } from "@ant-design/icons";
+import { defaultDatabaseFields, getauthToken } from "../../../utils";
+import { useGlobalContext } from "../../../context/GlobalContext";
+import { databaseMumeneenFieldData, subSectorData } from "../../../types";
 import {
   getFileDataFields,
   getMumeneenDataFields,
@@ -13,25 +13,26 @@ import {
   getSubSectorList,
   updateSubSectorFilesData,
 } from "../../../pages/api/v2/services/subsector";
-import {resetFileData} from "../../../pages/api/v2/services/dbUpload";
-import {API} from "../../../utils/api";
-import {handleResponse} from "../../../utils/handleResponse";
-import {filter} from "lodash";
+import { resetFileData } from "../../../pages/api/v2/services/dbUpload";
+import { API } from "../../../utils/api";
+import { handleResponse } from "../../../utils/handleResponse";
+import { filter } from "lodash";
 
 const Dragger = Upload.Dragger;
 
 export const UploadExcelFileCard: FC = () => {
   const [excelFile, setexcelFile] = useState(null);
-  const {toggleProgressLoader, setProgressValue} = useGlobalContext();
+  const { toggleProgressLoader, setProgressValue } = useGlobalContext();
 
   const draggerProps = {
     name: "file",
     multiple: false,
     maxCount: 1,
+    action: '/api/noop',
     accept:
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
     onChange(info: any) {
-      const {status} = info.file;
+      const { status } = info.file;
       if (status !== "uploading") {
         setexcelFile(info.file);
       }
@@ -167,7 +168,7 @@ export const UploadExcelFileCard: FC = () => {
   const getMemberDataList = (fileData: any) => {
     const finalMemberList: any[] = [];
     fileData.map((file: any) => {
-      const {memberData} = file;
+      const { memberData } = file;
       memberData.map((member: any) => {
         const memberId: any = Object.keys(member)[0];
         finalMemberList.push({
@@ -231,7 +232,7 @@ export const UploadExcelFileCard: FC = () => {
 
       await fetch(API.fileList, {
         method: "POST",
-        headers: {...getauthToken()},
+        headers: { ...getauthToken() },
         body: JSON.stringify(dbUloadFileData),
       })
         .then(handleResponse)
@@ -240,7 +241,7 @@ export const UploadExcelFileCard: FC = () => {
 
       await fetch(API.memberList, {
         method: "POST",
-        headers: {...getauthToken()},
+        headers: { ...getauthToken() },
         body: JSON.stringify(dbUloadMemberData),
       })
         .then(handleResponse)
