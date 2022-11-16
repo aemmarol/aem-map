@@ -223,6 +223,12 @@ export default getNoAuthHandler().post(
             </tr>
             </table>
             <p style='font-size: 16px;'>Click <a href='{{params.link}}'>here </a> to view details.</p>
+            <br/>
+            <p style='font-size: 16px;'>Login with your ITS ID
+            and Password (first four characters of your first name in small letters and last four digits of your ITS)
+            </p>
+            <br/>
+            <p style='font-size: 16px;'><b>Ex: Shabbir Rampurawala having ITS: 30401234 will have password as shab1234</b></p>
           </body>
         </html>`;
 
