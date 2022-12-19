@@ -21,7 +21,6 @@ export default getAuthHandler()
         : type === filterTypes.SubSector
         ? "$file_details.sub_sector.name"
         : "";
-    if (userData.userRole.includes(userRoles.Admin)) {
       const doc = await req.db
         .collection(escalationCollectionName)
         .aggregate([
@@ -36,9 +35,6 @@ export default getAuthHandler()
         ])
         .toArray();
       res.json(doc);
-    } else {
-      res.status(401).json({msg: "user access denied!"});
-    }
   })
   .post(async (req: NextApiRequestExtended, res) => {
     const {status, type, filterName, filterValue} = req.query;
