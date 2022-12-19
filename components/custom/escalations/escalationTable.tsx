@@ -5,7 +5,6 @@ import {
   escalationData,
   escalationStatus,
   fileDetails,
-  umoorData,
   userRoles,
 } from "../../../types";
 import moment from "moment";

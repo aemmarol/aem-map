@@ -2,7 +2,7 @@ import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
 import {escalationCollectionName} from "../../../../../mongodb/dbCollectionNames";
-import {userRoles} from "../../../../../types";
+// import {userRoles} from "../../../../../types";
 import {filterTypes} from "../../../../../types/escalation";
 
 // get is used for admin dashboard
@@ -10,7 +10,7 @@ import {filterTypes} from "../../../../../types/escalation";
 
 export default getAuthHandler()
   .get(async (req: NextApiRequestExtended, res) => {
-    const {userData} = req;
+    // const {userData} = req;
     const {status, type} = req.query;
     const matchObj = !status ? {} : {status: status};
     const groupby =
