@@ -5,7 +5,6 @@ import {
   escalationData,
   escalationStatus,
   fileDetails,
-  umoorData,
   userRoles,
 } from "../../../types";
 import moment from "moment";
@@ -63,34 +62,34 @@ export const EscalationTable: FC<EscalationTableType> = ({
           : "HOF",
       width: 200,
     },
-    {
-      title: "Umoor",
-      dataIndex: "type",
-      key: "type",
-      render: (type: umoorData) => {
-        return type.label;
-      },
-      sorter: (a: any, b: any) => a.type.label.localeCompare(b.type.label),
-      width: 100,
-    },
-    {
-      title: "Umoor Coordinators",
-      dataIndex: "type",
-      key: "type.coordinator",
-      render: (type: any) =>
-        type.coordinators.length > 0 ? (
-          <div>
-            {type.coordinators.map((coordinator: any, idx: any) => (
-              <p key={idx + coordinator.name}>
-                {coordinator.name + " (" + coordinator.contact + ")"}
-              </p>
-            ))}
-          </div>
-        ) : (
-          "Unassigned"
-        ),
-      width: 250,
-    },
+    // {
+    //   title: "Umoor",
+    //   dataIndex: "type",
+    //   key: "type",
+    //   render: (type: umoorData) => {
+    //     return type.label;
+    //   },
+    //   sorter: (a: any, b: any) => a.type.label.localeCompare(b.type.label),
+    //   width: 100,
+    // },
+    // {
+    //   title: "Umoor Coordinators",
+    //   dataIndex: "type",
+    //   key: "type.coordinator",
+    //   render: (type: any) =>
+    //     type.coordinators.length > 0 ? (
+    //       <div>
+    //         {type.coordinators.map((coordinator: any, idx: any) => (
+    //           <p key={idx + coordinator.name}>
+    //             {coordinator.name + " (" + coordinator.contact + ")"}
+    //           </p>
+    //         ))}
+    //       </div>
+    //     ) : (
+    //       "Unassigned"
+    //     ),
+    //   width: 250,
+    // },
     {
       title: "Sector",
       dataIndex: "file_details",
@@ -196,6 +195,11 @@ export const EscalationTable: FC<EscalationTableType> = ({
       router.push("/escalations/" + escId);
     }
   };
+
+  console.log(
+    "data",
+    escalationList.map((val) => ({...val, key: val._id}))
+  );
 
   return (
     <Table
