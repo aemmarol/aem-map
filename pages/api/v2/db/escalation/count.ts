@@ -21,20 +21,20 @@ export default getAuthHandler()
         : type === filterTypes.SubSector
         ? "$file_details.sub_sector.name"
         : "";
-      const doc = await req.db
-        .collection(escalationCollectionName)
-        .aggregate([
-          {$match: matchObj},
-          {
-            $group: {
-              _id: groupby,
-              count: {$sum: 1},
-            },
+    const doc = await req.db
+      .collection(escalationCollectionName)
+      .aggregate([
+        {$match: matchObj},
+        {
+          $group: {
+            _id: groupby,
+            count: {$sum: 1},
           },
-          {$sort: {_id: 1}},
-        ])
-        .toArray();
-      res.json(doc);
+        },
+        {$sort: {_id: 1}},
+      ])
+      .toArray();
+    res.json(doc);
   })
   .post(async (req: NextApiRequestExtended, res) => {
     const {status, type, filterName, filterValue} = req.query;

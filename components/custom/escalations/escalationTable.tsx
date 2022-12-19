@@ -197,7 +197,10 @@ export const EscalationTable: FC<EscalationTableType> = ({
     }
   };
 
-  console.log("data",escalationList.map((val) => ({...val, key: val._id})))
+  console.log(
+    "data",
+    escalationList.map((val) => ({...val, key: val._id}))
+  );
 
   return (
     <Table
