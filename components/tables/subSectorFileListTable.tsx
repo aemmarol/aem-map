@@ -6,7 +6,7 @@ import {useRouter} from "next/router";
 import {logout, verifyUser} from "../../pages/api/v1/authentication";
 import {authUser, databaseMumeneenFieldData} from "../../types";
 import {getFileTableUserColumns} from "./columnsUtil";
-import useWindowDimensions from "../../utils/windowDimensions";
+import {useWindowDimensions} from "../../utils/hooks";
 import {EscStat} from "../custom/escalations/escalationStatus";
 import {getFileDataFields} from "../../pages/api/v2/services/dbFields";
 

@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from "react";
 
 import {escalationData, userRoles} from "../../../types";
-import useWindowDimensions from "../../../utils/windowDimensions";
+import {useWindowDimensions} from "../../../utils/hooks";
 import {EscalationCard} from "./escalationCard";
 import {EscalationTable} from "./escalationTable";
 
@@ -18,7 +18,7 @@ interface EscalationListType {
 }
 
 export const EscalationList: FC<EscalationListType> = ({userRole}) => {
-  const {height, width} = useWindowDimensions();
+  const { height,width} = useWindowDimensions();
   const {escalationFilterProps, escalationList} = useEscalationContext();
 
   const [escalations, setEscalations] = useState<escalationData[]>([]);

@@ -16,7 +16,7 @@ export function isMobile() {
   return dim.width && dim.width < 576;
 }
 
-export default function useWindowDimensions() {
+export const useWindowDimensions = () => {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
   );
@@ -27,5 +27,5 @@ export default function useWindowDimensions() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  return windowDimensions;
-}
+  return {...windowDimensions};
+};

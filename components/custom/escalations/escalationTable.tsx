@@ -9,7 +9,7 @@ import {
 } from "../../../types";
 import moment from "moment";
 import {useRouter} from "next/router";
-import useWindowDimensions from "../../../utils/windowDimensions";
+import {useWindowDimensions} from "../../../utils/hooks";
 import {getDateDiffDays, getEscalationStatusDetail} from "../../../utils";
 
 interface EscalationTableType {

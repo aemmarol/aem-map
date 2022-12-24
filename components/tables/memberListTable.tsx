@@ -6,7 +6,7 @@ import {useRouter} from "next/router";
 import {logout, verifyUser} from "../../pages/api/v1/authentication";
 import {authUser, databaseMumeneenFieldData} from "../../types";
 import {getMumineenTableUserColumns} from "./columnsUtil";
-import useWindowDimensions from "../../utils/windowDimensions";
+import {useWindowDimensions} from "../../utils/hooks";
 import {EscStat} from "../custom/escalations/escalationStatus";
 import sampleMemberList from "../../sample_data/mumeneenDataField.json";
 import {getMumeneenDataFields} from "../../pages/api/v2/services/dbFields";

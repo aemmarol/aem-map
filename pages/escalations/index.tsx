@@ -18,7 +18,7 @@ import {EscalationList} from "../../components/custom/escalations/escalationList
 
 import {filterTypes} from "../../types/escalation";
 import {StatsCard} from "../../components/cards/statsCard";
-import useWindowDimensions from "../../utils/windowDimensions";
+import {useWindowDimensions} from "../../utils/hooks";
 import {DownloadOutlined} from "@ant-design/icons";
 import {CSVLink} from "react-csv";
 import {getDateDiffDays} from "../../utils";

@@ -29,7 +29,6 @@ export const DistanceCard: FC<{
           <div className={styles.distanceInfo}>
             <p>Direction from</p>
             <p>{fromLocation}</p>
-            {/* <p className={styles.eta}>{eta}</p> */}
           </div>
         </div>
       </a>
