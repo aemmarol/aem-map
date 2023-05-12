@@ -13,10 +13,9 @@ export default getAuthHandler()
     } else {
       const key: string = fieldName as string;
       const qValue: string = value as string;
-      console.log({[key]: qValue});
       const doc = await req.db
         .collection(fileCollectionName)
-        .findOne({[key]: Number(qValue)});
+        .findOne({[key]: key === "tanzeem_file_no" ? Number(qValue) : qValue});
       res.json(doc);
     }
   })
