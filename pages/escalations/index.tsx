@@ -53,7 +53,7 @@ const EscalationDashboard: NextPage = () => {
     useState<boolean>(false);
 
   const [statCardList, setStatCardList] = useState<any>([]);
-  const [aemUser, setAemUser] = useState<authUser|null>(null);
+  const [aemUser, setAemUser] = useState<authUser | null>(null);
   const [umoorList, setUmoorList] = useState<umoorData[]>([]);
 
   useEffect(() => {
