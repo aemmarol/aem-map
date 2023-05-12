@@ -68,7 +68,7 @@ export const EscalationTable: FC<EscalationTableType> = ({
       dataIndex: "type",
       key: "type",
       render: (type: umoorData) => {
-        return type && type.label?type.label:"-";
+        return type && type.label ? type.label : "-";
       },
       sorter: (a: any, b: any) => a.type.label.localeCompare(b.type.label),
       width: 100,
@@ -197,11 +197,11 @@ export const EscalationTable: FC<EscalationTableType> = ({
     }
   };
 
-  console.log("esc",escalationList)
+  console.log("esc", escalationList);
 
   return (
     <Table
-      dataSource={escalationList.map((val) => ({...val, key: val._id}))}
+      dataSource={escalationList.filter(value=>!(userRole !== userRoles.Admin && value.type?.value === "moharramat")).map((val) => ({...val, key: val._id}))}
       columns={getTableColumns() as any}
       pagination={false}
       scroll={{
