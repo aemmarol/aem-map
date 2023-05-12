@@ -53,7 +53,6 @@ const EscalationDashboard: NextPage = () => {
     useState<boolean>(false);
 
   const [statCardList, setStatCardList] = useState<any>([]);
-  const [aemUser, setAemUser] = useState<authUser | null>(null);
   const [umoorList, setUmoorList] = useState<umoorData[]>([]);
 
   useEffect(() => {
@@ -86,7 +85,6 @@ const EscalationDashboard: NextPage = () => {
   const setUserDetails = async (user: authUser) => {
     const umoors: umoorData[] = await getUmoorListWithCoordinators();
     setUmoorList(umoors);
-    setAemUser(user);
     if (user.userRole.includes(userRoles.Admin)) {
       await getSectorList((data: sectorData[]) => {
         user.assignedArea = data.map((sector) => sector.name);
