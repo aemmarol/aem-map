@@ -15,7 +15,7 @@ export default getAuthHandler()
       const qValue: string = value as string;
       const doc = await req.db
         .collection(fileCollectionName)
-        .findOne({[key]: key==="tanzeem_file_no"?Number(qValue):qValue});
+        .findOne({[key]: key === "tanzeem_file_no" ? Number(qValue) : qValue});
       res.json(doc);
     }
   })
