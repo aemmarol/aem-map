@@ -10,7 +10,7 @@ export default getAuthHandler()
     const hofId: string = req.query.hofId as string;
     const doc = await req.db
       .collection(memberCollectionName)
-      .find({hof_id: Number(hofId)})
+      .find({hof_id: hofId})
       .toArray();
     res.json(doc);
   })

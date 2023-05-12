@@ -13,9 +13,10 @@ export default getAuthHandler()
     } else {
       const key: string = fieldName as string;
       const qValue: string = value as string;
+      console.log({[key]: qValue})
       const doc = await req.db
         .collection(fileCollectionName)
-        .findOne({[key]: qValue});
+        .findOne({[key]: Number(qValue)});
       res.json(doc);
     }
   })
