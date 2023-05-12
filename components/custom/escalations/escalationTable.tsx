@@ -201,7 +201,14 @@ export const EscalationTable: FC<EscalationTableType> = ({
 
   return (
     <Table
-      dataSource={escalationList.filter(value=>!(userRole !== userRoles.Admin && value.type?.value === "moharramat")).map((val) => ({...val, key: val._id}))}
+      dataSource={escalationList
+        .filter(
+          (value) =>
+            !(
+              userRole !== userRoles.Admin && value.type?.value === "moharramat"
+            )
+        )
+        .map((val) => ({...val, key: val._id}))}
       columns={getTableColumns() as any}
       pagination={false}
       scroll={{
