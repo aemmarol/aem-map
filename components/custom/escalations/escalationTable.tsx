@@ -5,6 +5,7 @@ import {
   escalationData,
   escalationStatus,
   fileDetails,
+  umoorData,
   userRoles,
 } from "../../../types";
 import moment from "moment";
@@ -62,16 +63,16 @@ export const EscalationTable: FC<EscalationTableType> = ({
           : "HOF",
       width: 200,
     },
-    // {
-    //   title: "Umoor",
-    //   dataIndex: "type",
-    //   key: "type",
-    //   render: (type: umoorData) => {
-    //     return type.label;
-    //   },
-    //   sorter: (a: any, b: any) => a.type.label.localeCompare(b.type.label),
-    //   width: 100,
-    // },
+    {
+      title: "Umoor",
+      dataIndex: "type",
+      key: "type",
+      render: (type: umoorData) => {
+        return type && type.label?type.label:"-";
+      },
+      sorter: (a: any, b: any) => a.type.label.localeCompare(b.type.label),
+      width: 100,
+    },
     // {
     //   title: "Umoor Coordinators",
     //   dataIndex: "type",
@@ -196,10 +197,7 @@ export const EscalationTable: FC<EscalationTableType> = ({
     }
   };
 
-  console.log(
-    "data",
-    escalationList.map((val) => ({...val, key: val._id}))
-  );
+  console.log("esc",escalationList)
 
   return (
     <Table
