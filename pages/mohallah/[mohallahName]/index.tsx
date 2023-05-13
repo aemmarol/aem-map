@@ -14,7 +14,7 @@ import {getSubSectorData} from "../../api/v2/services/subsector";
 const SingleMohallah: NextPage = () => {
   const router = useRouter();
   const {mohallahName} = router.query;
-  const {toggleLoader, changeSelectedSidebarKey, center} = useGlobalContext();
+  const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
 
   const [mohallahDetails, setMohallahDetails] = useState<sectorData>(
     {} as sectorData
@@ -172,17 +172,17 @@ const SingleMohallah: NextPage = () => {
                       ? mohallahSubSectorsDetail.musaida_name
                       : "-"
                   }
-                  directionLink={`https://www.google.com/maps/dir/${
-                    center.latlng[0]
-                  },${center.latlng[1]}/${
-                    mohallahSubSectorsDetail.latlng
-                      ? mohallahSubSectorsDetail.latlng[0]
-                      : ""
-                  },${
-                    mohallahSubSectorsDetail.latlng
-                      ? mohallahSubSectorsDetail?.latlng[1]
-                      : ""
-                  }/`}
+                  // directionLink={`https://www.google.com/maps/dir/${
+                  //   center.latlng[0]
+                  // },${center.latlng[1]}/${
+                  //   mohallahSubSectorsDetail.latlng
+                  //     ? mohallahSubSectorsDetail.latlng[0]
+                  //     : ""
+                  // },${
+                  //   mohallahSubSectorsDetail.latlng
+                  //     ? mohallahSubSectorsDetail?.latlng[1]
+                  //     : ""
+                  // }/`}
                   cardHeading={mohallahSubSectorsDetail.name}
                   backgroundColor={mohallahDetails.primary_color}
                   number_of_females={
