@@ -60,6 +60,7 @@ export const UploadExcelFileCard: FC = () => {
     const apiResult = await fetch("/api/v1/db/dataUpload", requestOptions).then(
       (data) => data.json()
     );
+    // console.log(apiResult.data)
     addDataToDb(apiResult.data);
   };
 
@@ -85,7 +86,7 @@ export const UploadExcelFileCard: FC = () => {
           let subsector: subSectorData = {} as subSectorData;
 
           await getSubSectorDataByName(
-            userDetails.sub_sector.toUpperCase(),
+            userDetails.sub_sector,
             (data: subSectorData) => {
               subsector = data;
             }
