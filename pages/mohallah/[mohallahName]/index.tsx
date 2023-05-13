@@ -158,10 +158,10 @@ const SingleMohallah: NextPage = () => {
               >
                 <SubSectorCard
                   handleClick={() =>
-                    redirectToSubsector(mohallahSubSectorsDetail.name||"-")
+                    redirectToSubsector(mohallahSubSectorsDetail.name || "-")
                   }
-                  musaidName={mohallahSubSectorsDetail.musaid_name||"-"}
-                  musaidaName={mohallahSubSectorsDetail.musaida_name||"-"}
+                  musaidName={mohallahSubSectorsDetail.musaid_name || "-"}
+                  musaidaName={mohallahSubSectorsDetail.musaida_name || "-"}
                   directionLink={`https://www.google.com/maps/dir/${
                     center.latlng[0]
                   },${center.latlng[1]}/${
