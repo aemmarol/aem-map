@@ -58,7 +58,7 @@ const SingleMohallah: NextPage = () => {
           return subSecData;
         })
       );
-      setMohallahSubSectorsDetails(subSectorDetails);
+      setMohallahSubSectorsDetails(subSectorDetails.filter(val=> typeof val ==="object"));
       toggleLoader(false);
     }
   };
