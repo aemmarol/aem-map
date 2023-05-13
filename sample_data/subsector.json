@@ -67,6 +67,17 @@
   },
   {
     "sector_name": "BURHANI",
+    "name": "RABVAT JIBLA",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "latlng": [19.115354370056535, 72.87543929887346],
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "BURHANI",
     "name": "GABAJIWALA",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
@@ -221,7 +232,7 @@
   },
   {
     "sector_name": "EZZI",
-    "name": "GURUNANAK",
+    "name": "GURUNANAK CHS",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
@@ -430,7 +441,7 @@
   },
   {
     "sector_name": "JAMALI",
-    "name": "RAFEA",
+    "name": "RAFFEA",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
@@ -503,6 +514,17 @@
     "musaida_name": "Admin",
     "musaida_its": "33333333",
     "latlng": [19.107045865459884, 72.89830578231246],
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "NAJMI",
+    "name": "KANAKIA RAINFOREST",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "latlng": [19.119668825127206, 72.88037205700707],
     "musaida_contact": "9988998899"
   },
   {
@@ -606,7 +628,18 @@
   },
   {
     "sector_name": "SAIFEE",
-    "name": "YAMANI-2",
+    "name": "AL-YAMANI-A",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "latlng": [19.113938439860235, 72.875185133778],
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "SAIFEE",
+    "name": "AL-YAMANI-B",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
