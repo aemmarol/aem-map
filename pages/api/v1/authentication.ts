@@ -39,7 +39,7 @@ export const login = async (
         contact,
         email,
       } = data;
-      if (data.password !== password) {
+      if (data.password.trim() !== password.trim()) {
         throw new Error("invalid credentials!!");
       }
       const userTokenData = {
