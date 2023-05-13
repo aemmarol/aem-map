@@ -289,6 +289,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
                 valueStyle={{fontSize: 16}}
                 title="HOF Contact"
                 value={fileDetails.hofContact}
+                formatter={value=>"+"+value.toString()}
               />
             </Col>
             <Col xs={12}>
