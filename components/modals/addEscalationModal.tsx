@@ -290,9 +290,9 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
                 title="HOF Contact"
                 value={fileDetails.hofContact}
                 formatter={(value) => {
-                  const first = value.toString().charAt(0)
-                  if(first === "+") return value.toString();
-                  return "+"+value.toString()
+                  const first = value.toString().charAt(0);
+                  if (first === "+") return value.toString();
+                  return "+" + value.toString();
                 }}
               />
             </Col>
