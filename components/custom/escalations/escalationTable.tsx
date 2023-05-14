@@ -197,8 +197,6 @@ export const EscalationTable: FC<EscalationTableType> = ({
     }
   };
 
-  console.log("esc", escalationList);
-
   return (
     <Table
       dataSource={escalationList
