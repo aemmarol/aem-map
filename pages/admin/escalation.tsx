@@ -69,7 +69,10 @@ const AdminDashboard: NextPage = () => {
               cb_its: value.created_by.its_number,
               cb_contact: value.created_by.contact_number,
               cb_role: value.created_by.userRole,
-              created_at:moment(value.created_at,"DD-MM-YYYY hh:mm:ss").format("DD-MM-YYYY")
+              created_at: moment(
+                value.created_at,
+                "DD-MM-YYYY hh:mm:ss"
+              ).format("DD-MM-YYYY"),
             }))
         );
       })
@@ -94,7 +97,7 @@ const AdminDashboard: NextPage = () => {
     {field: "contact", headerName: "Issue raised for contact", minWidth: 200},
     {field: "issue", headerName: "Issue", minWidth: 300},
     {field: "status", headerName: "Status", minWidth: 200},
-    {field:"created_at",headerName:"Issue Raised On",minWidth:150},
+    {field: "created_at", headerName: "Issue Raised On", minWidth: 150},
     {field: "label", headerName: "Umoor", minWidth: 250},
     {
       field: "tanzeem_file_no",
