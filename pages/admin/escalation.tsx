@@ -66,10 +66,30 @@ const AdminDashboard: NextPage = () => {
               return aEsc - bEsc;
             })
             .map((value: any) => {
-              const masool = users.filter((user:any)=>user.assignedArea.includes(value.file_details.sub_sector.sector.name)&&user.userRole.includes(userRoles.Masool));
-              const masoola = users.filter((user:any)=>user.assignedArea.includes(value.file_details.sub_sector.sector.name)&&user.userRole.includes(userRoles.Masoola));
-              const musaid = users.filter((user:any)=>user.assignedArea.includes(value.file_details.sub_sector.name)&&user.userRole.includes(userRoles.Musaid));
-              const musaida = users.filter((user:any)=>user.assignedArea.includes(value.file_details.sub_sector.name)&&user.userRole.includes(userRoles.Musaida));
+              const masool = users.filter(
+                (user: any) =>
+                  user.assignedArea.includes(
+                    value.file_details.sub_sector.sector.name
+                  ) && user.userRole.includes(userRoles.Masool)
+              );
+              const masoola = users.filter(
+                (user: any) =>
+                  user.assignedArea.includes(
+                    value.file_details.sub_sector.sector.name
+                  ) && user.userRole.includes(userRoles.Masoola)
+              );
+              const musaid = users.filter(
+                (user: any) =>
+                  user.assignedArea.includes(
+                    value.file_details.sub_sector.name
+                  ) && user.userRole.includes(userRoles.Musaid)
+              );
+              const musaida = users.filter(
+                (user: any) =>
+                  user.assignedArea.includes(
+                    value.file_details.sub_sector.name
+                  ) && user.userRole.includes(userRoles.Musaida)
+              );
               return {
                 ...value,
                 ...value.issueRaisedFor,
@@ -81,23 +101,33 @@ const AdminDashboard: NextPage = () => {
                 cb_its: value.created_by.its_number,
                 cb_contact: value.created_by.contact_number,
                 cb_role: value.created_by.userRole,
-                masool_name:masool[0]&&masool[0].name?masool[0].name:"-",
-                masool_contact:masool[0]&&masool[0].contact?masool[0].contact:"-",
-                masool_its:masool[0]&&masool[0].itsId?masool[0].itsId:"-",
-                masoola_name:masoola[0]&&masoola[0].name?masoola[0].name:"-",
-                masoola_contact:masoola[0]&&masoola[0].contact?masoola[0].contact:"-",
-                masoola_its:masoola[0]&&masoola[0].itsId?masoola[0].itsId:"-",
-                musaid_name:musaid[0]&&musaid[0].name?musaid[0].name:"-",
-                musaid_contact:musaid[0]&&musaid[0].contact?musaid[0].contact:"-",
-                musaid_its:musaid[0]&&musaid[0].itsId?musaid[0].itsId:"-",
-                musaida_name:musaida[0]&&musaida[0].name?musaida[0].name:"-",
-                musaida_contact:musaida[0]&&musaida[0].contact?musaida[0].contact:"-",
-                musaida_its:musaida[0]&&musaida[0].itsId?musaida[0].itsId:"-",
+                masool_name: masool[0] && masool[0].name ? masool[0].name : "-",
+                masool_contact:
+                  masool[0] && masool[0].contact ? masool[0].contact : "-",
+                masool_its:
+                  masool[0] && masool[0].itsId ? masool[0].itsId : "-",
+                masoola_name:
+                  masoola[0] && masoola[0].name ? masoola[0].name : "-",
+                masoola_contact:
+                  masoola[0] && masoola[0].contact ? masoola[0].contact : "-",
+                masoola_its:
+                  masoola[0] && masoola[0].itsId ? masoola[0].itsId : "-",
+                musaid_name: musaid[0] && musaid[0].name ? musaid[0].name : "-",
+                musaid_contact:
+                  musaid[0] && musaid[0].contact ? musaid[0].contact : "-",
+                musaid_its:
+                  musaid[0] && musaid[0].itsId ? musaid[0].itsId : "-",
+                musaida_name:
+                  musaida[0] && musaida[0].name ? musaida[0].name : "-",
+                musaida_contact:
+                  musaida[0] && musaida[0].contact ? musaida[0].contact : "-",
+                musaida_its:
+                  musaida[0] && musaida[0].itsId ? musaida[0].itsId : "-",
                 created_at: moment(
                   value.created_at,
                   "DD-MM-YYYY hh:mm:ss"
                 ).format("DD-MM-YYYY"),
-              }
+              };
             })
         );
       })
@@ -151,7 +181,6 @@ const AdminDashboard: NextPage = () => {
     {field: "musaida_name", headerName: "Musaida Name", minWidth: 200},
     {field: "musaida_contact", headerName: "Musaida Contact", minWidth: 150},
     {field: "musaida_its", headerName: "Musaida ITS", minWidth: 150},
-
   ];
 
   return (
