@@ -76,15 +76,19 @@ export const UploadExcelFileCard: FC = () => {
   const getFileList = async (data: any[]) => {
     const fileFieldList = await getDbFileDataFields();
     const memberFieldList = await getDbMumeneenDataFields();
-    let dbSubSectorList:any[] = [];
-    await getSubSectorList((data:any)=>{dbSubSectorList=data});
+    let dbSubSectorList: any[] = [];
+    await getSubSectorList((data: any) => {
+      dbSubSectorList = data;
+    });
 
     const fileList = await Promise.all(
       data
         .filter((val) => val.hof_fm_type === "HOF")
         .map(async (userDetails) => {
-          const index = findIndex(dbSubSectorList,{name:userDetails.sub_sector})
-          const subsector= dbSubSectorList[index];
+          const index = findIndex(dbSubSectorList, {
+            name: userDetails.sub_sector,
+          });
+          const subsector = dbSubSectorList[index];
 
           const fileFieldsData: any = {};
 
