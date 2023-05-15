@@ -44,6 +44,13 @@ const AdminDashboard: NextPage = () => {
 
   const intiLists = async () => {
     toggleLoader(true);
+    const users = await await fetch(API.userList, {
+      method: "GET",
+      headers: {...getauthToken()},
+    })
+      .then(handleResponse)
+      .catch((error) => message.error(error.message));
+
     await fetch(API.escalationList, {
       method: "POST",
       headers: {...getauthToken()},
@@ -58,22 +65,40 @@ const AdminDashboard: NextPage = () => {
               const bEsc = Number(b.escalation_id.split("-")[1]);
               return aEsc - bEsc;
             })
-            .map((value: any) => ({
-              ...value,
-              ...value.issueRaisedFor,
-              ...value.file_details,
-              ...value.type,
-              sector: value.file_details.sub_sector.sector.name,
-              sub_sector: value.file_details.sub_sector.name,
-              cb_name: value.created_by.name,
-              cb_its: value.created_by.its_number,
-              cb_contact: value.created_by.contact_number,
-              cb_role: value.created_by.userRole,
-              created_at: moment(
-                value.created_at,
-                "DD-MM-YYYY hh:mm:ss"
-              ).format("DD-MM-YYYY"),
-            }))
+            .map((value: any) => {
+              const masool = users.filter((user:any)=>user.assignedArea.includes(value.file_details.sub_sector.sector.name)&&user.userRole.includes(userRoles.Masool));
+              const masoola = users.filter((user:any)=>user.assignedArea.includes(value.file_details.sub_sector.sector.name)&&user.userRole.includes(userRoles.Masoola));
+              const musaid = users.filter((user:any)=>user.assignedArea.includes(value.file_details.sub_sector.name)&&user.userRole.includes(userRoles.Musaid));
+              const musaida = users.filter((user:any)=>user.assignedArea.includes(value.file_details.sub_sector.name)&&user.userRole.includes(userRoles.Musaida));
+              return {
+                ...value,
+                ...value.issueRaisedFor,
+                ...value.file_details,
+                ...value.type,
+                sector: value.file_details.sub_sector.sector.name,
+                sub_sector: value.file_details.sub_sector.name,
+                cb_name: value.created_by.name,
+                cb_its: value.created_by.its_number,
+                cb_contact: value.created_by.contact_number,
+                cb_role: value.created_by.userRole,
+                masool_name:masool[0]&&masool[0].name?masool[0].name:"-",
+                masool_contact:masool[0]&&masool[0].contact?masool[0].contact:"-",
+                masool_its:masool[0]&&masool[0].itsId?masool[0].itsId:"-",
+                masoola_name:masoola[0]&&masoola[0].name?masoola[0].name:"-",
+                masoola_contact:masoola[0]&&masoola[0].contact?masoola[0].contact:"-",
+                masoola_its:masoola[0]&&masoola[0].itsId?masoola[0].itsId:"-",
+                musaid_name:musaid[0]&&musaid[0].name?musaid[0].name:"-",
+                musaid_contact:musaid[0]&&musaid[0].contact?musaid[0].contact:"-",
+                musaid_its:musaid[0]&&musaid[0].itsId?musaid[0].itsId:"-",
+                musaida_name:musaida[0]&&musaida[0].name?musaida[0].name:"-",
+                musaida_contact:musaida[0]&&musaida[0].contact?musaida[0].contact:"-",
+                musaida_its:musaida[0]&&musaida[0].itsId?musaida[0].itsId:"-",
+                created_at: moment(
+                  value.created_at,
+                  "DD-MM-YYYY hh:mm:ss"
+                ).format("DD-MM-YYYY"),
+              }
+            })
         );
       })
       .catch((error) => message.error(error.message))
@@ -114,6 +139,19 @@ const AdminDashboard: NextPage = () => {
     {field: "cb_its", headerName: "Created By ITS", minWidth: 150},
     {field: "cb_contact", headerName: "Created By Contact", minWidth: 150},
     {field: "cb_role", headerName: "Created By userRole", minWidth: 150},
+    {field: "masool_name", headerName: "Masool Name", minWidth: 200},
+    {field: "masool_contact", headerName: "Masool Contact", minWidth: 150},
+    {field: "masool_its", headerName: "Masool ITS", minWidth: 150},
+    {field: "masoola_name", headerName: "Masoola Name", minWidth: 200},
+    {field: "masoola_contact", headerName: "Masoola Contact", minWidth: 150},
+    {field: "masoola_its", headerName: "Masoola ITS", minWidth: 150},
+    {field: "musaid_name", headerName: "Musaid Name", minWidth: 200},
+    {field: "musaid_contact", headerName: "Musaid Contact", minWidth: 150},
+    {field: "musaid_its", headerName: "Musaid ITS", minWidth: 150},
+    {field: "musaida_name", headerName: "Musaida Name", minWidth: 200},
+    {field: "musaida_contact", headerName: "Musaida Contact", minWidth: 150},
+    {field: "musaida_its", headerName: "Musaida ITS", minWidth: 150},
+
   ];
 
   return (
