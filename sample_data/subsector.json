@@ -199,7 +199,7 @@
   },
   {
     "sector_name": "EZZI",
-    "name": "BEHIND  FRANKIE VIDEO",
+    "name": "BEHIND FRANKIE VIDEO",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
@@ -915,6 +915,17 @@
   {
     "sector_name": "ZZ NON RESIDENT",
     "name": "NRM",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "musaida_contact": "9988998899",
+    "latlng": [0, 0]
+  },
+  {
+    "sector_name": "MOGRAPADA",
+    "name": "MOGRA",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",

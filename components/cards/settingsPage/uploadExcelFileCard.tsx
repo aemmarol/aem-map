@@ -9,14 +9,13 @@ import {
   getMumeneenDataFields,
 } from "../../../pages/api/v2/services/dbFields";
 import {
-  getSubSectorDataByName,
   getSubSectorList,
   updateSubSectorFilesData,
 } from "../../../pages/api/v2/services/subsector";
 import {resetFileData} from "../../../pages/api/v2/services/dbUpload";
 import {API} from "../../../utils/api";
 import {handleResponse} from "../../../utils/handleResponse";
-import {filter} from "lodash";
+import {filter, findIndex} from "lodash";
 
 const Dragger = Upload.Dragger;
 
@@ -76,21 +75,16 @@ export const UploadExcelFileCard: FC = () => {
 
   const getFileList = async (data: any[]) => {
     const fileFieldList = await getDbFileDataFields();
-
     const memberFieldList = await getDbMumeneenDataFields();
+    let dbSubSectorList:any[] = [];
+    await getSubSectorList((data:any)=>{dbSubSectorList=data});
 
     const fileList = await Promise.all(
       data
         .filter((val) => val.hof_fm_type === "HOF")
         .map(async (userDetails) => {
-          let subsector: subSectorData = {} as subSectorData;
-
-          await getSubSectorDataByName(
-            userDetails.sub_sector,
-            (data: subSectorData) => {
-              subsector = data;
-            }
-          );
+          const index = findIndex(dbSubSectorList,{name:userDetails.sub_sector})
+          const subsector= dbSubSectorList[index];
 
           const fileFieldsData: any = {};
 
@@ -122,9 +116,9 @@ export const UploadExcelFileCard: FC = () => {
               ...defaultDatabaseFields,
               hof_name: userDetails.full_name,
               sub_sector: {
-                name: subsector.name,
-                _id: subsector._id,
-                sector: subsector.sector,
+                name: subsector?.name,
+                _id: subsector?._id,
+                sector: subsector?.sector,
               },
               member_ids: membersList.map((val) => val.its_id),
               no_of_males: membersList.filter(
@@ -230,6 +224,8 @@ export const UploadExcelFileCard: FC = () => {
       setProgressValue(50);
       const dbUloadFileData = getFileDataList(fileData);
       const dbUloadMemberData = getMemberDataList(fileData);
+
+      // console.log(dbUloadFileData,dbUloadMemberData)
 
       await fetch(API.fileList, {
         method: "POST",
