@@ -1,3 +1,4 @@
+import { InsertManyResult } from "mongodb";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
@@ -10,6 +11,14 @@ export default getAuthHandler().post(
       .collection(escalationCollectionName)
       .find(filterObj.findFilter)
       .toArray();
+    res.json(doc);
+  }
+).put(
+  async (req: NextApiRequestExtended, res) => {
+    console.log("Api hit")
+    const doc: InsertManyResult = await req.db
+      .collection(escalationCollectionName)
+      .insertMany(JSON.parse(req.body));
     res.json(doc);
   }
 );

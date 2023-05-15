@@ -1,11 +1,15 @@
-import {Button, Card, Col, message, Row} from "antd";
-import {NextPage} from "next";
-import {Dashboardlayout} from "../../layouts/dashboardLayout";
-import {useEffect, useState} from "react";
+import { Button, Card, Col, message, Row } from "antd";
+import { NextPage } from "next";
+import { Dashboardlayout } from "../../layouts/dashboardLayout";
+import { useEffect, useState } from "react";
+import escData from "../../sample_data/escalationData.json"
 
 import {
   authUser,
+  comment,
   databaseMumeneenFieldData,
+  escalationData,
+  escalationStatus,
   sectorData,
   subSectorData,
   userRoles,
@@ -17,20 +21,22 @@ import {
   SectorDetailsComponent,
   SubSectorDetailsComponent,
 } from "../../components";
-import {logout, verifyUser} from "../api/v1/authentication";
-import {useRouter} from "next/router";
-import {useGlobalContext} from "../../context/GlobalContext";
+import { logout, verifyUser } from "../api/v1/authentication";
+import { useRouter } from "next/router";
+import { useGlobalContext } from "../../context/GlobalContext";
 import Airtable from "airtable";
-import {API} from "../../utils/api";
-import {getauthToken} from "../../utils";
-import {handleResponse} from "../../utils/handleResponse";
+import { API } from "../../utils/api";
+import { defaultDatabaseFields, getauthToken } from "../../utils";
+import { handleResponse } from "../../utils/handleResponse";
 import {
   getFileDataFields,
   getMumeneenDataFields,
 } from "../api/v2/services/dbFields";
-import {getSectorList} from "../api/v2/services/sector";
-import {getUmoorList} from "../api/v2/services/umoor";
-import {getSubSectorList} from "../api/v2/services/subsector";
+import { getSectorList } from "../api/v2/services/sector";
+import { getUmoorList } from "../api/v2/services/umoor";
+import { getSubSectorList } from "../api/v2/services/subsector";
+import moment from "moment";
+import { findIndex } from "lodash";
 
 const airtableBase = new Airtable({
   apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
@@ -41,7 +47,7 @@ const umoorTable = airtableBase("umoorList");
 
 const AdminSettings: NextPage = () => {
   const router = useRouter();
-  const {toggleLoader, changeSelectedSidebarKey} = useGlobalContext();
+  const { toggleLoader, changeSelectedSidebarKey } = useGlobalContext();
 
   const [sectorDetails, setSectorDetails] = useState<sectorData[] | []>([]);
   const [subsectorDetails, setSubsectorDetails] = useState<
@@ -58,7 +64,7 @@ const AdminSettings: NextPage = () => {
     changeSelectedSidebarKey("3");
     toggleLoader(true);
     if (typeof verifyUser() !== "string") {
-      const {userRole} = verifyUser() as authUser;
+      const { userRole } = verifyUser() as authUser;
       if (!userRole.includes(userRoles.Admin)) {
         notVerifierUserLogout();
       } else {
@@ -91,7 +97,7 @@ const AdminSettings: NextPage = () => {
     toggleLoader(true);
     const mongoOldUserList = await await fetch(API.userList, {
       method: "GET",
-      headers: {...getauthToken()},
+      headers: { ...getauthToken() },
     })
       .then(handleResponse)
       .catch((error) => {
@@ -104,8 +110,8 @@ const AdminSettings: NextPage = () => {
         mongoOldUserList.map(async (val: authUser) => {
           await fetch(API.user, {
             method: "DELETE",
-            headers: {...getauthToken()},
-            body: JSON.stringify({id: val._id}),
+            headers: { ...getauthToken() },
+            body: JSON.stringify({ id: val._id }),
           })
             .then(handleResponse)
             .catch((error) => {
@@ -155,7 +161,7 @@ const AdminSettings: NextPage = () => {
         };
         await fetch(API.user, {
           method: "POST",
-          headers: {...getauthToken()},
+          headers: { ...getauthToken() },
           body: JSON.stringify(userdbdata),
         })
           .then(handleResponse)
@@ -178,8 +184,8 @@ const AdminSettings: NextPage = () => {
         oldUmoorList.map(async (val: any) => {
           await fetch(API.umoor, {
             method: "DELETE",
-            headers: {...getauthToken()},
-            body: JSON.stringify({id: val._id}),
+            headers: { ...getauthToken() },
+            body: JSON.stringify({ id: val._id }),
           })
             .then(handleResponse)
             .catch((error) => message.error(error));
@@ -219,7 +225,7 @@ const AdminSettings: NextPage = () => {
         };
         await fetch(API.umoor, {
           method: "POST",
-          headers: {...getauthToken()},
+          headers: { ...getauthToken() },
           body: JSON.stringify(umoordbdata),
         })
           .then(handleResponse)
@@ -229,9 +235,77 @@ const AdminSettings: NextPage = () => {
     toggleLoader(false);
   };
 
+  const handleEscalationFormSubmit = async () => {
+
+    getSubSectorList(async (subsector: subSectorData[]) => {
+
+      const escalations = escData.map(value => {
+        const index = findIndex(subsector, { name: value.sub_sector.toUpperCase() });
+        const firstComment: comment = {
+          msg: "Issue is added on " + moment(new Date()).format("DD-MM-YYYY"),
+          name: "Mulla Ebrahim bhai Shaikh Saifuddin bhai Attarwala",
+          contact_number: "+919820903152",
+          userRole: "Admin",
+          time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
+        };
+        const comment: comment = {
+          msg: value["Final Comments"],
+          name: "Mulla Ebrahim bhai Shaikh Saifuddin bhai Attarwala",
+          contact_number: "+919820903152",
+          userRole: "Admin",
+          time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
+        };
+        const escalationIssueType = {
+          value: "maqhsoos",
+          label: "Ashara Ohbat - Maqhsoos"
+        };
+        return {
+          ...defaultDatabaseFields,
+          created_by: {
+            name: "Mulla Ebrahim bhai Shaikh Saifuddin bhai Attarwala",
+            its_number: "30400068",
+            contact_number: "+919820903152",
+            userRole: "Admin",
+          },
+          file_details: {
+            tanzeem_file_no: Number(value["File No"]),
+            address: value.Address,
+            sub_sector: {
+              name: subsector[index].name,
+              sector: subsector[index].sector
+            },
+            hof_its: value["HOF ID"].toString(),
+            hof_name: value["HOF Name"],
+            hof_contact: value["HOF Contact"],
+          },
+          status: escalationStatus.ISSUE_REPORTED,
+          issue: value["Escalation Title"],
+          type: escalationIssueType,
+          comments: [firstComment,comment],
+          escalation_id: value["Unique ID"],
+          issueRaisedFor: {
+            ITS: value["ITS ID"].toString(),
+            name: value.Fullname,
+            contact: value.Phone,
+          },
+        }
+      })
+
+      await fetch(API.escalationList, {
+        method: "PUT",
+        body: JSON.stringify(escalations),
+        headers: {...getauthToken()},
+      })
+        .then(handleResponse)
+        .catch((error) => message.error(error.message))
+
+      console.log(escalations)
+    });
+  };
+
   return (
     <Dashboardlayout headerTitle="Admin Settings">
-      <Row className="mb-30" gutter={[{xs: 8, lg: 12}, 16]}>
+      <Row className="mb-30" gutter={[{ xs: 8, lg: 12 }, 16]}>
         <Col xs={12}>
           <UploadExcelFileCard />
         </Col>
@@ -248,12 +322,17 @@ const AdminSettings: NextPage = () => {
                   Sync Umoorlist
                 </Button>
               </Col>
+              <Col xs={12}>
+                <Button onClick={handleEscalationFormSubmit} type="primary">
+                  Add Escalations
+                </Button>
+              </Col>
             </Row>
           </Card>
         </Col>
       </Row>
 
-      <Row gutter={[{xs: 8, lg: 12}, 16]}>
+      <Row gutter={[{ xs: 8, lg: 12 }, 16]}>
         <Col xs={12}>
           <MumeneenDataFieldTable
             data={mumeneenFields}
