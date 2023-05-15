@@ -78,6 +78,11 @@ export const DashboardSidebar: FC<{
             Dashboard
           </Menu.Item>
         ) : null}
+        {appUserRole.length === 1 && appUserRole[0] === "Admin" ? (
+          <Menu.Item key="4" onClick={() => router.push("/admin/escalation")}>
+            Escalations
+          </Menu.Item>
+        ) : null}
         {appUserRole.length === 1 && appUserRole[0] === "Umoor" ? null : (
           <Menu.Item key="1" onClick={handleMohallahRouting}>
             Mohallah
