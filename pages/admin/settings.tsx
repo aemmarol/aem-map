@@ -237,12 +237,11 @@ const AdminSettings: NextPage = () => {
 
   const handleEscalationFormSubmit = async () => {
     getSubSectorList(async (subsector: subSectorData[]) => {
-
       const umoorArr = [
-        {label:"Ashara Ohbat - Maqhsoos",value:"maqhsoos"},
-        {label:"Dua Araz",value:"dua"},
-        {label:"Housing",value:"housing"},
-      ]
+        {label: "Ashara Ohbat - Maqhsoos", value: "maqhsoos"},
+        {label: "Dua Araz", value: "dua"},
+        {label: "Housing", value: "housing"},
+      ];
 
       const escalations = escData.map((value) => {
         const index = findIndex(subsector, {
@@ -262,7 +261,7 @@ const AdminSettings: NextPage = () => {
           userRole: "Admin",
           time: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
         };
-        const escIndex = findIndex(umoorArr,{value:value.value})
+        const escIndex = findIndex(umoorArr, {value: value.value});
         const escalationIssueType = umoorArr[escIndex];
         return {
           ...defaultDatabaseFields,
