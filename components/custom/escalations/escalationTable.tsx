@@ -54,6 +54,13 @@ export const EscalationTable: FC<EscalationTableType> = ({
         a.file_details.tanzeem_file_no - b.file_details.tanzeem_file_no,
     },
     {
+      title: "HOF Name",
+      dataIndex: "file_details",
+      key: "file_details",
+      render: (file_details: fileDetails) => file_details.hof_name,
+      width: 200,
+    },
+    {
       title: "Issue Raised For",
       dataIndex: "issueRaisedFor",
       key: "issueRaisedFor",

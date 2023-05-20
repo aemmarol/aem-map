@@ -64,6 +64,7 @@ export const EscalationList: FC<EscalationListType> = ({userRole}) => {
     <>
       <Row>
         <Input
+          size="large"
           suffix={<SearchOutlined />}
           placeholder="Search item"
           style={{marginBottom: "1em"}}

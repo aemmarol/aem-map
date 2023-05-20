@@ -47,6 +47,11 @@ export const EscalationCard: FC<{
       size: 24,
     },
     {
+      title: "HOF Name",
+      dataIndex: escalation.file_details.hof_name,
+      size: 24,
+    },
+    {
       title: "Umoor",
       dataIndex: escalation.type?.label,
       size: 24,
