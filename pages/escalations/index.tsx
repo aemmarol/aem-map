@@ -21,7 +21,7 @@ import {StatsCard} from "../../components/cards/statsCard";
 import useWindowDimensions from "../../utils/windowDimensions";
 import {DownloadOutlined} from "@ant-design/icons";
 import {CSVLink} from "react-csv";
-import {getDateDiffDays} from "../../utils";
+import {getauthToken} from "../../utils";
 import {getSectorList} from "../api/v2/services/sector";
 import {getUmoorListWithCoordinators} from "../api/v2/services/umoor";
 import {useEscalationContext} from "../../context/EscalationContext";
@@ -32,6 +32,9 @@ import {
   getSectorStats,
   getUmoorStats,
 } from "../api/v2/services/escalation";
+import {API} from "../../utils/api";
+import {handleResponse} from "../../utils/handleResponse";
+import moment from "moment";
 
 const EscalationDashboard: NextPage = () => {
   const router = useRouter();
@@ -54,6 +57,7 @@ const EscalationDashboard: NextPage = () => {
 
   const [statCardList, setStatCardList] = useState<any>([]);
   const [umoorList, setUmoorList] = useState<umoorData[]>([]);
+  const [userList, setUserList] = useState<umoorData[]>([]);
 
   useEffect(() => {
     if (typeof verifyUser() !== "string") {
@@ -85,6 +89,15 @@ const EscalationDashboard: NextPage = () => {
   const setUserDetails = async (user: authUser) => {
     const umoors: umoorData[] = await getUmoorListWithCoordinators();
     setUmoorList(umoors);
+
+    const users = await await fetch(API.userList, {
+      method: "GET",
+      headers: {...getauthToken()},
+    })
+      .then(handleResponse)
+      .catch((error) => message.error(error.message));
+    setUserList(users);
+
     if (user.userRole.includes(userRoles.Admin)) {
       await getSectorList((data: sectorData[]) => {
         user.assignedArea = data.map((sector) => sector.name);
@@ -327,92 +340,107 @@ const EscalationDashboard: NextPage = () => {
   };
 
   const getEscalationDownloadData: any = () => {
-    const tempArr: any = escalationList.map((data: any) => {
-      const tempEscData: any = {};
-      getEscalationDownloadDataHeaders().forEach((val: any) => {
-        switch (val.key) {
-          case "file_details":
-            tempEscData[val.key] = data.file_details.tanzeem_file_no;
-            break;
-
-          case "sector":
-            const sectorName: string = data.file_details.sub_sector.sector
-              .name as string;
-            tempEscData[val.key] = sectorName;
-            break;
-
-          case "pending_since":
-            tempEscData[val.key] = `${
-              data.status === escalationStatus.CLOSED ||
-              data.status === escalationStatus.RESOLVED
-                ? 0
-                : getDateDiffDays(data.created_at)
-            } days`;
-            break;
-
-          case "comments":
-            tempEscData[val.key] = data.comments[data.comments.length - 1].msg;
-            break;
-
-          case "type":
-            if (data.type) {
-              tempEscData[val.key] = data.type.label;
-            }
-            break;
-
-          default:
-            tempEscData[val.key] = data[val.key];
-            break;
-        }
+    const tempArr: any = escalationList
+      .sort((a: any, b: any) => {
+        const aEsc = Number(a.escalation_id.split("-")[1]);
+        const bEsc = Number(b.escalation_id.split("-")[1]);
+        return aEsc - bEsc;
+      })
+      .map((value: any) => {
+        const masool: any = userList.filter(
+          (user: any) =>
+            user.assignedArea.includes(
+              value.file_details.sub_sector.sector.name
+            ) && user.userRole.includes(userRoles.Masool)
+        );
+        const masoola: any = userList.filter(
+          (user: any) =>
+            user.assignedArea.includes(
+              value.file_details.sub_sector.sector.name
+            ) && user.userRole.includes(userRoles.Masoola)
+        );
+        const musaid: any = userList.filter(
+          (user: any) =>
+            user.assignedArea.includes(value.file_details.sub_sector.name) &&
+            user.userRole.includes(userRoles.Musaid)
+        );
+        const musaida: any = userList.filter(
+          (user: any) =>
+            user.assignedArea.includes(value.file_details.sub_sector.name) &&
+            user.userRole.includes(userRoles.Musaida)
+        );
+        return {
+          ...value,
+          ...value.issueRaisedFor,
+          ...value.file_details,
+          ...value.type,
+          sector: value.file_details.sub_sector.sector.name,
+          sub_sector: value.file_details.sub_sector.name,
+          cb_name: value.created_by.name,
+          cb_its: value.created_by.its_number,
+          cb_contact: value.created_by.contact_number,
+          cb_role: value.created_by.userRole,
+          masool_name: masool[0] && masool[0].name ? masool[0].name : "-",
+          masool_contact:
+            masool[0] && masool[0].contact ? masool[0].contact : "-",
+          masool_its: masool[0] && masool[0].itsId ? masool[0].itsId : "-",
+          masoola_name: masoola[0] && masoola[0].name ? masoola[0].name : "-",
+          masoola_contact:
+            masoola[0] && masoola[0].contact ? masoola[0].contact : "-",
+          masoola_its: masoola[0] && masoola[0].itsId ? masoola[0].itsId : "-",
+          musaid_name: musaid[0] && musaid[0].name ? musaid[0].name : "-",
+          musaid_contact:
+            musaid[0] && musaid[0].contact ? musaid[0].contact : "-",
+          musaid_its: musaid[0] && musaid[0].itsId ? musaid[0].itsId : "-",
+          musaida_name: musaida[0] && musaida[0].name ? musaida[0].name : "-",
+          musaida_contact:
+            musaida[0] && musaida[0].contact ? musaida[0].contact : "-",
+          musaida_its: musaida[0] && musaida[0].itsId ? musaida[0].itsId : "-",
+          created_at: moment(value.created_at, "DD-MM-YYYY hh:mm:ss").format(
+            "DD-MM-YYYY"
+          ),
+        };
       });
-
-      return tempEscData;
-    });
 
     return tempArr;
   };
 
   const getEscalationDownloadDataHeaders = () => {
     const columns = [
+      {key: "escalation_id", label: "Escalation Id"},
+      {key: "ITS", label: "ITS"},
+      {key: "name", label: "Issue raised for"},
+      {key: "contact", label: "Issue raised for contact"},
+      {key: "issue", label: "Issue"},
+      {key: "status", label: "Status"},
+      {key: "created_at", label: "Issue Raised On"},
+      {key: "label", label: "Umoor"},
       {
-        label: "Id",
-        key: "escalation_id",
+        key: "tanzeem_file_no",
+        label: "File number",
       },
-      {
-        label: "File No",
-        key: "file_details",
-      },
-
-      {
-        label: "Umoor",
-        key: "type",
-      },
-
-      {
-        label: "Sector",
-        key: "sector",
-      },
-
-      {
-        label: "Issue",
-        key: "issue",
-      },
-      {
-        label: "Issue Date",
-        key: "created_at",
-      },
-      {
-        label: "Pending Since",
-        key: "pending_since",
-      },
-      {
-        label: "Status",
-        key: "status",
-      },
-      {
-        label: "Latest Comment",
-        key: "comments",
-      },
+      {key: "hof_its", label: "HOF ITS"},
+      {key: "hof_name", label: "HOF Name"},
+      {key: "hof_contact", label: "HOF contact"},
+      {key: "sector", label: "Sector"},
+      {key: "sub_sector", label: "Sub Sector"},
+      {key: "address", label: "Address"},
+      {key: "cb_name", label: "Created By"},
+      {key: "cb_its", label: "Created By ITS"},
+      {key: "cb_contact", label: "Created By Contact"},
+      {key: "cb_role", label: "Created By userRole"},
+      {key: "masool_name", label: "Masool Name"},
+      {key: "masool_contact", label: "Masool Contact"},
+      {key: "masool_its", label: "Masool ITS"},
+      {key: "masoola_name", label: "Masoola Name"},
+      {key: "masoola_contact", label: "Masoola Contact"},
+      {key: "masoola_its", label: "Masoola ITS"},
+      {key: "musaid_name", label: "Musaid Name"},
+      {key: "musaid_contact", label: "Musaid Contact"},
+      {key: "musaid_its", label: "Musaid ITS"},
+      {key: "musaida_name", label: "Musaida Name"},
+      {key: "musaida_contact", label: "Musaida Contact"},
+      {key: "musaida_its", label: "Musaida ITS"},
     ];
     return columns;
   };
@@ -486,7 +514,6 @@ const EscalationDashboard: NextPage = () => {
           </Button>
           <Tooltip title="Download Escalationdata">
             <CSVLink
-              // className={styles.downloadLink}
               filename={"escalations.csv"}
               data={getEscalationDownloadData() || []}
               headers={getEscalationDownloadDataHeaders()}
