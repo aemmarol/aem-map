@@ -181,7 +181,7 @@ export default getNoAuthHandler().post(
       return {
         to: umoorWiseUser[umoorValue.value]
           ? umoorWiseUser[umoorValue.value].map((data: any) => ({
-              email: data.email,
+              email: data.email || "ddedhawala@gmail.com",
               name: data.name,
             }))
           : [{email: "ddedhawala@gmail.com", name: "Admin"}],
