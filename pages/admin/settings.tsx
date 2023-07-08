@@ -89,7 +89,7 @@ const AdminSettings: NextPage = () => {
 
   const handleSyncUsersFromAirtable = async () => {
     toggleLoader(true);
-    const mongoOldUserList = await await fetch(API.userList, {
+    const mongoOldUserList = await fetch(API.userList, {
       method: "GET",
       headers: {...getauthToken()},
     })
