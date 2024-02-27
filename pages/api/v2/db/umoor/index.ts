@@ -28,10 +28,10 @@ export default getAuthHandler()
   .put(async (req: NextApiRequestExtended, res) => {
     const {userData} = req;
     if (userData.userRole.includes(userRoles.Admin)) {
-      const {id,data:updateData} = JSON.parse(req.body);
-      const doc:UpdateResult  = await req.db
+      const {id, data: updateData} = JSON.parse(req.body);
+      const doc: UpdateResult = await req.db
         .collection(umoorListCollectionName)
-        .updateOne({_id:new ObjectId(id)}, {$set: updateData});
+        .updateOne({_id: new ObjectId(id)}, {$set: updateData});
       res.json(doc);
     } else {
       res.status(401).json({msg: "user access denied!"});

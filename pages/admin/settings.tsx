@@ -28,7 +28,7 @@ import {
 } from "../api/v2/services/dbFields";
 import {getSectorList} from "../api/v2/services/sector";
 import {getSubSectorList} from "../api/v2/services/subsector";
-import { getUmoorList } from "../api/v2/services/umoor";
+import {getUmoorList} from "../api/v2/services/umoor";
 
 const AdminSettings: NextPage = () => {
   const router = useRouter();
@@ -66,9 +66,9 @@ const AdminSettings: NextPage = () => {
         getSubSectorList((data: subSectorData[]) => {
           setSubsectorDetails(data);
         });
-        getUmoorList().then((data)=>{
-          setumoorDetails(data)
-        })
+        getUmoorList().then((data) => {
+          setumoorDetails(data);
+        });
       }
     } else {
       notVerifierUserLogout();
@@ -119,7 +119,7 @@ const AdminSettings: NextPage = () => {
         <Col xs={12}>
           <UmoorListComponent
             data={umoorDetails}
-            updateData={(data)=>setumoorDetails(data)}
+            updateData={(data) => setumoorDetails(data)}
           />
         </Col>
       </Row>
