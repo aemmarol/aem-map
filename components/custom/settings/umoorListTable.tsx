@@ -3,7 +3,7 @@ import {FC, useState} from "react";
 import {umoorData} from "../../../types";
 import {TableCardWithForm} from "../../cards";
 import {
-    addUmoorData,
+  addUmoorData,
   getUmoorList,
   updateUmoorData,
 } from "../../../pages/api/v2/services/umoor";
@@ -148,101 +148,104 @@ export const UmoorListComponent: FC<CardProps> = ({data, updateData}) => {
     };
   });
 
-  const addUmoor = ()=>setShowAddUmoor(true);
+  const addUmoor = () => setShowAddUmoor(true);
 
-  const handleSubmitAddUmoorForm = async(values:Partial<umoorData>)=>{
-    addUmoorData(values).then(()=>{
-        setisLoading(true)
-        getUmoorList().then((data: umoorData[]) => {
+  const handleSubmitAddUmoorForm = async (values: Partial<umoorData>) => {
+    addUmoorData(values)
+      .then(() => {
+        setisLoading(true);
+        getUmoorList()
+          .then((data: umoorData[]) => {
             updateData(data);
-          }).finally(()=>{
-            setisLoading(false)
           })
-    }).finally(()=>{
-        setShowAddUmoor(false)
-    })
-  }
+          .finally(() => {
+            setisLoading(false);
+          });
+      })
+      .finally(() => {
+        setShowAddUmoor(false);
+      });
+  };
 
   return (
     <>
-    <Form form={form} component={false}>
-      <TableCardWithForm
-        cardTitle="UmoorList"
-        TableComponent={Table}
-        tableComponentProps={{
-          dataSource: data.map((val, index) => ({
-            ...val,
-            key: index,
-          })),
-          columns: mergedColumns,
-          pagination: false,
-          scroll: {x: "450px", y: "400px"},
-          components: {
-            body: {
-              cell: EditableCell,
+      <Form form={form} component={false}>
+        <TableCardWithForm
+          cardTitle="UmoorList"
+          TableComponent={Table}
+          tableComponentProps={{
+            dataSource: data.map((val, index) => ({
+              ...val,
+              key: index,
+            })),
+            columns: mergedColumns,
+            pagination: false,
+            scroll: {x: "450px", y: "400px"},
+            components: {
+              body: {
+                cell: EditableCell,
+              },
             },
-          },
-          loading: isLoading,
-        }}
-        extraComponents={
-          <div className="flex-align-center-justify-center">
-            <Button onClick={addUmoor} className="mr-10">
-              Add umoor
-            </Button>
-          </div>
-        }
-      />
-    </Form>
-    {
-        showAddUmoor ?
-        <Modal
-      footer={null}
-      onCancel={()=>setShowAddUmoor(false)}
-      visible={showAddUmoor}
-      title="Add Umoor"
-    >
-      <Form
-        name="escalationComments"
-        onFinish={handleSubmitAddUmoorForm}
-        layout="vertical"
-        form={addUmoorForm}
-      >
-        <Form.Item
-          label="Label"
-          name="label"
-          className="mb-8"
-          rules={[
-            {
-              required: true,
-              message: "Label cannot be empty!",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label="Value"
-          name="value"
-          className="mb-8"
-          rules={[
-            {
-              required: true,
-              message: "Value cannot be empty!",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
+            loading: isLoading,
+          }}
+          extraComponents={
+            <div className="flex-align-center-justify-center">
+              <Button onClick={addUmoor} className="mr-10">
+                Add umoor
+              </Button>
+            </div>
+          }
+        />
       </Form>
-    </Modal>:null
-    }
+      {showAddUmoor ? (
+        <Modal
+          footer={null}
+          onCancel={() => setShowAddUmoor(false)}
+          visible={showAddUmoor}
+          title="Add Umoor"
+        >
+          <Form
+            name="escalationComments"
+            onFinish={handleSubmitAddUmoorForm}
+            layout="vertical"
+            form={addUmoorForm}
+          >
+            <Form.Item
+              label="Label"
+              name="label"
+              className="mb-8"
+              rules={[
+                {
+                  required: true,
+                  message: "Label cannot be empty!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Value"
+              name="value"
+              className="mb-8"
+              rules={[
+                {
+                  required: true,
+                  message: "Value cannot be empty!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+      ) : null}
     </>
   );
 };
