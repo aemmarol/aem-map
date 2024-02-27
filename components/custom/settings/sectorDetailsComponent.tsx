@@ -1,4 +1,3 @@
-import Airtable from "airtable";
 import {
   Button,
   Form,
@@ -12,19 +11,11 @@ import {
 import {FC, useState} from "react";
 import {TableCardWithForm} from "../..";
 import {
-  getSectorDataByName,
   getSectorList,
   updateSectorData,
   updateSectorListToDefault,
 } from "../../../pages/api/v2/services/sector";
 import {sectorData} from "../../../types";
-
-const airtableBase = new Airtable({
-  apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
-}).base("app7V1cg4ibiooxcn");
-
-const userTable = airtableBase("userList");
-
 interface CardProps {
   data: any[];
   updateData: (data: sectorData[]) => any;
@@ -227,64 +218,7 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
   };
 
   const handleUpdateMasoolDetails = async () => {
-    setisLoading(true);
-    const masoolData = await userTable
-      .select({
-        view: "Grid view",
-        filterByFormula: `({userRole} = 'Masool')`,
-      })
-      .firstPage();
-    const masoolaData = await userTable
-      .select({
-        view: "Grid view",
-        filterByFormula: `({userRole} = 'Masoola')`,
-      })
-      .firstPage();
-
-    await Promise.all(
-      masoolData
-        .map((val) => val.fields)
-        .map(async (value: any) => {
-          let sectorDetails: sectorData = {} as sectorData;
-          await getSectorDataByName(
-            value.assignedArea[0],
-            (data: sectorData) => {
-              sectorDetails = data;
-            }
-          );
-
-          await updateSectorData(sectorDetails._id as string, {
-            masool_contact: value.contact,
-            masool_name: value.name,
-            masool_its: value.itsId.toString(),
-          });
-        })
-    );
-
-    await Promise.all(
-      masoolaData
-        .map((val) => val.fields)
-        .map(async (value: any) => {
-          let sectorDetails: sectorData = {} as sectorData;
-          await getSectorDataByName(
-            value.assignedArea[0],
-            (data: sectorData) => {
-              sectorDetails = data;
-            }
-          );
-          await updateSectorData(sectorDetails._id as string, {
-            masoola_contact: value.contact,
-            masoola_name: value.name,
-            masoola_its: value.itsId.toString(),
-          });
-        })
-    );
-
-    await getSectorList((data: sectorData[]) => {
-      updateData(data);
-    });
-
-    setisLoading(false);
+    console.log("update masool info")
   };
 
   return (

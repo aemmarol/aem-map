@@ -18,7 +18,6 @@
     "ag-grid-community": "^29.3.4",
     "ag-grid-enterprise": "^29.3.4",
     "ag-grid-react": "^29.3.4",
-    "airtable": "^0.11.1",
     "antd": "^4.18.5",
     "async-busboy": "^1.1.0",
     "firebase": "^9.6.4",

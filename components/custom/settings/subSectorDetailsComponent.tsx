@@ -1,4 +1,3 @@
-import Airtable from "airtable";
 import {
   Button,
   Form,
@@ -13,18 +12,11 @@ import {FC, useState} from "react";
 import {TableCardWithForm} from "../..";
 
 import {
-  getSubSectorDataByName,
   getSubSectorList,
   updateSubSectorData,
   updateSubSectorListToDefault,
 } from "../../../pages/api/v2/services/subsector";
 import {subSectorData} from "../../../types";
-
-const airtableBase = new Airtable({
-  apiKey: process.env.NEXT_PUBLIC_AIRTABLE_API_KEY,
-}).base("app7V1cg4ibiooxcn");
-
-const userTable = airtableBase("userList");
 
 interface CardProps {
   data: any[];
@@ -226,59 +218,7 @@ export const SubSectorDetailsComponent: FC<CardProps> = ({
   };
 
   const handleUpdateMusaidDetails = async () => {
-    setisLoading(true);
-    const musaidData = await userTable
-      .select({
-        view: "Grid view",
-        filterByFormula: `({userRole} = 'Musaid')`,
-      })
-      .firstPage();
-    const musaidaData = await userTable
-      .select({
-        view: "Grid view",
-        filterByFormula: `({userRole} = 'Musaida')`,
-      })
-      .firstPage();
-
-    await Promise.all(
-      musaidData
-        .map((val) => val.fields)
-        .map(async (value: any) => {
-          await getSubSectorDataByName(
-            value.assignedArea[0],
-            async (data: subSectorData) => {
-              await updateSubSectorData(data._id as string, {
-                musaid_contact: value.contact,
-                musaid_name: value.name,
-                musaid_its: value.itsId.toString(),
-              });
-            }
-          );
-        })
-    );
-
-    await Promise.all(
-      musaidaData
-        .map((val) => val.fields)
-        .map(async (value: any) => {
-          await getSubSectorDataByName(
-            value.assignedArea[0],
-            async (data: subSectorData) => {
-              await updateSubSectorData(data._id as string, {
-                musaida_contact: value.contact,
-                musaida_name: value.name,
-                musaida_its: value.itsId.toString(),
-              });
-            }
-          );
-        })
-    );
-
-    await getSubSectorList((data: subSectorData[]) => {
-      updateData(data);
-    });
-
-    setisLoading(false);
+    console.log("update musaid");
   };
 
   return (
