@@ -14,6 +14,16 @@ export const getUmoorList = async (): Promise<umoorData[]> => {
     .catch((error) => message.error(error.message));
 };
 
+export const addUmoorData = async (data: Partial<umoorData>) => {
+  await fetch(API.umoor, {
+    method: "POST",
+    headers: {...getauthToken()},
+    body: JSON.stringify(data),
+  })
+    .then(handleResponse)
+    .catch((error) => message.error(error.message));
+};
+
 export const updateUmoorData = async (id: string, data: Partial<umoorData>) => {
   await fetch(API.umoor, {
     method: "PUT",

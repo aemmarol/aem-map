@@ -1,8 +1,9 @@
-import {Button, Form, Input, Popconfirm, Table, Typography} from "antd";
+import {Button, Form, Input, Modal, Popconfirm, Table, Typography} from "antd";
 import {FC, useState} from "react";
 import {umoorData} from "../../../types";
 import {TableCardWithForm} from "../../cards";
 import {
+    addUmoorData,
   getUmoorList,
   updateUmoorData,
 } from "../../../pages/api/v2/services/umoor";
@@ -52,13 +53,14 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
 export const UmoorListComponent: FC<CardProps> = ({data, updateData}) => {
   const [form] = Form.useForm();
+  const [addUmoorForm] = Form.useForm();
   const [editingKey, setEditingKey] = useState<string | undefined>("");
   const [isLoading, setisLoading] = useState<boolean>(false);
+  const [showAddUmoor, setShowAddUmoor] = useState<boolean>(false);
 
   const isEditing = (record: umoorData) => record._id === editingKey;
 
   const edit = (record: Partial<umoorData>) => {
-    console.log(record._id);
     form.setFieldsValue({...record});
     setEditingKey(record._id);
   };
@@ -139,7 +141,6 @@ export const UmoorListComponent: FC<CardProps> = ({data, updateData}) => {
       ...col,
       onCell: (record: umoorData) => ({
         record,
-        inputType: "text",
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
@@ -147,11 +148,23 @@ export const UmoorListComponent: FC<CardProps> = ({data, updateData}) => {
     };
   });
 
-  const addUmoor = async () => {
-    console.log("add umoor");
-  };
+  const addUmoor = ()=>setShowAddUmoor(true);
+
+  const handleSubmitAddUmoorForm = async(values:Partial<umoorData>)=>{
+    addUmoorData(values).then(()=>{
+        setisLoading(true)
+        getUmoorList().then((data: umoorData[]) => {
+            updateData(data);
+          }).finally(()=>{
+            setisLoading(false)
+          })
+    }).finally(()=>{
+        setShowAddUmoor(false)
+    })
+  }
 
   return (
+    <>
     <Form form={form} component={false}>
       <TableCardWithForm
         cardTitle="UmoorList"
@@ -180,5 +193,56 @@ export const UmoorListComponent: FC<CardProps> = ({data, updateData}) => {
         }
       />
     </Form>
+    {
+        showAddUmoor ?
+        <Modal
+      footer={null}
+      onCancel={()=>setShowAddUmoor(false)}
+      visible={showAddUmoor}
+      title="Add Umoor"
+    >
+      <Form
+        name="escalationComments"
+        onFinish={handleSubmitAddUmoorForm}
+        layout="vertical"
+        form={addUmoorForm}
+      >
+        <Form.Item
+          label="Label"
+          name="label"
+          className="mb-8"
+          rules={[
+            {
+              required: true,
+              message: "Label cannot be empty!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Value"
+          name="value"
+          className="mb-8"
+          rules={[
+            {
+              required: true,
+              message: "Value cannot be empty!",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    </Modal>:null
+    }
+    </>
   );
 };
