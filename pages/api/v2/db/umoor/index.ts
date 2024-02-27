@@ -1,4 +1,4 @@
-import {InsertOneResult, ObjectId, DeleteResult} from "mongodb";
+import {InsertOneResult, ObjectId, DeleteResult, UpdateResult} from "mongodb";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
@@ -20,6 +20,18 @@ export default getAuthHandler()
       const doc: InsertOneResult = await req.db
         .collection(umoorListCollectionName)
         .insertOne(JSON.parse(req.body));
+      res.json(doc);
+    } else {
+      res.status(401).json({msg: "user access denied!"});
+    }
+  })
+  .put(async (req: NextApiRequestExtended, res) => {
+    const {userData} = req;
+    if (userData.userRole.includes(userRoles.Admin)) {
+      const {id,data:updateData} = JSON.parse(req.body);
+      const doc:UpdateResult  = await req.db
+        .collection(umoorListCollectionName)
+        .updateOne({_id:new ObjectId(id)}, {$set: updateData});
       res.json(doc);
     } else {
       res.status(401).json({msg: "user access denied!"});

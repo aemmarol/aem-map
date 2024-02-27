@@ -6,9 +6,25 @@ import {handleResponse} from "../../../../utils/handleResponse";
 import {getUserList} from "./user";
 
 export const getUmoorList = async (): Promise<umoorData[]> => {
-  return await await fetch(API.umoor, {
+  return await fetch(API.umoor, {
     method: "GET",
     headers: {...getauthToken()},
+  })
+    .then(handleResponse)
+    .catch((error) => message.error(error.message));
+};
+
+export const updateUmoorData = async (
+  id: string,
+  data: Partial<umoorData>
+) => {
+  await fetch(API.umoor, {
+    method: "PUT",
+    headers: {...getauthToken()},
+    body: JSON.stringify({
+      data,
+      id: id,
+    }),
   })
     .then(handleResponse)
     .catch((error) => message.error(error.message));
