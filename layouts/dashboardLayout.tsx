@@ -18,7 +18,7 @@ export const Dashboardlayout: FC<{
   showBackButton?: boolean;
 }> = ({children, headerTitle, backgroundColor = "#efefef", showBackButton}) => {
   const [visible, setVisible] = useState(false);
-  const {showLoader, showProgressLoader, progressValue, setProgressValue} =
+  const {showLoader, showProgressLoader, progressValue} =
     useGlobalContext();
   return (
     <Layout>
