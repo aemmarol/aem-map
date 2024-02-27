@@ -1,4 +1,4 @@
-import { Col, message, Row} from "antd";
+import {Col, message, Row} from "antd";
 import {NextPage} from "next";
 import {Dashboardlayout} from "../../layouts/dashboardLayout";
 import {useEffect, useState} from "react";

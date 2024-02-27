@@ -218,7 +218,7 @@ export const SectorDetailsComponent: FC<CardProps> = ({data, updateData}) => {
   };
 
   const handleUpdateMasoolDetails = async () => {
-    console.log("update masool info")
+    console.log("update masool info");
   };
 
   return (
