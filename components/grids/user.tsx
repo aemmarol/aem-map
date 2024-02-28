@@ -7,7 +7,7 @@ const defaultColDef = {
   flex: 1,
   resizable: true,
   filter: "agTextColumnFilter",
-  sortable:true
+  sortable: true,
 };
 
 interface UserGridProps {

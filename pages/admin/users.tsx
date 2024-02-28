@@ -103,21 +103,28 @@ const AdminDashboard: NextPage = () => {
       body: JSON.stringify(uploadData),
     })
       .then(handleResponse)
-      .then(()=>{
+      .then(() => {
         message.success("users are updated");
-        intiLists()
+        intiLists();
       })
       .catch((error) => {
         message.error(error);
-      }).finally(()=>{
-        toggleLoader(false)
       })
-
+      .finally(() => {
+        toggleLoader(false);
+      });
   };
 
   return (
     <Dashboardlayout headerTitle="User List">
-      <Button size="large" type="primary" style={{marginBottom:12}} onClick={syncAirtableUsers}>Sync Users</Button>
+      <Button
+        size="large"
+        type="primary"
+        style={{marginBottom: 12}}
+        onClick={syncAirtableUsers}
+      >
+        Sync Users
+      </Button>
       <UserGrid data={userList} />
 
       {/* <Tabs type="card">
