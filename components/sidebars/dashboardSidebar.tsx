@@ -93,7 +93,11 @@ export const DashboardSidebar: FC<{
             Escalations
           </Menu.Item>
         )}
-
+        {appUserRole.length === 1 && appUserRole[0] === "Admin" ? (
+          <Menu.Item key="5" onClick={() => router.push("/admin/users")}>
+            User List
+          </Menu.Item>
+        ) : null}
         {appUserRole.length === 1 && appUserRole[0] === "Admin" ? (
           <Menu.Item key="3" onClick={() => router.push("/admin/settings")}>
             Settings
