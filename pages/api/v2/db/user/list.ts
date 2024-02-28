@@ -1,4 +1,4 @@
-import { InsertManyResult} from "mongodb";
+import {InsertManyResult} from "mongodb";
 import getAuthHandler, {
   NextApiRequestExtended,
 } from "../../../../../mongodb/authHandler";
