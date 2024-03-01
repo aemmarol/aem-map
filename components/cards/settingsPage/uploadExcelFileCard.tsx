@@ -1,6 +1,6 @@
 import {Button, Card, message, Upload} from "antd";
 import {FC, useState} from "react";
-import {InboxOutlined} from "@ant-design/icons";
+// import {InboxOutlined} from "@ant-design/icons";
 import {defaultDatabaseFields, getauthToken} from "../../../utils";
 import {useGlobalContext} from "../../../context/GlobalContext";
 import {databaseMumeneenFieldData, subSectorData} from "../../../types";
@@ -281,7 +281,7 @@ export const UploadExcelFileCard: FC = () => {
     >
       <Dragger {...draggerProps}>
         <p className="ant-upload-drag-icon">
-          <InboxOutlined />
+          {/* <InboxOutlined /> */}
         </p>
         <p>Click or drag file to this area to upload</p>
       </Dragger>
