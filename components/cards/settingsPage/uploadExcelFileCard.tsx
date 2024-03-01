@@ -280,9 +280,7 @@ export const UploadExcelFileCard: FC = () => {
       title="Upload Excel File"
     >
       <Dragger {...draggerProps}>
-        <p className="ant-upload-drag-icon">
-          {/* <InboxOutlined /> */}
-        </p>
+        <p className="ant-upload-drag-icon">{/* <InboxOutlined /> */}</p>
         <p>Click or drag file to this area to upload</p>
       </Dragger>
     </Card>
