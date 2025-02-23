@@ -517,8 +517,30 @@
     "musaida_contact": "9988998899"
   },
   {
+    "sector_name": "MOHAMMEDI",
+    "name": "RAHEJA",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "latlng": [19.107045865459884, 72.89830578231246],
+    "musaida_contact": "9988998899"
+  },
+  {
     "sector_name": "NAJMI",
     "name": "KANAKIA RAINFOREST",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "latlng": [19.119668825127206, 72.88037205700707],
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "NAJMI",
+    "name": "KANAKIA SEVENS",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
@@ -580,6 +602,17 @@
     "musaida_name": "Admin",
     "musaida_its": "33333333",
     "latlng": [19.1147494357769, 72.88401397465638],
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "NAJMI",
+    "name": "RAJ PARADISE",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "latlng": [19.119668825127206, 72.88037205700707],
     "musaida_contact": "9988998899"
   },
   {
@@ -728,6 +761,17 @@
   {
     "sector_name": "VAJIHI",
     "name": "AMEEN",
+    "musaid_name": "Admin",
+    "musaid_its": "33333333",
+    "musaid_contact": "9988998899",
+    "musaida_name": "Admin",
+    "musaida_its": "33333333",
+    "latlng": [19.112950998597803, 72.87775499908872],
+    "musaida_contact": "9988998899"
+  },
+  {
+    "sector_name": "VAJIHI",
+    "name": "GURUNANAK",
     "musaid_name": "Admin",
     "musaid_its": "33333333",
     "musaid_contact": "9988998899",
