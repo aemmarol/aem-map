@@ -226,10 +226,10 @@ export const UploadExcelFileCard: FC = () => {
       await resetFileData();
       setProgressValue(40);
       const fileData = await getFileList(data);
-      console.log("fileData",fileData);
+      console.log("fileData", fileData);
       setProgressValue(50);
       const dbUloadFileData = getFileDataList(fileData);
-      console.log("dbUloadFileData",dbUloadFileData);
+      console.log("dbUloadFileData", dbUloadFileData);
       const dbUloadMemberData = getMemberDataList(fileData);
 
       // console.log(dbUloadFileData,dbUloadMemberData)
