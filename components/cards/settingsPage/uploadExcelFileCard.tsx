@@ -186,6 +186,7 @@ export const UploadExcelFileCard: FC = () => {
       const fileId: any = Object.keys(file)[0];
       finalFileList.push({
         ...file[fileId],
+        tanzeem_file_no: Number(file[fileId].tanzeem_file_no),
         _id: fileId,
       });
     });
@@ -225,8 +226,10 @@ export const UploadExcelFileCard: FC = () => {
       await resetFileData();
       setProgressValue(40);
       const fileData = await getFileList(data);
+      console.log("fileData",fileData);
       setProgressValue(50);
       const dbUloadFileData = getFileDataList(fileData);
+      console.log("dbUloadFileData",dbUloadFileData);
       const dbUloadMemberData = getMemberDataList(fileData);
 
       // console.log(dbUloadFileData,dbUloadMemberData)
