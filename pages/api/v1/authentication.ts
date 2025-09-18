@@ -53,7 +53,7 @@ export const login = async (
       };
       const accessToken: string = sign(
         {
-          exp: Math.floor(Date.now() / 1000) + 60 * 60 * 6,
+          exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
           data: userTokenData,
         },
         process.env.NEXT_PUBLIC_ACCESS_TOKEN_SALT as string
