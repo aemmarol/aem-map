@@ -5,11 +5,10 @@ import styles from "../styles/SignInPage.module.scss";
 import {Signinlayout} from "../layouts/signInLayout";
 import {SigninCard} from "../components";
 import {login, verifyUser} from "../pages/api/v1/authentication";
-import {authenticationProps, authUser, subSectorData} from "../types";
+import {authenticationProps, authUser} from "../types";
 import {useEffect} from "react";
 import {useRouter} from "next/router";
 import {useGlobalContext} from "../context/GlobalContext";
-import {getSubSectorDataByName} from "./api/v2/services/subsector";
 
 const SignInPage: NextPage = () => {
   const [form] = Form.useForm();
@@ -18,14 +17,13 @@ const SignInPage: NextPage = () => {
 
   useEffect(() => {
     if (typeof verifyUser() !== "string") {
-      const {userRole, assignedArea} = verifyUser() as authUser;
-      verifyUserAndRedirect(userRole, assignedArea);
+      const {userRole} = verifyUser() as authUser;
+      verifyUserAndRedirect(userRole);
     }
   }, []);
 
   const verifyUserAndRedirect = async (
     userRole: string[],
-    assignedArea: string[]
   ) => {
     switch (userRole[0]) {
       case "Admin":
@@ -33,25 +31,21 @@ const SignInPage: NextPage = () => {
         router.push("/admin/settings");
         break;
       case "Masool":
-        changeSelectedSidebarKey("1");
-        router.push("/mohallah/" + assignedArea[0]);
+        changeSelectedSidebarKey("2");
+        router.push("/escalations");
         break;
       case "Masoola":
-        changeSelectedSidebarKey("1");
-        router.push("/mohallah/" + assignedArea[0]);
+        changeSelectedSidebarKey("2");
+        router.push("/escalations");
         break;
       case "Musaid":
-        changeSelectedSidebarKey("1");
-        await getSubSectorDataByName(assignedArea[0], (data: subSectorData) => {
-          router.push("/mohallah/" + data.sector.name + "/" + assignedArea[0]);
-        });
+        changeSelectedSidebarKey("2");
+        router.push("/escalations");
 
         break;
       case "Musaida":
-        changeSelectedSidebarKey("1");
-        await getSubSectorDataByName(assignedArea[0], (data: subSectorData) => {
-          router.push("/mohallah/" + data.sector.name + "/" + assignedArea[0]);
-        });
+        changeSelectedSidebarKey("2");
+        router.push("/escalations");
 
         break;
       case "Umoor":
@@ -81,8 +75,8 @@ const SignInPage: NextPage = () => {
 
   const onLoginSuccess = () => {
     if (typeof verifyUser() !== "string") {
-      const {userRole, assignedArea} = verifyUser() as authUser;
-      verifyUserAndRedirect(userRole, assignedArea);
+      const {userRole} = verifyUser() as authUser;
+      verifyUserAndRedirect(userRole);
       message.success("User Login Successful");
     }
     toggleLoader(false);
