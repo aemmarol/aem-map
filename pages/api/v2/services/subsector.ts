@@ -41,7 +41,7 @@ export const addSubSectorList = async () => {
         method: "POST",
         headers: {...getauthToken()},
         body: JSON.stringify({
-          name: value.name.toUpperCase(),
+          name: value.name,
           musaid_contact: value.musaid_contact,
           musaid_its: value.musaid_its,
           musaid_name: value.musaid_name,
