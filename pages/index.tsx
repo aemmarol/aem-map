@@ -22,9 +22,7 @@ const SignInPage: NextPage = () => {
     }
   }, []);
 
-  const verifyUserAndRedirect = async (
-    userRole: string[],
-  ) => {
+  const verifyUserAndRedirect = async (userRole: string[]) => {
     switch (userRole[0]) {
       case "Admin":
         changeSelectedSidebarKey("0");
