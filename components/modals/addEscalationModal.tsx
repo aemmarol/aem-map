@@ -196,7 +196,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
       issueRaisedFor: {
         ITS: escalationRaisedForDetails.its.toString(),
         name: escalationRaisedForDetails.name.toString(),
-        contact: values.escalationRaisedForContact,
+        contact: values?.escalationRaisedForContact || fileDetails?.hofContact,
       },
     };
 
@@ -354,7 +354,7 @@ export const AddEscalationModal: FC<AddEscalationModalProps> = ({
               label="Issue raised for (Enter contact)"
               rules={[
                 {
-                  required: true,
+                  required: false,
                   message: "Please Enter a contact number",
                 },
                 {
