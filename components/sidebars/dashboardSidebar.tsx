@@ -3,9 +3,9 @@ import {useRouter} from "next/router";
 import {FC, useEffect, useState} from "react";
 import {useGlobalContext} from "../../context/GlobalContext";
 import {verifyUser} from "../../pages/api/v1/authentication";
-import {getSubSectorDataByName} from "../../pages/api/v2/services/subsector";
+// import {getSubSectorDataByName} from "../../pages/api/v2/services/subsector";
 import styles from "../../styles/components/sidebars/dashboardSidebar.module.scss";
-import {authUser, subSectorData, userRoles} from "../../types";
+import {authUser, userRoles} from "../../types";
 
 export const DashboardSidebar: FC<{
   visible: boolean;
@@ -22,27 +22,27 @@ export const DashboardSidebar: FC<{
     }
   }, []);
 
-  const handleMohallahRouting = async () => {
-    changeSelectedSidebarKey("1");
-    if (typeof verifyUser() !== "string") {
-      const {userRole, assignedArea} = verifyUser() as authUser;
-      if (userRole.includes(userRoles.Admin)) {
-        router.push("/mohallah");
-      } else if (
-        userRole.includes(userRoles.Masool) ||
-        userRole.includes(userRoles.Masoola)
-      ) {
-        router.push("/mohallah/" + assignedArea[0]);
-      } else if (
-        userRole.includes(userRoles.Musaid) ||
-        userRole.includes(userRoles.Musaida)
-      ) {
-        await getSubSectorDataByName(assignedArea[0], (data: subSectorData) => {
-          router.push("/mohallah/" + data.sector.name + "/" + assignedArea[0]);
-        });
-      }
-    }
-  };
+  // const handleMohallahRouting = async () => {
+  //   changeSelectedSidebarKey("1");
+  //   if (typeof verifyUser() !== "string") {
+  //     const {userRole, assignedArea} = verifyUser() as authUser;
+  //     if (userRole.includes(userRoles.Admin)) {
+  //       router.push("/mohallah");
+  //     } else if (
+  //       userRole.includes(userRoles.Masool) ||
+  //       userRole.includes(userRoles.Masoola)
+  //     ) {
+  //       router.push("/mohallah/" + assignedArea[0]);
+  //     } else if (
+  //       userRole.includes(userRoles.Musaid) ||
+  //       userRole.includes(userRoles.Musaida)
+  //     ) {
+  //       await getSubSectorDataByName(assignedArea[0], (data: subSectorData) => {
+  //         router.push("/mohallah/" + data.sector.name + "/" + assignedArea[0]);
+  //       });
+  //     }
+  //   }
+  // };
 
   const redirectToEscalations = () => {
     changeSelectedSidebarKey("2");
