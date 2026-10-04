@@ -83,11 +83,11 @@ export const DashboardSidebar: FC<{
             Escalations
           </Menu.Item>
         ) : null}
-        {appUserRole.length === 1 && appUserRole[0] === "Umoor" ? null : (
+        {/* {appUserRole.length === 1 && appUserRole[0] === "Umoor" ? null : (
           <Menu.Item key="1" onClick={handleMohallahRouting}>
             Mohallah
           </Menu.Item>
-        )}
+        )} */}
         {appUserRole.length === 1 && appUserRole[0] === "Admin" ? null : (
           <Menu.Item onClick={redirectToEscalations} key="2">
             Escalations
